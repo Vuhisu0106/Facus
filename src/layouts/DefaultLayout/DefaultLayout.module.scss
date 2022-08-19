@@ -10,12 +10,141 @@
     padding: 20px 0;
     width: var(--default-layout-width);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .content {
+    max-width: 530px;
     flex: 1;
-    background-color: #fff;
+    background-color: var(--light-mode-color);
     margin: 0px 24px;
     border-radius: var(--component-border-radius);
+}
+
+.post-item {
+    width: 100%;
+    padding: 12px 16px 2px 16px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: var(--component-border-radius);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.user-avt {
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.post-header-info {
+    margin: -5px 5px;
+    flex: 1;
+
+    .user-name {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .time-post {
+        font-weight: 500;
+        font-size: 1.2rem;
+        color: rgb(101, 103, 107);
+    }
+}
+
+.more-btn {
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    text-align: center;
+
+    &:hover {
+        background-color: var(--light-mode-color);
+    }
+}
+
+.post-content {
+    .post-caption {
+        padding: 8px 0 12px 0;
+    }
+    .post-image img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
+
+.post-interaction {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-interaction-detail {
+    display: flex;
+    line-height: 20px;
+    height: 43px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding: 10px 16px;
+    //margin: -5px 16px 0px 16px;
+    border-bottom: 1px solid rgb(206, 208, 212);
+
+    .post-reaction-detail {
+        flex: 1;
+
+        .reaction-icon {
+            color: var(--primary);
+        }
+    }
+}
+
+.post-interact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding: 4px;
+
+    border-bottom: 1px solid rgb(206, 208, 212);
+
+    button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        font-size: 1.5rem;
+        font-weight: 500;
+        background-color: transparent;
+        cursor: pointer;
+        border-radius: 2px;
+
+        span {
+            margin-left: 5px;
+        }
+
+        &:hover {
+            background-color: rgb(224, 224, 224, 0.5);
+        }
+    }
+}
+
+.comment-bar {
+    display: flex;
+    padding: 6px;
+
+    img {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
 }

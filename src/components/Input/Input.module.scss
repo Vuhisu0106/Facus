@@ -29,17 +29,19 @@
     .left-button {
         border-top-left-radius: var(--input-border-radius);
         border-bottom-left-radius: var(--input-border-radius);
+        margin-right: -8px;
     }
 
     .right-button {
         border-top-right-radius: var(--input-border-radius);
         border-bottom-right-radius: var(--input-border-radius);
+        margin-left: -8px;
     }
 
     input {
         width: 100%;
         height: 100%;
-        padding-left: 2px;
+        padding: 0 10px;
         background-color: transparent;
         font-weight: 500;
         caret-color: var(--primary);

@@ -7,7 +7,7 @@ function Input({ className, placeHolder, leftIcon, rightIcon }) {
         <div className={cx('wrapper', { [className]: className })}>
             {leftIcon && <button className={cx('left-button')}>{leftIcon}</button>}
             <input placeholder={placeHolder}></input>
-            {rightIcon && <button className={cx('right-button')}>{leftIcon}</button>}
+            {rightIcon && <button className={cx('right-button')}>{rightIcon}</button>}
         </div>
     );
 }
