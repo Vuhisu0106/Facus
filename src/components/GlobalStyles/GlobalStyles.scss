@@ -10,9 +10,15 @@
 
     //Default Layout
     --default-layout-header-height: 60px;
-    --default-layout-width: 1178px;
-    --default-interface-padding: 20px 24px;
-    --default-center-area-width: 612px;
+
+    //Home Layout
+    --home-layout-width: 1178px;
+    --home-interface-padding: 20px 24px;
+    --home-center-area-width: 612px;
+
+    //Profile Layout
+    --profile-layout-width: 1095px;
+    --profile-layout-padding: 246px;
 
     //Light mode
     --light-mode-color: #f2f5f7;

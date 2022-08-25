@@ -7,16 +7,16 @@ function Button({
     to,
     href,
     primary = false,
-    outline = false,
+    menu = false,
+    nav = false,
     text = false,
-    small = false,
-    medium = false,
-    large = false,
+    long = false,
     children,
     leftIcon,
     rightIcon,
     onClick,
     className,
+    active = false,
     disabled = false,
     ...passProps
 }) {
@@ -46,12 +46,12 @@ function Button({
     const classes = cx('wrapper', {
         [className]: className,
         primary,
-        outline,
+        menu,
+        nav,
         text,
+        active,
         disabled,
-        small,
-        medium,
-        large,
+        long,
     });
     return (
         <Comp className={classes} {...props}>

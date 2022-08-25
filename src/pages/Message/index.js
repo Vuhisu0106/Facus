@@ -1,5 +1,10 @@
+import classNames from 'classnames/bind';
+
+import styles from './Message.module.scss';
+
+const cx = classNames.bind(styles);
 function Message() {
-    return <h1>Message page</h1>;
+    return <div className={cx('container')}></div>;
 }
 
 export default Message;

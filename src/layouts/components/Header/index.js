@@ -19,13 +19,14 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '~/components/AccountItem';
 import Menu from '~/components/Popper/Menu';
 import { faSquarePlus, faUser } from '@fortawesome/free-regular-svg-icons';
+import config from '~/configs';
 
 const cx = classNames.bind(styles);
 const MENU_ITEMS_USER = [
     {
         icon: <FontAwesomeIcon icon={faUser} />,
         title: 'View profile',
-        to: '/acc',
+        to: config.routes.profile,
     },
     {
         icon: <FontAwesomeIcon icon={faMoon} />,
@@ -48,9 +49,12 @@ const MENU_ITEMS_ADD = [
     },
 ];
 
-function Header() {
+function Header({ className }) {
+    const classes = cx('wrapper', {
+        [className]: className,
+    });
     return (
-        <header className={cx('wrapper')}>
+        <header className={classes}>
             <div className={cx('inner-wrapper')}>
                 <div className={cx('logo')}>facus</div>
 
@@ -74,8 +78,11 @@ function Header() {
 
                 <div className={cx('actions')}>
                     <div className={cx('actions-btn')}>
-                        <CircleButton children={<FontAwesomeIcon icon={faHome} />} />
-                        <CircleButton children={<FontAwesomeIcon icon={faFacebookMessenger} />} />
+                        <CircleButton to={config.routes.home} children={<FontAwesomeIcon icon={faHome} />} />
+                        <CircleButton
+                            to={config.routes.message}
+                            children={<FontAwesomeIcon icon={faFacebookMessenger} />}
+                        />
                         <Menu items={MENU_ITEMS_ADD} offset={[45, 8]}>
                             <span>
                                 <CircleButton children={<FontAwesomeIcon icon={faPlus} />} />

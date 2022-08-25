@@ -5,10 +5,12 @@
     background-color: #fff;
     display: flex;
     justify-content: center;
+    position: fixed;
+    box-shadow: rgb(0 0 0 / 8%) 0px 2px 12px;
 }
 
 .inner-wrapper {
-    width: var(--default-layout-width);
+    width: var(--home-layout-width);
     display: flex;
     justify-content: space-between;
     align-items: center;
