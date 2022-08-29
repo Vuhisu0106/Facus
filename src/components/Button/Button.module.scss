@@ -80,10 +80,10 @@
 
 .active {
     background-color: transparent;
-    color: rgb(46, 137, 255);
+    color: var(--primary);
 
     &::after {
-        color: rgb(46, 137, 255);
+        color: var(--primary);
         bottom: -3px;
         content: 'a';
         height: 3px;

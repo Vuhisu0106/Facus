@@ -1,3 +1,4 @@
+//Post
 .wrapper {
     display: flex;
     column-gap: 1.4rem;
@@ -10,34 +11,16 @@
 
 .left-content {
     width: 386px;
-
-    .intro {
-        padding: 16px;
-
-        background-color: #fff;
-        margin-bottom: 1.4rem;
-        p {
-            margin-top: 16px;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-    }
-    .photo {
-        background-color: #fff;
-        padding: 16px;
-        p {
-            margin-top: 16px;
-            text-align: center;
-        }
-    }
 }
 
 .intro,
 .photo {
-    padding: 16px;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px 0 rgb(99 99 99 / 20%);
-
+    margin-bottom: 1.4rem;
+    p {
+        margin-top: 16px;
+        text-align: center;
+        margin-bottom: 12px;
+    }
     h2 {
         font-size: 2.5rem;
         font-weight: 700;
@@ -47,4 +30,52 @@
 .right-content {
     flex: 1;
     //background-color: #fff;
+}
+
+//Following
+.following,
+.follower {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    h2 {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+}
+
+.account {
+    flex-basis: 49.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 115px;
+    padding: 16px;
+    margin-bottom: 8px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.account-avt {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    margin-right: 16px;
+}
+.account-info {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.account-name {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.account-bio {
+    font-size: 12px;
+    font-weight: 400;
 }

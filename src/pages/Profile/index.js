@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 import styles from './Profile.module.scss';
 import { faCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
-import PostLayout from '~/components/PostLayout';
+
 import Posts from '~/layouts/components/Profile/Posts';
 import Following from '~/layouts/components/Profile/Following';
+import Follower from '~/layouts/components/Profile/Follower';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -20,11 +21,7 @@ function Profile() {
             return <Following />;
         }
         if (profileLayout === 'Follower') {
-            return (
-                <div>
-                    <h1>Follower</h1>
-                </div>
-            );
+            return <Follower />;
         }
         return <Posts />;
     };

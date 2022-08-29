@@ -1,5 +1,5 @@
 function LandingLayout() {
-    return;
+    return <h1>Log in</h1>;
 }
 
 export default LandingLayout;
