@@ -83,10 +83,11 @@
     color: var(--primary);
 
     &::after {
+        display: block;
         color: var(--primary);
         bottom: -3px;
-        content: 'a';
-        height: 3px;
+        content: '';
+        height: 0.3rem;
         left: 10%;
         position: absolute;
         width: 80%;

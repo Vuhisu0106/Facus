@@ -1,0 +1,47 @@
+.wrapper {
+    padding: 6px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    width: 64px;
+    margin: 8px;
+}
+
+.user-avt {
+    align-items: center;
+    align-self: center;
+    display: block;
+    flex: none;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 6px;
+    margin-top: 4px;
+}
+
+.story-circle {
+    width: 66px;
+    height: 66px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-img {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2.5px solid var(--white);
+}
+
+.user-name {
+    font-size: 1.2rem;
+    font-weight: 500;
+}

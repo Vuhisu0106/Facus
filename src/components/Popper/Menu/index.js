@@ -8,7 +8,7 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 const cx = classNames.bind(styles);
 function Menu({ children, items, offset }) {
     const renderItems = () => {
-        return items.map((item, index) => <MenuItem key={index} data={item} />);
+        return items.map((item, index) => <MenuItem key={index} data={item} onClick={item.onClick} />);
     };
 
     return (
@@ -16,6 +16,7 @@ function Menu({ children, items, offset }) {
             interactive
             trigger="click"
             placement="bottom-end"
+            hideOnClick={true}
             offset={offset}
             render={(attrs) => (
                 <div className={cx('menu-list')} tabIndex="-1" {...attrs}>

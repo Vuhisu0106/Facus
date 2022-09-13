@@ -1,7 +1,25 @@
 .container {
     min-height: 1000px;
-    padding: 20px 0;
+    padding: 0 0;
     width: var(--home-layout-width);
     display: flex;
     justify-content: space-between;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    position: relative;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.sidebar {
+    grid-column: span 1 / span 1;
+    background-color: #fff;
+}
+
+.content {
+    flex: 1;
+    background-color: #fff;
+    grid-column: span 3 / span 3;
 }

@@ -10,6 +10,14 @@ import HeaderOnly from '~/layouts/HeaderOnly';
 
 const publicRoutes = [
     {
+        path: config.routes.landing,
+        component: LandingPage,
+        layout: null,
+    },
+];
+
+const privateRoutes = [
+    {
         path: config.routes.home,
         component: Home,
     },
@@ -30,12 +38,6 @@ const publicRoutes = [
         path: config.routes.message,
         component: Message,
     },
-    {
-        path: config.routes.landing,
-        component: LandingPage,
-    },
 ];
-
-const privateRoutes = [];
 
 export { publicRoutes, privateRoutes };

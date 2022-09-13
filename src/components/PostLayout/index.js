@@ -6,7 +6,7 @@ import styles from './PostLayout.module.scss';
 import Input from '~/components/Input';
 
 const cx = classNames.bind(styles);
-function PostLayout() {
+function PostLayout({ userId, userName, userAvt, timeStamp, postImg, postStatus, likeCount }) {
     return (
         <div className={cx('post-wrapper')}>
             <div className={cx('post-header')}>
@@ -28,7 +28,7 @@ function PostLayout() {
                     <p>"I captured a 145 megapixel image of our sun using a specially modified telescope. Zoom in!"</p>
                 </div>
                 <div className={cx('post-image')}>
-                    <a href="/post" id="" onclick="">
+                    <a href="/post" id="">
                         <img
                             alt="Vu Minh Hieu"
                             src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/97948524_559253204991695_2663173301714550784_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=e3f864&_nc_ohc=homhmfBkkoQAX_GZaNp&_nc_ht=scontent.fhan17-1.fna&oh=00_AT8_PE-kHOJ_FMh04EUKBz23kBXqNedDqelrTW5S4oHisQ&oe=632B0CD3"
