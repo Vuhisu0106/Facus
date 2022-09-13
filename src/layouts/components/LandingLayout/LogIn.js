@@ -16,10 +16,9 @@ function LogIn() {
     const emailRef = useRef();
     const passwordRef = useRef();
 
-    const { signup, login, currentUser } = useAuth();
+    const { login } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const navigate = useNavigate();
 
@@ -30,7 +29,7 @@ function LogIn() {
             setError('');
             setLoading(true);
             await login(emailRef.current.value, passwordRef.current.value);
-            console.log('Log In');
+            navigate('/');
         } catch (error) {
             setError('Failed to log in');
             //console.log(error);
@@ -39,26 +38,19 @@ function LogIn() {
         setLoading(false);
     }
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate('/');
-            console.log('is logged in');
-        }
-    }, []);
-
     return (
         <div className={cx('log-in-wrapper')}>
             <form onSubmit={handleSubmit} className={cx('log-in-form')}>
                 <h2 className={cx('title')}>Log In</h2>
                 <div className={cx('input-field')}>
                     <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
-                    <input placeholder="Email" />
+                    <input placeholder="Email" ref={emailRef} />
                 </div>
                 <div className={cx('input-field')}>
                     <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-                    <input type="password" placeholder="Password" />
+                    <input type="password" placeholder="Password" ref={passwordRef} />
                 </div>
-                <button className={cx('btn')} type="submit" value="Log in">
+                <button disabled={loading} className={cx('btn')} type="submit" value="Log in">
                     Log in
                 </button>
 

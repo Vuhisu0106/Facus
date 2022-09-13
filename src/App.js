@@ -3,17 +3,9 @@ import { Fragment, useState } from 'react';
 
 import { publicRoutes, privateRoutes } from './routes';
 import DefaultLayout from './layouts/DefaultLayout';
-import LandingPage from './pages/LandingPage';
-import LandingLayout from './layouts/components/LandingLayout';
+
 import AuthProvider from './context/AuthContext';
 import PrivateRoute from './components/Route/PrivateRoute';
-import Dkm from './pages/Dkm';
-import Home from './pages/Home';
-import Message from './pages/Message';
-import Profile from './pages/Profile';
-import Upload from './pages/Upload';
-import Post from './pages/Post';
-import ShareLayout from './layouts/ShareLayout';
 
 function App() {
     const user = true;
