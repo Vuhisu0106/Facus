@@ -34,6 +34,21 @@ function AuthProvider({ children }) {
         return unsubcriber;
     }, []);
 
+    // useEffect(() => {
+    //     const unsubcriber = onAuthStateChanged(auth, (user) => {
+    //         if (user) {
+    //             navigate('/');
+    //             setCurrentUser(user);
+    //             setLoading(false);
+    //         }
+    //         setCurrentUser();
+    //         setLoading(false);
+    //         navigate('/landing');
+    //     });
+
+    //     return unsubcriber;
+    // }, []);
+
     const value = {
         currentUser,
         signup,
