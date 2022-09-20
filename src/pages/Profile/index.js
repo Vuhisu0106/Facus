@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
 import styles from './Profile.module.scss';
-import { faCircle, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
 
 import Posts from '~/layouts/components/Profile/Posts';
 import Following from '~/layouts/components/Profile/Following';
 import Follower from '~/layouts/components/Profile/Follower';
+import CircleButton from '~/components/Button/CircleButton';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -40,11 +41,12 @@ function Profile() {
                 />
 
                 <div className={cx('profile-main-part-center')}>
-                    <div>
+                    <div className={cx('avatar')}>
+                        <CircleButton className={cx('change-avt-btn')} children={<FontAwesomeIcon icon={faCamera} />} />
                         <img
                             className={cx('profile-avt')}
                             alt="Vu Minh Hieu"
-                            src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=LsEXcWjsPnwAX_aqMvn&_nc_ht=scontent.fhan17-1.fna&oh=00_AT8CqApXsUwbkS7tXeLYTc9rRPE-97NT1Y0Z4A70YWs91A&oe=6325334F"
+                            src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=oGyPLoZWKrsAX__hIhS&_nc_ht=scontent.fhan17-1.fna&oh=00_AT_4rP0VslP3931BOoOScc4pVamVvHSzmmYDQ2CNHssO7A&oe=6350B4CF"
                         />
                     </div>
 

@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import styles from './CircleButton.module.scss';
 
 const cx = classNames.bind(styles);
-function CircleButton({ to, href, children, onClick }) {
+function CircleButton({ className, to, href, children, onClick }) {
     let Comp = 'button';
 
-    const classes = cx('wrapper');
+    const classes = cx('wrapper', { [className]: className });
     const props = {
         onClick,
     };

@@ -15,8 +15,8 @@ const cx = classNames.bind(styles);
 function LogIn() {
     const emailRef = useRef();
     const passwordRef = useRef();
+    const { login, currentUser } = useAuth();
 
-    const { login } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -30,6 +30,7 @@ function LogIn() {
             setLoading(true);
             await login(emailRef.current.value, passwordRef.current.value);
             navigate('/');
+            //console.log(currentUser);
         } catch (error) {
             setError('Failed to log in');
             //console.log(error);

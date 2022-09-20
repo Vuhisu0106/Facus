@@ -116,7 +116,9 @@ function Message() {
                                 <span className={cx('sending-time')}>10:42 AM</span>
                             </div>
                             <div className={cx('message', 'fr-mess')}>
-                                <div className={cx('fr-mess-content')}>Bao thì đi</div>
+                                <div className={cx('fr-mess-content')}>
+                                    Bao thì đi nhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                </div>
                                 <span className={cx('sending-time')}>10:44 AM</span>
                             </div>{' '}
                             <div className={cx('message', 'my-mess')}>

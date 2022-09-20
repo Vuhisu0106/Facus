@@ -36,7 +36,7 @@ function Header({ className }) {
 
     const MENU_ITEMS_USER = [
         {
-            title: currentUser.email,
+            title: currentUser.displayName,
         },
         {
             icon: <FontAwesomeIcon icon={faUser} />,
