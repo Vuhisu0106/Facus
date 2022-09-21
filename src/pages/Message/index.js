@@ -6,6 +6,7 @@ import CircleButton from '~/components/Button/CircleButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import MessageItem from '~/components/MessageItem';
+import MessSearch from '~/components/Search/MessSearch';
 
 const cx = classNames.bind(styles);
 function Message() {
@@ -19,7 +20,7 @@ function Message() {
                             <CircleButton children={<FontAwesomeIcon icon={faSquarePlus} />} />
                         </div>
                         <div className={cx('search')}>
-                            <Input className={cx('search-input')} placeHolder={'Search...'} />
+                            <MessSearch />
                         </div>
                     </div>
                     <div className={cx('user-message-list')}>

@@ -11,6 +11,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '~/context/AuthContext';
 import styles from './LandingLayout.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { generateKeywords } from '~/services';
 
 const cx = classNames.bind(styles);
 
@@ -71,6 +72,7 @@ function SignUp() {
                             displayName: displayNameRef.current.value,
                             email: emailRef.current.value,
                             photoURL: downloadURL,
+                            keywords: generateKeywords(displayNameRef.current.value),
                         });
 
                         //create empty user chats on firestore
