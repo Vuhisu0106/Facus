@@ -11,7 +11,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '~/context/AuthContext';
 import styles from './LandingLayout.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { generateKeywords } from '~/services';
+import { generateKeywords } from '~/services/generateKeywords';
 
 const cx = classNames.bind(styles);
 
