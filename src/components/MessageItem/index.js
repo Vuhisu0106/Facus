@@ -3,9 +3,9 @@ import classNames from 'classnames/bind';
 import styles from './MessageItem.module.scss';
 
 const cx = classNames.bind(styles);
-function MessageItem({ userAvt, userName, closestMess, unreadMessCount, closestMessTime }) {
+function MessageItem({ userAvt, userName, closestMess, unreadMessCount, closestMessTime, onClick }) {
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} onClick={onClick}>
             <img className={cx('user-avt')} alt={userName} src={userAvt} />
 
             <div className={cx('message-content')}>

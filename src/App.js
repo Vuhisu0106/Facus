@@ -14,32 +14,31 @@ function App() {
 
     return (
         <div className="App">
-            <AuthProvider>
-                <Routes>
-                    {publicRoutes.map((route, index) => {
-                        const Page = route.component;
+            <Routes>
+                {publicRoutes.map((route, index) => {
+                    const Page = route.component;
 
-                        let Layout = DefaultLayout;
-                        if (route.layout) {
-                            Layout = route.layout;
-                        } else if (route.layout === null) {
-                            Layout = Fragment;
-                        }
+                    let Layout = DefaultLayout;
+                    if (route.layout) {
+                        Layout = route.layout;
+                    } else if (route.layout === null) {
+                        Layout = Fragment;
+                    }
 
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
-                    })}
+                    return (
+                        <Route
+                            key={index}
+                            path={route.path}
+                            element={
+                                <Layout>
+                                    <Page />
+                                </Layout>
+                            }
+                        />
+                    );
+                })}
 
-                    {/* <Route
+                {/* <Route
                         path="/"
                         element={
                             <PrivateRoute>
@@ -48,7 +47,7 @@ function App() {
                         }
                     /> */}
 
-                    {/* <Route
+                {/* <Route
                         path="/"
                         element={
                             <PrivateRoute>
@@ -69,33 +68,32 @@ function App() {
                     </Route>
                     <Route path="/landing" element={<LandingPage />} /> */}
 
-                    {privateRoutes.map((route, index) => {
-                        const Page = route.component;
+                {privateRoutes.map((route, index) => {
+                    const Page = route.component;
 
-                        let Layout = DefaultLayout;
-                        if (route.layout) {
-                            Layout = route.layout;
-                        } else if (route.layout === null) {
-                            Layout = Fragment;
-                        }
+                    let Layout = DefaultLayout;
+                    if (route.layout) {
+                        Layout = route.layout;
+                    } else if (route.layout === null) {
+                        Layout = Fragment;
+                    }
 
-                        return (
-                            <Route
-                                key={index}
-                                exact
-                                path={route.path}
-                                element={
-                                    <PrivateRoute>
-                                        <Layout>
-                                            <Page />
-                                        </Layout>
-                                    </PrivateRoute>
-                                }
-                            ></Route>
-                        );
-                    })}
-                </Routes>
-            </AuthProvider>
+                    return (
+                        <Route
+                            key={index}
+                            exact
+                            path={route.path}
+                            element={
+                                <PrivateRoute>
+                                    <Layout>
+                                        <Page />
+                                    </Layout>
+                                </PrivateRoute>
+                            }
+                        ></Route>
+                    );
+                })}
+            </Routes>
         </div>
     );
 }

@@ -160,11 +160,28 @@
         }
     }
 
+    .img-btn {
+        width: 58px;
+        height: 56px;
+
+        margin-right: 1px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        color: var(--light-text-color);
+        &:hover {
+            color: #4c4d51;
+            background-color: rgba(22, 24, 35, 0.05);
+        }
+    }
+
     .send-btn {
-        width: 40px;
-        height: 40px;
-        margin-right: 15px;
-        border-radius: 50%;
+        width: 58px;
+        height: 56px;
+        //margin-right: 15px;
+        //border-radius: 50%;
+        border-left: 1px solid rgb(204, 206, 209, 0.5);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
         color: var(--light-text-color);
         &:hover {
             color: #4c4d51;
