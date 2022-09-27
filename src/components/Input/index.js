@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import { useRef } from 'react';
 import styles from './Input.module.scss';
 
 const cx = classNames.bind(styles);

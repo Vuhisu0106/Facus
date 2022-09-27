@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react/headless';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 import { useAuth } from '~/context/AuthContext';
 import { db } from '~/firebase';
@@ -21,6 +21,7 @@ function ChatSearch() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    const { currentUser } = useAuth();
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();
 
@@ -62,17 +63,54 @@ function ChatSearch() {
         }
     };
 
+    const handleSelect = async (result) => {
+        const combinedId = currentUser.uid > result.uid ? currentUser.uid + result.uid : result.uid + currentUser.uid;
+        console.log(combinedId);
+        try {
+            const res = await getDoc(doc(db, 'chats', combinedId));
+            console.log(res);
+            if (!res.exists()) {
+                //create a chat in chats collection (if chat hasn't existed before)
+                await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+
+                //create user chats
+                await updateDoc(doc(db, 'userChats', currentUser.uid), {
+                    [combinedId + '.userInfo']: {
+                        uid: result.uid,
+                        displayName: result.displayName,
+                        photoURL: result.photoURL,
+                    },
+                    [combinedId + '.date']: serverTimestamp(),
+                });
+
+                await updateDoc(doc(db, 'userChats', result.uid), {
+                    [combinedId + '.userInfo']: {
+                        uid: currentUser.uid,
+                        displayName: currentUser.displayName,
+                        photoURL: currentUser.photoURL,
+                    },
+                    [combinedId + '.date']: serverTimestamp(),
+                });
+            }
+        } catch (error) {}
+    };
+
     return (
         <div className={cx('mess-search')}>
             <HeadlessTippy
                 interactive
-                visible={showResult && searchResult.length > 0}
+                placement="bottom"
+                visible={showResult && searchValue}
                 render={(attrs) => (
                     <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
-                            {searchResult.map((result) => (
-                                <AccountItem key={result.uid} data={result} />
-                            ))}
+                            {searchResult.length === 0 ? (
+                                <span>User not found</span>
+                            ) : (
+                                searchResult.map((result) => (
+                                    <AccountItem key={result.uid} data={result} onClick={() => handleSelect(result)} />
+                                ))
+                            )}
                         </PopperWrapper>
                     </div>
                 )}

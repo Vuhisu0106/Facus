@@ -4,9 +4,9 @@ import styles from './AccountItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function AccountItem({ data }) {
+function AccountItem({ data, onClick }) {
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} onClick={onClick}>
             <img className={cx('avatar')} src={data.photoURL} alt={data.displayName} />
             <div className={cx('info')}>
                 <h4 className={cx('name')}>
