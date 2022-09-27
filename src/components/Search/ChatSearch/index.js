@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import Tippy from '@tippyjs/react/headless';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -93,6 +92,9 @@ function ChatSearch() {
                 });
             }
         } catch (error) {}
+
+        setSearchResult([]);
+        setSearchValue('');
     };
 
     return (
