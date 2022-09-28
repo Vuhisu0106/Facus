@@ -37,7 +37,7 @@
 
 // export default ChatProvider;
 
-import { createContext, useContext, useEffect, useReducer, useState } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 
 import { useAuth } from './AuthContext';
 

@@ -49,17 +49,19 @@ function ChatSidebar() {
                 </div>
             </div>
             <div className={cx('user-message-list')}>
-                {Object.entries(chats).map((chat) => (
-                    <MessageItem
-                        key={chat[0]}
-                        userName={chat[1].userInfo.displayName}
-                        userAvt={chat[1].userInfo.photoURL}
-                        closestMess={chat[1].lastMessage?.text}
-                        unreadMessCount={1}
-                        closestMessTime={'9:00 AM'}
-                        onClick={() => handleSelect(chat[1].userInfo)}
-                    />
-                ))}
+                {Object.entries(chats)
+                    ?.sort((a, b) => b[1].date - a[1].date)
+                    .map((chat) => (
+                        <MessageItem
+                            key={chat[0]}
+                            userName={chat[1].userInfo.displayName}
+                            userAvt={chat[1].userInfo.photoURL}
+                            closestMess={chat[1].lastMessage?.text}
+                            unreadMessCount={1}
+                            closestMessTime={'9:00 AM'}
+                            onClick={() => handleSelect(chat[1].userInfo)}
+                        />
+                    ))}
             </div>
         </div>
     );

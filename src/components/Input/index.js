@@ -8,6 +8,8 @@ function Input({
     placeHolder,
     leftIcon,
     rightIcon,
+    onClickRightBtn,
+    onClickLeftBtn,
     classNameRightBtn,
     classNameLeftBtn,
     inputRef,
@@ -22,11 +24,21 @@ function Input({
     return (
         <div className={cx('wrapper', { [className]: className })}>
             {leftIcon && (
-                <button className={cx('left-button', { [classNameLeftBtn]: classNameLeftBtn })}>{leftIcon}</button>
+                <button
+                    className={cx('left-button', { [classNameLeftBtn]: classNameLeftBtn })}
+                    onClick={onClickLeftBtn}
+                >
+                    {leftIcon}
+                </button>
             )}
             <input type={type} ref={inputRef} placeholder={placeHolder} {...props}></input>
             {rightIcon && (
-                <button className={cx('right-button', { [classNameRightBtn]: classNameRightBtn })}>{rightIcon}</button>
+                <button
+                    className={cx('right-button', { [classNameRightBtn]: classNameRightBtn })}
+                    onClick={onClickRightBtn}
+                >
+                    {rightIcon}
+                </button>
             )}
         </div>
     );
