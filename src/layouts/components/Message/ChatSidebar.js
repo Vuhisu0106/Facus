@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect } from 'react';
 import { onSnapshot, doc } from 'firebase/firestore';
+import moment from 'moment';
 
 import { db } from '~/firebase';
 import CircleButton from '~/components/Button/CircleButton';
@@ -57,8 +58,8 @@ function ChatSidebar() {
                             userName={chat[1].userInfo.displayName}
                             userAvt={chat[1].userInfo.photoURL}
                             closestMess={chat[1].lastMessage?.text}
-                            unreadMessCount={1}
-                            closestMessTime={'9:00 AM'}
+                            //unreadMessCount={1}
+                            closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
                             onClick={() => handleSelect(chat[1].userInfo)}
                         />
                     ))}

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { doc, onSnapshot, arrayUnion, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
+import moment from 'moment';
 
 import { db, storage } from '~/firebase';
 import Input from '~/components/Input';
@@ -97,24 +98,36 @@ function Chat() {
             </div>
             <div className={cx('chat-box')}>
                 <div className={cx('message-list')}>
-                    {messages.map((mess) => (
-                        <div
-                            className={
-                                mess.senderId === currentUser.uid ? cx('message', 'my-mess') : cx('message', 'fr-mess')
-                            }
-                            key={mess.id}
-                            ref={messageRef}
-                        >
-                            <div
-                                className={
-                                    mess.senderId === currentUser.uid ? cx('my-mess-content') : cx('fr-mess-content')
-                                }
-                            >
-                                {mess.text}
+                    {messages.map((mess) =>
+                        // <div
+                        //     className={
+                        //         mess.senderId === currentUser.uid ? cx('message', 'my-mess') : cx('message', 'fr-mess')
+                        //     }
+                        //     key={mess.id}
+                        //     ref={messageRef}
+                        // >
+                        //     <div
+                        //         className={
+                        //             mess.senderId === currentUser.uid ? cx('my-mess-content') : cx('fr-mess-content')
+                        //         }
+                        //     >
+                        //         {mess.text}
+                        //     </div>
+                        //     <span className={cx('sending-time')}>{moment(mess.date.toDate()).format('LT')}</span>
+                        // </div>
+
+                        mess.senderId === currentUser.uid ? (
+                            <div className={cx('message', 'my-mess')} key={mess.id} ref={messageRef}>
+                                <span className={cx('sending-time')}>{moment(mess.date.toDate()).format('LT')}</span>
+                                <div className={cx('my-mess-content')}>{mess.text}</div>
                             </div>
-                            <span className={cx('sending-time')}>10:43 AM</span>
-                        </div>
-                    ))}
+                        ) : (
+                            <div className={cx('message', 'fr-mess')} key={mess.id} ref={messageRef}>
+                                <div className={cx('fr-mess-content')}>{mess.text}</div>
+                                <span className={cx('sending-time')}>{moment(mess.date.toDate()).format('LT')}</span>
+                            </div>
+                        ),
+                    )}
                     {/* <div className={cx('message', 'my-mess')}>
                         <div className={cx('my-mess-content')}>Hi bro, đang làm clg đấy? :) </div>
 
@@ -138,6 +151,7 @@ function Chat() {
             <div className={cx('chat-footer')}>
                 <Input
                     className={cx('mess-input')}
+                    value={text}
                     type="text"
                     placeHolder={'Write a message'}
                     onChange={(e) => setText(e.target.value)}

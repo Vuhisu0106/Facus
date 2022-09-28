@@ -17,7 +17,7 @@ function MessageItem({ userAvt, userName, closestMess, unreadMessCount, closestM
 
                     <div className={cx('mess-bottom-content')}>
                         <span className={cx('closest-mess')}>{closestMess}</span>
-                        <span className={cx('unread-count')}>{unreadMessCount}</span>
+                        {/* <span className={cx('unread-count')}>{unreadMessCount}</span> */}
                     </div>
                 </div>
             </div>

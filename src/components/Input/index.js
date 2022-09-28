@@ -4,6 +4,7 @@ import styles from './Input.module.scss';
 const cx = classNames.bind(styles);
 function Input({
     className,
+    value,
     type,
     placeHolder,
     leftIcon,
@@ -31,7 +32,7 @@ function Input({
                     {leftIcon}
                 </button>
             )}
-            <input type={type} ref={inputRef} placeholder={placeHolder} {...props}></input>
+            <input value={value} type={type} ref={inputRef} placeholder={placeHolder} {...props}></input>
             {rightIcon && (
                 <button
                     className={cx('right-button', { [classNameRightBtn]: classNameRightBtn })}

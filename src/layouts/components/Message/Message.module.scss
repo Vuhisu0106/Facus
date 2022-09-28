@@ -96,20 +96,22 @@
 .message {
     position: relative;
     display: flex;
-    flex-direction: column;
+    //flex-direction: column;
     width: 100%;
-    margin: 5px 0;
-    justify-content: flex-end;
+    margin: 8px 0;
+    align-items: center;
 }
 
 .my-mess {
-    align-items: flex-end;
+    //align-items: flex-end;
+    justify-content: flex-end;
 
     .my-mess-content {
         position: relative;
         padding: 8px;
+        margin-left: 8px;
         background-color: var(--primary);
-        border-radius: 10px 0 10px 10px;
+        border-radius: 10px;
         color: var(--white);
         max-width: 65%;
         font-size: 15px;
@@ -125,13 +127,14 @@
 }
 
 .fr-mess {
-    align-items: flex-start;
+    justify-content: flex-start;
 
     .fr-mess-content {
         position: relative;
         padding: 8px;
+        margin-right: 8px;
         background-color: #ececec;
-        border-radius: 0 10px 10px 10px;
+        border-radius: 10px;
         color: var(--light-mode-black);
         max-width: 65%;
         font-size: 15px;
