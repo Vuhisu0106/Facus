@@ -3,9 +3,9 @@ import classNames from 'classnames/bind';
 import styles from './MessageItem.module.scss';
 
 const cx = classNames.bind(styles);
-function MessageItem({ userAvt, userName, closestMess, unreadMessCount, closestMessTime, onClick }) {
+function MessageItem({ userAvt, userName, active = false, closestMess, unread, closestMessTime, onClick }) {
     return (
-        <div className={cx('wrapper')} onClick={onClick}>
+        <div className={cx('wrapper', active && 'active')} onClick={onClick}>
             <img className={cx('user-avt')} alt={userName} src={userAvt} />
 
             <div className={cx('message-content')}>
@@ -16,8 +16,8 @@ function MessageItem({ userAvt, userName, closestMess, unreadMessCount, closestM
                     </div>
 
                     <div className={cx('mess-bottom-content')}>
-                        <span className={cx('closest-mess')}>{closestMess}</span>
-                        {/* <span className={cx('unread-count')}>{unreadMessCount}</span> */}
+                        <span className={cx('closest-mess', unread && 'unread')}>{closestMess}</span>
+                        {unread && <span className={cx('unread-count')}></span>}
                     </div>
                 </div>
             </div>

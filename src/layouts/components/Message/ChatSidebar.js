@@ -1,8 +1,9 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc } from 'firebase/firestore';
+import { onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import moment from 'moment';
+import HeadlessTippy from '@tippyjs/react/headless';
 
 import { db } from '~/firebase';
 import CircleButton from '~/components/Button/CircleButton';
@@ -16,9 +17,10 @@ import { useChat } from '~/context/ChatContext';
 const cx = classNames.bind(styles);
 function ChatSidebar() {
     const [chats, setChats] = useState([]);
+    const [activeMessItem, setActiveMessItem] = useState(null);
 
     const { currentUser } = useAuth();
-    const { dispatch } = useChat();
+    const { data, dispatch } = useChat();
 
     useEffect(() => {
         const getChats = () => {
@@ -34,8 +36,20 @@ function ChatSidebar() {
         currentUser.uid && getChats();
     }, [currentUser.uid]);
 
-    const handleSelect = (user) => {
-        dispatch({ type: 'CHANGE_USER', payload: user });
+    const handleSelect = async (user) => {
+        await dispatch({ type: 'CHANGE_USER', payload: user.userInfo });
+
+        // if (user.lastMessage?.senderId !== currentUser.uid) {
+        //     await updateDoc(doc(db, 'userChats', data.user.uid), {
+        //         [data.chatId + '.receiverHasRead']: true,
+        //     });
+        //     console.log('sender is not you');
+        // } else {
+        //     console.log('sender is you');
+        // }
+        //var selectedMessage = localStorage.getItem('SelectedMessage') || 1;
+        localStorage.setItem('SelectedMessage', user.userInfo.uid);
+        setActiveMessItem(user.userInfo.uid);
     };
 
     return (
@@ -53,15 +67,29 @@ function ChatSidebar() {
                 {Object.entries(chats)
                     ?.sort((a, b) => b[1].date - a[1].date)
                     .map((chat) => (
+                        // <HeadlessTippy
+                        //     key={chat[0]}
+                        //     //visible="true"
+                        //     delay={[0, 700]}
+                        //     interactive
+                        //     placement="bottom-end"
+                        //     offset={[12, 8]}
+                        //     render={(attrs) => <h2>Hello</h2>}
+                        // >
                         <MessageItem
                             key={chat[0]}
+                            active={activeMessItem === chat[1].userInfo.uid && true}
                             userName={chat[1].userInfo.displayName}
                             userAvt={chat[1].userInfo.photoURL}
-                            closestMess={chat[1].lastMessage?.text}
-                            //unreadMessCount={1}
+                            closestMess={
+                                (chat[1].lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
+                                chat[1].lastMessage?.text
+                            }
+                            unread={chat[1].receiverHasRead === false && true}
                             closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
-                            onClick={() => handleSelect(chat[1].userInfo)}
+                            onClick={() => handleSelect(chat[1])}
                         />
+                        // </HeadlessTippy>
                     ))}
             </div>
         </div>

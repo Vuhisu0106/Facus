@@ -61,6 +61,8 @@ function Chat() {
             //         });
             //     },
             // );
+        } else if (!text) {
+            return;
         } else {
             await updateDoc(doc(db, 'chats', data.chatId), {
                 messages: arrayUnion({
@@ -74,16 +76,20 @@ function Chat() {
 
         await updateDoc(doc(db, 'userChats', currentUser.uid), {
             [data.chatId + '.lastMessage']: {
+                senderId: currentUser.uid,
                 text,
             },
             [data.chatId + '.date']: serverTimestamp(),
+            [data.chatId + '.receiverHasRead']: true,
         });
 
         await updateDoc(doc(db, 'userChats', data.user.uid), {
             [data.chatId + '.lastMessage']: {
+                senderId: currentUser.uid,
                 text,
             },
             [data.chatId + '.date']: serverTimestamp(),
+            [data.chatId + '.receiverHasRead']: false,
         });
 
         setText('');
@@ -99,53 +105,22 @@ function Chat() {
             <div className={cx('chat-box')}>
                 <div className={cx('message-list')}>
                     {messages.map((mess) =>
-                        // <div
-                        //     className={
-                        //         mess.senderId === currentUser.uid ? cx('message', 'my-mess') : cx('message', 'fr-mess')
-                        //     }
-                        //     key={mess.id}
-                        //     ref={messageRef}
-                        // >
-                        //     <div
-                        //         className={
-                        //             mess.senderId === currentUser.uid ? cx('my-mess-content') : cx('fr-mess-content')
-                        //         }
-                        //     >
-                        //         {mess.text}
-                        //     </div>
-                        //     <span className={cx('sending-time')}>{moment(mess.date.toDate()).format('LT')}</span>
-                        // </div>
-
                         mess.senderId === currentUser.uid ? (
                             <div className={cx('message', 'my-mess')} key={mess.id} ref={messageRef}>
                                 <span className={cx('sending-time')}>{moment(mess.date.toDate()).format('LT')}</span>
-                                <div className={cx('my-mess-content')}>{mess.text}</div>
+                                <div className={cx('my-mess-content-wrapper')}>
+                                    <div className={cx('my-mess-content')}>{mess.text}</div>
+                                </div>
                             </div>
                         ) : (
                             <div className={cx('message', 'fr-mess')} key={mess.id} ref={messageRef}>
-                                <div className={cx('fr-mess-content')}>{mess.text}</div>
+                                <div className={cx('fr-mess-content-wrapper')}>
+                                    <div className={cx('fr-mess-content')}>{mess.text}</div>
+                                </div>
                                 <span className={cx('sending-time')}>{moment(mess.date.toDate()).format('LT')}</span>
                             </div>
                         ),
                     )}
-                    {/* <div className={cx('message', 'my-mess')}>
-                        <div className={cx('my-mess-content')}>Hi bro, đang làm clg đấy? :) </div>
-
-                        <span className={cx('sending-time')}>10:42 AM</span>
-                    </div>
-                    <div className={cx('message', 'fr-mess')}>
-                        <div className={cx('fr-mess-content')}>Hỏi làm gì?</div>
-                        <span className={cx('sending-time')}>10:42 AM</span>
-                    </div>
-                    <div className={cx('message', 'my-mess')}>
-                        <div className={cx('my-mess-content')}>Đi cafe ko?</div>
-                        <span className={cx('sending-time')}>10:43 AM</span>
-                    </div>
-                    <div className={cx('message', 'fr-mess')}>
-                        <div className={cx('fr-mess-content')}>Bao thì đi</div>
-                        <span className={cx('sending-time')}>10:44 AM</span>
-                    </div>
- */}
                 </div>
             </div>
             <div className={cx('chat-footer')}>

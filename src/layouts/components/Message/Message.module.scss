@@ -103,19 +103,24 @@
 }
 
 .my-mess {
-    //align-items: flex-end;
     justify-content: flex-end;
-
-    .my-mess-content {
+    .my-mess-content-wrapper {
         position: relative;
         padding: 8px;
         margin-left: 8px;
         background-color: var(--primary);
         border-radius: 10px;
+        max-width: 520px;
+    }
+    .my-mess-content {
         color: var(--white);
-        max-width: 65%;
         font-size: 15px;
         font-weight: 600;
+        white-space: normal !important;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        text-overflow: ellipsis;
     }
 
     .sending-time {
@@ -129,17 +134,25 @@
 .fr-mess {
     justify-content: flex-start;
 
-    .fr-mess-content {
+    .fr-mess-content-wrapper {
         position: relative;
         padding: 8px;
         margin-right: 8px;
-        background-color: #ececec;
+        background-color: #ffebef;
         border-radius: 10px;
-        color: var(--light-mode-black);
         max-width: 65%;
+        border: 1.5px solid rgba(255, 190, 190, 0.5);
+    }
+
+    .fr-mess-content {
+        color: #921b33;
         font-size: 15px;
         font-weight: 600;
-        border: 1.5px solid rgb(204, 206, 209, 0.5);
+        white-space: normal !important;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        text-overflow: ellipsis;
     }
 
     .sending-time {
