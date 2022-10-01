@@ -32,7 +32,10 @@ function Chat() {
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
             doc.exists() && setMessages(doc.data().messages);
+            console.log(data);
         });
+
+        setText('');
 
         return () => {
             unSub();
@@ -83,14 +86,26 @@ function Chat() {
             [data.chatId + '.receiverHasRead']: true,
         });
 
-        await updateDoc(doc(db, 'userChats', data.user.uid), {
-            [data.chatId + '.lastMessage']: {
-                senderId: currentUser.uid,
-                text,
-            },
-            [data.chatId + '.date']: serverTimestamp(),
-            [data.chatId + '.receiverHasRead']: false,
-        });
+        //if current user is same as user messaging to, receiverHasRead will be true
+        if (currentUser.uid !== data.user.uid) {
+            await updateDoc(doc(db, 'userChats', data.user.uid), {
+                [data.chatId + '.lastMessage']: {
+                    senderId: currentUser.uid,
+                    text,
+                },
+                [data.chatId + '.date']: serverTimestamp(),
+                [data.chatId + '.receiverHasRead']: false,
+            });
+        } else {
+            await updateDoc(doc(db, 'userChats', data.user.uid), {
+                [data.chatId + '.lastMessage']: {
+                    senderId: currentUser.uid,
+                    text,
+                },
+                [data.chatId + '.date']: serverTimestamp(),
+                [data.chatId + '.receiverHasRead']: true,
+            });
+        }
 
         setText('');
         setImg(null);

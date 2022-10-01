@@ -13,13 +13,15 @@ import ChatSearch from '~/components/Search/ChatSearch';
 import styles from './Message.module.scss';
 import { useAuth } from '~/context/AuthContext';
 import { useChat } from '~/context/ChatContext';
+import { SearchIcon } from '~/components/Icon';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function ChatSidebar() {
     const [chats, setChats] = useState([]);
-    const [messageItem, setMessageItem] = useState(null);
     const [activeMessItem, setActiveMessItem] = useState(null);
 
+    const { isAddChatVisible, setIsAddChatVisible } = useApp();
     const { currentUser } = useAuth();
     const { data, dispatch } = useChat();
 
@@ -51,8 +53,8 @@ function ChatSidebar() {
         }
 
         //var selectedMessage = localStorage.getItem('SelectedMessage') || 1;
-        localStorage.setItem('SelectedMessage', user.userInfo.uid);
-        setActiveMessItem(user.userInfo.uid);
+        //localStorage.setItem('SelectedMessage', user.userInfo.uid);
+        //setActiveMessItem(user.userInfo.uid);
     };
 
     // useEffect(() => {
@@ -77,15 +79,23 @@ function ChatSidebar() {
     //     }
     // }
 
+    useEffect(() => {
+        setActiveMessItem(data.user.uid);
+        setIsAddChatVisible(false);
+    }, [data]);
+
     return (
         <div className={cx('sidebar-wrapper')}>
             <div className={cx('sidebar-header')}>
                 <div className={cx('sidebar-top-header')}>
                     <h2>Chat</h2>
-                    <CircleButton children={<FontAwesomeIcon icon={faSquarePlus} />} />
+                    <CircleButton
+                        children={<FontAwesomeIcon icon={faSquarePlus} />}
+                        onClick={() => setIsAddChatVisible(true)}
+                    />
                 </div>
                 <div className={cx('search')}>
-                    <ChatSearch />
+                    <ChatSearch placeHolder={'Search...'} placement={'bottom'} />
                 </div>
             </div>
             <div className={cx('user-message-list')}>
@@ -116,6 +126,7 @@ function ChatSidebar() {
                             closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
                             onClick={() => {
                                 handleSelect(chat[1]);
+                                console.log(data);
                             }}
                         />
                         // </HeadlessTippy>

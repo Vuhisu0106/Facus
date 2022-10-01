@@ -145,7 +145,7 @@
     }
 
     .fr-mess-content {
-        color: #921b33;
+        color: #75172a;
         font-size: 15px;
         font-weight: 600;
         white-space: normal !important;
@@ -204,4 +204,28 @@
             background-color: rgba(22, 24, 35, 0.05);
         }
     }
+}
+
+//Empty chat
+.empty-chat-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    color: var(--light-text-color);
+    grid-column: span 3 / span 3;
+    position: relative;
+}
+
+.to {
+    font-size: 15px;
+    font-weight: 400px;
+}
+
+.chat-header-input {
+    border: none;
+    background-color: #fff;
+    font-size: 25px;
+    font-weight: 400px;
 }

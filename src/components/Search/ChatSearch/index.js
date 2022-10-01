@@ -2,7 +2,9 @@ import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { useApp } from '~/context/AppContext';
 import { useChat } from '~/context/ChatContext';
 import { useAuth } from '~/context/AuthContext';
 import { db } from '~/firebase';
@@ -12,15 +14,17 @@ import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 
 import { useDebounce } from '~/components/Hook';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
-function ChatSearch() {
+function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const [showResult, setShowResult] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    const { isAddChatVisible, setIsAddChatVisible, clearState } = useApp();
     const { currentUser } = useAuth();
     const { data, dispatch } = useChat();
 
@@ -42,14 +46,18 @@ function ChatSearch() {
             return;
         }
 
+        setLoading(true);
+
         const handleSearch = async () => {
             const q = query(collection(db, 'users'), where('keywords', 'array-contains', searchValue));
 
             try {
                 const querySnapshot = await getDocs(q);
                 setSearchResult(querySnapshot.docs.map((doc) => doc.data()));
+                setLoading(false);
             } catch (err) {
                 setError(true);
+                setLoading(false);
             }
         };
         handleSearch();
@@ -108,16 +116,23 @@ function ChatSearch() {
         <div className={cx('mess-search')}>
             <HeadlessTippy
                 interactive
-                placement="bottom"
+                placement={placement}
                 visible={showResult && searchValue}
                 render={(attrs) => (
                     <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
-                            {searchResult.length === 0 ? (
+                            {loading === false && searchResult.length === 0 ? (
                                 <span>User not found</span>
                             ) : (
                                 searchResult.map((result) => (
-                                    <AccountItem key={result.uid} data={result} onClick={() => handleSelect(result)} />
+                                    <AccountItem
+                                        key={result.uid}
+                                        data={result}
+                                        onClick={() => {
+                                            handleSelect(result);
+                                            clearState();
+                                        }}
+                                    />
                                 ))
                             )}
                         </PopperWrapper>
@@ -127,11 +142,15 @@ function ChatSearch() {
             >
                 <div className={cx('search')}>
                     <Input
+                        className={className}
+                        type="text"
                         inputRef={inputRef}
                         value={searchValue}
-                        placeHolder={'Search...'}
+                        placeHolder={placeHolder}
                         onChange={handleSearchInput}
                         spellCheck={false}
+                        loading={loading}
+                        autoFocus={autoFocus}
                         onFocus={() => setShowResult(true)}
                     />
 

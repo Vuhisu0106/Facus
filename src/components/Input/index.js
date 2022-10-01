@@ -1,5 +1,8 @@
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import styles from './Input.module.scss';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 function Input({
@@ -15,6 +18,8 @@ function Input({
     classNameLeftBtn,
     inputRef,
     onChange,
+    autoFocus,
+    loading = false,
     ...passProps
 }) {
     //const inputRef = useRef();
@@ -32,7 +37,15 @@ function Input({
                     {leftIcon}
                 </button>
             )}
-            <input value={value} type={type} ref={inputRef} placeholder={placeHolder} {...props}></input>
+            <input
+                value={value}
+                type={type}
+                ref={inputRef}
+                placeholder={placeHolder}
+                autoFocus={autoFocus}
+                {...props}
+            ></input>
+            {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
             {rightIcon && (
                 <button
                     className={cx('right-button', { [classNameRightBtn]: classNameRightBtn })}
