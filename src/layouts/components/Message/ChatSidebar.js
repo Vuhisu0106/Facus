@@ -17,6 +17,7 @@ import { useChat } from '~/context/ChatContext';
 const cx = classNames.bind(styles);
 function ChatSidebar() {
     const [chats, setChats] = useState([]);
+    const [messageItem, setMessageItem] = useState(null);
     const [activeMessItem, setActiveMessItem] = useState(null);
 
     const { currentUser } = useAuth();
@@ -39,18 +40,42 @@ function ChatSidebar() {
     const handleSelect = async (user) => {
         await dispatch({ type: 'CHANGE_USER', payload: user.userInfo });
 
-        // if (user.lastMessage?.senderId !== currentUser.uid) {
-        //     await updateDoc(doc(db, 'userChats', data.user.uid), {
-        //         [data.chatId + '.receiverHasRead']: true,
-        //     });
-        //     console.log('sender is not you');
-        // } else {
-        //     console.log('sender is you');
-        // }
+        console.log(user);
+        if (user.receiverHasRead === false) {
+            await updateDoc(doc(db, 'userChats', currentUser.uid), {
+                [user.userChatId + '.receiverHasRead']: true,
+            });
+            console.log('sender is not you');
+        } else {
+            console.log('sender is you');
+        }
+
         //var selectedMessage = localStorage.getItem('SelectedMessage') || 1;
         localStorage.setItem('SelectedMessage', user.userInfo.uid);
         setActiveMessItem(user.userInfo.uid);
     };
+
+    // useEffect(() => {
+    //     const unSub = onSnapshot(doc(db, 'userChats', data.chatId), (doc) => {
+    //         setMessageItem(doc.data());
+    //     });
+
+    //     return () => {
+    //         unSub();
+    //     };
+    // }, [data.chatId]);
+
+    // async function updateUnread(user) {
+    //     console.log('ms:' + messageItem);
+    //     if (user.receiverHasRead === false) {
+    //         await updateDoc(doc(db, 'userChats', currentUser.uid), {
+    //             [messageItem.chatId + '.receiverHasRead']: true,
+    //         });
+    //         console.log('sender is not you');
+    //     } else {
+    //         console.log('sender is you');
+    //     }
+    // }
 
     return (
         <div className={cx('sidebar-wrapper')}>
@@ -82,12 +107,16 @@ function ChatSidebar() {
                             userName={chat[1].userInfo.displayName}
                             userAvt={chat[1].userInfo.photoURL}
                             closestMess={
-                                (chat[1].lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
-                                chat[1].lastMessage?.text
+                                !chat[1].lastMessage
+                                    ? ''
+                                    : (chat[1].lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
+                                      chat[1].lastMessage?.text
                             }
                             unread={chat[1].receiverHasRead === false && true}
                             closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
-                            onClick={() => handleSelect(chat[1])}
+                            onClick={() => {
+                                handleSelect(chat[1]);
+                            }}
                         />
                         // </HeadlessTippy>
                     ))}

@@ -3,6 +3,7 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
+import { useChat } from '~/context/ChatContext';
 import { useAuth } from '~/context/AuthContext';
 import { db } from '~/firebase';
 import AccountItem from '~/components/AccountItem';
@@ -21,6 +22,8 @@ function ChatSearch() {
     const [error, setError] = useState('');
 
     const { currentUser } = useAuth();
+    const { data, dispatch } = useChat();
+
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();
 
@@ -74,6 +77,7 @@ function ChatSearch() {
 
                 //create user chats
                 await updateDoc(doc(db, 'userChats', currentUser.uid), {
+                    [combinedId + '.userChatId']: combinedId,
                     [combinedId + '.userInfo']: {
                         uid: result.uid,
                         displayName: result.displayName,
@@ -83,6 +87,7 @@ function ChatSearch() {
                 });
 
                 await updateDoc(doc(db, 'userChats', result.uid), {
+                    [combinedId + '.userChatId']: combinedId,
                     [combinedId + '.userInfo']: {
                         uid: currentUser.uid,
                         displayName: currentUser.displayName,
@@ -92,6 +97,8 @@ function ChatSearch() {
                 });
             }
         } catch (error) {}
+
+        await dispatch({ type: 'CHANGE_USER', payload: result });
 
         setSearchResult([]);
         setSearchValue('');
