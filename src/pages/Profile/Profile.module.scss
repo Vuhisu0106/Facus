@@ -1,10 +1,11 @@
 .container {
+    width: 100vw;
     min-height: 1000px;
     display: block;
 }
 
 .profile-main-part {
-    width: 100vw;
+    width: 100%;
     padding: 0 216px;
     background-color: #fff;
 }
@@ -19,11 +20,11 @@
 
 .profile-main-part-center {
     height: 160px;
+    padding-top: 10px;
     padding-bottom: 16px;
     margin: 0 32px;
-
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
     align-items: flex-start;
     border-bottom: 1px solid rgb(204, 206, 209);
 }
@@ -31,8 +32,9 @@
 .avatar {
     width: 170px;
     height: 170px;
-    transform: translateY(-32px);
+    transform: translateY(-42px);
     position: relative;
+    margin-right: 10px;
 }
 
 .profile-avt {
@@ -43,6 +45,7 @@
     bottom: 0;
     margin-right: 16px;
     position: absolute;
+    object-fit: cover;
 }
 
 .change-avt-btn {
@@ -56,9 +59,7 @@
     }
 }
 
-.profile-main-part-info {
-    flex: 1;
-    margin-top: 16px;
+.profile-main-part-right {
     display: flex;
     justify-content: space-between;
 }
@@ -75,14 +76,28 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    position: absolute;
 
     .separate-follow {
         font-size: 8px;
     }
 }
-
-.edit-btn {
-    margin-top: 10px;
+.profile-main-part-left {
+    display: flex;
+    flex-direction: column;
+    .edit-account-btn {
+        margin-top: 10px;
+        background-color: var(--primary);
+        color: var(--white);
+        border-radius: 8px;
+        &:hover {
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
+        }
+    }
+    .edit-profile-btn {
+        margin-top: 10px;
+        border-radius: 8px;
+    }
 }
 
 .profile-nav {

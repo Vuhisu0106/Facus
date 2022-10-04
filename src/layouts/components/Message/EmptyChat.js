@@ -22,7 +22,7 @@ function EmptyChat() {
         </div>
     ) : (
         <div className={cx('empty-chat-wrapper')}>
-            <h1>Let's chat</h1>
+            <h2>Select a chat or start a new conversation!</h2>
         </div>
     );
 }

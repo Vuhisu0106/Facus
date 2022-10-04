@@ -3,19 +3,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
 import styles from './Profile.module.scss';
-import { faCamera, faCircle, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faCircle, faPen, faWrench } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
-
+import { useAuth } from '~/context/AuthContext';
 import Posts from '~/layouts/components/Profile/Posts';
 import Following from '~/layouts/components/Profile/Following';
 import Follower from '~/layouts/components/Profile/Follower';
 import CircleButton from '~/components/Button/CircleButton';
+import Modal from '~/components/Modal';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
 function Profile() {
     const [type, setType] = useState('Posts');
     const [profileLayout, setProfileLayout] = useState('Posts');
+
+    const { currentUser } = useAuth();
+    const { setIsEditProfileVisible } = useApp();
 
     const main = () => {
         if (profileLayout === 'Following') {
@@ -34,32 +39,41 @@ function Profile() {
     return (
         <div className={cx('container')}>
             <div className={cx('profile-main-part')}>
-                <img
-                    className={cx('profile-cover-photo')}
-                    src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/97948524_559253204991695_2663173301714550784_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=e3f864&_nc_ohc=homhmfBkkoQAX_GZaNp&_nc_ht=scontent.fhan17-1.fna&oh=00_AT8_PE-kHOJ_FMh04EUKBz23kBXqNedDqelrTW5S4oHisQ&oe=632B0CD3"
-                    alt="Vu Hieu"
-                />
-
+                <img className={cx('profile-cover-photo')} src={currentUser.photoURL} alt="Vu Hieu" />
                 <div className={cx('profile-main-part-center')}>
-                    <div className={cx('avatar')}>
-                        <CircleButton className={cx('change-avt-btn')} children={<FontAwesomeIcon icon={faCamera} />} />
-                        <img
-                            className={cx('profile-avt')}
-                            alt="Vu Minh Hieu"
-                            src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=oGyPLoZWKrsAX__hIhS&_nc_ht=scontent.fhan17-1.fna&oh=00_AT_4rP0VslP3931BOoOScc4pVamVvHSzmmYDQ2CNHssO7A&oe=6350B4CF"
-                        />
-                    </div>
-
-                    <div className={cx('profile-main-part-info')}>
+                    <div className={cx('profile-main-part-right')}>
+                        <div className={cx('avatar')}>
+                            <CircleButton
+                                className={cx('change-avt-btn')}
+                                children={<FontAwesomeIcon icon={faCamera} />}
+                            />
+                            <img className={cx('profile-avt')} alt="Vu Minh Hieu" src={currentUser.photoURL} />
+                        </div>
                         <div>
-                            <h1 className={cx('profile-name')}>Vũ Hiếu</h1>
+                            <h1 className={cx('profile-name')}>{currentUser.displayName}</h1>
                             <div className={cx('profile-follow-info')}>
                                 <span className={cx('profile-following')}>1 following</span>
                                 <FontAwesomeIcon className={cx('separate-follow')} icon={faCircle} />
                                 <span className={cx('profile-follower')}>0 follower</span>
                             </div>
                         </div>
-                        <Button primary className={cx('edit-btn')} leftIcon={<FontAwesomeIcon icon={faPen} />}>
+                    </div>
+                    <div className={cx('profile-main-part-left')}>
+                        <Button
+                            primary
+                            className={cx('edit-account-btn')}
+                            leftIcon={<FontAwesomeIcon icon={faWrench} />}
+                        >
+                            Edit account
+                        </Button>
+                        <Button
+                            primary
+                            className={cx('edit-profile-btn')}
+                            leftIcon={<FontAwesomeIcon icon={faPen} />}
+                            onClick={() => {
+                                setIsEditProfileVisible(true);
+                            }}
+                        >
                             Edit profile
                         </Button>
                     </div>

@@ -46,6 +46,7 @@
         background-color: transparent;
         font-weight: 500;
         caret-color: var(--primary);
+        text-decoration: none !important;
     }
 
     &:focus-within {

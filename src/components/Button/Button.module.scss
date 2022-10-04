@@ -4,16 +4,13 @@
     align-items: center;
     font-size: 1.5rem;
     font-weight: 600;
-    min-width: 120px;
+    min-width: 80px;
     padding: 9px 16px;
     border-radius: 4px;
     cursor: pointer;
     border: transparent solid 1px;
     background-color: rgb(175, 177, 182, 0.3);
     user-select: none;
-
-    + .wrapper {
-    }
 
     &:hover {
         background-color: rgb(175, 177, 182, 0.5);

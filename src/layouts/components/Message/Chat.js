@@ -82,6 +82,7 @@ function Chat() {
                 senderId: currentUser.uid,
                 text,
             },
+
             [data.chatId + '.date']: serverTimestamp(),
             [data.chatId + '.receiverHasRead']: true,
         });
@@ -122,7 +123,12 @@ function Chat() {
                     {messages.map((mess) =>
                         mess.senderId === currentUser.uid ? (
                             <div className={cx('message', 'my-mess')} key={mess.id} ref={messageRef}>
-                                <span className={cx('sending-time')}>{moment(mess.date.toDate()).format('LT')}</span>
+                                <span className={cx('sending-time')}>
+                                    {/* {moment(mess.date.toDate()).startOf('day').fromNow()} */}
+                                    {moment(mess.date.toDate()).diff(moment(moment().format('L'))) < 0
+                                        ? moment(mess.date.toDate()).calendar()
+                                        : moment(mess.date.toDate()).format('LT')}
+                                </span>
                                 <div className={cx('my-mess-content-wrapper')}>
                                     <div className={cx('my-mess-content')}>{mess.text}</div>
                                 </div>
@@ -132,7 +138,11 @@ function Chat() {
                                 <div className={cx('fr-mess-content-wrapper')}>
                                     <div className={cx('fr-mess-content')}>{mess.text}</div>
                                 </div>
-                                <span className={cx('sending-time')}>{moment(mess.date.toDate()).format('LT')}</span>
+                                <span className={cx('sending-time')}>
+                                    {moment(mess.date.toDate()).diff(moment(moment().format('L'))) < 0
+                                        ? moment(mess.date.toDate()).calendar()
+                                        : moment(mess.date.toDate()).format('LT')}
+                                </span>
                             </div>
                         ),
                     )}
