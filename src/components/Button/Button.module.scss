@@ -11,6 +11,7 @@
     border: transparent solid 1px;
     background-color: rgb(175, 177, 182, 0.3);
     user-select: none;
+    position: relative;
 
     &:hover {
         background-color: rgb(175, 177, 182, 0.5);
@@ -78,16 +79,18 @@
 .active {
     background-color: transparent;
     color: var(--primary);
+    font-weight: 700;
 
     &::after {
         display: block;
         color: var(--primary);
-        bottom: -3px;
+        bottom: -5px;
         content: '';
         height: 0.3rem;
-        left: 10%;
         position: absolute;
-        width: 80%;
+        width: 60%;
+        background-color: var(--primary);
+        left: 20%;
     }
 }
 

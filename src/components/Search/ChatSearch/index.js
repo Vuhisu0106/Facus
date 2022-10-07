@@ -12,9 +12,7 @@ import AccountItem from '~/components/AccountItem';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
-
 import { useDebounce } from '~/components/Hook';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 function ChatSearch({ className, placeHolder, placement, autoFocus }) {
@@ -40,6 +38,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
         setShowResult(false);
     };
 
+    //Show users acording to search value
     useEffect(() => {
         if (!debounce.trim()) {
             setSearchResult([]);
@@ -75,7 +74,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
 
     const handleSelect = async (result) => {
         const combinedId = currentUser.uid > result.uid ? currentUser.uid + result.uid : result.uid + currentUser.uid;
-        console.log(combinedId);
+        //console.log(combinedId);
         try {
             const res = await getDoc(doc(db, 'chats', combinedId));
             console.log(res);
@@ -119,7 +118,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
                 placement={placement}
                 visible={showResult && searchValue}
                 render={(attrs) => (
-                    <div className={cx('search-result')} tabIndex="-1" {...attrs}>
+                    <div className={cx('chat-search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             {loading === false && searchResult.length === 0 ? (
                                 <span>User not found</span>
@@ -153,20 +152,6 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
                         autoFocus={autoFocus}
                         onFocus={() => setShowResult(true)}
                     />
-
-                    {/* 
-                    {!!searchValue && !loading ? (
-                        <button className={cx('clear-btn')} onClick={handleClearSearch}>
-                            <FontAwesomeIcon icon={faCircleXmark} />
-                        </button>
-                    ) : (
-                        <></>
-                    )}
-                    {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-
-                    <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
-                        <SearchIcon />
-                    </button> */}
                 </div>
             </HeadlessTippy>
         </div>

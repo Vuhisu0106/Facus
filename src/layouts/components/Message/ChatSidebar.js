@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect } from 'react';
 import { onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import moment from 'moment';
-import HeadlessTippy from '@tippyjs/react/headless';
 
 import { db } from '~/firebase';
 import CircleButton from '~/components/Button/CircleButton';
@@ -13,7 +12,6 @@ import ChatSearch from '~/components/Search/ChatSearch';
 import styles from './Message.module.scss';
 import { useAuth } from '~/context/AuthContext';
 import { useChat } from '~/context/ChatContext';
-import { SearchIcon } from '~/components/Icon';
 import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
@@ -21,7 +19,7 @@ function ChatSidebar() {
     const [chats, setChats] = useState([]);
     const [activeMessItem, setActiveMessItem] = useState(null);
 
-    const { isAddChatVisible, setIsAddChatVisible } = useApp();
+    const { setIsAddChatVisible } = useApp();
     const { currentUser } = useAuth();
     const { data, dispatch } = useChat();
 

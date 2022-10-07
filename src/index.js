@@ -8,20 +8,22 @@ import GlobalStyles from './components/GlobalStyles';
 import AuthProvider from './context/AuthContext';
 import ChatProvider from './context/ChatContext';
 import AppProvider from './context/AppContext';
-
+import UserProvider from './context/UserContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <AppProvider>
         <AuthProvider>
-            <ChatProvider>
-                <React.StrictMode>
-                    <BrowserRouter>
-                        <GlobalStyles>
-                            <App />
-                        </GlobalStyles>
-                    </BrowserRouter>
-                </React.StrictMode>
-            </ChatProvider>
+            <UserProvider>
+                <ChatProvider>
+                    <React.StrictMode>
+                        <BrowserRouter>
+                            <GlobalStyles>
+                                <App />
+                            </GlobalStyles>
+                        </BrowserRouter>
+                    </React.StrictMode>
+                </ChatProvider>
+            </UserProvider>
         </AuthProvider>
     </AppProvider>,
 );

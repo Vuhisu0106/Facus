@@ -77,6 +77,8 @@ function SignUp() {
 
                         //create empty user chats on firestore
                         await setDoc(doc(db, 'userChats', res.user.uid), {});
+                        await setDoc(doc(db, 'following', res.user.uid), {});
+                        await setDoc(doc(db, 'follower', res.user.uid), {});
                         navigate('/');
                     } catch (err) {
                         console.log(err);

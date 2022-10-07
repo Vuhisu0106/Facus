@@ -112,6 +112,16 @@ function Chat() {
         setImg(null);
     };
 
+    const handleSendInput = (e) => {
+        const sendValueInput = e.target.value;
+
+        if (!sendValueInput.startsWith(' ')) {
+            setText(sendValueInput);
+        } else {
+            return;
+        }
+    };
+
     return (
         <div className={cx('chat-wrapper')}>
             <div className={cx('chat-header')}>
@@ -154,7 +164,7 @@ function Chat() {
                     value={text}
                     type="text"
                     placeHolder={'Write a message'}
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={handleSendInput}
                     classNameLeftBtn={cx('img-btn')}
                     leftIcon={<FontAwesomeIcon icon={faImage} />}
                     classNameRightBtn={cx('send-btn')}

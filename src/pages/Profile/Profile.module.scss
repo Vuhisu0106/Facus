@@ -83,10 +83,15 @@
     }
 }
 .profile-main-part-left {
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    .edit-account-btn {
-        margin-top: 10px;
+    flex-direction: row;
+    align-items: flex-end;
+    padding-bottom: 20px;
+    .edit-account-btn,
+    .follow-btn,
+    .unfollow-btn {
+        height: 40px;
         background-color: var(--primary);
         color: var(--white);
         border-radius: 8px;
@@ -94,9 +99,11 @@
             background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
         }
     }
-    .edit-profile-btn {
-        margin-top: 10px;
+    .edit-profile-btn,
+    .chat-btn {
+        height: 40px;
         border-radius: 8px;
+        margin-left: 10px;
     }
 }
 
@@ -111,7 +118,6 @@
         display: flex;
         justify-content: space-between;
         background-color: transparent;
-
         list-style-type: none;
 
         li {
@@ -119,6 +125,11 @@
             width: 100%;
         }
     }
+}
+
+.profile-nav-btn {
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .profile-content {

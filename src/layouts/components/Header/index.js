@@ -1,26 +1,26 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket, faCamera, faHome, faMoon, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
-import Tippy from '@tippyjs/react/headless';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './Header.module.scss';
-import Input from '~/components/Input';
 import CircleButton from '~/components/Button/CircleButton';
 import { faFacebookMessenger } from '@fortawesome/free-brands-svg-icons';
-import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '~/components/AccountItem';
 import Menu from '~/components/Popper/Menu';
 import { faSquarePlus, faUser } from '@fortawesome/free-regular-svg-icons';
 import config from '~/configs';
 import { useState } from 'react';
 import { useAuth } from '~/context/AuthContext';
+import AccountSearch from '~/components/Search/AccountSearch';
+import { useUser } from '~/context/UserContext';
 
 const cx = classNames.bind(styles);
 
 function Header({ className }) {
     const [error, setError] = useState();
     const { currentUser, logout } = useAuth();
+    const { dispatch, addToLocalStorage } = useUser();
     const navigate = useNavigate();
 
     async function handleLogout() {
@@ -41,7 +41,11 @@ function Header({ className }) {
         {
             icon: <FontAwesomeIcon icon={faUser} />,
             title: 'View profile',
-            to: config.routes.profile,
+            onClick: async () => {
+                await dispatch({ type: 'SELECT_USER', payload: currentUser });
+                navigate(`/user/${currentUser.uid}`);
+                addToLocalStorage(currentUser.uid);
+            },
         },
         {
             icon: <FontAwesomeIcon icon={faMoon} />,
@@ -76,23 +80,11 @@ function Header({ className }) {
             <div className={cx('inner-wrapper')}>
                 <div className={cx('logo')}>facus</div>
 
-                <Tippy
-                    interactive
-                    trigger="click"
-                    render={(attrs) => (
-                        <div className={cx('search-result')} tabIndex="-1" {...attrs}>
-                            <PopperWrapper>
-                                {/* <AccountItem />
-                                <AccountItem />
-                                <AccountItem /> */}
-                            </PopperWrapper>
-                        </div>
-                    )}
-                >
-                    <div className={cx('search')}>
-                        <Input placeHolder={'Search for creators...'} leftIcon={<FontAwesomeIcon icon={faSearch} />} />
-                    </div>
-                </Tippy>
+                <AccountSearch
+                    className={cx('search')}
+                    placeHolder={'Search Facus...'}
+                    leftIcon={<FontAwesomeIcon icon={faSearch} />}
+                />
 
                 <div className={cx('actions')}>
                     <div className={cx('actions-btn')}>
