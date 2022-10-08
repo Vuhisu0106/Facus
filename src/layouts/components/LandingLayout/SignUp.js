@@ -79,6 +79,7 @@ function SignUp() {
                         await setDoc(doc(db, 'userChats', res.user.uid), {});
                         await setDoc(doc(db, 'following', res.user.uid), {});
                         await setDoc(doc(db, 'follower', res.user.uid), {});
+                        await setDoc(doc(db, 'post', res.user.uid), {});
                         navigate('/');
                     } catch (err) {
                         console.log(err);
