@@ -16,7 +16,6 @@ function Following() {
         const getFollowingList = () => {
             const unsub = onSnapshot(doc(db, 'following', selectUser), (doc) => {
                 setFollowingList(doc.data());
-                console.log(selectUser);
             });
 
             return () => {

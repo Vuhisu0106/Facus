@@ -1,74 +1,102 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faComment, faEllipsis, faHeart, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router-dom';
+import { onSnapshot, doc } from 'firebase/firestore';
+import moment from 'moment';
 
+import { db } from '~/firebase';
 import WrapperModal from '~/components/Wrapper';
 import Input from '~/components/Input';
 import styles from './Post.module.scss';
+import { useState, useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 function Post() {
+    let params = useParams();
+
+    const [postDetail, setPostDetail] = useState();
+
+    useEffect(() => {
+        const getPostDetail = () => {
+            const unsub = onSnapshot(doc(db, 'post', localStorage.getItem('selectPost')), (doc) => {
+                setPostDetail(doc.data());
+                console.log(postDetail);
+            });
+            return () => {
+                unsub();
+            };
+        };
+        getPostDetail();
+    }, [params.id]);
+
     return (
-        <WrapperModal className={cx('container')}>
-            <div className={cx('post-img-wrapper')}>
-                <div className={cx('post-image')}>
-                    <img
-                        alt="Vu Minh Hieu"
-                        src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/97948524_559253204991695_2663173301714550784_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=e3f864&_nc_ohc=homhmfBkkoQAX_GZaNp&_nc_ht=scontent.fhan17-1.fna&oh=00_AT8_PE-kHOJ_FMh04EUKBz23kBXqNedDqelrTW5S4oHisQ&oe=632B0CD3"
-                    />
-                </div>
-            </div>
-            <div className={cx('post-detail')}>
-                <div className={cx('post-header')}>
-                    <img
-                        className={cx('user-avt')}
-                        alt="Vu Minh Hieu"
-                        src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=LsEXcWjsPnwAX_aqMvn&_nc_ht=scontent.fhan17-1.fna&oh=00_AT8CqApXsUwbkS7tXeLYTc9rRPE-97NT1Y0Z4A70YWs91A&oe=6325334F"
-                    />
-                    <div className={cx('post-header-info')}>
-                        <p className={cx('user-name')}>Vũ Hiếu</p>
-                        <p className={cx('time-post')}>2 hours ago</p>
-                    </div>
-                    <div className={cx('more-btn')}>
-                        <FontAwesomeIcon icon={faEllipsis} />
+        postDetail && (
+            <WrapperModal className={cx('container')}>
+                <div className={cx('post-img-wrapper')}>
+                    <div className={cx('post-image')}>
+                        <img alt={postDetail.poster.displayName} src={postDetail.img} />
                     </div>
                 </div>
-                <div className={cx('post-content')}>
-                    <div className={cx('post-caption')}>
-                        <p>
-                            "I captured a 145 megapixel image of our sun using a specially modified telescope. Zoom in!"
-                        </p>
-                    </div>
-                </div>
-                <div className={cx('post-interaction')}>
-                    <div className={cx('post-interaction-detail')}>
-                        <div className={cx('post-reaction-detail')}>
-                            <FontAwesomeIcon className={cx('reaction-icon')} icon={faHeart} /> You and 8 others
-                        </div>
-                        <div className={cx('post-comment-detail')}>
-                            <span>25 comments</span>
-                        </div>
-                    </div>
-                    <div className={cx('post-interact')}>
-                        <button className={cx('reaction-btn')}>
-                            <FontAwesomeIcon icon={faHeart} />
-                            <span>Like</span>
-                        </button>
-                        <button className={cx('comment-btn')}>
-                            <FontAwesomeIcon icon={faComment} />
-                            <span>Comment</span>
-                        </button>
-                    </div>
-                    <div className={cx('comment-bar')}>
+                <div className={cx('post-detail')}>
+                    <div className={cx('post-header')}>
                         <img
-                            alt="Vu Minh Hieu"
-                            src="https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=LsEXcWjsPnwAX_aqMvn&_nc_ht=scontent.fhan17-1.fna&oh=00_AT8CqApXsUwbkS7tXeLYTc9rRPE-97NT1Y0Z4A70YWs91A&oe=6325334F"
+                            className={cx('user-avt')}
+                            alt={postDetail.poster.displayName}
+                            src={postDetail.poster.photoURL}
                         />
-                        <Input placeHolder={'Write comment here...'} rightIcon={<FontAwesomeIcon icon={faCamera} />} />
+                        <div className={cx('post-header-info')}>
+                            <p className={cx('user-name')}>{postDetail.poster.displayName}</p>
+                            <p className={cx('time-post')}>
+                                {postDetail.date && moment(postDetail.date.toDate()).fromNow()}
+                            </p>
+                        </div>
+                        <div className={cx('more-btn')}>
+                            <FontAwesomeIcon icon={faEllipsis} />
+                        </div>
+                    </div>
+                    <div className={cx('post-content')}>
+                        <div className={cx('post-caption')}>
+                            <p>{postDetail.caption}</p>
+                        </div>
+                    </div>
+                    <div className={cx('post-interaction')}>
+                        {postDetail.like > 0 && postDetail.comment > 0 && (
+                            <div className={cx('post-interaction-detail')}>
+                                {postDetail.like.length > 0 && (
+                                    <div className={cx('post-reaction-detail')}>
+                                        <FontAwesomeIcon className={cx('reaction-icon')} icon={faHeart} /> You and 8
+                                        others
+                                    </div>
+                                )}
+                                {postDetail.comment.length > 0 && (
+                                    <div className={cx('post-comment-detail')}>
+                                        <span>25 comments</span>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        <div className={cx('post-interact')}>
+                            <button className={cx('reaction-btn')}>
+                                <FontAwesomeIcon icon={faHeart} />
+                                <span>Like</span>
+                            </button>
+                            <button className={cx('comment-btn')}>
+                                <FontAwesomeIcon icon={faComment} />
+                                <span>Comment</span>
+                            </button>
+                        </div>
+                        <div className={cx('comment-bar')}>
+                            <img alt={postDetail.poster.displayName} src={postDetail.poster.photoURL} />
+                            <Input
+                                placeHolder={'Write comment here...'}
+                                rightIcon={<FontAwesomeIcon icon={faCamera} />}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </WrapperModal>
+            </WrapperModal>
+        )
     );
 }
 

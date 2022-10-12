@@ -48,8 +48,8 @@ function UserProvider({ children }) {
         }
     };
 
-    const addToLocalStorage = (user) => {
-        localStorage.setItem('selectUser', user);
+    const addToLocalStorage = (localStorageName, data) => {
+        localStorage.setItem(localStorageName, data);
     };
 
     var selectUserLocalStorage = localStorage.getItem('selectUser');

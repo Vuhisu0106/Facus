@@ -1,12 +1,15 @@
-import { faCamera, faComment, faEllipsis, faHeart, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faEllipsis, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 
 import styles from './PostLayout.module.scss';
 import Input from '~/components/Input';
+import { faComment, faHeart } from '@fortawesome/free-regular-svg-icons';
+import { useUser } from '~/context/UserContext';
 
 const cx = classNames.bind(styles);
-function PostLayout({ userId, userName, userAvt, timeStamp, postImg, postCaption, likeCount, commentCount }) {
+function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, postCaption, likeCount, commentCount }) {
+    const { addToLocalStorage } = useUser();
     return (
         <div className={cx('post-wrapper')}>
             <div className={cx('post-header')}>
@@ -25,7 +28,13 @@ function PostLayout({ userId, userName, userAvt, timeStamp, postImg, postCaption
                 </div>
                 {postImg && (
                     <div className={cx('post-image')}>
-                        <a href="/post" id="">
+                        <a
+                            href={`/post/${postId}`}
+                            id=""
+                            onClick={() => {
+                                addToLocalStorage('selectPost', postId);
+                            }}
+                        >
                             <img alt={userName} src={postImg} />
                         </a>
                     </div>

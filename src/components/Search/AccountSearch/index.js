@@ -74,7 +74,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
 
     const handleSelect = async (result) => {
         await dispatch({ type: 'SELECT_USER', payload: result });
-        addToLocalStorage(result.uid);
+        addToLocalStorage('selectUser', result.uid);
         navigate(`/user/${result.uid}`);
         setSearchResult([]);
         setSearchValue('');

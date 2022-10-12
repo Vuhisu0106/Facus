@@ -25,7 +25,7 @@ function Posts({ isCurrentUser = false }) {
 
     useEffect(() => {
         const getPost = () => {
-            const unsub = onSnapshot(doc(db, 'post', selectUser), (doc) => {
+            const unsub = onSnapshot(doc(db, 'userPost', selectUser), (doc) => {
                 setPostList(doc.data());
             });
 
@@ -94,6 +94,7 @@ function Posts({ isCurrentUser = false }) {
                         .map((post) => (
                             <PostLayout
                                 key={post[0]}
+                                postId={post[0]}
                                 userId={post[1].poster.uid}
                                 userName={post[1].poster.displayName}
                                 userAvt={post[1].poster.photoURL}

@@ -21,8 +21,8 @@ const NAV_LIST = ['Posts', 'Following', 'Follower'];
 function Profile() {
     const [selectedUser, setSelectedUser] = useState('');
     const [following, setFollowing] = useState(false);
-    const [type, setType] = useState('Post');
-    const [profileLayout, setProfileLayout] = useState('Post');
+    const [type, setType] = useState('Posts');
+    const [profileLayout, setProfileLayout] = useState('Posts');
     const [currentUserFollowing, setCurrentUserFollowing] = useState([]);
 
     const { currentUser } = useAuth();

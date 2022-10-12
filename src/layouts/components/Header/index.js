@@ -44,7 +44,7 @@ function Header({ className }) {
             onClick: async () => {
                 await dispatch({ type: 'SELECT_USER', payload: currentUser });
                 navigate(`/user/${currentUser.uid}`);
-                addToLocalStorage(currentUser.uid);
+                addToLocalStorage('selectUser', currentUser.uid);
             },
         },
         {

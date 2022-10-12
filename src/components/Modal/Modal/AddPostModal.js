@@ -51,7 +51,7 @@ function AddPostModal() {
 
             await uploadBytesResumable(storageRef, img).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDoc(doc(db, 'post', currentUser.uid), {
+                    await updateDoc(doc(db, 'userPost', currentUser.uid), {
                         [uuId]: {
                             postId: uuId,
                             poster: {
@@ -66,12 +66,26 @@ function AddPostModal() {
                             comment: [],
                         },
                     });
+
+                    await setDoc(doc(db, 'post', uuId), {
+                        postId: uuId,
+                        poster: {
+                            uid: currentUser.uid,
+                            displayName: currentUser.displayName,
+                            photoURL: currentUser.photoURL,
+                        },
+                        caption: caption,
+                        img: downloadURL,
+                        date: serverTimestamp(),
+                        like: [],
+                        comment: [],
+                    });
                 });
             });
         } else if (!caption) {
             return;
         } else {
-            await updateDoc(doc(db, 'post', currentUser.uid), {
+            await updateDoc(doc(db, 'userPost', currentUser.uid), {
                 [uuId]: {
                     postId: uuId,
                     poster: {
@@ -84,6 +98,19 @@ function AddPostModal() {
                     like: [],
                     comment: [],
                 },
+            });
+            await setDoc(doc(db, 'post', uuId), {
+                postId: uuId,
+                poster: {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    photoURL: currentUser.photoURL,
+                },
+                caption: caption,
+
+                date: serverTimestamp(),
+                like: [],
+                comment: [],
             });
         }
 
