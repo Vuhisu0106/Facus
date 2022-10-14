@@ -12,6 +12,7 @@ import PostLayout from '~/components/PostLayout';
 import styles from './Home.module.scss';
 import RoundAccountItem from '~/components/AccountItem/RoundAccountItem';
 import { useAuth } from '~/context/AuthContext';
+import SuggestAccount from '~/components/SuggestAccount';
 
 const cx = classNames.bind(styles);
 function Home() {
@@ -42,18 +43,6 @@ function Home() {
     }, [currentUser.uid]);
 
     useEffect(() => {
-        // const getPost = () => {
-        //     const unsub = onSnapshot(doc(db, 'userPost', where(documentId(), 'in', followingList)), (doc) => {
-        //         setPostList(doc.data());
-        //     });
-
-        //     return () => {
-        //         unsub();
-        //     };
-        // };
-
-        // followingList && getPost();
-
         const getPost = async () => {
             const postFromId = localStorage.getItem('FollowingList').split(',');
             postFromId.push(currentUser.uid);
@@ -72,12 +61,6 @@ function Home() {
             return () => {
                 unsub();
             };
-
-            // const postDocsSnap = await getDocs(q);
-
-            // postDocsSnap.forEach((doc) => {
-            //     console.log('doc' + doc.data()); // "doc1", "doc2" and "doc3"
-            // });
         };
 
         getPost();
@@ -91,53 +74,19 @@ function Home() {
 
     return (
         <div className={cx('container')}>
-            <Sidebar />
+            <Sidebar children={<SuggestAccount label="Suggested to you" />} className={cx('left-sidebar')} />
+
             <div className={cx('content')}>
                 <div className={cx('horizontal-scroll')} ref={horizontalRef}>
                     <button className={cx('btn-scroll-left')}>{<FontAwesomeIcon icon={faChevronLeft} />}</button>
                     <div className={cx('feeling-container')} ref={storyRef}>
-                        <RoundAccountItem
-                            avt={
-                                'https://scontent.fhan15-2.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=aOrAX3b2VlgAX85MgLN&_nc_ht=scontent.fhan15-2.fna&oh=00_AT91QUBc3D1eLrd5bZSDnYY-JxtamKZ23dqDBRSBgrIqxw&oe=6340E2CF'
-                            }
-                            userName={'Vu Hieu'}
-                        />
-                        <RoundAccountItem
-                            avt={
-                                'https://scontent.fhan15-2.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=aOrAX3b2VlgAX85MgLN&_nc_ht=scontent.fhan15-2.fna&oh=00_AT91QUBc3D1eLrd5bZSDnYY-JxtamKZ23dqDBRSBgrIqxw&oe=6340E2CF'
-                            }
-                            userName={'Vu Hieu'}
-                        />
-                        <RoundAccountItem
-                            avt={
-                                'https://scontent.fhan15-2.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=aOrAX3b2VlgAX85MgLN&_nc_ht=scontent.fhan15-2.fna&oh=00_AT91QUBc3D1eLrd5bZSDnYY-JxtamKZ23dqDBRSBgrIqxw&oe=6340E2CF'
-                            }
-                            userName={'Vu Hieu'}
-                        />
-                        <RoundAccountItem
-                            avt={
-                                'https://scontent.fhan15-2.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=aOrAX3b2VlgAX85MgLN&_nc_ht=scontent.fhan15-2.fna&oh=00_AT91QUBc3D1eLrd5bZSDnYY-JxtamKZ23dqDBRSBgrIqxw&oe=6340E2CF'
-                            }
-                            userName={'Vu Hieu'}
-                        />
-                        <RoundAccountItem
-                            avt={
-                                'https://scontent.fhan15-2.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=aOrAX3b2VlgAX85MgLN&_nc_ht=scontent.fhan15-2.fna&oh=00_AT91QUBc3D1eLrd5bZSDnYY-JxtamKZ23dqDBRSBgrIqxw&oe=6340E2CF'
-                            }
-                            userName={'Vu Hieu'}
-                        />
-                        <RoundAccountItem
-                            avt={
-                                'https://scontent.fhan15-2.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=aOrAX3b2VlgAX85MgLN&_nc_ht=scontent.fhan15-2.fna&oh=00_AT91QUBc3D1eLrd5bZSDnYY-JxtamKZ23dqDBRSBgrIqxw&oe=6340E2CF'
-                            }
-                            userName={'Vu Hieu'}
-                        />
-                        <RoundAccountItem
-                            avt={
-                                'https://scontent.fhan15-2.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=aOrAX3b2VlgAX85MgLN&_nc_ht=scontent.fhan15-2.fna&oh=00_AT91QUBc3D1eLrd5bZSDnYY-JxtamKZ23dqDBRSBgrIqxw&oe=6340E2CF'
-                            }
-                            userName={'Vu Hieu'}
-                        />
+                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
+                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
+                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
+                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
+                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
+                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
+                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
                     </div>
                     <button className={cx('btn-scroll-right')}>{<FontAwesomeIcon icon={faChevronRight} />}</button>
                 </div>
@@ -160,7 +109,7 @@ function Home() {
                             />
                         ))}
             </div>
-            <Sidebar />
+            <Sidebar children={<SuggestAccount label="Suggested to you" />} className={cx('right-sidebar')} />
         </div>
     );
 }

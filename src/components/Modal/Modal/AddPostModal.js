@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
-import { doc, onSnapshot, arrayUnion, serverTimestamp, Timestamp, updateDoc, setDoc } from 'firebase/firestore';
+import { doc, serverTimestamp, updateDoc, setDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 
@@ -23,14 +23,7 @@ function AddPostModal() {
     const [caption, setCaption] = useState('');
     const [img, setImg] = useState(null);
 
-    const {
-        isAddPostVisible,
-        setIsAddPostVisible,
-        addPhotoVisible,
-        setAddPhotoVisible,
-        buttonActive,
-        setButtonActive,
-    } = useApp();
+    const { setIsAddPostVisible, addPhotoVisible, setAddPhotoVisible, buttonActive, setButtonActive } = useApp();
 
     const handleCaption = (e) => {
         const captionValueInput = e.target.value;

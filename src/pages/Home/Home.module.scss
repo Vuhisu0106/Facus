@@ -3,7 +3,7 @@
     padding: 20px 0;
     width: var(--home-layout-width);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 .content {
     max-width: 530px;
@@ -48,4 +48,16 @@
     left: 0;
     position: absolute;
     transition: 0.5s all ease-out;
+}
+
+.left-sidebar {
+    position: fixed;
+    top: 80px;
+    left: calc((100vw - 1178px) / 2);
+}
+
+.right-sidebar {
+    position: fixed;
+    top: 80px;
+    right: calc((100vw - 1178px) / 2);
 }

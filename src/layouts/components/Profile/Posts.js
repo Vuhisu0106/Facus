@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc } from 'firebase/firestore';
+import { onSnapshot, doc, serverTimestamp, updateDoc, setDoc } from 'firebase/firestore';
 import moment from 'moment';
 
 import { db } from '~/firebase';
@@ -13,6 +13,7 @@ import { useApp } from '~/context/AppContext';
 import CircleAvatar from '~/components/CircleAvatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
+import Input from '~/components/Input';
 
 const cx = classNames.bind(styles);
 function Posts({ isCurrentUser = false }) {
@@ -20,6 +21,8 @@ function Posts({ isCurrentUser = false }) {
     const { setIsAddPostVisible, setAddPhotoVisible, setButtonActive } = useApp();
 
     const [postList, setPostList] = useState([]);
+    const [bioInput, setBioInput] = useState('');
+    const [editBio, setEditBio] = useState(false);
 
     var selectUser = localStorage.getItem('selectUser');
 
@@ -36,17 +39,96 @@ function Posts({ isCurrentUser = false }) {
 
         selectUser && getPost();
     }, [selectUser]);
+
+    const handleEditBio = (e) => {
+        const editValueInput = e.target.value;
+
+        if (editValueInput.trim() !== '') {
+            setBioInput(editValueInput);
+            console.log(currentUser);
+        } else {
+            return;
+        }
+    };
+
+    const handleSaveBio = async () => {
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+            bio: bioInput,
+        });
+
+        setBioInput('');
+        setEditBio(false);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('left-content')}>
                 <WrapperModal className={cx('intro')}>
                     <h2>Intro</h2>
-                    <p>Hello world</p>
-                    {isCurrentUser && <Button long>Edit bio</Button>}
+                    {!editBio ? (
+                        <>
+                            <p>Hello world</p>
+                            {isCurrentUser && (
+                                <Button
+                                    long
+                                    onClick={() => {
+                                        setEditBio(true);
+                                    }}
+                                >
+                                    Edit bio
+                                </Button>
+                            )}
+                        </>
+                    ) : (
+                        <div className={cx('edit-bio')}>
+                            <Input
+                                className={cx('bio-input')}
+                                placeHolder={'Type your bio...'}
+                                onChange={handleEditBio}
+                            />
+                            <div className={cx('edit-bio-btn')}>
+                                <Button
+                                    className={cx('cancel-bio-btn')}
+                                    children={'Cancel'}
+                                    onClick={() => {
+                                        setBioInput('');
+                                        setEditBio(false);
+                                    }}
+                                />
+                                <Button
+                                    className={cx('save-bio-btn')}
+                                    children={'Save'}
+                                    onClick={() => {
+                                        handleSaveBio();
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    )}
                 </WrapperModal>
                 <WrapperModal className={cx('photo')}>
                     <h2>Photo</h2>
                     <p>No image found!</p>
+                    <div className={cx('photo-box')}>
+                        <div>
+                            <img
+                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                                alt=""
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                                alt=""
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                                alt=""
+                            />
+                        </div>
+                    </div>
                 </WrapperModal>
             </div>
             <div className={cx('right-content')}>

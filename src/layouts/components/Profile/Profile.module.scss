@@ -27,6 +27,62 @@
     }
 }
 
+.edit-bio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .bio-input {
+        min-height: 36px;
+        width: 248px;
+        padding: 8px 24px;
+        margin: 12px 0;
+        border: 1.8px solid rgb(204, 206, 209, 1);
+        background-color: var(--white);
+
+        &:focus-within {
+            border: 1.8px solid var(--primary);
+        }
+    }
+
+    .edit-bio-btn {
+        width: 170px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .cancel-bio-btn {
+            height: 32px;
+            border-radius: 8px;
+        }
+        .save-bio-btn {
+            height: 32px;
+            border-radius: 8px;
+            background-color: var(--primary);
+            color: var(--white);
+
+            &:hover {
+                background-color: red;
+            }
+        }
+    }
+}
+
+.photo-box {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-gap: 5px;
+    margin-top: 15px;
+    border-radius: 15px;
+
+    div img {
+        width: 100%;
+        cursor: pointer;
+    }
+}
+
 .right-content {
     flex: 1;
     //background-color: #fff;

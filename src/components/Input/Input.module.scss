@@ -3,7 +3,7 @@
     align-items: center;
     flex: 1;
     background-color: var(--light-mode-color);
-    height: 34px;
+    min-height: 34px;
     border: 1.5px solid transparent;
     border-radius: var(--input-border-radius);
     position: relative;
