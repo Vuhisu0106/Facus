@@ -12,6 +12,8 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { useUser } from '~/context/UserContext';
 import { useAuth } from '~/context/AuthContext';
+import CircleAvatar from '../CircleAvatar';
+import CircleButton from '../Button/CircleButton';
 
 const cx = classNames.bind(styles);
 function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, postCaption, likeCount, commentCount }) {
@@ -119,8 +121,63 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                     </button>
                 </div>
                 <div className={cx('comment-bar')}>
-                    <img alt={userName} src={userAvt} />
+                    <CircleAvatar userName={userName} avatar={userAvt} />
                     <Input placeHolder={'Write comment here...'} rightIcon={<FontAwesomeIcon icon={faCamera} />} />
+                </div>
+                <div className={cx('comment-list')}>
+                    <div className={cx('comment-element')}>
+                        <CircleAvatar
+                            userName={currentUser.displayName}
+                            avatar={currentUser.photoURL}
+                            diameter="32px"
+                        />
+                        <div className={cx('comment-element-content')}>
+                            <div className={cx('comment-content-n-setting')}>
+                                <div className={cx('comment-content-wrapper')}>
+                                    <div className={cx('comment-content')}>Hello, this is a post comment</div>
+                                </div>
+                                <CircleButton
+                                    className={cx('comment-setting')}
+                                    children={<FontAwesomeIcon icon={faEllipsis} />}
+                                />
+                            </div>
+
+                            <img className={cx('comment-image')} src={currentUser.photoURL} alt="" />
+
+                            <div className={cx('comment-interact')}>
+                                <button>Like</button>
+                                <button>Reply</button>
+                                <span>12 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={cx('comment-element')}>
+                        <CircleAvatar
+                            userName={currentUser.displayName}
+                            avatar={currentUser.photoURL}
+                            diameter="32px"
+                        />
+                        <div className={cx('comment-element-content')}>
+                            <div className={cx('comment-content-n-setting')}>
+                                <div className={cx('comment-content-wrapper')}>
+                                    <div className={cx('comment-content')}>Hello, this is a post comment</div>
+                                </div>
+                                <CircleButton
+                                    className={cx('comment-setting')}
+                                    children={<FontAwesomeIcon icon={faEllipsis} />}
+                                />
+                            </div>
+
+                            <img className={cx('comment-image')} src={currentUser.photoURL} alt="" />
+
+                            <div className={cx('comment-interact')}>
+                                <button>Like</button>
+                                <button>Reply</button>
+                                <span>12 min</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
