@@ -16,6 +16,10 @@ function Input({
     onClickLeftBtn,
     classNameRightBtn,
     classNameLeftBtn,
+    leftBtnTypeFile = false,
+    rightBtnTypeFile = false,
+    onChangeLeftBtn,
+    onChangeRightBtn,
     inputRef,
     onChange,
     autoFocus,
@@ -46,14 +50,25 @@ function Input({
                 {...props}
             ></input>
             {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-            {rightIcon && (
-                <button
-                    className={cx('right-button', { [classNameRightBtn]: classNameRightBtn })}
-                    onClick={onClickRightBtn}
-                >
-                    {rightIcon}
-                </button>
-            )}
+            {rightIcon &&
+                (!rightBtnTypeFile ? (
+                    <button
+                        className={cx('right-button', { [classNameRightBtn]: classNameRightBtn })}
+                        onClick={onClickRightBtn}
+                    >
+                        {rightIcon}
+                    </button>
+                ) : (
+                    <>
+                        <label
+                            htmlFor="right-btn-input"
+                            className={cx('right-input-file', { [classNameRightBtn]: classNameRightBtn })}
+                        >
+                            {rightIcon}
+                        </label>
+                        <input id="right-btn-input" type="file" onChange={onChangeRightBtn} />
+                    </>
+                ))}
         </div>
     );
 }

@@ -1,10 +1,14 @@
-import { faCamera, faEllipsis, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faEllipsis, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useState, useEffect } from 'react';
-import { doc, onSnapshot, arrayUnion, updateDoc, arrayRemove } from 'firebase/firestore';
+import { useState, useEffect, useRef } from 'react';
+import { doc, onSnapshot, arrayUnion, updateDoc, arrayRemove, serverTimestamp, setDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { v4 as uuid } from 'uuid';
 import { db } from '~/firebase';
+import moment from 'moment';
 
+import { storage } from '~/firebase';
 import styles from './PostLayout.module.scss';
 import Input from '~/components/Input';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
@@ -14,6 +18,7 @@ import { useUser } from '~/context/UserContext';
 import { useAuth } from '~/context/AuthContext';
 import CircleAvatar from '../CircleAvatar';
 import CircleButton from '../Button/CircleButton';
+import { async } from '@firebase/util';
 
 const cx = classNames.bind(styles);
 function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, postCaption, likeCount, commentCount }) {
@@ -21,6 +26,11 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
     const { currentUser } = useAuth();
 
     const [postDetail, setPostDetail] = useState({});
+    const [comment, setComment] = useState('');
+    const [commentVisible, setCommentVisible] = useState(false);
+    const [commentImg, setCommentImg] = useState(null);
+
+    const commentInputRef = useRef();
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'post', postId), (doc) => {
@@ -50,6 +60,137 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
             });
         }
     };
+
+    const handleCommentInput = (e) => {
+        const sendValueInput = e.target.value;
+
+        if (!sendValueInput.startsWith(' ')) {
+            setComment(sendValueInput);
+        } else {
+            return;
+        }
+    };
+
+    const handleOnClickCommentBtn = () => {
+        commentInputRef.current.focus();
+        setCommentVisible(true);
+    };
+
+    const handleComment = async () => {
+        let uuId = uuid();
+        if (commentImg) {
+            const storageRef = ref(storage, uuid());
+            //const uploadTask = await uploadBytesResumable(storageRef, img);
+
+            await uploadBytesResumable(storageRef, commentImg).then(() => {
+                getDownloadURL(storageRef).then(async (downloadURL) => {
+                    await updateDoc(doc(db, 'post', postId), {
+                        comment: arrayUnion({
+                            commentId: uuId,
+                            commenter: {
+                                uid: currentUser.uid,
+                                displayName: currentUser.displayName,
+                                photoURL: currentUser.photoURL,
+                            },
+                            content: comment,
+                            img: downloadURL,
+                            createdAt: new Date(),
+                            like: [],
+                        }),
+                    });
+
+                    await updateDoc(doc(db, 'userPost', userId), {
+                        [postId + '.comment']: arrayUnion({
+                            commentId: uuId,
+                            commenter: {
+                                uid: currentUser.uid,
+                                displayName: currentUser.displayName,
+                                photoURL: currentUser.photoURL,
+                            },
+                            content: comment,
+                            img: downloadURL,
+                            createdAt: new Date(),
+                            like: [],
+                        }),
+                    });
+                });
+            });
+        } else if (!comment && commentImg) {
+            const storageRef = ref(storage, uuid());
+            //const uploadTask = await uploadBytesResumable(storageRef, img);
+
+            await uploadBytesResumable(storageRef, commentImg).then(() => {
+                getDownloadURL(storageRef).then(async (downloadURL) => {
+                    await updateDoc(doc(db, 'post', postId), {
+                        comment: arrayUnion({
+                            commentId: uuId,
+                            commenter: {
+                                uid: currentUser.uid,
+                                displayName: currentUser.displayName,
+                                photoURL: currentUser.photoURL,
+                            },
+
+                            img: downloadURL,
+                            createdAt: new Date(),
+                            like: [],
+                        }),
+                    });
+
+                    await updateDoc(doc(db, 'userPost', userId), {
+                        [postId + '.comment']: arrayUnion({
+                            commentId: uuId,
+                            commenter: {
+                                uid: currentUser.uid,
+                                displayName: currentUser.displayName,
+                                photoURL: currentUser.photoURL,
+                            },
+
+                            img: downloadURL,
+                            createdAt: new Date(),
+                            like: [],
+                        }),
+                    });
+                });
+            });
+        } else if (!comment && !commentImg) {
+            return;
+        } else {
+            await updateDoc(doc(db, 'post', postId), {
+                comment: arrayUnion({
+                    commentId: uuId,
+                    commenter: {
+                        uid: currentUser.uid,
+                        displayName: currentUser.displayName,
+                        photoURL: currentUser.photoURL,
+                    },
+                    content: comment,
+                    createdAt: new Date(),
+                    like: [],
+                }),
+            });
+
+            await updateDoc(doc(db, 'userPost', userId), {
+                [postId + '.comment']: arrayUnion({
+                    commentId: uuId,
+                    commenter: {
+                        uid: currentUser.uid,
+                        displayName: currentUser.displayName,
+                        photoURL: currentUser.photoURL,
+                    },
+                    content: comment,
+                    createdAt: new Date(),
+                    like: [],
+                }),
+            });
+        }
+
+        setComment('');
+        setCommentImg(null);
+        // setCaption('');
+        // setImg(null);
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
         <div className={cx('post-wrapper')}>
             <div className={cx('post-header')}>
@@ -96,7 +237,9 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
 
                         {commentCount > 0 && (
                             <div className={cx('post-comment-detail')}>
-                                <span>{commentCount}</span>
+                                <span onClick={handleOnClickCommentBtn}>
+                                    {commentCount} {(commentCount = 0 ? '' : commentCount > 1 ? 'comments' : 'comment')}
+                                </span>
                             </div>
                         )}
                     </div>
@@ -115,70 +258,119 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                             </>
                         )}
                     </button>
-                    <button className={cx('comment-btn')}>
+                    <button className={cx('comment-btn')} onClick={handleOnClickCommentBtn}>
                         <FontAwesomeIcon icon={faComment} />
                         <span>Comment</span>
                     </button>
                 </div>
                 <div className={cx('comment-bar')}>
-                    <CircleAvatar userName={userName} avatar={userAvt} />
-                    <Input placeHolder={'Write comment here...'} rightIcon={<FontAwesomeIcon icon={faCamera} />} />
-                </div>
-                <div className={cx('comment-list')}>
-                    <div className={cx('comment-element')}>
-                        <CircleAvatar
-                            userName={currentUser.displayName}
-                            avatar={currentUser.photoURL}
-                            diameter="32px"
+                    <CircleAvatar
+                        className={cx('user-avt-comment')}
+                        userName={currentUser.displayName}
+                        avatar={currentUser.photoURL}
+                    />
+
+                    <div className={cx('comment-input-area')}>
+                        <Input
+                            className={cx('comment-input')}
+                            value={comment}
+                            type="text"
+                            placeHolder={'Write comment here...'}
+                            inputRef={commentInputRef}
+                            rightIcon={<FontAwesomeIcon icon={faCamera} />}
+                            onChange={handleCommentInput}
+                            rightBtnTypeFile
+                            onChangeRightBtn={(e) => setCommentImg(e.target.files[0])}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleComment();
+                                }
+                            }}
                         />
-                        <div className={cx('comment-element-content')}>
-                            <div className={cx('comment-content-n-setting')}>
-                                <div className={cx('comment-content-wrapper')}>
-                                    <div className={cx('comment-content')}>Hello, this is a post comment</div>
-                                </div>
+                        {commentImg && (
+                            <div className={cx('image-sending-comment')}>
+                                <img className={cx('select-photo')} src={URL.createObjectURL(commentImg)} alt="img" />
                                 <CircleButton
-                                    className={cx('comment-setting')}
-                                    children={<FontAwesomeIcon icon={faEllipsis} />}
+                                    className={cx('cancel-photo-btn')}
+                                    children={<FontAwesomeIcon icon={faXmark} />}
+                                    onClick={() => {
+                                        setCommentImg(null);
+                                    }}
                                 />
                             </div>
-
-                            <img className={cx('comment-image')} src={currentUser.photoURL} alt="" />
-
-                            <div className={cx('comment-interact')}>
-                                <button>Like</button>
-                                <button>Reply</button>
-                                <span>12 min</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={cx('comment-element')}>
-                        <CircleAvatar
-                            userName={currentUser.displayName}
-                            avatar={currentUser.photoURL}
-                            diameter="32px"
-                        />
-                        <div className={cx('comment-element-content')}>
-                            <div className={cx('comment-content-n-setting')}>
-                                <div className={cx('comment-content-wrapper')}>
-                                    <div className={cx('comment-content')}>Hello, this is a post comment</div>
-                                </div>
-                                <CircleButton
-                                    className={cx('comment-setting')}
-                                    children={<FontAwesomeIcon icon={faEllipsis} />}
-                                />
-                            </div>
-
-                            <img className={cx('comment-image')} src={currentUser.photoURL} alt="" />
-
-                            <div className={cx('comment-interact')}>
-                                <button>Like</button>
-                                <button>Reply</button>
-                                <span>12 min</span>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
+                {commentVisible && (
+                    <div className={cx('comment-list')}>
+                        {postDetail.comment &&
+                            postDetail.comment
+                                ?.sort((a, b) => b.createdAt - a.createdAt)
+                                .map((comment) => (
+                                    <div className={cx('comment-element')} key={comment.commentId}>
+                                        <CircleAvatar
+                                            userName={comment.commenter.displayName}
+                                            avatar={comment.commenter.photoURL}
+                                            diameter="32px"
+                                        />
+                                        <div className={cx('comment-element-content')}>
+                                            <div className={cx('comment-content-n-setting')}>
+                                                <div className={cx('comment-content-wrapper')}>
+                                                    <div className={cx('comment-user-name')}>
+                                                        {comment.commenter.displayName}
+                                                    </div>
+                                                    <div className={cx('comment-content')}>{comment.content}</div>
+                                                </div>
+                                                {!comment.img && comment.like.length > 0 && (
+                                                    <div className={cx('reaction-cmt')}>
+                                                        <FontAwesomeIcon
+                                                            className={cx('reaction-cmt-icon')}
+                                                            icon={faHeartSolid}
+                                                        />
+                                                        {comment.like.length > 1 && (
+                                                            <div className={cx('reaction-cmt-count')}>
+                                                                {comment.like.length}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                                <CircleButton
+                                                    className={cx('comment-setting')}
+                                                    children={<FontAwesomeIcon icon={faEllipsis} />}
+                                                />
+                                            </div>
+
+                                            {comment.img && (
+                                                <div className={cx('comment-img-n-reaction')}>
+                                                    <img className={cx('comment-image')} src={comment.img} alt="" />
+                                                    {comment.like.length > 0 && (
+                                                        <div className={cx('reaction-image-cmt')}>
+                                                            <FontAwesomeIcon
+                                                                className={cx('reaction-cmt-icon')}
+                                                                icon={faHeartSolid}
+                                                            />
+                                                            {comment.like.length > 1 && (
+                                                                <div className={cx('reaction-cmt-count')}>
+                                                                    {comment.like.length}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            <div className={cx('comment-interact')}>
+                                                <button className={cx('like-comment-btn')}>Like</button>
+                                                <button className={cx('reply-comment-btn')}>Reply</button>
+                                                <span>
+                                                    {comment.createdAt && moment(comment.createdAt.toDate()).fromNow()}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                    </div>
+                )}
             </div>
         </div>
     );

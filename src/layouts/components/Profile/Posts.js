@@ -23,6 +23,7 @@ function Posts({ isCurrentUser = false }) {
     const [postList, setPostList] = useState([]);
     const [bioInput, setBioInput] = useState('');
     const [editBio, setEditBio] = useState(false);
+    const [saveButtonDisable, setSaveButtonDisable] = useState(true);
 
     var selectUser = localStorage.getItem('selectUser');
 
@@ -45,9 +46,9 @@ function Posts({ isCurrentUser = false }) {
 
         if (editValueInput.trim() !== '') {
             setBioInput(editValueInput);
-            console.log(currentUser);
+            setSaveButtonDisable(false);
         } else {
-            return;
+            setSaveButtonDisable(true);
         }
     };
 
@@ -96,6 +97,7 @@ function Posts({ isCurrentUser = false }) {
                                     }}
                                 />
                                 <Button
+                                    disabled={saveButtonDisable}
                                     className={cx('save-bio-btn')}
                                     children={'Save'}
                                     onClick={() => {
@@ -110,6 +112,24 @@ function Posts({ isCurrentUser = false }) {
                     <h2>Photo</h2>
                     <p>No image found!</p>
                     <div className={cx('photo-box')}>
+                        <div>
+                            <img
+                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                                alt=""
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                                alt=""
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                                alt=""
+                            />
+                        </div>
                         <div>
                             <img
                                 src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
