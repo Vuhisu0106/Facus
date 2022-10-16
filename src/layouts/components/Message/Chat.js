@@ -32,7 +32,7 @@ function Chat() {
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
             doc.exists() && setMessages(doc.data().messages);
-            console.log(data);
+            //console.log(data);
         });
 
         setText('');

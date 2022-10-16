@@ -1,12 +1,23 @@
-import { faCamera, faEllipsis, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faEllipsis, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState, useEffect, useRef } from 'react';
-import { doc, onSnapshot, arrayUnion, updateDoc, arrayRemove, serverTimestamp, setDoc } from 'firebase/firestore';
+import {
+    doc,
+    onSnapshot,
+    arrayUnion,
+    updateDoc,
+    arrayRemove,
+    serverTimestamp,
+    setDoc,
+    collection,
+    query,
+    where,
+    getDocs,
+} from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import { db } from '~/firebase';
-import moment from 'moment';
 
 import { storage } from '~/firebase';
 import styles from './PostLayout.module.scss';
@@ -18,7 +29,7 @@ import { useUser } from '~/context/UserContext';
 import { useAuth } from '~/context/AuthContext';
 import CircleAvatar from '../CircleAvatar';
 import CircleButton from '../Button/CircleButton';
-import { async } from '@firebase/util';
+import CommentItem from '../CommentItem';
 
 const cx = classNames.bind(styles);
 function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, postCaption, likeCount, commentCount }) {
@@ -27,8 +38,11 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
 
     const [postDetail, setPostDetail] = useState({});
     const [comment, setComment] = useState('');
+    const [commentList, setCommentList] = useState([]);
     const [commentVisible, setCommentVisible] = useState(false);
     const [commentImg, setCommentImg] = useState(null);
+    //const [isAddComment, setIsAddComment] = useState(false);
+    const [error, setError] = useState('');
 
     const commentInputRef = useRef();
 
@@ -42,8 +56,26 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
         };
     }, [postId]);
 
+    useEffect(() => {
+        const unSub = async () => {
+            const q = query(collection(db, 'comment'), where('postId', '==', postId));
+
+            try {
+                const querySnapshot = await getDocs(q);
+                setCommentList(querySnapshot.docs.map((doc) => doc.data()));
+                //setLoading(false);
+            } catch (err) {
+                setError(true);
+                //console.log(err);
+                //setLoading(false);
+            }
+        };
+
+        unSub();
+    }, [postId, commentList]);
+
     const handleLike = async () => {
-        console.log(postDetail);
+        //console.log(postDetail);
         if (postDetail.like.indexOf(currentUser.uid) === -1) {
             await updateDoc(doc(db, 'post', postId), {
                 like: arrayUnion(currentUser.uid),
@@ -80,39 +112,37 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
         let uuId = uuid();
         if (commentImg) {
             const storageRef = ref(storage, uuid());
-            //const uploadTask = await uploadBytesResumable(storageRef, img);
 
             await uploadBytesResumable(storageRef, commentImg).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDoc(doc(db, 'post', postId), {
-                        comment: arrayUnion({
-                            commentId: uuId,
-                            commenter: {
-                                uid: currentUser.uid,
-                                displayName: currentUser.displayName,
-                                photoURL: currentUser.photoURL,
-                            },
-                            content: comment,
-                            img: downloadURL,
-                            createdAt: new Date(),
-                            like: [],
-                        }),
+                    await setDoc(doc(db, 'comment', uuId), {
+                        commentId: uuId,
+                        postId: postId,
+                        commenter: {
+                            uid: currentUser.uid,
+                            displayName: currentUser.displayName,
+                            photoURL: currentUser.photoURL,
+                        },
+                        content: comment,
+                        img: downloadURL,
+                        createdAt: serverTimestamp(),
+                        like: [],
                     });
 
-                    await updateDoc(doc(db, 'userPost', userId), {
-                        [postId + '.comment']: arrayUnion({
-                            commentId: uuId,
-                            commenter: {
-                                uid: currentUser.uid,
-                                displayName: currentUser.displayName,
-                                photoURL: currentUser.photoURL,
-                            },
-                            content: comment,
-                            img: downloadURL,
-                            createdAt: new Date(),
-                            like: [],
-                        }),
-                    });
+                    // await updateDoc(doc(db, 'userPost', userId), {
+                    //     [postId + '.comment']: arrayUnion({
+                    //         commentId: uuId,
+                    //         commenter: {
+                    //             uid: currentUser.uid,
+                    //             displayName: currentUser.displayName,
+                    //             photoURL: currentUser.photoURL,
+                    //         },
+                    //         content: comment,
+                    //         img: downloadURL,
+                    //         createdAt: new Date(),
+                    //         like: [],
+                    //     }),
+                    // });
                 });
             });
         } else if (!comment && commentImg) {
@@ -121,73 +151,69 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
 
             await uploadBytesResumable(storageRef, commentImg).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDoc(doc(db, 'post', postId), {
-                        comment: arrayUnion({
-                            commentId: uuId,
-                            commenter: {
-                                uid: currentUser.uid,
-                                displayName: currentUser.displayName,
-                                photoURL: currentUser.photoURL,
-                            },
+                    await setDoc(doc(db, 'comment', uuId), {
+                        commentId: uuId,
+                        postId: postId,
+                        commenter: {
+                            uid: currentUser.uid,
+                            displayName: currentUser.displayName,
+                            photoURL: currentUser.photoURL,
+                        },
 
-                            img: downloadURL,
-                            createdAt: new Date(),
-                            like: [],
-                        }),
+                        img: downloadURL,
+                        createdAt: serverTimestamp(),
+                        like: [],
                     });
 
-                    await updateDoc(doc(db, 'userPost', userId), {
-                        [postId + '.comment']: arrayUnion({
-                            commentId: uuId,
-                            commenter: {
-                                uid: currentUser.uid,
-                                displayName: currentUser.displayName,
-                                photoURL: currentUser.photoURL,
-                            },
+                    // await updateDoc(doc(db, 'userPost', userId), {
+                    //     [postId + '.comment']: arrayUnion({
+                    //         commentId: uuId,
+                    //         commenter: {
+                    //             uid: currentUser.uid,
+                    //             displayName: currentUser.displayName,
+                    //             photoURL: currentUser.photoURL,
+                    //         },
 
-                            img: downloadURL,
-                            createdAt: new Date(),
-                            like: [],
-                        }),
-                    });
+                    //         img: downloadURL,
+                    //         createdAt: new Date(),
+                    //         like: [],
+                    //     }),
+                    // });
                 });
             });
         } else if (!comment && !commentImg) {
             return;
         } else {
-            await updateDoc(doc(db, 'post', postId), {
-                comment: arrayUnion({
-                    commentId: uuId,
-                    commenter: {
-                        uid: currentUser.uid,
-                        displayName: currentUser.displayName,
-                        photoURL: currentUser.photoURL,
-                    },
-                    content: comment,
-                    createdAt: new Date(),
-                    like: [],
-                }),
+            await setDoc(doc(db, 'comment', uuId), {
+                commentId: uuId,
+                postId: postId,
+                commenter: {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    photoURL: currentUser.photoURL,
+                },
+                content: comment,
+                createdAt: serverTimestamp(),
+                like: [],
             });
 
-            await updateDoc(doc(db, 'userPost', userId), {
-                [postId + '.comment']: arrayUnion({
-                    commentId: uuId,
-                    commenter: {
-                        uid: currentUser.uid,
-                        displayName: currentUser.displayName,
-                        photoURL: currentUser.photoURL,
-                    },
-                    content: comment,
-                    createdAt: new Date(),
-                    like: [],
-                }),
-            });
+            // await updateDoc(doc(db, 'userPost', userId), {
+            //     [postId + '.comment']: arrayUnion({
+            //         commentId: uuId,
+            //         commenter: {
+            //             uid: currentUser.uid,
+            //             displayName: currentUser.displayName,
+            //             photoURL: currentUser.photoURL,
+            //         },
+            //         content: comment,
+            //         createdAt: new Date(),
+            //         like: [],
+            //     }),
+            // });
         }
 
         setComment('');
         setCommentImg(null);
-        // setCaption('');
-        // setImg(null);
     };
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,7 +248,7 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                 )}
             </div>
             <div className={cx('post-interaction')}>
-                {(likeCount > 0 || commentCount > 0) && (
+                {(likeCount > 0 || commentList.length > 0) && (
                     <div className={cx('post-interaction-detail')}>
                         {likeCount > 0 && (
                             <div className={cx('post-reaction-detail')}>
@@ -235,10 +261,12 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                             </div>
                         )}
 
-                        {commentCount > 0 && (
+                        {commentList.length > 0 && (
                             <div className={cx('post-comment-detail')}>
                                 <span onClick={handleOnClickCommentBtn}>
-                                    {commentCount} {(commentCount = 0 ? '' : commentCount > 1 ? 'comments' : 'comment')}
+                                    {!commentList
+                                        ? ''
+                                        : commentList.length + ' ' + (commentList.length > 1 ? 'comments' : 'comment')}
                                 </span>
                             </div>
                         )}
@@ -258,7 +286,13 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                             </>
                         )}
                     </button>
-                    <button className={cx('comment-btn')} onClick={handleOnClickCommentBtn}>
+                    <button
+                        className={cx('comment-btn')}
+                        onClick={() => {
+                            handleOnClickCommentBtn();
+                            //console.log('comment list: ' + commentList.length);
+                        }}
+                    >
                         <FontAwesomeIcon icon={faComment} />
                         <span>Comment</span>
                     </button>
@@ -277,10 +311,13 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                             type="text"
                             placeHolder={'Write comment here...'}
                             inputRef={commentInputRef}
+                            classNameInputRight={`${postId}`}
                             rightIcon={<FontAwesomeIcon icon={faCamera} />}
                             onChange={handleCommentInput}
                             rightBtnTypeFile
-                            onChangeRightBtn={(e) => setCommentImg(e.target.files[0])}
+                            onChangeRightBtn={(e) => {
+                                setCommentImg(e.target.files[0]);
+                            }}
                             onKeyPress={(e) => {
                                 if (e.key === 'Enter') {
                                     handleComment();
@@ -289,7 +326,12 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                         />
                         {commentImg && (
                             <div className={cx('image-sending-comment')}>
-                                <img className={cx('select-photo')} src={URL.createObjectURL(commentImg)} alt="img" />
+                                <img
+                                    id={`${postId}`}
+                                    className={cx('select-photo')}
+                                    src={URL.createObjectURL(commentImg)}
+                                    alt="img"
+                                />
                                 <CircleButton
                                     className={cx('cancel-photo-btn')}
                                     children={<FontAwesomeIcon icon={faXmark} />}
@@ -303,72 +345,10 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                 </div>
                 {commentVisible && (
                     <div className={cx('comment-list')}>
-                        {postDetail.comment &&
-                            postDetail.comment
+                        {commentList &&
+                            commentList
                                 ?.sort((a, b) => b.createdAt - a.createdAt)
-                                .map((comment) => (
-                                    <div className={cx('comment-element')} key={comment.commentId}>
-                                        <CircleAvatar
-                                            userName={comment.commenter.displayName}
-                                            avatar={comment.commenter.photoURL}
-                                            diameter="32px"
-                                        />
-                                        <div className={cx('comment-element-content')}>
-                                            <div className={cx('comment-content-n-setting')}>
-                                                <div className={cx('comment-content-wrapper')}>
-                                                    <div className={cx('comment-user-name')}>
-                                                        {comment.commenter.displayName}
-                                                    </div>
-                                                    <div className={cx('comment-content')}>{comment.content}</div>
-                                                </div>
-                                                {!comment.img && comment.like.length > 0 && (
-                                                    <div className={cx('reaction-cmt')}>
-                                                        <FontAwesomeIcon
-                                                            className={cx('reaction-cmt-icon')}
-                                                            icon={faHeartSolid}
-                                                        />
-                                                        {comment.like.length > 1 && (
-                                                            <div className={cx('reaction-cmt-count')}>
-                                                                {comment.like.length}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-                                                <CircleButton
-                                                    className={cx('comment-setting')}
-                                                    children={<FontAwesomeIcon icon={faEllipsis} />}
-                                                />
-                                            </div>
-
-                                            {comment.img && (
-                                                <div className={cx('comment-img-n-reaction')}>
-                                                    <img className={cx('comment-image')} src={comment.img} alt="" />
-                                                    {comment.like.length > 0 && (
-                                                        <div className={cx('reaction-image-cmt')}>
-                                                            <FontAwesomeIcon
-                                                                className={cx('reaction-cmt-icon')}
-                                                                icon={faHeartSolid}
-                                                            />
-                                                            {comment.like.length > 1 && (
-                                                                <div className={cx('reaction-cmt-count')}>
-                                                                    {comment.like.length}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-
-                                            <div className={cx('comment-interact')}>
-                                                <button className={cx('like-comment-btn')}>Like</button>
-                                                <button className={cx('reply-comment-btn')}>Reply</button>
-                                                <span>
-                                                    {comment.createdAt && moment(comment.createdAt.toDate()).fromNow()}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+                                .map((comments) => <CommentItem key={comments.commentId} data={comments} />)}
                     </div>
                 )}
             </div>

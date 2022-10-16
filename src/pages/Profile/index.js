@@ -86,7 +86,7 @@ function Profile() {
     }, [params.id]);
 
     useEffect(() => {
-        console.log(data);
+        //console.log(data);
         //console.log(localStorage.getItem('FollowingList'));
         if (localStorage.getItem('FollowingList').indexOf(params.id) > -1) {
             setFollowing(true);

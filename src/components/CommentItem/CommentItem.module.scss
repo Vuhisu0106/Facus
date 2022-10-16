@@ -1,0 +1,131 @@
+.comment-element {
+    width: 100%;
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.comment-element-content {
+    width: 100%;
+    margin: 0 16px 0 6px;
+
+    .comment-content-n-setting {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        &:hover {
+            .comment-setting {
+                opacity: 1;
+            }
+        }
+
+        .reaction-cmt {
+            height: 22px;
+            width: 33px;
+            z-index: 1;
+            margin-left: -5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            border: 1px solid rgb(206, 208, 212);
+            background-color: var(--white);
+            padding: 4px 4px;
+            .reaction-cmt-icon {
+                color: var(--primary);
+                font-size: 11px;
+            }
+            .reaction-cmt-count {
+                font-size: 11px;
+                margin-left: 2px;
+            }
+        }
+
+        .comment-setting {
+            width: 32px;
+            height: 32px;
+            background-color: #fff;
+            color: rgb(0, 0, 0, 0.5);
+            margin-left: 6px;
+            opacity: 0;
+            transition: 0.1s;
+        }
+
+        .comment-content-wrapper {
+            position: relative;
+            padding: 8px;
+            background-color: var(--light-mode-color);
+            color: var(--black);
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 10px;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+
+            .comment-user-name {
+                font-weight: 700;
+                font-size: 13px;
+            }
+        }
+    }
+
+    .comment-img-n-reaction {
+        position: relative;
+        display: inline-block;
+
+        .comment-image {
+            border-radius: 10px;
+            max-width: 320px;
+            margin-top: 4px;
+        }
+
+        .reaction-image-cmt {
+            position: absolute;
+            bottom: -3px;
+            right: -5px;
+            height: 22px;
+            width: 33px;
+            z-index: 1;
+            margin-left: -5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            border: 1px solid rgb(206, 208, 212);
+            background-color: var(--white);
+            padding: 4px 4px;
+            .reaction-cmt-icon {
+                color: var(--primary);
+                font-size: 11px;
+            }
+            .reaction-cmt-count {
+                font-size: 11px;
+                margin-left: 2px;
+            }
+        }
+    }
+
+    .comment-interact {
+        min-width: 125px;
+        margin: 0 6px;
+        display: inline-block;
+
+        .like-comment-btn,
+        .reply-comment-btn {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgb(101, 103, 107);
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            margin-right: 14px;
+        }
+
+        span {
+            font-size: 12px;
+        }
+    }
+}

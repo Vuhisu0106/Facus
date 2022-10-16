@@ -77,7 +77,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
         //console.log(combinedId);
         try {
             const res = await getDoc(doc(db, 'chats', combinedId));
-            console.log(res);
+            //console.log(res);
             if (!res.exists()) {
                 //create a chat in chats collection (if chat hasn't existed before)
                 await setDoc(doc(db, 'chats', combinedId), { messages: [] });

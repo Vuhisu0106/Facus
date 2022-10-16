@@ -6,6 +6,8 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 function Input({
+    classNameInputRight,
+    onClickInputRight,
     className,
     value,
     type,
@@ -20,6 +22,7 @@ function Input({
     rightBtnTypeFile = false,
     onChangeLeftBtn,
     onChangeRightBtn,
+    idRightBtn,
     inputRef,
     onChange,
     autoFocus,
@@ -61,12 +64,12 @@ function Input({
                 ) : (
                     <>
                         <label
-                            htmlFor="right-btn-input"
                             className={cx('right-input-file', { [classNameRightBtn]: classNameRightBtn })}
+                            onClick={onClickInputRight}
                         >
+                            <input type="file" onChange={onChangeRightBtn} />
                             {rightIcon}
                         </label>
-                        <input id="right-btn-input" type="file" onChange={onChangeRightBtn} />
                     </>
                 ))}
         </div>

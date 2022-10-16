@@ -124,7 +124,7 @@ function ChatSidebar() {
                             closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
                             onClick={() => {
                                 handleSelect(chat[1]);
-                                console.log(data);
+                                //console.log(data);
                             }}
                         />
                         // </HeadlessTippy>
