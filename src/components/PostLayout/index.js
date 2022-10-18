@@ -41,7 +41,7 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
     const [commentList, setCommentList] = useState([]);
     const [commentVisible, setCommentVisible] = useState(false);
     const [commentImg, setCommentImg] = useState(null);
-    //const [isAddComment, setIsAddComment] = useState(false);
+    const [isAddComment, setIsAddComment] = useState(false);
     const [error, setError] = useState('');
 
     const commentInputRef = useRef();
@@ -49,6 +49,7 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'post', postId), (doc) => {
             doc.exists() && setPostDetail(doc.data());
+            console.log('1: read');
         });
 
         return () => {
@@ -63,16 +64,18 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
             try {
                 const querySnapshot = await getDocs(q);
                 setCommentList(querySnapshot.docs.map((doc) => doc.data()));
+                console.log('2: read');
+
                 //setLoading(false);
             } catch (err) {
                 setError(true);
-                //console.log(err);
+                console.log(err);
                 //setLoading(false);
             }
         };
 
         unSub();
-    }, [postId, commentList]);
+    }, [postId, isAddComment]);
 
     const handleLike = async () => {
         //console.log(postDetail);
@@ -164,21 +167,6 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                         createdAt: serverTimestamp(),
                         like: [],
                     });
-
-                    // await updateDoc(doc(db, 'userPost', userId), {
-                    //     [postId + '.comment']: arrayUnion({
-                    //         commentId: uuId,
-                    //         commenter: {
-                    //             uid: currentUser.uid,
-                    //             displayName: currentUser.displayName,
-                    //             photoURL: currentUser.photoURL,
-                    //         },
-
-                    //         img: downloadURL,
-                    //         createdAt: new Date(),
-                    //         like: [],
-                    //     }),
-                    // });
                 });
             });
         } else if (!comment && !commentImg) {
@@ -196,22 +184,8 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                 createdAt: serverTimestamp(),
                 like: [],
             });
-
-            // await updateDoc(doc(db, 'userPost', userId), {
-            //     [postId + '.comment']: arrayUnion({
-            //         commentId: uuId,
-            //         commenter: {
-            //             uid: currentUser.uid,
-            //             displayName: currentUser.displayName,
-            //             photoURL: currentUser.photoURL,
-            //         },
-            //         content: comment,
-            //         createdAt: new Date(),
-            //         like: [],
-            //     }),
-            // });
         }
-
+        setIsAddComment(!isAddComment);
         setComment('');
         setCommentImg(null);
     };
@@ -348,7 +322,9 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                         {commentList &&
                             commentList
                                 ?.sort((a, b) => b.createdAt - a.createdAt)
-                                .map((comments) => <CommentItem key={comments.commentId} data={comments} />)}
+                                .map((comments) => (
+                                    <CommentItem key={comments.commentId} data={comments} isAddComment={isAddComment} />
+                                ))}
                     </div>
                 )}
             </div>

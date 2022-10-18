@@ -4,43 +4,44 @@ import moment from 'moment';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import { onSnapshot, doc } from 'firebase/firestore';
+import { doc, onSnapshot, arrayUnion, updateDoc, arrayRemove } from 'firebase/firestore';
 
 import { db } from '~/firebase';
 import CircleButton from '../Button/CircleButton';
 import CircleAvatar from '../CircleAvatar';
 import styles from './CommentItem.module.scss';
+import { useAuth } from '~/context/AuthContext';
 
 const cx = classNames.bind(styles);
-function CommentItem({ data }) {
+function CommentItem({ data, isAddComment }) {
     const [commentDetail, setCommentDetail] = useState({});
+    const [likeComment, setLikeComment] = useState(false);
+
+    const { currentUser } = useAuth();
+    /////////////////////////////////////////////////////////////////////////////////////////////
     useEffect(() => {
-        const unSub = onSnapshot(doc(db, 'post', data.commentId), (doc) => {
+        const unSub = onSnapshot(doc(db, 'comment', data.commentId), (doc) => {
             doc.exists() && setCommentDetail(doc.data());
+            console.log('3: read');
         });
 
         return () => {
             unSub();
         };
-    }, [data.commentId]);
-
+    }, [data.commentId, likeComment]);
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     const handleLikeComment = async (commentId) => {
         //console.log(commentId);
-        // if (postDetail.like.indexOf(currentUser.uid) === -1) {
-        //     await updateDoc(doc(db, 'post', postId), {
-        //         like: arrayUnion(currentUser.uid),
-        //     });
-        //     await updateDoc(doc(db, 'userPost', userId), {
-        //         [postId + '.like']: arrayUnion(currentUser.uid),
-        //     });
-        // } else {
-        //     await updateDoc(doc(db, 'post', postId), {
-        //         like: arrayRemove(currentUser.uid),
-        //     });
-        //     await updateDoc(doc(db, 'userPost', userId), {
-        //         [postId + '.like']: arrayRemove(currentUser.uid),
-        //     });
-        // }
+        if (commentDetail.like.indexOf(currentUser.uid) === -1) {
+            await updateDoc(doc(db, 'comment', data.commentId), {
+                like: arrayUnion(currentUser.uid),
+            });
+        } else {
+            await updateDoc(doc(db, 'comment', data.commentId), {
+                like: arrayRemove(currentUser.uid),
+            });
+            setLikeComment(!likeComment);
+        }
     };
     return (
         <div className={cx('comment-element')} key={data.commentId}>
@@ -50,24 +51,33 @@ function CommentItem({ data }) {
                     <div className={cx('comment-content-wrapper')}>
                         <div className={cx('comment-user-name')}>{data.commenter.displayName}</div>
                         <div className={cx('comment-content')}>{data.content}</div>
+
+                        {/* Use data from rendering in this component (not from props of parents component) must check if they exist or not */}
+                        {!commentDetail.img && commentDetail.like && commentDetail.like.length > 0 && (
+                            <div className={cx('reaction-cmt')}>
+                                <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
+                                {commentDetail && commentDetail.like.length > 1 && (
+                                    <div className={cx('reaction-cmt-count')}>
+                                        {commentDetail && commentDetail.like.length}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
-                    {!data.img && data.like.length > 0 && (
-                        <div className={cx('reaction-cmt')}>
-                            <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
-                            {data.like.length > 1 && <div className={cx('reaction-cmt-count')}>{data.like.length}</div>}
-                        </div>
-                    )}
+
                     <CircleButton className={cx('comment-setting')} children={<FontAwesomeIcon icon={faEllipsis} />} />
                 </div>
 
                 {data.img && (
                     <div className={cx('comment-img-n-reaction')}>
                         <img className={cx('comment-image')} src={data.img} alt="" />
-                        {data.like.length > 0 && (
+                        {commentDetail.like && commentDetail.like.length > 0 && (
                             <div className={cx('reaction-image-cmt')}>
                                 <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
-                                {data.like.length > 1 && (
-                                    <div className={cx('reaction-cmt-count')}>{data.like.length}</div>
+                                {commentDetail && commentDetail.like.length > 1 && (
+                                    <div className={cx('reaction-cmt-count')}>
+                                        {commentDetail && commentDetail.like.length}
+                                    </div>
                                 )}
                             </div>
                         )}
@@ -77,7 +87,10 @@ function CommentItem({ data }) {
                 <div className={cx('comment-interact')}>
                     <button
                         className={cx('like-comment-btn')}
-                        style={{ color: '#fe2c55' }}
+                        style={{
+                            color:
+                                commentDetail.like && commentDetail.like.indexOf(currentUser.uid) !== -1 && '#fe2c55',
+                        }}
                         onClick={() => handleLikeComment(data.commentId)}
                     >
                         Like

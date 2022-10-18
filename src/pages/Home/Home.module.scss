@@ -51,9 +51,13 @@
 }
 
 .left-sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: fixed;
     top: 80px;
     left: calc((100vw - 1178px) / 2);
+    background-color: var(--light-mode-color);
 }
 
 .right-sidebar {

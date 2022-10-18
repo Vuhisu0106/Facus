@@ -13,6 +13,8 @@ import styles from './Home.module.scss';
 import RoundAccountItem from '~/components/AccountItem/RoundAccountItem';
 import { useAuth } from '~/context/AuthContext';
 import SuggestAccount from '~/components/SuggestAccount';
+import WeatherBox from '~/components/WeatherBox';
+import ProfileCard from '~/components/ProfileCard';
 
 const cx = classNames.bind(styles);
 function Home() {
@@ -74,7 +76,14 @@ function Home() {
 
     return (
         <div className={cx('container')}>
-            <Sidebar children={<SuggestAccount label="Suggested to you" />} className={cx('left-sidebar')} />
+            <Sidebar
+                children={
+                    <>
+                        <ProfileCard /> <WeatherBox />
+                    </>
+                }
+                className={cx('left-sidebar')}
+            />
 
             <div className={cx('content')}>
                 <div className={cx('horizontal-scroll')} ref={horizontalRef}>

@@ -6,7 +6,7 @@ import MenuItem from './MenuItem';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 
 const cx = classNames.bind(styles);
-function Menu({ children, items, offset }) {
+function Menu({ children, items, offset, isMenuVisible, handleHideMenu }) {
     const renderItems = () => {
         return items.map((item, index) => <MenuItem key={index} data={item} onClick={item.onClick} />);
     };
@@ -14,9 +14,10 @@ function Menu({ children, items, offset }) {
     return (
         <Tippy
             interactive
-            trigger="click"
+            //trigger="click"
             placement="bottom-end"
-            hideOnClick={true}
+            visible={isMenuVisible}
+            onClickOutside={handleHideMenu}
             offset={offset}
             render={(attrs) => (
                 <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
