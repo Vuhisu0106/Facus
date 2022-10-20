@@ -9,9 +9,34 @@
     justify-content: center;
 }
 
+.header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgb(204, 206, 209, 0.5);
+    z-index: 1;
+    position: relative;
+
+    h2 {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .close-modal-btn {
+        top: 13px;
+        right: 16px;
+        position: absolute;
+    }
+}
+
 .wrapper {
     min-width: 300px;
-    min-height: 300px;
+    min-height: 100px;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: rgb(0 0 0 / 20%) 2px 10px 30px 0px;
@@ -28,21 +53,6 @@
     z-index: 1;
 }
 
-.add-post-title {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid rgb(204, 206, 209, 0.5);
-}
-
-.close-modal-btn {
-    top: 13px;
-    right: 16px;
-    position: absolute;
-}
-
 .add-post-user-info {
     height: 72px;
     margin: 0 16px;
@@ -50,7 +60,7 @@
     display: flex;
     align-items: center;
 
-    .user-avt {
+    img {
         width: 38px;
         height: 38px;
         border-radius: 50%;
@@ -63,7 +73,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        .user-name {
+        h4 {
             transform: translateY(-2.5px);
         }
 
@@ -79,17 +89,17 @@
 .add-post-body {
     width: 100%;
     padding: 4px 16px 8px 16px;
-}
 
-.post-message-input {
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 50px;
-    max-height: 160px;
-    border: none;
-    outline: none;
-    font-size: 15px;
+    textarea {
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        min-height: 50px;
+        max-height: 160px;
+        border: none;
+        outline: none;
+        font-size: 15px;
+    }
 }
 
 .add-photo-container {
@@ -153,7 +163,7 @@
     }
 }
 
-.select-photo-wrapper {
+.selected-photo-wrapper {
     display: flex;
     width: 100%;
     height: 100%;
@@ -164,7 +174,7 @@
     align-items: center;
     flex-direction: column;
 
-    .select-photo {
+    img {
         display: block;
         max-width: 100%;
         max-height: 100%;
@@ -438,5 +448,99 @@ input[type='file'] {
         &:hover {
             background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
         }
+    }
+}
+
+/////////////////////////////////////////////////////////Set Status Modal//////////////////////////////////////////////////////
+.set-status-wrapper {
+    width: 446px;
+    position: relative;
+
+    .status-content {
+        padding: 12px 16px;
+    }
+}
+
+.status-bar {
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    background-color: var(--light-mode-color);
+    border-color: rgba(22, 24, 35, 0.2);
+    margin-bottom: 8px;
+
+    .status-input {
+        margin-left: 6px;
+    }
+
+    .status-icon {
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 8px;
+        border-top-left-radius: 8px;
+        background-color: var(--white);
+        border-right: 1.5px solid rgba(22, 24, 35, 0.2);
+
+        &:hover {
+            background-color: #fff;
+            color: var(--primary);
+        }
+
+        &:active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        &:focus-within {
+            border-color: none;
+        }
+    }
+}
+
+.suggestions {
+    height: 80px;
+    transition: height 100ms ease-out, opacity 200ms ease-in;
+    overflow: hidden;
+
+    h4 {
+        width: 100%;
+        margin: 8px 0 16px 0;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .suggest-examples {
+        div {
+            width: 50%;
+        }
+        margin: 8px 16px 0 16px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+    }
+}
+
+.status-footer {
+    width: 100%;
+    height: 65px;
+    border-top: 1px solid rgb(204, 206, 209, 0.5);
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .set-status-btn,
+    .clear-status-btn {
+        width: 200px;
+        height: 32px;
+        background-color: var(--primary);
+        color: var(--white);
+        border-radius: 6px;
+    }
+    .clear-status-btn {
+        border: 1px solid rgb(204, 206, 209, 0.5);
+        background-color: var(--light-mode-color);
+        color: #000;
     }
 }

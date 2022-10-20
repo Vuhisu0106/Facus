@@ -8,7 +8,12 @@ function ProfileCard() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('blur-wrapper')}></div>
-            <div className={cx('profile-card-wrapper')}>
+            <div
+                className={cx('profile-card-wrapper')}
+                // style={{
+                //     backgroundImage: `url(${'https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/97948524_559253204991695_2663173301714550784_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=e3f864&_nc_ohc=PMWScH-sYvsAX-s8xyU&_nc_ht=scontent.fhan17-1.fna&oh=00_AT-secSV--Z2ZIVR1ElAJwrCBRq3hnn8L24azEIv96rx8A&oe=63763253'})`,
+                // }}
+            >
                 <div className={cx('info')}>
                     <img
                         className={cx('avatar')}
@@ -34,6 +39,7 @@ function ProfileCard() {
                         <li>JavaScript</li>
                         <li>React</li>
                         <li>Redux</li>
+                        <li>...</li>
                     </ul>
                 </div> */}
             </div>

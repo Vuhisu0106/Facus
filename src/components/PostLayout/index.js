@@ -131,21 +131,6 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                         createdAt: serverTimestamp(),
                         like: [],
                     });
-
-                    // await updateDoc(doc(db, 'userPost', userId), {
-                    //     [postId + '.comment']: arrayUnion({
-                    //         commentId: uuId,
-                    //         commenter: {
-                    //             uid: currentUser.uid,
-                    //             displayName: currentUser.displayName,
-                    //             photoURL: currentUser.photoURL,
-                    //         },
-                    //         content: comment,
-                    //         img: downloadURL,
-                    //         createdAt: new Date(),
-                    //         like: [],
-                    //     }),
-                    // });
                 });
             });
         } else if (!comment && commentImg) {
@@ -185,9 +170,11 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                 like: [],
             });
         }
-        setIsAddComment(!isAddComment);
+
         setComment('');
         setCommentImg(null);
+        setIsAddComment(!isAddComment);
+        console.log('add cmt' + isAddComment);
     };
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -285,7 +272,7 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
                             type="text"
                             placeHolder={'Write comment here...'}
                             inputRef={commentInputRef}
-                            classNameInputRight={`${postId}`}
+                            //classNameInputRight={`${postId}`}
                             rightIcon={<FontAwesomeIcon icon={faCamera} />}
                             onChange={handleCommentInput}
                             rightBtnTypeFile

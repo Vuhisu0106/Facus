@@ -6,7 +6,9 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 function Input({
-    classNameInputRight,
+    //classNameInputRight,
+
+    inputClassName,
     onClickInputRight,
     className,
     value,
@@ -22,7 +24,7 @@ function Input({
     rightBtnTypeFile = false,
     onChangeLeftBtn,
     onChangeRightBtn,
-    idRightBtn,
+    //idRightBtn,
     inputRef,
     onChange,
     autoFocus,
@@ -45,6 +47,7 @@ function Input({
                 </button>
             )}
             <input
+                className={inputClassName}
                 value={value}
                 type={type}
                 ref={inputRef}

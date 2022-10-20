@@ -1,12 +1,12 @@
 .wrapper {
     width: 100%;
-    height: 300px;
+    //max-height: 450px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
     background-color: var(--white);
-    border-radius: 8px;
+    border-radius: 10px;
     position: relative;
 }
 
@@ -15,17 +15,21 @@
     height: 100%;
     position: absolute;
 }
+
 .profile-card-wrapper {
     max-width: 100%;
     height: 100%;
     background-color: var(--white);
     border-radius: 5px;
-    //box-shadow: 0px 10px 20px -10px rgba(0, 0, 0, 0.75);
     color: var(--text-color);
-    padding-top: 20px;
+    padding: 20px 0 20px 0;
     position: relative;
     width: 350px;
     text-align: center;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-image: linear-gradient(var(--primary), var(--primary));
+    background-size: 100% 27%;
 }
 
 .info {
@@ -34,13 +38,13 @@
     align-items: center;
     .avatar {
         width: 110px;
-        border: 1px solid var(--primary);
+        border: 5px solid var(--white);
         border-radius: 50%;
-        padding: 5px;
+        padding: 0px;
     }
 
     h3 {
-        margin-top: 7px;
+        margin-top: 10px;
     }
 
     p {
@@ -78,11 +82,13 @@
 }
 
 // .skills {
-//     background-color: var(--primary);
+//     background-color: #ff4f71;
 //     text-align: left;
-//     padding: 15px;
+//     padding: 10px;
 //     margin-top: 20px;
-//     color: var(--light-text-color);
+//     color: var(--white);
+//     border-bottom-left-radius: 5px;
+//     border-bottom-right-radius: 5px;
 
 //     ul {
 //         list-style-type: none;
@@ -91,11 +97,11 @@
 //     }
 
 //     ul li {
-//         border: 1px solid #2d2747;
+//         border: 1px solid var(--light-text-color);
 //         border-radius: 2px;
 //         display: inline-block;
 //         font-size: 12px;
 //         margin: 0 7px 7px 0;
-//         padding: 7px;
+//         padding: 4px;
 //     }
 // }

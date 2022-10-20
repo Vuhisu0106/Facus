@@ -14,11 +14,13 @@ import CircleAvatar from '~/components/CircleAvatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 import Input from '~/components/Input';
+import { useUser } from '~/context/UserContext';
 
 const cx = classNames.bind(styles);
 function Posts({ isCurrentUser = false }) {
     const { currentUser } = useAuth();
     const { setIsAddPostVisible, setAddPhotoVisible, setButtonActive } = useApp();
+    const { addToLocalStorage } = useUser();
 
     const [postList, setPostList] = useState([]);
     const [bioInput, setBioInput] = useState('');
@@ -112,42 +114,25 @@ function Posts({ isCurrentUser = false }) {
                     <h2>Photo</h2>
                     <p>No image found!</p>
                     <div className={cx('photo-box')}>
-                        <div>
-                            <img
-                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                                alt=""
-                            />
-                        </div>
-                        <div>
-                            <img
-                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                                alt=""
-                            />
-                        </div>
-                        <div>
-                            <img
-                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                                alt=""
-                            />
-                        </div>
-                        <div>
-                            <img
-                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                                alt=""
-                            />
-                        </div>
-                        <div>
-                            <img
-                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                                alt=""
-                            />
-                        </div>
-                        <div>
-                            <img
-                                src="https://yt3.ggpht.com/ytc/AMLnZu97kMUfoLOx9fPmTdKkiysf79flOrIHEmFgwb-xsQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                                alt=""
-                            />
-                        </div>
+                        {postList &&
+                            Object.entries(postList)
+                                ?.sort((a, b) => b[1].date - a[1].date)
+                                .map(
+                                    (post) =>
+                                        post[1].img && (
+                                            <div key={post[0]}>
+                                                <a
+                                                    href={`/post/${post[0]}`}
+                                                    id=""
+                                                    onClick={() => {
+                                                        addToLocalStorage('selectPost', post[0]);
+                                                    }}
+                                                >
+                                                    <img src={post[1].img && post[1].img} alt={post[0]} />
+                                                </a>
+                                            </div>
+                                        ),
+                                )}
                     </div>
                 </WrapperModal>
             </div>

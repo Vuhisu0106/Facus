@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket, faCamera, faHome, faMoon, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faHome, faMoon, faSearch, faSun } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Tippy from '@tippyjs/react/headless';
 
@@ -13,10 +13,8 @@ import { useRef, useState } from 'react';
 import { useAuth } from '~/context/AuthContext';
 import AccountSearch from '~/components/Search/AccountSearch';
 import { useUser } from '~/context/UserContext';
-import { useApp } from '~/context/AppContext';
 import { tippy } from '@tippyjs/react';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
-import MenuItem from '~/components/Popper/Menu/MenuItem';
 import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
@@ -115,7 +113,7 @@ function Header({ className }) {
                             children={<FontAwesomeIcon icon={faFacebookMessenger} />}
                         />
 
-                        <CircleButton children={<FontAwesomeIcon icon={faPlus} />} />
+                        <CircleButton children={<FontAwesomeIcon icon={faSun} />} />
 
                         <Tippy
                             interactive

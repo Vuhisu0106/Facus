@@ -19,18 +19,12 @@ function EditProfileModal() {
     const [coverPhoto, setCoverPhoto] = useState(null);
     return (
         <Modal
+            title="Edit profile"
+            onClick={() => {
+                setIsEditProfileVisible(false);
+            }}
             children={
                 <div className={cx('edit-profile-wrapper')}>
-                    <div className={cx('edit-profile-header')}>
-                        <h2>Edit profile</h2>
-                        <CircleButton
-                            className={cx('close-modal-btn')}
-                            children={<FontAwesomeIcon icon={faXmark} />}
-                            onClick={() => {
-                                setIsEditProfileVisible(false);
-                            }}
-                        />
-                    </div>
                     <div className={cx('edit-profile-body')}>
                         {/* Edit profile picture */}
                         <div className={cx('edit-avatar')}>

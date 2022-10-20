@@ -113,23 +113,19 @@ function AddPostModal() {
 
     return (
         <Modal
+            title="Create post"
+            onClick={() => {
+                setIsAddPostVisible(false);
+                setButtonActive(false);
+                setImg(null);
+            }}
             children={
                 <div className={cx('add-post-wrapper')}>
                     <div className={cx('add-post-header')}>
-                        <h2 className={cx('add-post-title')}>Create post</h2>
-                        <CircleButton
-                            className={cx('close-modal-btn')}
-                            children={<FontAwesomeIcon icon={faXmark} />}
-                            onClick={() => {
-                                setIsAddPostVisible(false);
-                                setButtonActive(false);
-                                setImg(null);
-                            }}
-                        />
                         <div className={cx('add-post-user-info')}>
-                            <img className={cx('user-avt')} alt={currentUser.displayName} src={currentUser.photoURL} />
+                            <img alt={currentUser.displayName} src={currentUser.photoURL} />
                             <div className={cx('user-info')}>
-                                <h4 className={cx('user-name')}>{currentUser.displayName}</h4>
+                                <h4>{currentUser.displayName}</h4>
                                 <Button
                                     children={'Global'}
                                     className={cx('global')}
@@ -140,7 +136,6 @@ function AddPostModal() {
                     </div>
                     <div className={cx('add-post-body')}>
                         <textarea
-                            className={cx('post-message-input')}
                             placeholder={`What's on your mind, ${currentUser.displayName}?`}
                             onChange={handleCaption}
                         ></textarea>
@@ -165,8 +160,8 @@ function AddPostModal() {
                                         <span>or drag and drop</span>
                                     </label>
                                 ) : (
-                                    <div className={cx('select-photo-wrapper')}>
-                                        <img className={cx('select-photo')} src={URL.createObjectURL(img)} alt="img" />
+                                    <div className={cx('selected-photo-wrapper')}>
+                                        <img src={URL.createObjectURL(img)} alt="img" />
                                         <CircleButton
                                             className={cx('cancel-photo-btn')}
                                             children={<FontAwesomeIcon icon={faXmark} />}

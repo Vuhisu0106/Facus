@@ -6,7 +6,7 @@ import { onSnapshot, doc, updateDoc, serverTimestamp, deleteField } from 'fireba
 
 import { db } from '~/firebase';
 import styles from './Profile.module.scss';
-import { faCamera, faCircle, faMessage, faPen, faUserPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faMessage, faPen, faUserPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
 import Posts from '~/layouts/components/Profile/Posts';
@@ -15,6 +15,7 @@ import Follower from '~/layouts/components/Profile/Follower';
 import CircleButton from '~/components/Button/CircleButton';
 import { useApp } from '~/context/AppContext';
 import { useUser } from '~/context/UserContext';
+import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -27,11 +28,14 @@ function Profile() {
 
     const { currentUser } = useAuth();
     const { data } = useUser();
-    const { setIsEditProfileVisible } = useApp();
+    const { setIsEditStatusModal, setIsEditProfileVisible } = useApp();
 
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
+
+    const [hovered, setHovered] = useState(false);
+    const toggleHover = () => setHovered(!hovered);
 
     const main = () => {
         if (profileLayout === 'Following') {
@@ -160,10 +164,27 @@ function Profile() {
                 <div className={cx('profile-main-part-center')}>
                     <div className={cx('profile-main-part-right')}>
                         <div className={cx('avatar')}>
-                            <CircleButton
-                                className={cx('change-avt-btn')}
-                                children={<FontAwesomeIcon icon={faCamera} />}
-                            />
+                            <div
+                                className={cx('set-status-wrapper')}
+                                onMouseEnter={toggleHover}
+                                onMouseLeave={toggleHover}
+                            >
+                                {hovered ? (
+                                    <div
+                                        className={cx('hovered-set-status-btn')}
+                                        onClick={() => {
+                                            setIsEditStatusModal(true);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon icon={faFaceSmile} />
+                                        <div className={cx('set-status')}>Set status</div>
+                                    </div>
+                                ) : (
+                                    <div className={cx('set-status-btn')}>
+                                        <FontAwesomeIcon icon={faFaceSmile} />
+                                    </div>
+                                )}
+                            </div>
                             <img className={cx('profile-avt')} alt="Vu Minh Hieu" src={selectedUser.photoURL} />
                         </div>
                         <div>

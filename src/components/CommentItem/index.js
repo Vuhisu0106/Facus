@@ -13,9 +13,8 @@ import styles from './CommentItem.module.scss';
 import { useAuth } from '~/context/AuthContext';
 
 const cx = classNames.bind(styles);
-function CommentItem({ data, isAddComment }) {
+function CommentItem({ data }) {
     const [commentDetail, setCommentDetail] = useState({});
-    const [likeComment, setLikeComment] = useState(false);
 
     const { currentUser } = useAuth();
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,10 +27,9 @@ function CommentItem({ data, isAddComment }) {
         return () => {
             unSub();
         };
-    }, [data.commentId, likeComment]);
+    }, [data.commentId]);
     ///////////////////////////////////////////////////////////////////////////////////////////////
     const handleLikeComment = async (commentId) => {
-        //console.log(commentId);
         if (commentDetail.like.indexOf(currentUser.uid) === -1) {
             await updateDoc(doc(db, 'comment', data.commentId), {
                 like: arrayUnion(currentUser.uid),
@@ -40,7 +38,6 @@ function CommentItem({ data, isAddComment }) {
             await updateDoc(doc(db, 'comment', data.commentId), {
                 like: arrayRemove(currentUser.uid),
             });
-            setLikeComment(!likeComment);
         }
     };
     return (

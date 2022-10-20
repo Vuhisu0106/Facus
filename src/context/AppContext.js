@@ -18,6 +18,8 @@ function AppProvider({ children }) {
     const [buttonActive, setButtonActive] = useState(false);
     //Edit profile modal
     const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
+    //Edit status modal
+    const [isEditStatusModal, setIsEditStatusModal] = useState(false);
 
     const value = {
         isAddChatVisible,
@@ -31,6 +33,8 @@ function AppProvider({ children }) {
         setButtonActive,
         isEditProfileVisible,
         setIsEditProfileVisible,
+        isEditStatusModal,
+        setIsEditStatusModal,
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
