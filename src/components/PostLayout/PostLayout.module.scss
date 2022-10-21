@@ -4,6 +4,8 @@
     margin-top: 20px;
     background-color: #fff;
     border-radius: var(--component-border-radius);
+    transition: var(--transition-theme);
+    box-shadow: 0 2px 8px 0 rgb(99 99 99 / 10%);
 }
 
 .post-header {
@@ -43,9 +45,9 @@
     height: 36px;
     border-radius: 50%;
     text-align: center;
-
+    cursor: pointer;
     &:hover {
-        background-color: var(--light-mode-color);
+        background-color: var(--light-background-color);
     }
 }
 
@@ -184,4 +186,58 @@
     width: 100%;
     height: 100%;
     padding: 4px 0 0 6px;
+}
+
+///Dark theme////
+
+.dark {
+    background-color: var(--dark-background-color-2);
+    box-shadow: none;
+    transition: var(--transition-theme);
+
+    .user-name {
+        color: var(--dark-text-color-2);
+    }
+
+    .time-post {
+        color: var(--dark-text-color-3);
+    }
+
+    .post-caption {
+        color: var(--dark-text-color-2);
+    }
+
+    .post-image {
+        background-color: var(--dark-background-color-2);
+    }
+
+    .post-interact {
+        border-top: 1px solid rgb(62, 64, 66);
+        border-bottom: 1px solid rgb(62, 64, 66);
+    }
+
+    .more-btn {
+        color: var(--dark-icon-color);
+
+        &:hover {
+            background-color: var(--dark-element-color);
+        }
+    }
+
+    .post-interaction-detail {
+        color: var(--dark-text-color-3);
+    }
+
+    .reaction-btn,
+    .comment-btn {
+        color: var(--dark-text-color-3);
+    }
+
+    .post-interact {
+        button {
+            &:hover {
+                background-color: var(--dark-element-hover-2);
+            }
+        }
+    }
 }

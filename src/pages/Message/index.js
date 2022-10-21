@@ -9,10 +9,10 @@ import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Message() {
-    const { isAddChatVisible, setIsAddChatVisible } = useApp();
+    const { isAddChatVisible, setIsAddChatVisible, checkDark } = useApp();
     const { data } = useChat();
     return (
-        <div className={cx('container')}>
+        <div className={cx('container', checkDark())}>
             <div className={cx('wrapper')}>
                 <ChatSidebar />
                 {data.chatId === 'null' || (data.chatId && isAddChatVisible) ? <EmptyChat /> : <Chat />}

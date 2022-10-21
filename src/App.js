@@ -3,13 +3,9 @@ import { Fragment, useState } from 'react';
 
 import { publicRoutes, privateRoutes } from './routes';
 import DefaultLayout from './layouts/DefaultLayout';
-
-import AuthProvider from './context/AuthContext';
 import PrivateRoute from './components/Route/PrivateRoute';
 
 function App() {
-    const user = true;
-
     const [error, setError] = useState(null);
 
     return (

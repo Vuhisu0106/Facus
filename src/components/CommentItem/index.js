@@ -11,12 +11,14 @@ import CircleButton from '../Button/CircleButton';
 import CircleAvatar from '../CircleAvatar';
 import styles from './CommentItem.module.scss';
 import { useAuth } from '~/context/AuthContext';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function CommentItem({ data }) {
     const [commentDetail, setCommentDetail] = useState({});
 
     const { currentUser } = useAuth();
+    const { checkDark } = useApp();
     /////////////////////////////////////////////////////////////////////////////////////////////
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'comment', data.commentId), (doc) => {
@@ -41,7 +43,7 @@ function CommentItem({ data }) {
         }
     };
     return (
-        <div className={cx('comment-element')} key={data.commentId}>
+        <div className={cx('comment-element', checkDark())} key={data.commentId}>
             <CircleAvatar userName={data.commenter.displayName} avatar={data.commenter.photoURL} diameter="32px" />
             <div className={cx('comment-element-content')}>
                 <div className={cx('comment-content-n-setting')}>

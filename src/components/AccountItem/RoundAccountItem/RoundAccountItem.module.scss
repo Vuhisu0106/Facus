@@ -45,3 +45,13 @@
     font-size: 1.2rem;
     font-weight: 500;
 }
+
+.dark {
+    .user-img {
+        border: 2.5px solid var(--dark-background-color-2);
+    }
+
+    .user-name {
+        color: var(--dark-text-color-3);
+    }
+}

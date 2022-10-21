@@ -6,12 +6,12 @@ import styles from './Message.module.scss';
 
 const cx = classNames.bind(styles);
 function EmptyChat() {
-    const { isAddChatVisible, setIsAddChatVisible } = useApp();
+    const { isAddChatVisible, setIsAddChatVisible, checkDark } = useApp();
 
     return isAddChatVisible === true ? (
-        <div className={cx('chat-wrapper')}>
+        <div className={cx('chat-wrapper', checkDark('dark-empty-search-chat'))}>
             <div className={cx('chat-header')}>
-                <span className={cx('to')}>To:</span>
+                <span>To:</span>
                 <ChatSearch
                     className={cx('chat-header-input')}
                     type="text"
@@ -21,7 +21,7 @@ function EmptyChat() {
             </div>
         </div>
     ) : (
-        <div className={cx('empty-chat-wrapper')}>
+        <div className={cx('empty-chat-wrapper', checkDark('dark-empty-chat'))}>
             <h2>Select a chat or start a new conversation!</h2>
         </div>
     );

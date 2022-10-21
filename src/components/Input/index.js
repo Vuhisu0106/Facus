@@ -3,11 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styles from './Input.module.scss';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Input({
-    //classNameInputRight,
-
     inputClassName,
     onClickInputRight,
     className,
@@ -24,7 +23,6 @@ function Input({
     rightBtnTypeFile = false,
     onChangeLeftBtn,
     onChangeRightBtn,
-    //idRightBtn,
     inputRef,
     onChange,
     autoFocus,
@@ -32,12 +30,14 @@ function Input({
     ...passProps
 }) {
     //const inputRef = useRef();
+    const { checkDark } = useApp();
     const props = {
         onChange,
         ...passProps,
     };
+
     return (
-        <div className={cx('wrapper', { [className]: className })}>
+        <div className={cx('wrapper', checkDark(), { [className]: className })}>
             {leftIcon && (
                 <button
                     className={cx('left-button', { [classNameLeftBtn]: classNameLeftBtn })}

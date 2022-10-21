@@ -98,3 +98,29 @@
     color: var(--white);
     border-radius: 50%;
 }
+
+//Dark mode//
+
+.dark.active {
+    background: var(--dark-element-hover);
+}
+.dark {
+    &:hover {
+        background: var(--dark-element-hover);
+    }
+
+    .mess-top-content {
+        .user-name {
+            font-weight: 600;
+            color: var(--dark-text-color-2);
+        }
+
+        .closest-mess-time {
+            color: var(--dark-text-color-3);
+        }
+    }
+
+    .closest-mess {
+        color: var(--dark-text-color-3);
+    }
+}

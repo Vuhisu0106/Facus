@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { useApp } from '~/context/AppContext';
 import styles from './Button.module.scss';
 
 const cx = classNames.bind(styles);
@@ -20,6 +21,7 @@ function Button({
     disabled = false,
     ...passProps
 }) {
+    const { checkDark } = useApp();
     let Comp = 'button';
 
     const props = {
@@ -43,7 +45,7 @@ function Button({
         Comp = 'a';
     }
 
-    const classes = cx('wrapper', {
+    const classes = cx('wrapper', checkDark(), {
         [className]: className,
         primary,
         menu,

@@ -7,6 +7,7 @@
     justify-content: center;
     position: fixed;
     box-shadow: rgb(0 0 0 / 8%) 0px 2px 12px;
+    transition: var(--transition-theme);
 }
 
 .inner-wrapper {
@@ -87,4 +88,31 @@
 
 .menu-body {
     overflow-y: auto;
+}
+
+//Dark mode
+.dark {
+    transition: var(--transition-theme);
+    background-color: var(--dark-background-color-2);
+    border-bottom: 1px solid rgb(62, 64, 66);
+
+    .search {
+        color: var(--dark-text-color-3);
+    }
+
+    .menu-list {
+        box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        .menu-item-btn {
+            color: var(--dark-text-color-3);
+            background-color: var(--dark-background-color-2);
+
+            &:hover {
+                background-color: var(--dark-element-hover);
+            }
+
+            &.separate {
+                border-top: 1px solid rgba(22, 24, 35, 0.12);
+            }
+        }
+    }
 }

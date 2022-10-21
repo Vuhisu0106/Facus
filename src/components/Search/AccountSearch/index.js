@@ -12,6 +12,7 @@ import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
 import { useUser } from '~/context/UserContext';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function AccountSearch({ className, placeHolder, placement, autoFocus }) {
@@ -23,6 +24,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
 
     const { currentUser } = useAuth();
     const { dispatch, addToLocalStorage } = useUser();
+    const { checkDark } = useApp();
 
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();

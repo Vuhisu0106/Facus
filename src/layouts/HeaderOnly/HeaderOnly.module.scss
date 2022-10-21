@@ -2,8 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--light-mode-color);
+    background-color: var(--light-background-color);
     position: relative;
+    transition: var(--transition-theme);
 }
 
 .header {
@@ -16,4 +17,10 @@
     padding-top: 60px;
     display: flex;
     justify-content: center;
+}
+
+//Dark mode
+.dark {
+    transition: var(--transition-theme);
+    background-color: var(--dark-background-color);
 }

@@ -1,8 +1,10 @@
 import classNames from 'classnames/bind';
+import { useApp } from '~/context/AppContext';
 
 import styles from './RoundAccountItem.module.scss';
 const cx = classNames.bind(styles);
 function RoundAccountItem({ userName, avt, happy, sad, sleepy }) {
+    const { checkDark } = useApp();
     const badgeClasses = cx('badge', {
         [classNames]: classNames,
         happy,
@@ -10,7 +12,7 @@ function RoundAccountItem({ userName, avt, happy, sad, sleepy }) {
         sleepy,
     });
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper', checkDark())}>
             <div className={cx('user-avt')}>
                 <div className={cx('story-circle')}>
                     <img className={cx('user-img')} alt={userName} src={avt} />

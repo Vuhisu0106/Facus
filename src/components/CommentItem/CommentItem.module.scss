@@ -58,7 +58,7 @@
         .comment-content-wrapper {
             position: relative;
             padding: 8px;
-            background-color: var(--light-mode-color);
+            background-color: var(--light-background-color);
             color: var(--black);
             font-size: 15px;
             font-weight: 500;
@@ -129,6 +129,62 @@
 
         span {
             font-size: 12px;
+        }
+    }
+}
+
+//Dark mode//
+.dark {
+    .comment-element-content {
+        .comment-content-n-setting {
+            .reaction-cmt {
+                border: 1px solid rgb(206, 208, 212, 0.5);
+                background-color: var(--dark-element-color);
+
+                .reaction-cmt-count {
+                    color: var(--dark-text-color-3);
+                }
+            }
+
+            .comment-setting {
+                color: var(--dark-icon-color);
+                background-color: transparent;
+            }
+
+            .comment-content-wrapper {
+                background-color: var(--dark-element-color);
+                color: var(--dark-text-color-2);
+
+                .comment-user-name {
+                    font-size: 400;
+                }
+
+                .comment-content {
+                    font-weight: 400;
+                }
+            }
+        }
+
+        .comment-img-n-reaction {
+            .reaction-image-cmt {
+                border: 1px solid rgb(206, 208, 212, 0.5);
+                background-color: var(--dark-element-color);
+
+                .reaction-cmt-count {
+                    color: var(--dark-text-color-3);
+                }
+            }
+        }
+
+        .comment-interact {
+            .like-comment-btn,
+            .reply-comment-btn {
+                color: var(--dark-text-color-3);
+            }
+
+            span {
+                color: var(--dark-text-color-3);
+            }
         }
     }
 }

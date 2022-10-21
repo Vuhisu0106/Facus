@@ -1,10 +1,12 @@
-import { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext, ChangeEventHandler, useEffect } from 'react';
 
 export const AppContext = createContext();
 
 export function useApp() {
     return useContext(AppContext);
 }
+
+const darkModeState = JSON.parse(localStorage.getItem('darkMode'));
 
 function AppProvider({ children }) {
     //Add chat
@@ -21,6 +23,24 @@ function AppProvider({ children }) {
     //Edit status modal
     const [isEditStatusModal, setIsEditStatusModal] = useState(false);
 
+    //Dark/light mode
+    const [dark, setDark] = useState(false || darkModeState);
+
+    const toggleTheme = () => {
+        setDark(!dark);
+        localStorage.setItem('darkMode', String(!dark));
+    };
+
+    const checkDark = (className) => {
+        if (dark && !className) {
+            return 'dark';
+        } else if (dark && className) {
+            return className;
+        } else {
+            return '';
+        }
+    };
+
     const value = {
         isAddChatVisible,
         setIsAddChatVisible,
@@ -35,6 +55,9 @@ function AppProvider({ children }) {
         setIsEditProfileVisible,
         isEditStatusModal,
         setIsEditStatusModal,
+        dark,
+        toggleTheme,
+        checkDark,
     };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

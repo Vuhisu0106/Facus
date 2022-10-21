@@ -19,7 +19,7 @@ function ChatSidebar() {
     const [chats, setChats] = useState([]);
     const [activeMessItem, setActiveMessItem] = useState(null);
 
-    const { setIsAddChatVisible } = useApp();
+    const { setIsAddChatVisible, checkDark } = useApp();
     const { currentUser } = useAuth();
     const { data, dispatch } = useChat();
 
@@ -83,7 +83,7 @@ function ChatSidebar() {
     }, [data]);
 
     return (
-        <div className={cx('sidebar-wrapper')}>
+        <div className={cx('sidebar-wrapper', checkDark('dark-chat-sidebar'))}>
             <div className={cx('sidebar-header')}>
                 <div className={cx('sidebar-top-header')}>
                     <h2>Chat</h2>

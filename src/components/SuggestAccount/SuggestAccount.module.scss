@@ -77,3 +77,37 @@
     font-weight: 700;
     cursor: pointer;
 }
+
+//Dark mode//
+
+.dark {
+    background-color: var(--dark-background-color-2);
+    border-radius: 6px;
+    .label {
+        p {
+            font-weight: 600;
+            color: rgb(142, 142, 142);
+        }
+    }
+
+    .info {
+        flex: 1;
+        margin-left: 8px;
+    }
+
+    .name {
+        font-size: 1.4rem;
+        font-weight: 600;
+        span {
+            color: var(--dark-text-color-2);
+        }
+    }
+
+    .username {
+        color: var(--dark-text-color-3);
+    }
+
+    .follow {
+        font-weight: 500;
+    }
+}

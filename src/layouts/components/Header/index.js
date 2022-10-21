@@ -16,6 +16,7 @@ import { useUser } from '~/context/UserContext';
 import { tippy } from '@tippyjs/react';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Button from '~/components/Button';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +27,7 @@ function Header({ className }) {
 
     const { currentUser, logout } = useAuth();
     const { dispatch, addToLocalStorage } = useUser();
+    const { darkModeState, toggleTheme, dark, checkDark } = useApp();
     const navigate = useNavigate();
 
     async function handleLogout() {
@@ -58,14 +60,6 @@ function Header({ className }) {
             },
         },
         {
-            icon: <FontAwesomeIcon icon={faMoon} />,
-            title: 'Dark mode',
-            onClick: () => {
-                tippy(avtRef.current).hide(200);
-                setIsMenuVisible(false);
-            },
-        },
-        {
             icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
             title: 'Log out',
             onClick: () => {
@@ -90,7 +84,7 @@ function Header({ className }) {
     //     },
     // ];
 
-    const classes = cx('wrapper', {
+    const classes = cx('wrapper', checkDark(), {
         [className]: className,
     });
 
@@ -113,7 +107,13 @@ function Header({ className }) {
                             children={<FontAwesomeIcon icon={faFacebookMessenger} />}
                         />
 
-                        <CircleButton children={<FontAwesomeIcon icon={faSun} />} />
+                        <CircleButton
+                            children={dark ? <FontAwesomeIcon icon={faMoon} /> : <FontAwesomeIcon icon={faSun} />}
+                            onClick={() => {
+                                toggleTheme();
+                                console.log('darkModeState: ' + darkModeState);
+                            }}
+                        />
 
                         <Tippy
                             interactive

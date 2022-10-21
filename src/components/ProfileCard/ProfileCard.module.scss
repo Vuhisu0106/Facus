@@ -1,6 +1,6 @@
 .wrapper {
     width: 100%;
-    //max-height: 450px;
+    max-height: 450px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,14 +22,14 @@
     background-color: var(--white);
     border-radius: 5px;
     color: var(--text-color);
-    padding: 20px 0 20px 0;
+    padding-top: 20px;
     position: relative;
     width: 350px;
     text-align: center;
     background-repeat: no-repeat;
     background-position: center top;
     background-image: linear-gradient(var(--primary), var(--primary));
-    background-size: 100% 27%;
+    background-size: 100% 20%;
 }
 
 .info {
@@ -81,27 +81,84 @@
     }
 }
 
-// .skills {
-//     background-color: #ff4f71;
-//     text-align: left;
-//     padding: 10px;
-//     margin-top: 20px;
-//     color: var(--white);
-//     border-bottom-left-radius: 5px;
-//     border-bottom-right-radius: 5px;
+.skills {
+    background-color: #ff4f71;
+    text-align: left;
+    padding: 10px;
+    margin-top: 20px;
+    color: var(--white);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 
-//     ul {
-//         list-style-type: none;
-//         margin: 0;
-//         padding: 0;
-//     }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
 
-//     ul li {
-//         border: 1px solid var(--light-text-color);
-//         border-radius: 2px;
-//         display: inline-block;
-//         font-size: 12px;
-//         margin: 0 7px 7px 0;
-//         padding: 4px;
-//     }
-// }
+    ul li {
+        border: 1px solid var(--light-text-color);
+        border-radius: 2px;
+        display: inline-block;
+        font-size: 12px;
+        margin: 0 7px 7px 0;
+        padding: 4px;
+    }
+}
+
+//Dark mode//
+
+.dark {
+    .wrapper {
+        background-color: var(--white);
+    }
+
+    .blur-wrapper {
+    }
+
+    .profile-card-wrapper {
+        background-color: var(--dark-background-color-2);
+        color: var(--text-color);
+        background-image: linear-gradient(var(--primary), var(--primary));
+    }
+
+    .info {
+        .avatar {
+            border: 5px solid var(--white);
+        }
+
+        h3 {
+            margin-top: 10px;
+        }
+
+        p {
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .view-profile-btn,
+        .follow-btn {
+            color: var(--white);
+        }
+
+        .view-profile-btn {
+            background-color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .follow-btn {
+            background-color: var(--white);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+    }
+
+    .skills {
+        background-color: #ff4f71;
+        color: var(--white);
+
+        ul li {
+            border: 1px solid var(--light-text-color);
+        }
+    }
+}

@@ -6,7 +6,7 @@
     cursor: pointer;
     border-radius: 8px;
     &:hover {
-        background: rgba(68, 73, 80, 0.12);
+        background: #4449501f;
     }
 }
 
@@ -37,4 +37,19 @@
     font-size: 1.3rem;
     color: rgba(22, 24, 35, 0.5);
     font-weight: 500;
+}
+
+////Dark//////
+.dark {
+    &:hover {
+        background-color: var(--dark-element-hover);
+    }
+    .name {
+        color: var(--dark-text-color-2);
+        font-weight: 400;
+    }
+    .username {
+        color: var(--dark-text-color-3);
+        font-weight: 300;
+    }
 }

@@ -13,14 +13,15 @@ import styles from './Home.module.scss';
 import RoundAccountItem from '~/components/AccountItem/RoundAccountItem';
 import { useAuth } from '~/context/AuthContext';
 import SuggestAccount from '~/components/SuggestAccount';
-import WeatherBox from '~/components/WeatherBox';
 import ProfileCard from '~/components/ProfileCard';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Home() {
     // let currentScrollPosition = 0;
     // let scrollAmount = 320;
     const { currentUser } = useAuth();
+    const { checkDark } = useApp();
     const [followingList, setFollowingList] = useState([]);
     const [postList, setPostList] = useState([]);
 
@@ -75,11 +76,11 @@ function Home() {
     // function scrollHorizontally() {}
 
     return (
-        <div className={cx('container')}>
+        <div className={cx('wrapper', checkDark())}>
             <Sidebar
                 children={
                     <>
-                        <ProfileCard /> <WeatherBox />
+                        <ProfileCard />
                     </>
                 }
                 className={cx('left-sidebar')}
@@ -88,7 +89,7 @@ function Home() {
             <div className={cx('content')}>
                 <div className={cx('horizontal-scroll')} ref={horizontalRef}>
                     <button className={cx('btn-scroll-left')}>{<FontAwesomeIcon icon={faChevronLeft} />}</button>
-                    <div className={cx('feeling-container')} ref={storyRef}>
+                    <div className={cx('status-container')} ref={storyRef}>
                         <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
                         <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
                         <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />

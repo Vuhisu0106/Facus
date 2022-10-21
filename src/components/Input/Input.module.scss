@@ -2,11 +2,12 @@
     display: flex;
     align-items: center;
     flex: 1;
-    background-color: var(--light-mode-color);
+    background-color: var(--light-background-color);
     min-height: 34px;
     border: 1.5px solid transparent;
     border-radius: var(--input-border-radius);
     position: relative;
+    transition: var(--transition-theme);
 
     button {
         min-height: 34px;
@@ -18,11 +19,13 @@
 
         &:hover {
             background-color: rgba(22, 24, 35, 0.03);
+            //not
         }
 
         &:active {
             cursor: pointer;
             background-color: rgb(22, 24, 35, 0.07);
+            //not
         }
     }
 
@@ -73,6 +76,7 @@
         top: 50%;
         transform: translateY(-50%);
         color: rgba(22, 24, 35, 0.34);
+        //not
     }
 
     .loading {
@@ -86,5 +90,19 @@
         to {
             transform: translateY(-50%) rotate(360deg);
         }
+    }
+}
+
+.dark {
+    background-color: var(--dark-element-color);
+    color: var(--dark-text-color);
+    transition: var(--transition-theme);
+
+    input {
+        color: var(--dark-text-color-2);
+    }
+
+    .right-input-file {
+        color: var(--dark-icon-color);
     }
 }

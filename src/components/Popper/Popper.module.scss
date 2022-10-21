@@ -9,3 +9,7 @@
     min-height: 40px;
     max-height: min((100vh - 96px) - 60px, 734px);
 }
+
+.dark {
+    background: var(--dark-background-color-2);
+}

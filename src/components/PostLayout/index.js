@@ -30,11 +30,13 @@ import { useAuth } from '~/context/AuthContext';
 import CircleAvatar from '../CircleAvatar';
 import CircleButton from '../Button/CircleButton';
 import CommentItem from '../CommentItem';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, postCaption, likeCount, commentCount }) {
     const { addToLocalStorage } = useUser();
     const { currentUser } = useAuth();
+    const { checkDark } = useApp();
 
     const [postDetail, setPostDetail] = useState({});
     const [comment, setComment] = useState('');
@@ -179,7 +181,7 @@ function PostLayout({ userId, postId, userName, userAvt, timeStamp, postImg, pos
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <div className={cx('post-wrapper')}>
+        <div className={cx('post-wrapper', checkDark())}>
             <div className={cx('post-header')}>
                 <img className={cx('user-avt')} alt={userName} src={userAvt} />
                 <div className={cx('post-header-info')}>

@@ -22,7 +22,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { isAddChatVisible, setIsAddChatVisible, clearState } = useApp();
+    const { isAddChatVisible, setIsAddChatVisible, clearState, checkDark } = useApp();
     const { currentUser } = useAuth();
     const { data, dispatch } = useChat();
 
@@ -112,7 +112,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     };
 
     return (
-        <div className={cx('mess-search')}>
+        <div className={cx('mess-search', checkDark())}>
             <HeadlessTippy
                 interactive
                 placement={placement}

@@ -13,6 +13,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { useChat } from '~/context/ChatContext';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useAuth } from '~/context/AuthContext';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Chat() {
@@ -22,6 +23,7 @@ function Chat() {
 
     const messageRef = useRef();
 
+    const { checkDark } = useApp();
     const { currentUser } = useAuth();
     const { data } = useChat();
 
@@ -123,7 +125,7 @@ function Chat() {
     };
 
     return (
-        <div className={cx('chat-wrapper')}>
+        <div className={cx('chat-wrapper', checkDark('dark-chat'))}>
             <div className={cx('chat-header')}>
                 <img className={cx('user-avt')} alt={data.user?.displayName} src={data.user?.photoURL} />
                 <h3 className={cx('user-name')}>{data.user?.displayName}</h3>
