@@ -19,7 +19,7 @@ import { useUser } from '~/context/UserContext';
 const cx = classNames.bind(styles);
 function Posts({ isCurrentUser = false }) {
     const { currentUser } = useAuth();
-    const { setIsAddPostVisible, setAddPhotoVisible, setButtonActive } = useApp();
+    const { setIsAddPostVisible, setAddPhotoVisible, setButtonActive, checkDark } = useApp();
     const { addToLocalStorage } = useUser();
 
     const [postList, setPostList] = useState([]);
@@ -64,7 +64,7 @@ function Posts({ isCurrentUser = false }) {
     };
 
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper', checkDark('dark-post'))}>
             <div className={cx('left-content')}>
                 <WrapperModal className={cx('intro')}>
                     <h2>Intro</h2>
@@ -73,6 +73,7 @@ function Posts({ isCurrentUser = false }) {
                             <p>Hello world</p>
                             {isCurrentUser && (
                                 <Button
+                                    className={cx('edit-bio-btn')}
                                     long
                                     onClick={() => {
                                         setEditBio(true);
@@ -89,7 +90,7 @@ function Posts({ isCurrentUser = false }) {
                                 placeHolder={'Type your bio...'}
                                 onChange={handleEditBio}
                             />
-                            <div className={cx('edit-bio-btn')}>
+                            <div className={cx('edit-bio-btns')}>
                                 <Button
                                     className={cx('cancel-bio-btn')}
                                     children={'Cancel'}

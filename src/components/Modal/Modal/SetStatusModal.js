@@ -12,7 +12,7 @@ import Modal from '..';
 
 const cx = classNames.bind(styles);
 function SetStatusModal() {
-    const { setIsEditStatusModal } = useApp();
+    const { setIsEditStatusModal, checkDark, dark } = useApp();
 
     const [selectEmoji, setSelectEmoji] = useState('');
     const [message, setMessage] = useState('');
@@ -28,6 +28,16 @@ function SetStatusModal() {
         setMessage('');
         setShowPicker(false);
     };
+
+    const handleSendInput = (e) => {
+        const sendValueInput = e.target.value;
+
+        if (!sendValueInput.startsWith(' ')) {
+            setMessage(sendValueInput);
+        } else {
+            return;
+        }
+    };
     return (
         <Modal
             title="Edit status"
@@ -35,7 +45,7 @@ function SetStatusModal() {
                 setIsEditStatusModal(false);
             }}
             children={
-                <div className={cx('set-status-wrapper')}>
+                <div className={cx('set-status-wrapper', checkDark('dark-set-status'))}>
                     <div className={cx('status-content')}>
                         <Input
                             className={cx('status-bar')}
@@ -51,6 +61,7 @@ function SetStatusModal() {
                         {showPicker && (
                             <EmojiPicker
                                 emojiStyle="google"
+                                theme={dark ? 'dark' : 'light'}
                                 lazyLoadEmojis={true}
                                 height={'400px'}
                                 onEmojiClick={(e) => onEmojiClick(e)}
@@ -61,12 +72,12 @@ function SetStatusModal() {
                             <h4>Suggestions</h4>
                             <div className={cx('suggest-examples')}>
                                 <div>
-                                    <p>😁 On vacation</p>
-                                    <p>😁 Out sick</p>
+                                    <p>🥱 Deadline</p>
+                                    <p>🤒 Out sick af</p>
                                 </div>
                                 <div>
-                                    <p>😁 Working from home</p>
-                                    <p>😁 Focusing</p>
+                                    <p>🐧 Just feeling lazy</p>
+                                    <p>🥰 This web is pềct</p>
                                 </div>
                             </div>
                         </div>

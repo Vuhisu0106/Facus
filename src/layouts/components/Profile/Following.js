@@ -6,11 +6,14 @@ import { db } from '~/firebase';
 import styles from './Profile.module.scss';
 import WrapperModal from '~/components/Wrapper';
 import { useState } from 'react';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Following() {
     const [followingList, setFollowingList] = useState();
     var selectUser = localStorage.getItem('selectUser');
+
+    const { checkDark } = useApp();
 
     useEffect(() => {
         const getFollowingList = () => {
@@ -27,7 +30,7 @@ function Following() {
     }, [selectUser]);
 
     return (
-        <WrapperModal className={cx('following')}>
+        <WrapperModal className={cx('following', checkDark())}>
             <h2>Following</h2>
             {followingList &&
                 Object.entries(followingList).map((following) => (

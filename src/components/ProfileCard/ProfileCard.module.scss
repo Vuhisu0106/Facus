@@ -118,22 +118,23 @@
 
     .profile-card-wrapper {
         background-color: var(--dark-background-color-2);
+
         color: var(--text-color);
-        background-image: linear-gradient(var(--primary), var(--primary));
+        background-image: none;
     }
 
     .info {
         .avatar {
-            border: 5px solid var(--white);
+            padding: 3px;
+            border: 3px solid var(--primary);
         }
 
         h3 {
-            margin-top: 10px;
+            color: var(--dark-text-color-3);
         }
 
         p {
-            font-size: 14px;
-            margin-bottom: 7px;
+            color: var(--dark-text-color-3);
         }
 
         .view-profile-btn,
@@ -144,21 +145,23 @@
         .view-profile-btn {
             background-color: var(--primary);
             border: 1px solid var(--primary);
+            color: #3a2228;
         }
 
         .follow-btn {
-            background-color: var(--white);
+            background-color: var(--dark-background-color-2);
+
             border: 1px solid var(--primary);
             color: var(--primary);
         }
     }
 
     .skills {
-        background-color: #ff4f71;
-        color: var(--white);
+        background-color: #29181d;
+        color: var(--dark-text-color-3);
 
         ul li {
-            border: 1px solid var(--light-text-color);
+            border: 1px solid var(--dark-text-color-3);
         }
     }
 }

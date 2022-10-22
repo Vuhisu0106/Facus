@@ -12,7 +12,6 @@ import { useAuth } from '~/context/AuthContext';
 import Posts from '~/layouts/components/Profile/Posts';
 import Following from '~/layouts/components/Profile/Following';
 import Follower from '~/layouts/components/Profile/Follower';
-import CircleButton from '~/components/Button/CircleButton';
 import { useApp } from '~/context/AppContext';
 import { useUser } from '~/context/UserContext';
 import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
@@ -28,10 +27,10 @@ function Profile() {
 
     const { currentUser } = useAuth();
     const { data } = useUser();
-    const { setIsEditStatusModal, setIsEditProfileVisible } = useApp();
+    const { setIsEditStatusModal, setIsEditProfileVisible, checkDark } = useApp();
 
-    let location = useLocation();
-    let navigate = useNavigate();
+    // let location = useLocation();
+    // let navigate = useNavigate();
     let params = useParams();
 
     const [hovered, setHovered] = useState(false);
@@ -158,7 +157,7 @@ function Profile() {
     };
 
     return (
-        <div className={cx('container')}>
+        <div className={cx('wrapper', checkDark())}>
             <div className={cx('profile-main-part')}>
                 <img className={cx('profile-cover-photo')} src={selectedUser.photoURL} alt="Vu Hieu" />
                 <div className={cx('profile-main-part-center')}>

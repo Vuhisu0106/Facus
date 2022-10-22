@@ -23,7 +23,8 @@ function AddPostModal() {
     const [caption, setCaption] = useState('');
     const [img, setImg] = useState(null);
 
-    const { setIsAddPostVisible, addPhotoVisible, setAddPhotoVisible, buttonActive, setButtonActive } = useApp();
+    const { setIsAddPostVisible, addPhotoVisible, setAddPhotoVisible, buttonActive, setButtonActive, checkDark } =
+        useApp();
 
     const handleCaption = (e) => {
         const captionValueInput = e.target.value;
@@ -120,7 +121,7 @@ function AddPostModal() {
                 setImg(null);
             }}
             children={
-                <div className={cx('add-post-wrapper')}>
+                <div className={cx('add-post-wrapper', checkDark('dark-add-post'))}>
                     <div className={cx('add-post-header')}>
                         <div className={cx('add-post-user-info')}>
                             <img alt={currentUser.displayName} src={currentUser.photoURL} />

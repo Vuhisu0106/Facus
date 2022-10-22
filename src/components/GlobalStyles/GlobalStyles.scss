@@ -33,7 +33,7 @@
 
     ////////////////////////////////////////////////////////
     --input-border-radius: 92px;
-    --transition-theme: all 0.1s ease;
+    --transition-theme: all 0.02s ease;
     --component-border-radius: 15px;
 
     ////////////////////////Dark mode//////////////////////
@@ -67,7 +67,7 @@ html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: var(--transition-theme);
+    //transition: var(--transition-theme);
 }
 
 body {

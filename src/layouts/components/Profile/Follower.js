@@ -5,11 +5,14 @@ import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '~/firebase';
 import styles from './Profile.module.scss';
 import WrapperModal from '~/components/Wrapper';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Follower() {
     const [followerList, setFollowerList] = useState();
     var selectUser = localStorage.getItem('selectUser');
+
+    const { checkDark } = useApp();
 
     useEffect(() => {
         const getFollowerList = () => {
@@ -27,7 +30,7 @@ function Follower() {
     }, [selectUser]);
 
     return (
-        <WrapperModal className={cx('follower')}>
+        <WrapperModal className={cx('follower', checkDark())}>
             <h2>Follower</h2>
             {followerList &&
                 Object.entries(followerList).map((follower) => (

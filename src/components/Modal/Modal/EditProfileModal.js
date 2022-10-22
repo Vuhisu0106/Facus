@@ -13,7 +13,7 @@ import { useState } from 'react';
 const cx = classNames.bind(styles);
 function EditProfileModal() {
     const { currentUser } = useAuth();
-    const { setIsEditProfileVisible } = useApp();
+    const { setIsEditProfileVisible, checkDark } = useApp();
 
     const [avatar, setAvatar] = useState(null);
     const [coverPhoto, setCoverPhoto] = useState(null);
@@ -24,7 +24,7 @@ function EditProfileModal() {
                 setIsEditProfileVisible(false);
             }}
             children={
-                <div className={cx('edit-profile-wrapper')}>
+                <div className={cx('edit-profile-wrapper', checkDark('dark-edit-profile'))}>
                     <div className={cx('edit-profile-body')}>
                         {/* Edit profile picture */}
                         <div className={cx('edit-avatar')}>

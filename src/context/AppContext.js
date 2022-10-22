@@ -41,6 +41,13 @@ function AppProvider({ children }) {
         }
     };
 
+    //Change background color of body based on theme
+    if (dark) {
+        document.body.style.backgroundColor = '#18191a';
+    } else {
+        document.body.style.backgroundColor = '#f2f5f7';
+    }
+
     const value = {
         isAddChatVisible,
         setIsAddChatVisible,

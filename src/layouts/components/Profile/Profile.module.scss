@@ -46,7 +46,7 @@
         }
     }
 
-    .edit-bio-btn {
+    .edit-bio-btns {
         width: 170px;
         display: flex;
         justify-content: space-between;
@@ -201,4 +201,105 @@
 .account-bio {
     font-size: 12px;
     font-weight: 400;
+}
+
+//////////////////////////////////////////Dark mode/////////////////////////////////////////
+/// Post
+.dark-post {
+    .intro,
+    .photo {
+        background-color: var(--dark-background-color-2);
+        box-shadow: none;
+        p {
+            color: var(--dark-text-color-3);
+        }
+        h2 {
+            color: var(--dark-text-color-3);
+        }
+    }
+
+    .edit-bio-btn {
+        color: var(--dark-text-color-2);
+    }
+
+    .edit-bio {
+        .bio-input {
+            background-color: var(--dark-element-color);
+            color: var(--dark-text-color);
+            border: 1.8px solid rgb(176, 179, 184, 0.3);
+
+            &:focus-within {
+                border: 1.8px solid var(--primary);
+            }
+        }
+
+        .edit-bio-btns {
+            .cancel-bio-btn {
+                background-color: var(--dark-text-color);
+                color: var(--dark-text-color-2);
+
+                &:hover {
+                    background-color: var(--dark-element-hover-2);
+                }
+            }
+            .save-bio-btn {
+                color: var(--white);
+                &:hover {
+                    background: #fc476b;
+                }
+            }
+        }
+    }
+
+    .add-post {
+        background-color: var(--dark-background-color-2);
+        box-shadow: none;
+    }
+
+    .add-post-top {
+        .add-post-only-message-btn {
+            background-color: var(--dark-text-color);
+            color: var(--dark-text-color-3);
+
+            &:hover {
+                background-color: var(--dark-element-hover-2);
+            }
+        }
+    }
+
+    .add-post-bottom {
+        border-top: 1px solid rgb(62, 64, 66);
+
+        .add-post-with-video-btn,
+        .add-post-with-photo-btn {
+            background-color: transparent;
+            color: var(--dark-text-color-3);
+
+            &:hover {
+                background-color: var(--dark-element-hover);
+                color: var(--primary);
+            }
+        }
+    }
+}
+
+///Following
+.dark {
+    background-color: var(--dark-background-color-2);
+    box-shadow: none;
+
+    h2 {
+        color: var(--dark-text-color-3);
+    }
+    .account {
+        border: 1px solid rgb(62, 64, 66);
+    }
+
+    .account-name {
+        color: var(--dark-text-color-2);
+    }
+
+    .account-bio {
+        color: var(--dark-text-color-3);
+    }
 }

@@ -469,14 +469,13 @@ input[type='file'] {
     background-color: var(--light-background-color);
     border-color: rgba(22, 24, 35, 0.2);
     margin-bottom: 8px;
+    transition: none;
 
     .status-input {
         margin-left: 6px;
     }
 
     .status-icon {
-        border-bottom-right-radius: 0px;
-        border-top-right-radius: 0px;
         border-bottom-left-radius: 8px;
         border-top-left-radius: 8px;
         background-color: var(--white);
@@ -542,5 +541,189 @@ input[type='file'] {
         border: 1px solid rgb(204, 206, 209, 0.5);
         background-color: var(--light-background-color);
         color: #000;
+    }
+}
+
+/////////////////////////////////////////////Dark mode////////////////////////////////////////////////
+.dark {
+    background-color: rgba(0, 0, 0, 0.7);
+
+    .header {
+        background-color: var(--dark-background-color-2);
+        border-bottom: 1px solid rgb(62, 64, 66);
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+
+        h2 {
+            color: var(--dark-text-color-3);
+        }
+    }
+
+    .wrapper {
+        background-color: var(--dark-background-color-2);
+    }
+}
+
+.dark-add-post {
+    .add-post-user-info {
+        .user-info {
+            h4 {
+                color: var(--dark-text-color-2);
+            }
+
+            .global {
+                background-color: var(--dark-element-color);
+                color: var(--dark-text-color-2);
+            }
+        }
+    }
+
+    .add-post-body {
+        textarea {
+            background-color: var(--dark-background-color-2);
+            color: var(--dark-text-color-3);
+        }
+    }
+
+    .add-photo-container {
+        border: 1px solid rgb(62, 64, 66);
+    }
+
+    .add-photo-wrapper {
+        background-color: #323436;
+
+        &:hover {
+            background-color: var(--dark-element-color);
+        }
+
+        .upload-icon {
+            color: var(--dark-text-color-3);
+            background-color: #47494a;
+        }
+
+        h3,
+        span {
+            color: var(--dark-text-color-3);
+        }
+    }
+
+    .close-upload-btn,
+    .cancel-photo-btn {
+        background-color: var(--dark-element-color);
+        color: var(--dark-icon-color);
+
+        &:hover {
+            background-color: var(--dark-element-hover-2);
+            color: var(--primary);
+            border: rgb(254, 44, 85, 0.5) 1px solid;
+        }
+    }
+
+    .selected-photo-wrapper {
+        background-color: var(--dark-element-color);
+    }
+
+    .add-post-footer {
+        .btn-nav-footer {
+            border: 1px solid rgb(62, 64, 66);
+            color: var(--dark-text-color-2);
+
+            h4 {
+                font-size: 14px;
+            }
+
+            .btn-footer-list {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .circle-btn-footer {
+                    transition: 0;
+                }
+                .active {
+                    background: var(--primary);
+                    color: var(--white);
+
+                    &:hover {
+                        background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
+                        color: var(--white);
+                    }
+                }
+            }
+        }
+
+        .post-btn {
+            width: 100%;
+            transition: 0.1s;
+            background: var(--primary);
+            color: var(--white);
+            &:hover {
+                background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
+                color: var(--white);
+            }
+        }
+    }
+}
+
+.dark-edit-profile {
+    h3 {
+        color: var(--dark-text-color-3);
+    }
+}
+
+.dark-set-status {
+    .status-bar {
+        background-color: var(--dark-background-color);
+        border: 1px solid rgb(62, 64, 66);
+
+        .status-input {
+            color: var(--dark-text-color-3);
+            font-weight: 400;
+        }
+
+        .status-icon {
+            background-color: var(--dark-background-color-2);
+            border-right: 1px solid rgb(62, 64, 66);
+            color: var(--dark-icon-color);
+
+            &:hover {
+                background-color: var(--dark-element-hover);
+                color: var(--primary);
+            }
+
+            &:active {
+                background-color: var(--primary);
+                color: var(--white);
+            }
+        }
+    }
+
+    .suggestions {
+        h4 {
+            color: var(--dark-text-color-3);
+        }
+
+        .suggest-examples {
+            color: var(--dark-text-color-3);
+        }
+    }
+
+    .status-footer {
+        border-top: 1px solid rgb(62, 64, 66);
+
+        .set-status-btn,
+        .clear-status-btn {
+            color: var(--white);
+            &:hover {
+                background: #fc476b;
+            }
+        }
+        .clear-status-btn {
+            background-color: var(--dark-text-color);
+            color: var(--dark-text-color-2);
+
+            &:hover {
+                background-color: var(--dark-element-hover-2);
+            }
+        }
     }
 }
