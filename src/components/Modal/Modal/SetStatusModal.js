@@ -2,7 +2,7 @@ import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import EmojiPicker from 'emoji-picker-react';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Button from '~/components/Button';
 import Input from '~/components/Input';
@@ -17,10 +17,12 @@ function SetStatusModal() {
     const [selectEmoji, setSelectEmoji] = useState('');
     const [message, setMessage] = useState('');
     const [showPicker, setShowPicker] = useState(false);
+    const [statusBtnDisable, setStatusBtnDisable] = useState(true);
 
     const onEmojiClick = (e) => {
         setShowPicker(false);
         setSelectEmoji(e.emoji);
+        console.log(selectEmoji);
     };
 
     const clearStatus = () => {
@@ -34,10 +36,21 @@ function SetStatusModal() {
 
         if (!sendValueInput.startsWith(' ')) {
             setMessage(sendValueInput);
+            console.log(sendValueInput);
         } else {
-            return;
+            setStatusBtnDisable(true);
         }
     };
+
+    //Condition to set 'Set status btn' unactive
+    useEffect(() => {
+        if (selectEmoji && message) {
+            setStatusBtnDisable(false);
+        } else {
+            setStatusBtnDisable(true);
+        }
+    }, [selectEmoji, message]);
+
     return (
         <Modal
             title="Edit status"
@@ -48,11 +61,14 @@ function SetStatusModal() {
                 <div className={cx('set-status-wrapper', checkDark('dark-set-status'))}>
                     <div className={cx('status-content')}>
                         <Input
+                            value={message}
                             className={cx('status-bar')}
                             inputClassName={cx('status-input')}
                             placeHolder="What's happening?"
                             classNameLeftBtn={cx('status-icon')}
+                            onChange={handleSendInput}
                             leftIcon={selectEmoji ? selectEmoji : <FontAwesomeIcon icon={faFaceSmile} />}
+                            onChangeLeftBtn={''}
                             onClickLeftBtn={() => {
                                 setShowPicker(!showPicker);
                             }}
@@ -64,7 +80,9 @@ function SetStatusModal() {
                                 theme={dark ? 'dark' : 'light'}
                                 lazyLoadEmojis={true}
                                 height={'400px'}
-                                onEmojiClick={(e) => onEmojiClick(e)}
+                                onEmojiClick={(e) => {
+                                    onEmojiClick(e);
+                                }}
                             />
                         )}
 
@@ -83,8 +101,14 @@ function SetStatusModal() {
                         </div>
                     </div>
                     <div className={cx('status-footer')}>
-                        <Button className={cx('set-status-btn')} children={'Set status'} />
-                        <Button className={cx('clear-status-btn')} children={'Clear status'} onClick={clearStatus} />
+                        <Button disabled={statusBtnDisable} className={cx('set-status-btn')} children={'Set status'} />
+                        <Button
+                            className={cx('clear-status-btn')}
+                            children={'Clear status'}
+                            onClick={() => {
+                                clearStatus();
+                            }}
+                        />
                     </div>
                 </div>
             }

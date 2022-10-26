@@ -15,7 +15,7 @@ function AppProvider({ children }) {
         setIsAddChatVisible(false);
     };
     //Add post modal
-    const [isAddPostVisible, setIsAddPostVisible] = useState(false);
+    const [isPostModalVisible, setIsPostModalVisible] = useState(false);
     const [addPhotoVisible, setAddPhotoVisible] = useState(false);
     const [buttonActive, setButtonActive] = useState(false);
     //Edit profile modal
@@ -52,8 +52,8 @@ function AppProvider({ children }) {
         isAddChatVisible,
         setIsAddChatVisible,
         clearState,
-        isAddPostVisible,
-        setIsAddPostVisible,
+        isPostModalVisible,
+        setIsPostModalVisible,
         addPhotoVisible,
         setAddPhotoVisible,
         buttonActive,

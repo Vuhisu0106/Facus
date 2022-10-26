@@ -4,7 +4,6 @@
     align-items: center;
     background-color: var(--light-background-color);
     position: relative;
-    transition: var(--transition-theme);
 }
 
 .header {
@@ -21,6 +20,5 @@
 
 //Dark mode
 .dark {
-    transition: var(--transition-theme);
     background-color: var(--dark-background-color);
 }

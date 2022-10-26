@@ -13,10 +13,10 @@ import { useRef, useState } from 'react';
 import { useAuth } from '~/context/AuthContext';
 import AccountSearch from '~/components/Search/AccountSearch';
 import { useUser } from '~/context/UserContext';
-import { tippy } from '@tippyjs/react';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Button from '~/components/Button';
 import { useApp } from '~/context/AppContext';
+import Menu from '~/components/Popper/Menu';
 
 const cx = classNames.bind(styles);
 
@@ -41,14 +41,11 @@ function Header({ className }) {
         }
     }
 
-    const handleHideMenu = () => {
+    const onClickOutside = () => {
         setIsMenuVisible(false);
     };
 
     const MENU_ITEMS_USER = [
-        {
-            title: currentUser.displayName,
-        },
         {
             icon: <FontAwesomeIcon icon={faUser} />,
             title: 'View profile',
@@ -115,44 +112,17 @@ function Header({ className }) {
                             }}
                         />
 
-                        <Tippy
-                            interactive
-                            //trigger="click"
-                            placement="bottom-end"
-                            visible={isMenuVisible}
-                            onClickOutside={handleHideMenu}
-                            //offset={offset}
-                            render={(attrs) => (
-                                <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
-                                    <PopperWrapper className={cx('menu-popper')}>
-                                        <div className={cx('menu-body')}>
-                                            {MENU_ITEMS_USER.map((item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    className={cx('menu-item-btn')}
-                                                    data={item}
-                                                    leftIcon={item.icon}
-                                                    to={item.to}
-                                                    onClick={item.onClick}
-                                                >
-                                                    {item.title}
-                                                </Button>
-                                            ))}
-                                        </div>
-                                    </PopperWrapper>
-                                </div>
-                            )}
-                        >
+                        <Menu items={MENU_ITEMS_USER} isMenuVisible={isMenuVisible} onClickOutside={onClickOutside}>
                             <img
                                 className={cx('user-avt')}
                                 alt="Vu Minh Hieu"
                                 src={currentUser.photoURL}
                                 ref={avtRef}
                                 onClick={() => {
-                                    setIsMenuVisible(true);
+                                    setIsMenuVisible(!isMenuVisible);
                                 }}
                             />
-                        </Tippy>
+                        </Menu>
                     </div>
                 </div>
             </div>

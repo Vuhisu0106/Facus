@@ -119,21 +119,14 @@
     flex-direction: row;
     align-items: flex-end;
     padding-bottom: 20px;
-    .edit-account-btn,
-    .follow-btn,
-    .unfollow-btn {
+    button {
         height: 40px;
-        background-color: var(--primary);
-        color: var(--white);
         border-radius: 8px;
-        &:hover {
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
-        }
+        padding: 0 12px;
     }
+
     .edit-profile-btn,
     .chat-btn {
-        height: 40px;
-        border-radius: 8px;
         margin-left: 10px;
     }
 }
@@ -213,14 +206,6 @@
         color: var(--dark-text-color-3);
     }
     .profile-main-part-left {
-        .edit-account-btn,
-        .follow-btn,
-        .unfollow-btn {
-            color: var(--white);
-            &:hover {
-                background: #fc476b;
-            }
-        }
         .edit-profile-btn,
         .chat-btn {
             background-color: var(--dark-text-color);

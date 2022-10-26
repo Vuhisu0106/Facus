@@ -7,7 +7,7 @@ import CircleButton from '../Button/CircleButton';
 import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
-function Modal({ title, children, onClick }) {
+function Modal({ title, children, onClose }) {
     const { checkDark } = useApp();
     return (
         <div className={cx('container', checkDark())}>
@@ -17,7 +17,7 @@ function Modal({ title, children, onClick }) {
                     <CircleButton
                         className={cx('close-modal-btn')}
                         children={<FontAwesomeIcon icon={faXmark} />}
-                        onClick={onClick}
+                        onClick={onClose}
                     />
                 </div>
                 {children}

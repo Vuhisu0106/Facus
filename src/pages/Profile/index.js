@@ -206,7 +206,6 @@ function Profile() {
                             />
 
                             <Button
-                                primary
                                 className={cx('edit-profile-btn')}
                                 leftIcon={<FontAwesomeIcon icon={faPen} />}
                                 children={'Edit profile'}
@@ -240,7 +239,6 @@ function Profile() {
                             )}
 
                             <Button
-                                primary
                                 className={cx('chat-btn')}
                                 leftIcon={<FontAwesomeIcon icon={faMessage} />}
                                 children={'Message'}
@@ -256,7 +254,7 @@ function Profile() {
                         <Button
                             className={cx('profile-nav-btn')}
                             nav
-                            active={type === items ? true : false}
+                            activeNav={type === items ? true : false}
                             key={items}
                             onClick={() => {
                                 setType(items);

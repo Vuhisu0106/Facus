@@ -17,7 +17,7 @@ function Follower() {
     useEffect(() => {
         const getFollowerList = () => {
             const unsub = onSnapshot(doc(db, 'follower', selectUser), (doc) => {
-                setFollowerList(doc.data());
+                setFollowerList(Object.entries(doc.data()));
                 console.log(selectUser);
             });
 
@@ -33,7 +33,7 @@ function Follower() {
         <WrapperModal className={cx('follower', checkDark())}>
             <h2>Follower</h2>
             {followerList &&
-                Object.entries(followerList).map((follower) => (
+                followerList.map((follower) => (
                     <div key={follower[0]} className={cx('account')}>
                         <img
                             className={cx('account-avt')}

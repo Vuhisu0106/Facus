@@ -26,7 +26,7 @@ function ChatSidebar() {
     useEffect(() => {
         const getChats = () => {
             const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
-                setChats(doc.data());
+                setChats(Object.entries(doc.data()));
             });
 
             return () => {
@@ -97,18 +97,9 @@ function ChatSidebar() {
                 </div>
             </div>
             <div className={cx('user-message-list')}>
-                {Object.entries(chats)
+                {chats
                     ?.sort((a, b) => b[1].date - a[1].date)
                     .map((chat) => (
-                        // <HeadlessTippy
-                        //     key={chat[0]}
-                        //     //visible="true"
-                        //     delay={[0, 700]}
-                        //     interactive
-                        //     placement="bottom-end"
-                        //     offset={[12, 8]}
-                        //     render={(attrs) => <h2>Hello</h2>}
-                        // >
                         <MessageItem
                             key={chat[0]}
                             active={activeMessItem === chat[1].userInfo.uid && true}
@@ -127,7 +118,6 @@ function ChatSidebar() {
                                 //console.log(data);
                             }}
                         />
-                        // </HeadlessTippy>
                     ))}
             </div>
         </div>

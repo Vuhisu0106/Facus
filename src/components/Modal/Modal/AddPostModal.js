@@ -1,10 +1,6 @@
 import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
-import { doc, serverTimestamp, updateDoc, setDoc } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { v4 as uuid } from 'uuid';
 
-import { storage } from '~/firebase';
 import Modal from '..';
 import styles from '~/components/Modal/Modal.module.scss';
 import CircleButton from '~/components/Button/CircleButton';
@@ -13,111 +9,56 @@ import { faFileCirclePlus, faGlobeAsia, faImage, faVideo, faXmark } from '@forta
 import { useAuth } from '~/context/AuthContext';
 import Button from '~/components/Button';
 import { useApp } from '~/context/AppContext';
-import { useState } from 'react';
-import { db } from '~/firebase';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
-function AddPostModal() {
+function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPostFunc, editPostFunc }) {
     const { currentUser } = useAuth();
 
     const [caption, setCaption] = useState('');
     const [img, setImg] = useState(null);
 
-    const { setIsAddPostVisible, addPhotoVisible, setAddPhotoVisible, buttonActive, setButtonActive, checkDark } =
-        useApp();
+    const [editCaption, setEditCaption] = useState(prevCaption || '');
+    const [editImg, setEditImg] = useState(prevImg || null); //init img received from prev post (exist as a firebase link )
+    const [postButtonDisable, setPostButtonDisable] = useState(true);
+
+    const { addPhotoVisible, setAddPhotoVisible, buttonActive, setButtonActive, checkDark } = useApp();
+
+    useEffect(() => {
+        setEditCaption(prevCaption);
+        setEditImg(prevImg);
+        //console.log('prevCaption: ' + prevCaption);
+    }, [prevCaption, prevImg]);
 
     const handleCaption = (e) => {
         const captionValueInput = e.target.value;
 
         if (!captionValueInput.startsWith(' ')) {
-            setCaption(captionValueInput);
+            edit ? setEditCaption(captionValueInput) : setCaption(captionValueInput);
+            setPostButtonDisable(false);
         } else {
-            return;
+            setPostButtonDisable(true);
         }
     };
 
-    const handlePost = async () => {
-        setIsAddPostVisible(false);
-        let uuId = uuid();
-        if (img) {
-            const storageRef = ref(storage, uuid());
-            //const uploadTask = await uploadBytesResumable(storageRef, img);
-
-            await uploadBytesResumable(storageRef, img).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDoc(doc(db, 'userPost', currentUser.uid), {
-                        [uuId]: {
-                            postId: uuId,
-                            poster: {
-                                uid: currentUser.uid,
-                                displayName: currentUser.displayName,
-                                photoURL: currentUser.photoURL,
-                            },
-                            caption: caption,
-                            img: downloadURL,
-                            date: serverTimestamp(),
-                            like: [],
-                            comment: [],
-                        },
-                    });
-
-                    await setDoc(doc(db, 'post', uuId), {
-                        postId: uuId,
-                        poster: {
-                            uid: currentUser.uid,
-                            displayName: currentUser.displayName,
-                            photoURL: currentUser.photoURL,
-                        },
-                        caption: caption,
-                        img: downloadURL,
-                        date: serverTimestamp(),
-                        like: [],
-                        comment: [],
-                    });
-                });
-            });
-        } else if (!caption) {
-            return;
-        } else {
-            await updateDoc(doc(db, 'userPost', currentUser.uid), {
-                [uuId]: {
-                    postId: uuId,
-                    poster: {
-                        uid: currentUser.uid,
-                        displayName: currentUser.displayName,
-                        photoURL: currentUser.photoURL,
-                    },
-                    caption: caption,
-                    date: serverTimestamp(),
-                    like: [],
-                    comment: [],
-                },
-            });
-            await setDoc(doc(db, 'post', uuId), {
-                postId: uuId,
-                poster: {
-                    uid: currentUser.uid,
-                    displayName: currentUser.displayName,
-                    photoURL: currentUser.photoURL,
-                },
-                caption: caption,
-
-                date: serverTimestamp(),
-                like: [],
-                comment: [],
-            });
-        }
-
+    const handleAddPost = () => {
+        addPostFunc(caption, img);
         setCaption('');
+        setImg(null);
+    };
+
+    const handleEditPost = async () => {
+        await editPostFunc(editCaption, img);
         setImg(null);
     };
 
     return (
         <Modal
-            title="Create post"
-            onClick={() => {
-                setIsAddPostVisible(false);
-                setButtonActive(false);
+            title={edit ? 'Edit post' : 'Create post'}
+            onClose={() => {
+                onCloseAddPostModal();
+                setEditCaption(prevCaption || '');
+                setEditImg(prevImg || null);
                 setImg(null);
             }}
             children={
@@ -137,12 +78,13 @@ function AddPostModal() {
                     </div>
                     <div className={cx('add-post-body')}>
                         <textarea
+                            value={edit && editCaption}
                             placeholder={`What's on your mind, ${currentUser.displayName}?`}
                             onChange={handleCaption}
                         ></textarea>
                         {addPhotoVisible && (
                             <div className={cx('add-photo-container')}>
-                                {!img ? (
+                                {!img && !editImg ? (
                                     <label htmlFor="photo-upload" className={cx('add-photo-wrapper')}>
                                         <CircleButton
                                             className={cx('close-upload-btn')}
@@ -162,11 +104,21 @@ function AddPostModal() {
                                     </label>
                                 ) : (
                                     <div className={cx('selected-photo-wrapper')}>
-                                        <img src={URL.createObjectURL(img)} alt="img" />
+                                        <img
+                                            src={
+                                                edit
+                                                    ? img
+                                                        ? URL.createObjectURL(img)
+                                                        : editImg
+                                                    : URL.createObjectURL(img)
+                                            }
+                                            alt="img"
+                                        />
                                         <CircleButton
                                             className={cx('cancel-photo-btn')}
                                             children={<FontAwesomeIcon icon={faXmark} />}
                                             onClick={() => {
+                                                setEditImg(null);
                                                 setImg(null);
                                             }}
                                         />
@@ -194,7 +146,12 @@ function AddPostModal() {
                                 />
                             </div>
                         </div>
-                        <Button children={'Post'} className={cx('post-btn')} onClick={handlePost} />
+                        <Button
+                            disabled={edit ? !editCaption : postButtonDisable}
+                            children={'Post'}
+                            className={cx('post-btn')}
+                            onClick={edit ? handleEditPost : handleAddPost}
+                        />
                     </div>
                 </div>
             }

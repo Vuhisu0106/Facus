@@ -2,7 +2,18 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useEffect, useState } from 'react';
-import { onSnapshot, doc, where, collection, query, getDocs } from 'firebase/firestore';
+import {
+    onSnapshot,
+    doc,
+    where,
+    collection,
+    query,
+    getDocs,
+    deleteDoc,
+    updateDoc,
+    FieldValue,
+    deleteField,
+} from 'firebase/firestore';
 import { documentId } from 'firebase/firestore';
 import moment from 'moment';
 
@@ -75,6 +86,22 @@ function Home() {
 
     // function scrollHorizontally() {}
 
+    //Delete post
+    const handleDeletePost = async (postId) => {
+        if (window.confirm('Do you want delete this post?')) {
+            try {
+                await deleteDoc(doc(db, 'post', postId));
+                await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                    [postId]: deleteField(),
+                });
+
+                setPostList((cmtList) => cmtList.filter((x) => x.postId !== postId));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
     return (
         <div className={cx('wrapper', checkDark())}>
             <Sidebar
@@ -116,6 +143,7 @@ function Home() {
                                 postCaption={post.caption}
                                 likeCount={post.like.length}
                                 commentCount={post.comment.length}
+                                deletePostFunc={handleDeletePost}
                             />
                         ))}
             </div>

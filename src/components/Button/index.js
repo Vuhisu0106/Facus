@@ -8,16 +8,15 @@ function Button({
     to,
     href,
     primary = false,
-    menu = false,
+    popper = false,
     nav = false,
-    text = false,
     long = false,
     children,
     leftIcon,
     rightIcon,
     onClick,
     className,
-    active = false,
+    activeNav = false,
     disabled = false,
     ...passProps
 }) {
@@ -48,10 +47,9 @@ function Button({
     const classes = cx('wrapper', checkDark(), {
         [className]: className,
         primary,
-        menu,
+        popper,
         nav,
-        text,
-        active,
+        activeNav,
         disabled,
         long,
     });

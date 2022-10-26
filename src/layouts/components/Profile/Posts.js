@@ -1,9 +1,11 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc, serverTimestamp, updateDoc, setDoc } from 'firebase/firestore';
+import { onSnapshot, doc, serverTimestamp, updateDoc, setDoc, deleteDoc, deleteField } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 
-import { db } from '~/firebase';
+import { db, storage } from '~/firebase';
 import Button from '~/components/Button';
 import WrapperModal from '~/components/Wrapper';
 import PostLayout from '~/components/PostLayout';
@@ -15,11 +17,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 import Input from '~/components/Input';
 import { useUser } from '~/context/UserContext';
+import AddPostModal from '~/components/Modal/Modal/AddPostModal';
 
 const cx = classNames.bind(styles);
 function Posts({ isCurrentUser = false }) {
     const { currentUser } = useAuth();
-    const { setIsAddPostVisible, setAddPhotoVisible, setButtonActive, checkDark } = useApp();
+    const { setAddPhotoVisible, setButtonActive, checkDark } = useApp();
     const { addToLocalStorage } = useUser();
 
     const [postList, setPostList] = useState([]);
@@ -27,12 +30,17 @@ function Posts({ isCurrentUser = false }) {
     const [editBio, setEditBio] = useState(false);
     const [saveButtonDisable, setSaveButtonDisable] = useState(true);
 
+    //Add post modal
+    const [openModal, setOpenModal] = useState(false);
+    // const [addPhotoVisible, setAddPhotoVisible] = useState(false);
+    // const [buttonActive, setButtonActive] = useState(false);
+
     var selectUser = localStorage.getItem('selectUser');
 
     useEffect(() => {
         const getPost = () => {
             const unsub = onSnapshot(doc(db, 'userPost', selectUser), (doc) => {
-                setPostList(doc.data());
+                setPostList(Object.entries(doc.data()));
             });
 
             return () => {
@@ -63,8 +71,106 @@ function Posts({ isCurrentUser = false }) {
         setEditBio(false);
     };
 
+    //Add post
+    const handleAddPost = async (caption, img) => {
+        setOpenModal(false);
+        let uuId = uuid();
+        if (img) {
+            const storageRef = ref(storage, uuid());
+            //const uploadTask = await uploadBytesResumable(storageRef, img);
+
+            await uploadBytesResumable(storageRef, img).then(() => {
+                getDownloadURL(storageRef).then(async (downloadURL) => {
+                    await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                        [uuId]: {
+                            postId: uuId,
+                            poster: {
+                                uid: currentUser.uid,
+                                displayName: currentUser.displayName,
+                                photoURL: currentUser.photoURL,
+                            },
+                            caption: caption,
+                            img: downloadURL,
+                            date: serverTimestamp(),
+                            like: [],
+                            comment: [],
+                        },
+                    });
+
+                    await setDoc(doc(db, 'post', uuId), {
+                        postId: uuId,
+                        poster: {
+                            uid: currentUser.uid,
+                            displayName: currentUser.displayName,
+                            photoURL: currentUser.photoURL,
+                        },
+                        caption: caption,
+                        img: downloadURL,
+                        date: serverTimestamp(),
+                        like: [],
+                        comment: [],
+                    });
+                });
+            });
+        } else if (!caption) {
+            return;
+        } else {
+            await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                [uuId]: {
+                    postId: uuId,
+                    poster: {
+                        uid: currentUser.uid,
+                        displayName: currentUser.displayName,
+                        photoURL: currentUser.photoURL,
+                    },
+                    caption: caption,
+                    date: serverTimestamp(),
+                    like: [],
+                    comment: [],
+                },
+            });
+            await setDoc(doc(db, 'post', uuId), {
+                postId: uuId,
+                poster: {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    photoURL: currentUser.photoURL,
+                },
+                caption: caption,
+
+                date: serverTimestamp(),
+                like: [],
+                comment: [],
+            });
+        }
+    };
+
+    const handleDeletePost = async (postId) => {
+        if (window.confirm('Do you want delete this post?')) {
+            try {
+                await deleteDoc(doc(db, 'post', postId));
+                await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                    [postId]: deleteField(),
+                });
+
+                setPostList((cmtList) => cmtList.filter((x) => x.postId !== postId));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
     return (
         <div className={cx('wrapper', checkDark('dark-post'))}>
+            {openModal && (
+                <AddPostModal
+                    addPostFunc={handleAddPost}
+                    onCloseAddPostModal={() => {
+                        setOpenModal(false);
+                        setButtonActive(false);
+                    }}
+                />
+            )}
             <div className={cx('left-content')}>
                 <WrapperModal className={cx('intro')}>
                     <h2>Intro</h2>
@@ -116,7 +222,7 @@ function Posts({ isCurrentUser = false }) {
                     <p>No image found!</p>
                     <div className={cx('photo-box')}>
                         {postList &&
-                            Object.entries(postList)
+                            postList
                                 ?.sort((a, b) => b[1].date - a[1].date)
                                 .map(
                                     (post) =>
@@ -151,7 +257,7 @@ function Posts({ isCurrentUser = false }) {
                                 className={cx('add-post-only-message-btn')}
                                 children={"What's on your mind?"}
                                 onClick={() => {
-                                    setIsAddPostVisible(true);
+                                    setOpenModal(true);
                                     setAddPhotoVisible(false);
                                     setButtonActive(false);
                                 }}
@@ -168,7 +274,7 @@ function Posts({ isCurrentUser = false }) {
                                 leftIcon={<FontAwesomeIcon icon={faImage} />}
                                 children={'Photo'}
                                 onClick={() => {
-                                    setIsAddPostVisible(true);
+                                    setOpenModal(true);
                                     setAddPhotoVisible(true);
                                     setButtonActive(true);
                                 }}
@@ -177,20 +283,21 @@ function Posts({ isCurrentUser = false }) {
                     </WrapperModal>
                 )}
                 {postList &&
-                    Object.entries(postList)
+                    postList
                         ?.sort((a, b) => b[1].date - a[1].date)
                         .map((post) => (
                             <PostLayout
                                 key={post[0]}
                                 postId={post[0]}
-                                userId={post[1].poster.uid}
-                                userName={post[1].poster.displayName}
-                                userAvt={post[1].poster.photoURL}
-                                timeStamp={post[1].date && moment(post[1].date.toDate()).fromNow()}
-                                postImg={post[1].img && post[1].img}
-                                postCaption={post[1].caption}
-                                likeCount={post[1].like.length}
-                                commentCount={post[1].comment.length}
+                                userId={post[1]?.poster?.uid}
+                                userName={post[1]?.poster?.displayName}
+                                userAvt={post[1]?.poster?.photoURL}
+                                timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
+                                postImg={post[1]?.img && post[1]?.img}
+                                postCaption={post[1]?.caption}
+                                likeCount={post[1]?.like?.length}
+                                commentCount={post[1]?.comment?.length}
+                                deletePostFunc={handleDeletePost}
                             />
                         ))}
             </div>
