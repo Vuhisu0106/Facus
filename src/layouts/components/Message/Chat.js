@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect, useRef } from 'react';
-import { doc, onSnapshot, arrayUnion, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, arrayUnion, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 
-import { db, storage } from '~/firebase';
+import { db, storage } from '~/firebase/firebase';
 import Input from '~/components/Input';
 import styles from './Message.module.scss';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +14,7 @@ import { useChat } from '~/context/ChatContext';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useAuth } from '~/context/AuthContext';
 import { useApp } from '~/context/AppContext';
+import { updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 function Chat() {
@@ -54,7 +55,7 @@ function Chat() {
             //     },
             //     () => {
             //         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            //             await updateDoc(doc(db, 'chats', data.chatId), {
+            //             await updateDocument( 'chats', data.chatId), {
             //                 messages: arrayUnion({
             //                     id: uuid(),
             //                     text,
@@ -69,7 +70,7 @@ function Chat() {
         } else if (!text) {
             return;
         } else {
-            await updateDoc(doc(db, 'chats', data.chatId), {
+            await updateDocument('chats', data.chatId, {
                 messages: arrayUnion({
                     id: uuid(),
                     text,
@@ -79,7 +80,7 @@ function Chat() {
             });
         }
 
-        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+        await updateDocument('userChats', currentUser.uid, {
             [data.chatId + '.lastMessage']: {
                 senderId: currentUser.uid,
                 text,
@@ -91,7 +92,7 @@ function Chat() {
 
         //if current user is same as user messaging to, receiverHasRead will be true
         if (currentUser.uid !== data.user.uid) {
-            await updateDoc(doc(db, 'userChats', data.user.uid), {
+            await updateDocument('userChats', data.user.uid, {
                 [data.chatId + '.lastMessage']: {
                     senderId: currentUser.uid,
                     text,
@@ -100,7 +101,7 @@ function Chat() {
                 [data.chatId + '.receiverHasRead']: false,
             });
         } else {
-            await updateDoc(doc(db, 'userChats', data.user.uid), {
+            await updateDocument('userChats', data.user.uid, {
                 [data.chatId + '.lastMessage']: {
                     senderId: currentUser.uid,
                     text,

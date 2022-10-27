@@ -11,7 +11,7 @@ import { useApp } from '~/context/AppContext';
 import Modal from '..';
 
 const cx = classNames.bind(styles);
-function SetStatusModal() {
+function SetStatusModal({ onClose }) {
     const { setIsEditStatusModal, checkDark, dark } = useApp();
 
     const [selectEmoji, setSelectEmoji] = useState('');
@@ -54,9 +54,7 @@ function SetStatusModal() {
     return (
         <Modal
             title="Edit status"
-            onClick={() => {
-                setIsEditStatusModal(false);
-            }}
+            onClose={onClose}
             children={
                 <div className={cx('set-status-wrapper', checkDark('dark-set-status'))}>
                     <div className={cx('status-content')}>

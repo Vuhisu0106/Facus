@@ -11,7 +11,7 @@ import { useApp } from '~/context/AppContext';
 import { useState } from 'react';
 
 const cx = classNames.bind(styles);
-function EditProfileModal() {
+function EditProfileModal({ onClose }) {
     const { currentUser } = useAuth();
     const { setIsEditProfileVisible, checkDark } = useApp();
 
@@ -20,9 +20,7 @@ function EditProfileModal() {
     return (
         <Modal
             title="Edit profile"
-            onClick={() => {
-                setIsEditProfileVisible(false);
-            }}
+            onClose={onClose}
             children={
                 <div className={cx('edit-profile-wrapper', checkDark('dark-edit-profile'))}>
                     <div className={cx('edit-profile-body')}>

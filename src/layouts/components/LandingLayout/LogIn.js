@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 
 import { useAuth } from '~/context/AuthContext';
-import { auth } from '~/firebase';
+import { auth } from '~/firebase/firebase';
 import styles from './LandingLayout.module.scss';
 import { useNavigate } from 'react-router-dom';
 

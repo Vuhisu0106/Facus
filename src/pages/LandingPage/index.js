@@ -6,7 +6,7 @@ import { useState, useRef } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 
 import { useAuth } from '~/context/AuthContext';
-import { auth } from '~/firebase';
+import { auth } from '~/firebase/firebase';
 import styles from './LandingPage.module.scss';
 import SignUp from '~/layouts/components/LandingLayout/SignUp';
 import LogIn from '~/layouts/components/LandingLayout/LogIn';

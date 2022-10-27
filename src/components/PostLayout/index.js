@@ -6,21 +6,18 @@ import {
     doc,
     onSnapshot,
     arrayUnion,
-    updateDoc,
     arrayRemove,
     serverTimestamp,
-    setDoc,
     collection,
     query,
     where,
     getDocs,
-    deleteDoc,
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
-import { db } from '~/firebase';
+import { db } from '~/firebase/firebase';
 
-import { storage } from '~/firebase';
+import { storage } from '~/firebase/firebase';
 import styles from './PostLayout.module.scss';
 import Input from '~/components/Input';
 import { faHeart as faHeartRegular, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
@@ -34,6 +31,7 @@ import { useApp } from '~/context/AppContext';
 import Menu from '../Popper/Menu';
 import ImageInputArea from '../Input/ImageInputArea';
 import AddPostModal from '../Modal/Modal/AddPostModal';
+import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 function PostLayout({
@@ -101,17 +99,18 @@ function PostLayout({
     const handleLike = async () => {
         //console.log(postDetail);
         if (postDetail.like.indexOf(currentUser.uid) === -1) {
-            await updateDoc(doc(db, 'post', postId), {
+            await updateDocument('post', postId, {
                 like: arrayUnion(currentUser.uid),
             });
-            await updateDoc(doc(db, 'userPost', userId), {
+
+            await updateDocument('userPost', userId, {
                 [postId + '.like']: arrayUnion(currentUser.uid),
             });
         } else {
-            await updateDoc(doc(db, 'post', postId), {
+            await updateDocument('post', postId, {
                 like: arrayRemove(currentUser.uid),
             });
-            await updateDoc(doc(db, 'userPost', userId), {
+            await updateDocument('userPost', userId, {
                 [postId + '.like']: arrayRemove(currentUser.uid),
             });
         }
@@ -139,7 +138,7 @@ function PostLayout({
 
             await uploadBytesResumable(storageRef, commentImg).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await setDoc(doc(db, 'comment', uuId), {
+                    await setDocument('comment', uuId, {
                         commentId: uuId,
                         postId: postId,
                         commenter: {
@@ -160,7 +159,7 @@ function PostLayout({
 
             await uploadBytesResumable(storageRef, commentImg).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await setDoc(doc(db, 'comment', uuId), {
+                    await setDocument('comment', uuId, {
                         commentId: uuId,
                         postId: postId,
                         commenter: {
@@ -178,7 +177,7 @@ function PostLayout({
         } else if (!comment && !commentImg) {
             return;
         } else {
-            await setDoc(doc(db, 'comment', uuId), {
+            await setDocument('comment', uuId, {
                 commentId: uuId,
                 postId: postId,
                 commenter: {
@@ -201,7 +200,7 @@ function PostLayout({
     const handleDeleteComment = async (commentId) => {
         if (window.confirm('Do you want delete this comment?')) {
             try {
-                await deleteDoc(doc(db, 'comment', commentId));
+                await deleteDocument('comment', commentId);
                 setCommentList((cmtList) => cmtList.filter((x) => x.commentId !== commentId));
             } catch (error) {
                 console.log(error);
@@ -217,25 +216,12 @@ function PostLayout({
             //const uploadTask = await uploadBytesResumable(storageRef, img);
             await uploadBytesResumable(storageRef, img).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                    await updateDocument('userPost', currentUser.uid, {
                         [postId + '.caption']: caption,
                         [postId + '.img']: img,
-                        // [postId]: {
-                        //     postId: postDetail.postId,
-                        //     poster: {
-                        //         uid: postDetail.poster.uid,
-                        //         displayName: postDetail.poster.displayName,
-                        //         photoURL: postDetail.poster.photoURL,
-                        //     },
-                        //     caption: caption,
-                        //     img: downloadURL,
-                        //     date: postDetail.date,
-                        //     like: postDetail.like,
-                        //     comment: postDetail.comment,
-                        // },
                     });
 
-                    await updateDoc(doc(db, 'post', postId), {
+                    await updateDocument('post', postId, {
                         caption: caption,
                         img: downloadURL,
                     });
@@ -244,10 +230,10 @@ function PostLayout({
         } else if (!caption) {
             return;
         } else {
-            await updateDoc(doc(db, 'userPost', currentUser.uid), {
+            await updateDocument('userPost', currentUser.uid, {
                 [postId + '.caption']: caption,
             });
-            await updateDoc(doc(db, 'post', postId), {
+            await updateDocument('post', postId, {
                 caption: caption,
             });
         }

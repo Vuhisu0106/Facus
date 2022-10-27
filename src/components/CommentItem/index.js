@@ -4,19 +4,20 @@ import moment from 'moment';
 import { faCamera, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import { doc, onSnapshot, arrayUnion, updateDoc, arrayRemove, deleteField } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { doc, onSnapshot, arrayUnion, arrayRemove, deleteField } from 'firebase/firestore';
+import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-import { storage } from '~/firebase';
-import { db } from '~/firebase';
+import { storage } from '~/firebase/firebase';
+import { db } from '~/firebase/firebase';
 import CircleAvatar from '../CircleAvatar';
 import styles from './CommentItem.module.scss';
 import { useAuth } from '~/context/AuthContext';
 import { useApp } from '~/context/AppContext';
 import Menu from '../Popper/Menu';
-import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import Input from '../Input';
 import ImageInputArea from '../Input/ImageInputArea';
+import { updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 function CommentItem({ data, deleteComment }) {
@@ -63,11 +64,11 @@ function CommentItem({ data, deleteComment }) {
     ///////////////////////////////////////////////////////////////////////////////////////////////
     const handleLikeComment = async (commentId) => {
         if (commentDetail.like.indexOf(currentUser.uid) === -1) {
-            await updateDoc(doc(db, 'comment', data.commentId), {
+            await updateDocument('comment', data.commentId, {
                 like: arrayUnion(currentUser.uid),
             });
         } else {
-            await updateDoc(doc(db, 'comment', data.commentId), {
+            await updateDocument('comment', data.commentId, {
                 like: arrayRemove(currentUser.uid),
             });
         }
@@ -94,7 +95,7 @@ function CommentItem({ data, deleteComment }) {
 
             await uploadBytesResumable(storageRef, commentImg).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDoc(doc(db, 'comment', data.commentId), {
+                    await updateDocument('comment', data.commentId, {
                         content: comment,
                         img: downloadURL,
                     });
@@ -106,7 +107,7 @@ function CommentItem({ data, deleteComment }) {
 
             await uploadBytesResumable(storageRef, commentImg).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDoc(doc(db, 'comment', data.commentId), {
+                    await updateDocument('comment', data.commentId, {
                         img: downloadURL,
                     });
                 });
@@ -114,7 +115,7 @@ function CommentItem({ data, deleteComment }) {
         } else if (!comment && !commentImg) {
             return;
         } else {
-            await updateDoc(doc(db, 'comment', data.commentId), {
+            await updateDocument('comment', data.commentId, {
                 content: comment,
                 img: deleteField(),
             });

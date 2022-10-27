@@ -1,10 +1,10 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { onSnapshot, doc } from 'firebase/firestore';
 import moment from 'moment';
 
-import { db } from '~/firebase';
+import { db } from '~/firebase/firebase';
 import CircleButton from '~/components/Button/CircleButton';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import MessageItem from '~/components/MessageItem';
@@ -13,6 +13,7 @@ import styles from './Message.module.scss';
 import { useAuth } from '~/context/AuthContext';
 import { useChat } from '~/context/ChatContext';
 import { useApp } from '~/context/AppContext';
+import { updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 function ChatSidebar() {
@@ -42,7 +43,7 @@ function ChatSidebar() {
 
         console.log(user);
         if (user.receiverHasRead === false) {
-            await updateDoc(doc(db, 'userChats', currentUser.uid), {
+            await updateDocument('userChats', currentUser.uid, {
                 [user.userChatId + '.receiverHasRead']: true,
             });
             console.log('sender is not you');

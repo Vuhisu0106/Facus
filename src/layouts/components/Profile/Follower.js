@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
 import { onSnapshot, doc } from 'firebase/firestore';
 
-import { db } from '~/firebase';
+import { db } from '~/firebase/firebase';
 import styles from './Profile.module.scss';
 import WrapperModal from '~/components/Wrapper';
 import { useApp } from '~/context/AppContext';

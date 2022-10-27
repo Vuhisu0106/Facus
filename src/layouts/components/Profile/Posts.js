@@ -1,11 +1,11 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc, serverTimestamp, updateDoc, setDoc, deleteDoc, deleteField } from 'firebase/firestore';
+import { onSnapshot, doc, serverTimestamp, deleteField } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 
-import { db, storage } from '~/firebase';
+import { db, storage } from '~/firebase/firebase';
 import Button from '~/components/Button';
 import WrapperModal from '~/components/Wrapper';
 import PostLayout from '~/components/PostLayout';
@@ -18,6 +18,7 @@ import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 import Input from '~/components/Input';
 import { useUser } from '~/context/UserContext';
 import AddPostModal from '~/components/Modal/Modal/AddPostModal';
+import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 function Posts({ isCurrentUser = false }) {
@@ -63,7 +64,7 @@ function Posts({ isCurrentUser = false }) {
     };
 
     const handleSaveBio = async () => {
-        await updateDoc(doc(db, 'users', currentUser.uid), {
+        await updateDocument('users', currentUser.uid, {
             bio: bioInput,
         });
 
@@ -81,7 +82,7 @@ function Posts({ isCurrentUser = false }) {
 
             await uploadBytesResumable(storageRef, img).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                    await updateDocument('userPost', currentUser.uid, {
                         [uuId]: {
                             postId: uuId,
                             poster: {
@@ -97,7 +98,7 @@ function Posts({ isCurrentUser = false }) {
                         },
                     });
 
-                    await setDoc(doc(db, 'post', uuId), {
+                    await setDocument('post', uuId, {
                         postId: uuId,
                         poster: {
                             uid: currentUser.uid,
@@ -115,7 +116,7 @@ function Posts({ isCurrentUser = false }) {
         } else if (!caption) {
             return;
         } else {
-            await updateDoc(doc(db, 'userPost', currentUser.uid), {
+            await updateDocument('userPost', currentUser.uid, {
                 [uuId]: {
                     postId: uuId,
                     poster: {
@@ -129,7 +130,7 @@ function Posts({ isCurrentUser = false }) {
                     comment: [],
                 },
             });
-            await setDoc(doc(db, 'post', uuId), {
+            await setDocument('post', uuId, {
                 postId: uuId,
                 poster: {
                     uid: currentUser.uid,
@@ -148,8 +149,8 @@ function Posts({ isCurrentUser = false }) {
     const handleDeletePost = async (postId) => {
         if (window.confirm('Do you want delete this post?')) {
             try {
-                await deleteDoc(doc(db, 'post', postId));
-                await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                await deleteDocument('post', postId);
+                await updateDocument('userPost', currentUser.uid, {
                     [postId]: deleteField(),
                 });
 
@@ -221,25 +222,24 @@ function Posts({ isCurrentUser = false }) {
                     <h2>Photo</h2>
                     <p>No image found!</p>
                     <div className={cx('photo-box')}>
-                        {postList &&
-                            postList
-                                ?.sort((a, b) => b[1].date - a[1].date)
-                                .map(
-                                    (post) =>
-                                        post[1].img && (
-                                            <div key={post[0]}>
-                                                <a
-                                                    href={`/post/${post[0]}`}
-                                                    id=""
-                                                    onClick={() => {
-                                                        addToLocalStorage('selectPost', post[0]);
-                                                    }}
-                                                >
-                                                    <img src={post[1].img && post[1].img} alt={post[0]} />
-                                                </a>
-                                            </div>
-                                        ),
-                                )}
+                        {postList
+                            ?.sort((a, b) => b[1].date - a[1].date)
+                            .map(
+                                (post) =>
+                                    post[1].img && (
+                                        <div key={post[0]}>
+                                            <a
+                                                href={`/post/${post[0]}`}
+                                                id=""
+                                                onClick={() => {
+                                                    addToLocalStorage('selectPost', post[0]);
+                                                }}
+                                            >
+                                                <img src={post[1]?.img} alt={post[0]} />
+                                            </a>
+                                        </div>
+                                    ),
+                            )}
                     </div>
                 </WrapperModal>
             </div>
@@ -282,24 +282,23 @@ function Posts({ isCurrentUser = false }) {
                         </div>
                     </WrapperModal>
                 )}
-                {postList &&
-                    postList
-                        ?.sort((a, b) => b[1].date - a[1].date)
-                        .map((post) => (
-                            <PostLayout
-                                key={post[0]}
-                                postId={post[0]}
-                                userId={post[1]?.poster?.uid}
-                                userName={post[1]?.poster?.displayName}
-                                userAvt={post[1]?.poster?.photoURL}
-                                timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
-                                postImg={post[1]?.img && post[1]?.img}
-                                postCaption={post[1]?.caption}
-                                likeCount={post[1]?.like?.length}
-                                commentCount={post[1]?.comment?.length}
-                                deletePostFunc={handleDeletePost}
-                            />
-                        ))}
+                {postList
+                    ?.sort((a, b) => b[1].date - a[1].date)
+                    .map((post) => (
+                        <PostLayout
+                            key={post[0]}
+                            postId={post[0]}
+                            userId={post[1]?.poster?.uid}
+                            userName={post[1]?.poster?.displayName}
+                            userAvt={post[1]?.poster?.photoURL}
+                            timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
+                            postImg={post[1]?.img && post[1]?.img}
+                            postCaption={post[1]?.caption}
+                            likeCount={post[1]?.like?.length}
+                            commentCount={post[1]?.comment?.length}
+                            deletePostFunc={handleDeletePost}
+                        />
+                    ))}
             </div>
         </div>
     );

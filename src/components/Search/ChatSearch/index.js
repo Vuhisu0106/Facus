@@ -1,18 +1,18 @@
 import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
-import { collection, query, where, doc, getDoc, getDocs, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { collection, query, where, doc, getDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 
 import { useApp } from '~/context/AppContext';
 import { useChat } from '~/context/ChatContext';
 import { useAuth } from '~/context/AuthContext';
-import { db } from '~/firebase';
+import { db } from '~/firebase/firebase';
 import AccountItem from '~/components/AccountItem';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
+import { setDocument, updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 function ChatSearch({ className, placeHolder, placement, autoFocus }) {
@@ -22,9 +22,9 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { isAddChatVisible, setIsAddChatVisible, clearState, checkDark } = useApp();
+    const { clearState, checkDark } = useApp();
     const { currentUser } = useAuth();
-    const { data, dispatch } = useChat();
+    const { dispatch } = useChat();
 
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();
@@ -80,10 +80,10 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
             //console.log(res);
             if (!res.exists()) {
                 //create a chat in chats collection (if chat hasn't existed before)
-                await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+                await setDocument('chats', combinedId, { messages: [] });
 
                 //create user chats
-                await updateDoc(doc(db, 'userChats', currentUser.uid), {
+                await updateDocument('userChats', currentUser.uid, {
                     [combinedId + '.userChatId']: combinedId,
                     [combinedId + '.userInfo']: {
                         uid: result.uid,
@@ -93,7 +93,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
                     [combinedId + '.date']: serverTimestamp(),
                 });
 
-                await updateDoc(doc(db, 'userChats', result.uid), {
+                await updateDocument('userChats', result.uid, {
                     [combinedId + '.userChatId']: combinedId,
                     [combinedId + '.userInfo']: {
                         uid: currentUser.uid,

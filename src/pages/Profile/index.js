@@ -1,10 +1,10 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { onSnapshot, doc, updateDoc, serverTimestamp, deleteField } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
+import { onSnapshot, doc, serverTimestamp, deleteField } from 'firebase/firestore';
 
-import { db } from '~/firebase';
+import { db } from '~/firebase/firebase';
 import styles from './Profile.module.scss';
 import { faCircle, faMessage, faPen, faUserPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
@@ -15,6 +15,9 @@ import Follower from '~/layouts/components/Profile/Follower';
 import { useApp } from '~/context/AppContext';
 import { useUser } from '~/context/UserContext';
 import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
+import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
+import EditProfileModal from '~/components/Modal/Modal/EditProfileModal';
+import { updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -24,10 +27,12 @@ function Profile() {
     const [type, setType] = useState('Posts');
     const [profileLayout, setProfileLayout] = useState('Posts');
     const [currentUserFollowing, setCurrentUserFollowing] = useState([]);
+    const [statusModalVisible, setStatusModalVisible] = useState(false);
+    const [profileModalVisible, setProfileModalVisible] = useState(false);
 
     const { currentUser } = useAuth();
     const { data } = useUser();
-    const { setIsEditStatusModal, setIsEditProfileVisible, checkDark } = useApp();
+    const { checkDark } = useApp();
 
     // let location = useLocation();
     // let navigate = useNavigate();
@@ -118,7 +123,7 @@ function Profile() {
 
     const handleFollow = async () => {
         try {
-            await updateDoc(doc(db, 'following', currentUser.uid), {
+            await updateDocument('following', currentUser.uid, {
                 [selectedUser.uid + '.userInfo']: {
                     uid: selectedUser.uid,
                     displayName: selectedUser.displayName,
@@ -127,7 +132,7 @@ function Profile() {
                 [selectedUser.uid + '.date']: serverTimestamp(),
             });
 
-            await updateDoc(doc(db, 'follower', selectedUser.uid), {
+            await updateDocument('follower', selectedUser.uid, {
                 [currentUser.uid + '.userInfo']: {
                     uid: currentUser.uid,
                     displayName: currentUser.displayName,
@@ -143,11 +148,11 @@ function Profile() {
 
     const handleUnfollow = async () => {
         try {
-            await updateDoc(doc(db, 'following', currentUser.uid), {
+            await updateDocument('following', currentUser.uid, {
                 [selectedUser.uid]: deleteField(),
             });
 
-            await updateDoc(doc(db, 'follower', selectedUser.uid), {
+            await updateDocument('follower', selectedUser.uid, {
                 [currentUser.uid]: deleteField(),
             });
         } catch (error) {
@@ -158,6 +163,20 @@ function Profile() {
 
     return (
         <div className={cx('wrapper', checkDark())}>
+            {statusModalVisible && (
+                <SetStatusModal
+                    onClose={() => {
+                        setStatusModalVisible(false);
+                    }}
+                />
+            )}
+            {profileModalVisible && (
+                <EditProfileModal
+                    onClose={() => {
+                        setProfileModalVisible(false);
+                    }}
+                />
+            )}
             <div className={cx('profile-main-part')}>
                 <img className={cx('profile-cover-photo')} src={selectedUser.photoURL} alt="Vu Hieu" />
                 <div className={cx('profile-main-part-center')}>
@@ -172,7 +191,7 @@ function Profile() {
                                     <div
                                         className={cx('hovered-set-status-btn')}
                                         onClick={() => {
-                                            setIsEditStatusModal(true);
+                                            setStatusModalVisible(true);
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faFaceSmile} />
@@ -210,7 +229,7 @@ function Profile() {
                                 leftIcon={<FontAwesomeIcon icon={faPen} />}
                                 children={'Edit profile'}
                                 onClick={() => {
-                                    setIsEditProfileVisible(true);
+                                    setProfileModalVisible(true);
                                 }}
                             />
                         </div>

@@ -2,22 +2,10 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useEffect, useState } from 'react';
-import {
-    onSnapshot,
-    doc,
-    where,
-    collection,
-    query,
-    getDocs,
-    deleteDoc,
-    updateDoc,
-    FieldValue,
-    deleteField,
-} from 'firebase/firestore';
-import { documentId } from 'firebase/firestore';
+import { onSnapshot, doc, where, collection, query, deleteField } from 'firebase/firestore';
 import moment from 'moment';
 
-import { db } from '~/firebase';
+import { db } from '~/firebase/firebase';
 import Sidebar from '~/layouts/components/Sidebar';
 import PostLayout from '~/components/PostLayout';
 import styles from './Home.module.scss';
@@ -26,6 +14,7 @@ import { useAuth } from '~/context/AuthContext';
 import SuggestAccount from '~/components/SuggestAccount';
 import ProfileCard from '~/components/ProfileCard';
 import { useApp } from '~/context/AppContext';
+import { deleteDocument, updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 function Home() {
@@ -90,8 +79,11 @@ function Home() {
     const handleDeletePost = async (postId) => {
         if (window.confirm('Do you want delete this post?')) {
             try {
-                await deleteDoc(doc(db, 'post', postId));
-                await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                await deleteDocument('post', postId);
+                // await updateDoc(doc(db, 'userPost', currentUser.uid), {
+                //     [postId]: deleteField(),
+                // });
+                await updateDocument('userPost', currentUser.uid, {
                     [postId]: deleteField(),
                 });
 

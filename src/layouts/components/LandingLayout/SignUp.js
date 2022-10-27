@@ -3,8 +3,7 @@ import { faCamera, faEnvelope, faLock, faUser } from '@fortawesome/free-solid-sv
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState, useRef } from 'react';
-import { db, storage } from '~/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { storage } from '~/firebase/firebase';
 import { updateProfile } from 'firebase/auth';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
@@ -12,6 +11,7 @@ import { useAuth } from '~/context/AuthContext';
 import styles from './LandingLayout.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { generateKeywords } from '~/services/generateKeywords';
+import { setDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
 
@@ -67,7 +67,7 @@ function SignUp() {
                             photoURL: downloadURL,
                         });
                         //create user on firestore
-                        await setDoc(doc(db, 'users', res.user.uid), {
+                        await setDocument('users', res.user.uid, {
                             uid: res.user.uid,
                             displayName: displayNameRef.current.value,
                             email: emailRef.current.value,
@@ -76,10 +76,10 @@ function SignUp() {
                         });
 
                         //create empty user chats on firestore
-                        await setDoc(doc(db, 'userChats', res.user.uid), {});
-                        await setDoc(doc(db, 'following', res.user.uid), {});
-                        await setDoc(doc(db, 'follower', res.user.uid), {});
-                        await setDoc(doc(db, 'userPost', res.user.uid), {});
+                        await setDocument('userChats', res.user.uid, {});
+                        await setDocument('following', res.user.uid, {});
+                        await setDocument('follower', res.user.uid, {});
+                        await setDocument('userPost', res.user.uid, {});
                         navigate('/');
                     } catch (err) {
                         console.log(err);
