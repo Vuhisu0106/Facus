@@ -15,9 +15,9 @@ import {
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
-import { db } from '~/firebase/firebase';
+import { db } from '~/firebase/config';
 
-import { storage } from '~/firebase/firebase';
+import { storage } from '~/firebase/config';
 import styles from './PostLayout.module.scss';
 import Input from '~/components/Input';
 import { faHeart as faHeartRegular, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
@@ -27,7 +27,7 @@ import { useUser } from '~/context/UserContext';
 import { useAuth } from '~/context/AuthContext';
 import CircleAvatar from '../CircleAvatar';
 import CommentItem from '../CommentItem';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import Menu from '../Popper/Menu';
 import ImageInputArea from '../Input/ImageInputArea';
 import AddPostModal from '../Modal/Modal/AddPostModal';
@@ -48,7 +48,7 @@ function PostLayout({
 }) {
     const { addToLocalStorage } = useUser();
     const { currentUser } = useAuth();
-    const { setAddPhotoVisible, setButtonActive, checkDark } = useApp();
+    const { setAddPhotoVisible, setButtonActive, checkDark } = useUI();
 
     const [postDetail, setPostDetail] = useState({});
     const [caption, setCaption] = useState(postDetail?.caption || postCaption || '');

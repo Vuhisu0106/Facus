@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { onSnapshot, doc } from 'firebase/firestore';
 import moment from 'moment';
 
-import { db } from '~/firebase/firebase';
+import { db } from '~/firebase/config';
 import CircleButton from '~/components/Button/CircleButton';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import MessageItem from '~/components/MessageItem';
@@ -12,7 +12,7 @@ import ChatSearch from '~/components/Search/ChatSearch';
 import styles from './Message.module.scss';
 import { useAuth } from '~/context/AuthContext';
 import { useChat } from '~/context/ChatContext';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import { updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
@@ -20,7 +20,7 @@ function ChatSidebar() {
     const [chats, setChats] = useState([]);
     const [activeMessItem, setActiveMessItem] = useState(null);
 
-    const { setIsAddChatVisible, checkDark } = useApp();
+    const { setIsAddChatVisible, checkDark } = useUI();
     const { currentUser } = useAuth();
     const { data, dispatch } = useChat();
 

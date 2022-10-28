@@ -3,7 +3,7 @@ import { faCamera, faEnvelope, faLock, faUser } from '@fortawesome/free-solid-sv
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState, useRef } from 'react';
-import { storage } from '~/firebase/firebase';
+import { storage } from '~/firebase/config';
 import { updateProfile } from 'firebase/auth';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 

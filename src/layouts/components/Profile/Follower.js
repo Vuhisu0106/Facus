@@ -1,39 +1,18 @@
 import classNames from 'classnames/bind';
-import { useState, useEffect } from 'react';
-import { onSnapshot, doc } from 'firebase/firestore';
 
-import { db } from '~/firebase/firebase';
 import styles from './Profile.module.scss';
 import WrapperModal from '~/components/Wrapper';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 
 const cx = classNames.bind(styles);
-function Follower() {
-    const [followerList, setFollowerList] = useState();
-    var selectUser = localStorage.getItem('selectUser');
-
-    const { checkDark } = useApp();
-
-    useEffect(() => {
-        const getFollowerList = () => {
-            const unsub = onSnapshot(doc(db, 'follower', selectUser), (doc) => {
-                setFollowerList(Object.entries(doc.data()));
-                console.log(selectUser);
-            });
-
-            return () => {
-                unsub();
-            };
-        };
-
-        selectUser && getFollowerList();
-    }, [selectUser]);
-
+function Follower({ list }) {
+    const { checkDark } = useUI();
     return (
         <WrapperModal className={cx('follower', checkDark())}>
             <h2>Follower</h2>
-            {followerList &&
-                followerList.map((follower) => (
+            {Object.keys(list).length > 0 ? (
+                list &&
+                Object.entries(list).map((follower) => (
                     <div key={follower[0]} className={cx('account')}>
                         <img
                             className={cx('account-avt')}
@@ -45,7 +24,10 @@ function Follower() {
                             <span className={cx('account-bio')}>Hello World</span>
                         </div>
                     </div>
-                ))}
+                ))
+            ) : (
+                <h2>This user has no follower</h2>
+            )}
         </WrapperModal>
     );
 }

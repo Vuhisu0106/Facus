@@ -6,14 +6,14 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 
-import { db, storage } from '~/firebase/firebase';
+import { db, storage } from '~/firebase/config';
 import Input from '~/components/Input';
 import styles from './Message.module.scss';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { useChat } from '~/context/ChatContext';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useAuth } from '~/context/AuthContext';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import { updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
@@ -24,7 +24,7 @@ function Chat() {
 
     const messageRef = useRef();
 
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
     const { currentUser } = useAuth();
     const { data } = useChat();
 

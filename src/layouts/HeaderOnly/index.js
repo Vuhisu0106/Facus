@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 
 import Header from '~/layouts/components/Header';
 import styles from './HeaderOnly.module.scss';
 
 const cx = classNames.bind(styles);
 function HeaderOnly({ children }) {
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
     return (
         <div className={cx('wrapper', checkDark())}>
             <Header className={cx('header')} />

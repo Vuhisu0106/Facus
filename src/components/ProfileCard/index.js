@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import Button from '../Button';
 
 import styles from './ProfileCard.module.scss';
 
 const cx = classNames.bind(styles);
 function ProfileCard() {
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
     return (
         <div className={cx('wrapper', checkDark())}>
             <div className={cx('blur-wrapper')}></div>

@@ -3,10 +3,10 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, doc, getDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import { useChat } from '~/context/ChatContext';
 import { useAuth } from '~/context/AuthContext';
-import { db } from '~/firebase/firebase';
+import { db } from '~/firebase/config';
 import AccountItem from '~/components/AccountItem';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
@@ -22,7 +22,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { clearState, checkDark } = useApp();
+    const { clearState, checkDark } = useUI();
     const { currentUser } = useAuth();
     const { dispatch } = useChat();
 

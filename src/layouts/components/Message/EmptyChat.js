@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
 
 import ChatSearch from '~/components/Search/ChatSearch';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import styles from './Message.module.scss';
 
 const cx = classNames.bind(styles);
 function EmptyChat() {
-    const { isAddChatVisible, setIsAddChatVisible, checkDark } = useApp();
+    const { isAddChatVisible, setIsAddChatVisible, checkDark } = useUI();
 
     return isAddChatVisible === true ? (
         <div className={cx('chat-wrapper', checkDark('dark-empty-search-chat'))}>

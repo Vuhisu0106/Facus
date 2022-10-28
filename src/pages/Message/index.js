@@ -5,11 +5,11 @@ import Chat from '~/layouts/components/Message/Chat';
 import ChatSidebar from '~/layouts/components/Message/ChatSidebar';
 import EmptyChat from '~/layouts/components/Message/EmptyChat';
 import { useChat } from '~/context/ChatContext';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 
 const cx = classNames.bind(styles);
 function Message() {
-    const { isAddChatVisible, setIsAddChatVisible, checkDark } = useApp();
+    const { isAddChatVisible, setIsAddChatVisible, checkDark } = useUI();
     const { data } = useChat();
     return (
         <div className={cx('container', checkDark())}>

@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileCirclePlus, faGlobeAsia, faImage, faVideo, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '~/context/AuthContext';
 import Button from '~/components/Button';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
@@ -22,7 +22,7 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
     const [editImg, setEditImg] = useState(prevImg || null); //init img received from prev post (exist as a firebase link )
     const [postButtonDisable, setPostButtonDisable] = useState(true);
 
-    const { addPhotoVisible, setAddPhotoVisible, buttonActive, setButtonActive, checkDark } = useApp();
+    const { addPhotoVisible, setAddPhotoVisible, buttonActive, setButtonActive, checkDark } = useUI();
 
     useEffect(() => {
         setEditCaption(prevCaption);

@@ -5,7 +5,7 @@ import { useRef, useEffect, useState } from 'react';
 import { onSnapshot, doc, where, collection, query, deleteField } from 'firebase/firestore';
 import moment from 'moment';
 
-import { db } from '~/firebase/firebase';
+import { db } from '~/firebase/config';
 import Sidebar from '~/layouts/components/Sidebar';
 import PostLayout from '~/components/PostLayout';
 import styles from './Home.module.scss';
@@ -13,7 +13,7 @@ import RoundAccountItem from '~/components/AccountItem/RoundAccountItem';
 import { useAuth } from '~/context/AuthContext';
 import SuggestAccount from '~/components/SuggestAccount';
 import ProfileCard from '~/components/ProfileCard';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import { deleteDocument, updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
@@ -21,7 +21,7 @@ function Home() {
     // let currentScrollPosition = 0;
     // let scrollAmount = 320;
     const { currentUser } = useAuth();
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
     const [followingList, setFollowingList] = useState([]);
     const [postList, setPostList] = useState([]);
 

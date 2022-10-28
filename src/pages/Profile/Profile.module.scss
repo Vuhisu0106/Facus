@@ -85,7 +85,9 @@
     box-shadow: rgb(0 0 0 / 8%) 0px 2px 12px;
 
     .set-status {
-        min-width: 64px;
+        margin-left: 5px;
+        min-width: 24px;
+        white-space: nowrap;
         font-size: 12px;
     }
 }

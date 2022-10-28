@@ -8,12 +8,12 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { doc, onSnapshot, arrayUnion, arrayRemove, deleteField } from 'firebase/firestore';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-import { storage } from '~/firebase/firebase';
-import { db } from '~/firebase/firebase';
+import { storage } from '~/firebase/config';
+import { db } from '~/firebase/config';
 import CircleAvatar from '../CircleAvatar';
 import styles from './CommentItem.module.scss';
 import { useAuth } from '~/context/AuthContext';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import Menu from '../Popper/Menu';
 import Input from '../Input';
 import ImageInputArea from '../Input/ImageInputArea';
@@ -29,7 +29,7 @@ function CommentItem({ data, deleteComment }) {
     const [isEditCommentImg, setIsEditCommentImg] = useState(false);
 
     const { currentUser } = useAuth();
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
 
     const MENU_COMMENT = [
         {

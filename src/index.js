@@ -7,25 +7,28 @@ import reportWebVitals from './reportWebVitals';
 import GlobalStyles from './components/GlobalStyles';
 import AuthProvider from './context/AuthContext';
 import ChatProvider from './context/ChatContext';
-import AppProvider from './context/AppContext';
 import UserProvider from './context/UserContext';
+import UIProvider from './context/UIContext';
+import AppProvider from './context/AppContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <AppProvider>
-        <AuthProvider>
-            <UserProvider>
-                <ChatProvider>
-                    <React.StrictMode>
-                        <BrowserRouter>
-                            <GlobalStyles>
-                                <App />
-                            </GlobalStyles>
-                        </BrowserRouter>
-                    </React.StrictMode>
-                </ChatProvider>
-            </UserProvider>
-        </AuthProvider>
-    </AppProvider>,
+    <AuthProvider>
+        <AppProvider>
+            <UIProvider>
+                <UserProvider>
+                    <ChatProvider>
+                        <React.StrictMode>
+                            <BrowserRouter>
+                                <GlobalStyles>
+                                    <App />
+                                </GlobalStyles>
+                            </BrowserRouter>
+                        </React.StrictMode>
+                    </ChatProvider>
+                </UserProvider>
+            </UIProvider>
+        </AppProvider>
+    </AuthProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

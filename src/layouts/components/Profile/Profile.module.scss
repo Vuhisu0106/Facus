@@ -95,12 +95,18 @@
 .right-content {
     flex: 1;
     //background-color: #fff;
+    h1 {
+        color: #65676b;
+        text-align: center;
+        margin-top: 50px;
+    }
 }
 
 .add-post {
     width: 100%;
     height: 116px;
     padding: 12px 16px 6px 16px;
+    margin-bottom: 20px;
 }
 
 .add-post-top {
@@ -248,6 +254,12 @@
                     background: #fc476b;
                 }
             }
+        }
+    }
+
+    .right-content {
+        h1 {
+            color: var(--dark-text-color-3);
         }
     }
 

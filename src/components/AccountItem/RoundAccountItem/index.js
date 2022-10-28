@@ -1,10 +1,10 @@
 import classNames from 'classnames/bind';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 
 import styles from './RoundAccountItem.module.scss';
 const cx = classNames.bind(styles);
 function RoundAccountItem({ userName, avt, happy, sad, sleepy }) {
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
     const badgeClasses = cx('badge', {
         [classNames]: classNames,
         happy,

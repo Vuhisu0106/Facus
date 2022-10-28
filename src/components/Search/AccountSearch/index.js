@@ -5,14 +5,14 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '~/context/AuthContext';
-import { db } from '~/firebase/firebase';
+import { db } from '~/firebase/config';
 import AccountItem from '~/components/AccountItem';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
 import { useUser } from '~/context/UserContext';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 
 const cx = classNames.bind(styles);
 function AccountSearch({ className, placeHolder, placement, autoFocus }) {
@@ -24,7 +24,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
 
     const { currentUser } = useAuth();
     const { dispatch, addToLocalStorage } = useUser();
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
 
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();

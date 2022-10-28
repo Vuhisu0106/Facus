@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { onSnapshot, doc } from 'firebase/firestore';
 import moment from 'moment';
 
-import { db } from '~/firebase/firebase';
+import { db } from '~/firebase/config';
 import WrapperModal from '~/components/Wrapper';
 import Input from '~/components/Input';
 import styles from './Post.module.scss';

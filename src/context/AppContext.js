@@ -1,4 +1,8 @@
-import { useState, createContext, useContext, ChangeEventHandler, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { onSnapshot, doc } from 'firebase/firestore';
+
+import { db } from '~/firebase/config';
+import { useAuth } from './AuthContext';
 
 export const AppContext = createContext();
 
@@ -6,66 +10,28 @@ export function useApp() {
     return useContext(AppContext);
 }
 
-const darkModeState = JSON.parse(localStorage.getItem('darkMode'));
-
 function AppProvider({ children }) {
-    //Add chat
-    const [isAddChatVisible, setIsAddChatVisible] = useState(false);
-    const clearState = () => {
-        setIsAddChatVisible(false);
-    };
-    //Add post modal
-    const [isPostModalVisible, setIsPostModalVisible] = useState(false);
-    const [addPhotoVisible, setAddPhotoVisible] = useState(false);
-    const [buttonActive, setButtonActive] = useState(false);
-    //Edit profile modal
-    const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
-    //Edit status modal
-    const [isEditStatusModal, setIsEditStatusModal] = useState(false);
+    const { currentUser } = useAuth();
+    const [currentUserFollowing, setCurrentUserFollowing] = useState([]);
 
-    //Dark/light mode
-    const [dark, setDark] = useState(false || darkModeState);
+    useEffect(() => {
+        const getFollowing = () => {
+            const unsub = onSnapshot(doc(db, 'following', currentUser.uid), (doc) => {
+                setCurrentUserFollowing(
+                    Object.entries(doc.data()).map((follow) => {
+                        return follow[0];
+                    }),
+                );
+            });
+            return () => {
+                unsub();
+            };
+        };
 
-    const toggleTheme = () => {
-        setDark(!dark);
-        localStorage.setItem('darkMode', String(!dark));
-    };
+        currentUser.uid && getFollowing();
+    }, [currentUser]);
 
-    const checkDark = (className) => {
-        if (dark && !className) {
-            return 'dark';
-        } else if (dark && className) {
-            return className;
-        } else {
-            return '';
-        }
-    };
-
-    //Change background color of body based on theme
-    if (dark) {
-        document.body.style.backgroundColor = '#18191a';
-    } else {
-        document.body.style.backgroundColor = '#f2f5f7';
-    }
-
-    const value = {
-        isAddChatVisible,
-        setIsAddChatVisible,
-        clearState,
-        isPostModalVisible,
-        setIsPostModalVisible,
-        addPhotoVisible,
-        setAddPhotoVisible,
-        buttonActive,
-        setButtonActive,
-        isEditProfileVisible,
-        setIsEditProfileVisible,
-        isEditStatusModal,
-        setIsEditStatusModal,
-        dark,
-        toggleTheme,
-        checkDark,
-    };
+    const value = { currentUserFollowing };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

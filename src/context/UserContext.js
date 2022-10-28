@@ -2,7 +2,7 @@ import { onSnapshot, doc } from 'firebase/firestore';
 import { useState } from 'react';
 import { createContext, useContext, useReducer, useEffect } from 'react';
 
-import { db } from '~/firebase/firebase';
+import { db } from '~/firebase/config';
 import { useAuth } from './AuthContext';
 
 export const UserContext = createContext();

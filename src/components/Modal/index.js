@@ -4,11 +4,11 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './Modal.module.scss';
 import CircleButton from '../Button/CircleButton';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 
 const cx = classNames.bind(styles);
 function Modal({ title, children, onClose }) {
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
     return (
         <div className={cx('container', checkDark())}>
             <div className={cx('wrapper')}>

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styles from './Input.module.scss';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 
 const cx = classNames.bind(styles);
 function Input({
@@ -30,7 +30,7 @@ function Input({
     ...passProps
 }) {
     //const inputRef = useRef();
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
     const props = {
         onChange,
         ...passProps,

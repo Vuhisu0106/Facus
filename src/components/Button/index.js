@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import styles from './Button.module.scss';
 
 const cx = classNames.bind(styles);
@@ -20,7 +20,7 @@ function Button({
     disabled = false,
     ...passProps
 }) {
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
     let Comp = 'button';
 
     const props = {

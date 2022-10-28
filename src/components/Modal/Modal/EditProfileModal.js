@@ -7,13 +7,13 @@ import Modal from '..';
 import CircleButton from '~/components/Button/CircleButton';
 import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 function EditProfileModal({ onClose }) {
     const { currentUser } = useAuth();
-    const { setIsEditProfileVisible, checkDark } = useApp();
+    const { setIsEditProfileVisible, checkDark } = useUI();
 
     const [avatar, setAvatar] = useState(null);
     const [coverPhoto, setCoverPhoto] = useState(null);

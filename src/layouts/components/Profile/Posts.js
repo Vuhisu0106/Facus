@@ -5,13 +5,13 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 
-import { db, storage } from '~/firebase/firebase';
+import { db, storage } from '~/firebase/config';
 import Button from '~/components/Button';
 import WrapperModal from '~/components/Wrapper';
 import PostLayout from '~/components/PostLayout';
 import styles from './Profile.module.scss';
 import { useAuth } from '~/context/AuthContext';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import CircleAvatar from '~/components/CircleAvatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
@@ -21,27 +21,23 @@ import AddPostModal from '~/components/Modal/Modal/AddPostModal';
 import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
-function Posts({ isCurrentUser = false }) {
+function Posts({ selectedUser, isCurrentUser = false }) {
     const { currentUser } = useAuth();
-    const { setAddPhotoVisible, setButtonActive, checkDark } = useApp();
+    const { setAddPhotoVisible, setButtonActive, checkDark } = useUI();
     const { addToLocalStorage } = useUser();
 
     const [postList, setPostList] = useState([]);
     const [bioInput, setBioInput] = useState('');
     const [editBio, setEditBio] = useState(false);
-    const [saveButtonDisable, setSaveButtonDisable] = useState(true);
+    const [saveBioBtnDisable, setSaveBioBtnDisable] = useState(true);
 
     //Add post modal
     const [openModal, setOpenModal] = useState(false);
-    // const [addPhotoVisible, setAddPhotoVisible] = useState(false);
-    // const [buttonActive, setButtonActive] = useState(false);
-
-    var selectUser = localStorage.getItem('selectUser');
 
     useEffect(() => {
         const getPost = () => {
-            const unsub = onSnapshot(doc(db, 'userPost', selectUser), (doc) => {
-                setPostList(Object.entries(doc.data()));
+            const unsub = onSnapshot(doc(db, 'userPost', selectedUser.uid), (doc) => {
+                doc.data() ? setPostList(Object.entries(doc.data())) : setPostList([]);
             });
 
             return () => {
@@ -49,17 +45,17 @@ function Posts({ isCurrentUser = false }) {
             };
         };
 
-        selectUser && getPost();
-    }, [selectUser]);
+        selectedUser && getPost();
+    }, [selectedUser]);
 
     const handleEditBio = (e) => {
         const editValueInput = e.target.value;
 
         if (editValueInput.trim() !== '') {
             setBioInput(editValueInput);
-            setSaveButtonDisable(false);
+            setSaveBioBtnDisable(false);
         } else {
-            setSaveButtonDisable(true);
+            setSaveBioBtnDisable(true);
         }
     };
 
@@ -177,7 +173,7 @@ function Posts({ isCurrentUser = false }) {
                     <h2>Intro</h2>
                     {!editBio ? (
                         <>
-                            <p>Hello world</p>
+                            {selectedUser.bio ? <p>{selectedUser.bio}</p> : <p>Hello world</p>}
                             {isCurrentUser && (
                                 <Button
                                     className={cx('edit-bio-btn')}
@@ -207,7 +203,7 @@ function Posts({ isCurrentUser = false }) {
                                     }}
                                 />
                                 <Button
-                                    disabled={saveButtonDisable}
+                                    disabled={saveBioBtnDisable}
                                     className={cx('save-bio-btn')}
                                     children={'Save'}
                                     onClick={() => {
@@ -282,23 +278,28 @@ function Posts({ isCurrentUser = false }) {
                         </div>
                     </WrapperModal>
                 )}
-                {postList
-                    ?.sort((a, b) => b[1].date - a[1].date)
-                    .map((post) => (
-                        <PostLayout
-                            key={post[0]}
-                            postId={post[0]}
-                            userId={post[1]?.poster?.uid}
-                            userName={post[1]?.poster?.displayName}
-                            userAvt={post[1]?.poster?.photoURL}
-                            timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
-                            postImg={post[1]?.img && post[1]?.img}
-                            postCaption={post[1]?.caption}
-                            likeCount={post[1]?.like?.length}
-                            commentCount={post[1]?.comment?.length}
-                            deletePostFunc={handleDeletePost}
-                        />
-                    ))}
+
+                {postList.length > 0 ? (
+                    postList
+                        ?.sort((a, b) => b[1].date - a[1].date)
+                        .map((post) => (
+                            <PostLayout
+                                key={post[0]}
+                                postId={post[0]}
+                                userId={post[1]?.poster?.uid}
+                                userName={post[1]?.poster?.displayName}
+                                userAvt={post[1]?.poster?.photoURL}
+                                timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
+                                postImg={post[1]?.img && post[1]?.img}
+                                postCaption={post[1]?.caption}
+                                likeCount={post[1]?.like?.length}
+                                commentCount={post[1]?.comment?.length}
+                                deletePostFunc={handleDeletePost}
+                            />
+                        ))
+                ) : (
+                    <h1>No post found</h1>
+                )}
             </div>
         </div>
     );

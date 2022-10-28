@@ -15,7 +15,7 @@ import AccountSearch from '~/components/Search/AccountSearch';
 import { useUser } from '~/context/UserContext';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Button from '~/components/Button';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import Menu from '~/components/Popper/Menu';
 
 const cx = classNames.bind(styles);
@@ -27,7 +27,7 @@ function Header({ className }) {
 
     const { currentUser, logout } = useAuth();
     const { dispatch, addToLocalStorage } = useUser();
-    const { darkModeState, toggleTheme, dark, checkDark } = useApp();
+    const { darkModeState, toggleTheme, dark, checkDark } = useUI();
     const navigate = useNavigate();
 
     async function handleLogout() {

@@ -4,20 +4,21 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { onSnapshot, doc, serverTimestamp, deleteField } from 'firebase/firestore';
 
-import { db } from '~/firebase/firebase';
+import { db } from '~/firebase/config';
 import styles from './Profile.module.scss';
-import { faCircle, faMessage, faPen, faUserPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faMessage, faPen, faUserMinus, faUserPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
 import Posts from '~/layouts/components/Profile/Posts';
 import Following from '~/layouts/components/Profile/Following';
 import Follower from '~/layouts/components/Profile/Follower';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 import { useUser } from '~/context/UserContext';
 import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
 import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
 import EditProfileModal from '~/components/Modal/Modal/EditProfileModal';
 import { updateDocument } from '~/firebase/services';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -26,16 +27,18 @@ function Profile() {
     const [following, setFollowing] = useState(false);
     const [type, setType] = useState('Posts');
     const [profileLayout, setProfileLayout] = useState('Posts');
-    const [currentUserFollowing, setCurrentUserFollowing] = useState([]);
+    //const [currentUserFollowing, setCurrentUserFollowing] = useState([]);
     const [statusModalVisible, setStatusModalVisible] = useState(false);
     const [profileModalVisible, setProfileModalVisible] = useState(false);
 
+    const [followingList, setFollowingList] = useState();
+    const [followerList, setFollowerList] = useState();
+
     const { currentUser } = useAuth();
     const { data } = useUser();
-    const { checkDark } = useApp();
+    const { checkDark } = useUI();
+    const { currentUserFollowing } = useApp();
 
-    // let location = useLocation();
-    // let navigate = useNavigate();
     let params = useParams();
 
     const [hovered, setHovered] = useState(false);
@@ -43,41 +46,17 @@ function Profile() {
 
     const main = () => {
         if (profileLayout === 'Following') {
-            return <Following />;
+            return <Following list={followingList} />;
         }
         if (profileLayout === 'Follower') {
-            return <Follower />;
+            return <Follower list={followerList} />;
         }
-        return <Posts isCurrentUser={params.id === currentUser.uid ? true : false} />;
+        return <Posts selectedUser={selectedUser} isCurrentUser={params.id === currentUser.uid ? true : false} />;
     };
 
     useEffect(() => {
         setProfileLayout(type);
     }, [type]);
-
-    useEffect(() => {
-        const getFollowing = () => {
-            const unsub = onSnapshot(doc(db, 'following', currentUser.uid), (doc) => {
-                setCurrentUserFollowing(
-                    Object.entries(doc.data()).map((follow) => {
-                        return follow[0];
-                    }),
-                );
-
-                localStorage.setItem(
-                    'FollowingList',
-                    Object.entries(doc.data()).map((follow) => {
-                        return follow[0];
-                    }),
-                );
-            });
-            return () => {
-                unsub();
-            };
-        };
-
-        currentUser.uid && getFollowing();
-    }, [currentUser.uid]);
 
     useEffect(() => {
         const getSelectedUser = () => {
@@ -93,10 +72,38 @@ function Profile() {
         params.id && getSelectedUser();
     }, [params.id]);
 
+    //following data
     useEffect(() => {
-        //console.log(data);
-        //console.log(localStorage.getItem('FollowingList'));
-        if (localStorage.getItem('FollowingList').indexOf(params.id) > -1) {
+        const getFollowingList = () => {
+            const unsub = onSnapshot(doc(db, 'following', params.id), (doc) => {
+                doc.data() ? setFollowingList(doc.data()) : setFollowingList({});
+            });
+
+            return () => {
+                unsub();
+            };
+        };
+
+        params.id && getFollowingList();
+    }, [params.id]);
+
+    //follower data
+    useEffect(() => {
+        const getFollowerList = () => {
+            const unsub = onSnapshot(doc(db, 'follower', params.id), (doc) => {
+                doc.data() ? setFollowerList(doc.data()) : setFollowerList({});
+            });
+
+            return () => {
+                unsub();
+            };
+        };
+
+        params.id && getFollowerList();
+    }, [params.id]);
+
+    useEffect(() => {
+        if (currentUserFollowing.indexOf(params.id) > -1) {
             setFollowing(true);
         } else {
             setFollowing(false);
@@ -187,20 +194,35 @@ function Profile() {
                                 onMouseEnter={toggleHover}
                                 onMouseLeave={toggleHover}
                             >
-                                {hovered ? (
-                                    <div
-                                        className={cx('hovered-set-status-btn')}
-                                        onClick={() => {
-                                            setStatusModalVisible(true);
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={faFaceSmile} />
-                                        <div className={cx('set-status')}>Set status</div>
-                                    </div>
+                                {params.id === currentUser.uid ? (
+                                    hovered ? (
+                                        <div
+                                            className={cx('hovered-set-status-btn')}
+                                            onClick={() => {
+                                                setStatusModalVisible(true);
+                                                console.log(selectedUser.status);
+                                            }}
+                                        >
+                                            {selectedUser.status ? (
+                                                selectedUser.status.icon
+                                            ) : (
+                                                <FontAwesomeIcon icon={faFaceSmile} />
+                                            )}
+                                            <div className={cx('set-status')}>
+                                                {selectedUser.status ? selectedUser.status.text : 'Set status'}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className={cx('set-status-btn')}>
+                                            {selectedUser.status ? (
+                                                selectedUser.status.icon
+                                            ) : (
+                                                <FontAwesomeIcon icon={faFaceSmile} />
+                                            )}
+                                        </div>
+                                    )
                                 ) : (
-                                    <div className={cx('set-status-btn')}>
-                                        <FontAwesomeIcon icon={faFaceSmile} />
-                                    </div>
+                                    ''
                                 )}
                             </div>
                             <img className={cx('profile-avt')} alt="Vu Minh Hieu" src={selectedUser.photoURL} />
@@ -208,9 +230,13 @@ function Profile() {
                         <div>
                             <h1 className={cx('profile-name')}>{selectedUser.displayName}</h1>
                             <div className={cx('profile-follow-info')}>
-                                <span className={cx('profile-following')}>1 following</span>
+                                <span className={cx('profile-following')}>
+                                    {followingList ? Object.keys(followingList).length : '0'} following
+                                </span>
                                 <FontAwesomeIcon className={cx('separate-follow')} icon={faCircle} />
-                                <span className={cx('profile-follower')}>0 follower</span>
+                                <span className={cx('profile-follower')}>
+                                    {followerList ? Object.keys(followerList).length : '0'} follower
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -249,8 +275,8 @@ function Profile() {
                                 <Button
                                     primary
                                     className={cx('unfollow-btn')}
-                                    leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
-                                    children={'Following'}
+                                    leftIcon={<FontAwesomeIcon icon={faUserMinus} />}
+                                    children={'Unfollow'}
                                     onClick={() => {
                                         handleUnfollow();
                                     }}

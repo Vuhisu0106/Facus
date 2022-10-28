@@ -1,39 +1,20 @@
 import classNames from 'classnames/bind';
-import { useEffect } from 'react';
-import { onSnapshot, doc } from 'firebase/firestore';
 
-import { db } from '~/firebase/firebase';
 import styles from './Profile.module.scss';
 import WrapperModal from '~/components/Wrapper';
-import { useState } from 'react';
-import { useApp } from '~/context/AppContext';
+import { useUI } from '~/context/UIContext';
 
 const cx = classNames.bind(styles);
-function Following() {
-    const [followingList, setFollowingList] = useState();
-    var selectUser = localStorage.getItem('selectUser');
-
-    const { checkDark } = useApp();
-
-    useEffect(() => {
-        const getFollowingList = () => {
-            const unsub = onSnapshot(doc(db, 'following', selectUser), (doc) => {
-                setFollowingList(doc.data());
-            });
-
-            return () => {
-                unsub();
-            };
-        };
-
-        selectUser && getFollowingList();
-    }, [selectUser]);
+function Following({ list }) {
+    const { checkDark } = useUI();
 
     return (
         <WrapperModal className={cx('following', checkDark())}>
             <h2>Following</h2>
-            {followingList &&
-                Object.entries(followingList).map((following) => (
+
+            {Object.keys(list).length > 0 ? (
+                list &&
+                Object.entries(list).map((following) => (
                     <div key={following[0]} className={cx('account')}>
                         <img
                             className={cx('account-avt')}
@@ -45,7 +26,10 @@ function Following() {
                             <span className={cx('account-bio')}>Hello World</span>
                         </div>
                     </div>
-                ))}
+                ))
+            ) : (
+                <h1>This user doesn't follow anyone</h1>
+            )}
         </WrapperModal>
     );
 }
