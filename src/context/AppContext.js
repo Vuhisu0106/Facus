@@ -28,8 +28,8 @@ function AppProvider({ children }) {
             };
         };
 
-        currentUser.uid && getFollowing();
-    }, [currentUser]);
+        currentUser?.uid && getFollowing();
+    }, []);
 
     const value = { currentUserFollowing };
 

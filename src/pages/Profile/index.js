@@ -56,12 +56,14 @@ function Profile() {
 
     useEffect(() => {
         setProfileLayout(type);
+        console.log(1);
     }, [type]);
 
     useEffect(() => {
         const getSelectedUser = () => {
             const unsub = onSnapshot(doc(db, 'users', params.id), (doc) => {
                 setSelectedUser(doc.data());
+                console.log(2);
             });
 
             return () => {
@@ -77,6 +79,7 @@ function Profile() {
         const getFollowingList = () => {
             const unsub = onSnapshot(doc(db, 'following', params.id), (doc) => {
                 doc.data() ? setFollowingList(doc.data()) : setFollowingList({});
+                console.log(3);
             });
 
             return () => {

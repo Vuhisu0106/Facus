@@ -19,8 +19,8 @@ function SuggestAccount({ label }) {
 
     useEffect(() => {
         const getSuggestFollowList = async () => {
-            const q = query(collection(db, 'users'), where('uid', 'not-in', currentUserFollowing), limit(10));
-
+            const q = query(collection(db, 'users'), where('uid', 'not-in', currentUserFollowing), limit(6));
+            console.log('suggest follow: ' + currentUserFollowing);
             try {
                 const querySnapshot = await getDocs(q);
                 setSuggestFollowList(querySnapshot.docs.map((doc) => doc.data()));

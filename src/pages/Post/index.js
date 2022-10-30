@@ -10,10 +10,13 @@ import WrapperModal from '~/components/Wrapper';
 import Input from '~/components/Input';
 import styles from './Post.module.scss';
 import { useState, useEffect } from 'react';
+import { useUI } from '~/context/UIContext';
+import PostLayout from '~/components/PostLayout';
 
 const cx = classNames.bind(styles);
 function Post() {
     let params = useParams();
+    const { checkDark } = useUI();
 
     const [postDetail, setPostDetail] = useState();
 
@@ -32,13 +35,13 @@ function Post() {
 
     return (
         postDetail && (
-            <WrapperModal className={cx('container')}>
+            <WrapperModal className={cx('container', checkDark())}>
                 <div className={cx('post-img-wrapper')}>
                     <div className={cx('post-image')}>
                         <img alt={postDetail.poster.displayName} src={postDetail.img} />
                     </div>
                 </div>
-                <div className={cx('post-detail')}>
+                {/* <div className={cx('post-detail')}>
                     <div className={cx('post-header')}>
                         <img
                             className={cx('user-avt')}
@@ -94,6 +97,20 @@ function Post() {
                             />
                         </div>
                     </div>
+                </div> */}
+                <div className={cx('post-detail')}>
+                    <PostLayout
+                        postPage
+                        key={postDetail.postId}
+                        postId={postDetail.postId}
+                        userId={postDetail?.poster?.uid}
+                        userName={postDetail?.poster?.displayName}
+                        userAvt={postDetail?.poster?.photoURL}
+                        timeStamp={postDetail?.date && moment(postDetail?.date.toDate()).fromNow()}
+                        postCaption={postDetail?.caption}
+                        likeCount={postDetail?.like?.length}
+                        //commentCount={post[1]?.comment?.length}
+                    />
                 </div>
             </WrapperModal>
         )

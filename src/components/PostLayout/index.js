@@ -45,6 +45,7 @@ function PostLayout({
     likeCount,
     commentCount,
     deletePostFunc,
+    postPage,
 }) {
     const { addToLocalStorage } = useUser();
     const { currentUser } = useAuth();
@@ -305,18 +306,20 @@ function PostLayout({
                 <div className={cx('post-caption')}>
                     <p>{postDetail?.caption}</p>
                 </div>
-                {postDetail?.img && (
-                    <div className={cx('post-image')}>
-                        <a
-                            href={`/post/${postId}`}
-                            onClick={() => {
-                                addToLocalStorage('selectPost', postId);
-                            }}
-                        >
-                            <img alt={userName} src={postDetail?.img} />
-                        </a>
-                    </div>
-                )}
+                {!postPage
+                    ? postDetail?.img && (
+                          <div className={cx('post-image')}>
+                              <a
+                                  href={`/post/${postId}`}
+                                  onClick={() => {
+                                      addToLocalStorage('selectPost', postId);
+                                  }}
+                              >
+                                  <img alt={userName} src={postDetail?.img} />
+                              </a>
+                          </div>
+                      )
+                    : ''}
             </div>
             <div className={cx('post-interaction')}>
                 {(likeCount > 0 || commentList.length > 0) && (

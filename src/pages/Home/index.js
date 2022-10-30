@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useEffect, useState } from 'react';
-import { onSnapshot, doc, where, collection, query, deleteField } from 'firebase/firestore';
+import { onSnapshot, where, collection, query, deleteField, getDocs } from 'firebase/firestore';
 import moment from 'moment';
 
 import { db } from '~/firebase/config';
@@ -15,6 +15,7 @@ import SuggestAccount from '~/components/SuggestAccount';
 import ProfileCard from '~/components/ProfileCard';
 import { useUI } from '~/context/UIContext';
 import { deleteDocument, updateDocument } from '~/firebase/services';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Home() {
@@ -22,34 +23,39 @@ function Home() {
     // let scrollAmount = 320;
     const { currentUser } = useAuth();
     const { checkDark } = useUI();
-    const [followingList, setFollowingList] = useState([]);
+    const { currentUserFollowing } = useApp();
+
     const [postList, setPostList] = useState([]);
+    const [statusFollowingList, setStatusFollowingList] = useState([]);
 
     const storyRef = useRef('');
     const horizontalRef = useRef();
 
     useEffect(() => {
-        const getFollowing = () => {
-            const unsub = onSnapshot(doc(db, 'following', currentUser.uid), (doc) => {
-                setFollowingList(
-                    Object.entries(doc.data()).map((follow) => {
-                        return follow[0];
-                    }),
-                );
-            });
-            return () => {
-                unsub();
-            };
-        };
+        const getStatusFollowingList = async () => {
+            const statusUserList = [currentUser.uid];
+            statusUserList.push(...currentUserFollowing);
+            // console.log('statusUserList1: ' + currentUserFollowing);
+            // console.log('statusUserList2: ' + statusUserList);
+            const q = query(collection(db, 'users'), where('uid', 'in', statusUserList));
 
-        currentUser.uid && getFollowing();
-    }, [currentUser.uid]);
+            try {
+                const querySnapshot = await getDocs(q);
+                setStatusFollowingList(querySnapshot.docs.map((doc) => doc.data()));
+                //setLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getStatusFollowingList();
+    }, [currentUser]);
 
     useEffect(() => {
         const getPost = async () => {
-            const postFromId = localStorage.getItem('FollowingList').split(',');
+            const postFromId = currentUserFollowing;
             postFromId.push(currentUser.uid);
             const q = query(collection(db, 'post'), where('poster.uid', 'in', postFromId));
+            console.log('followpost:: ' + currentUserFollowing);
 
             const unsub = onSnapshot(q, (querySnapshot) => {
                 const posts = [];
@@ -67,7 +73,7 @@ function Home() {
         };
 
         getPost();
-    }, [currentUser.uid, followingList]);
+    }, [currentUser.uid, currentUserFollowing]);
 
     // console.log(storyRef.current.offsetWidth);
 
@@ -80,9 +86,6 @@ function Home() {
         if (window.confirm('Do you want delete this post?')) {
             try {
                 await deleteDocument('post', postId);
-                // await updateDoc(doc(db, 'userPost', currentUser.uid), {
-                //     [postId]: deleteField(),
-                // });
                 await updateDocument('userPost', currentUser.uid, {
                     [postId]: deleteField(),
                 });
@@ -109,35 +112,45 @@ function Home() {
                 <div className={cx('horizontal-scroll')} ref={horizontalRef}>
                     <button className={cx('btn-scroll-left')}>{<FontAwesomeIcon icon={faChevronLeft} />}</button>
                     <div className={cx('status-container')} ref={storyRef}>
-                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
-                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
-                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
-                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
-                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
-                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
-                        <RoundAccountItem avt={currentUser.photoURL} userName={'Vu Hieu'} />
+                        <button
+                            onClick={() => {
+                                console.log(currentUser);
+                            }}
+                        >
+                            Click
+                        </button>
+                        {statusFollowingList?.map(
+                            (list) =>
+                                list.status && (
+                                    <RoundAccountItem
+                                        key={list.uid}
+                                        avt={list.photoURL}
+                                        userName={list.displayName}
+                                        status={list.status}
+                                    />
+                                ),
+                        )}
                     </div>
                     <button className={cx('btn-scroll-right')}>{<FontAwesomeIcon icon={faChevronRight} />}</button>
                 </div>
 
-                {postList &&
-                    postList
-                        ?.sort((a, b) => b.date - a.date)
-                        .map((post) => (
-                            <PostLayout
-                                key={post.postId}
-                                postId={post.postId}
-                                userId={post.poster.uid}
-                                userName={post.poster.displayName}
-                                userAvt={post.poster.photoURL}
-                                timeStamp={post.date && moment(post.date.toDate()).fromNow()}
-                                postImg={post.img && post.img}
-                                postCaption={post.caption}
-                                likeCount={post.like.length}
-                                commentCount={post.comment.length}
-                                deletePostFunc={handleDeletePost}
-                            />
-                        ))}
+                {postList
+                    ?.sort((a, b) => b.date - a.date)
+                    .map((post) => (
+                        <PostLayout
+                            key={post.postId}
+                            postId={post.postId}
+                            userId={post.poster.uid}
+                            userName={post.poster.displayName}
+                            userAvt={post.poster.photoURL}
+                            timeStamp={post.date && moment(post.date.toDate()).fromNow()}
+                            postImg={post.img && post.img}
+                            postCaption={post.caption}
+                            likeCount={post.like.length}
+                            commentCount={post.comment.length}
+                            deletePostFunc={handleDeletePost}
+                        />
+                    ))}
             </div>
             <Sidebar children={<SuggestAccount label="Suggested to you" />} className={cx('right-sidebar')} />
         </div>

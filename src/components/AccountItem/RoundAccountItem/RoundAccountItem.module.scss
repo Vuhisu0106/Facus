@@ -21,6 +21,34 @@
     position: relative;
     margin-bottom: 6px;
     margin-top: 4px;
+
+    .status-wrapper {
+        height: 34px;
+        min-width: 34px;
+        display: inline-block;
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+        background-color: transparent;
+        text-align: center;
+
+        .status {
+            height: 34px;
+            min-width: 34px;
+            border-radius: 50%;
+            font-size: 17px;
+            cursor: pointer;
+            transition: ease 50ms;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--white);
+            border: 1px solid rgb(204, 206, 209);
+            position: absolute;
+            margin: 0 8px 8px 0;
+            //z-index: 1;
+        }
+    }
 }
 
 .story-circle {
@@ -53,5 +81,12 @@
 
     .user-name {
         color: var(--dark-text-color-3);
+    }
+
+    .status-wrapper {
+        .status {
+            background-color: var(--dark-background-color-2);
+            border: 1px solid rgb(62, 64, 66);
+        }
     }
 }
