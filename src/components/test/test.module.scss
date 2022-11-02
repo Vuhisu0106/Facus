@@ -1,0 +1,19 @@
+.test1 {
+    background-color: red;
+    width: 300px;
+    height: 300px;
+}
+
+.wide {
+    .test2 {
+        background-color: orange;
+        width: 300px;
+        height: 300px;
+    }
+}
+
+.test2 {
+    background-color: yellow;
+    width: 300px;
+    height: 300px;
+}

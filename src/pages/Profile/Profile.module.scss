@@ -4,8 +4,8 @@
 }
 
 .profile-main-part {
-    width: 100%;
-    padding: 0 216px;
+    //width: 100%;
+    //padding: 0 216px;
     background-color: #fff;
 }
 
@@ -21,17 +21,33 @@
     height: 160px;
     padding-top: 10px;
     padding-bottom: 16px;
-    margin: 0 32px;
+    //margin: 0 32px;
+
+    border-bottom: 1px solid rgb(204, 206, 209);
+    //transform: translateY(-42px);
+}
+
+.profile-main-part-center-2 {
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 16px;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    border-bottom: 1px solid rgb(204, 206, 209);
+    transform: translateY(-25px);
+}
+
+.profile-main-part-right {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .avatar {
     min-width: 170px;
     height: 170px;
-    transform: translateY(-42px);
     position: relative;
     margin-right: 10px;
 }
@@ -92,35 +108,37 @@
     }
 }
 
-.profile-main-part-right {
-    display: flex;
-    justify-content: space-between;
-}
+.profile-name-follow {
+    margin-top: 5px;
+    margin-bottom: 32px;
 
-.profile-name {
-    font-size: 32px;
-}
+    .profile-name {
+        font-size: 32px;
+    }
 
-.profile-follow-info {
-    font-size: 17px;
-    font-weight: 600;
-    color: rgb(101, 103, 107);
-    column-gap: 0.8rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: absolute;
+    .profile-follow-info {
+        font-size: 17px;
+        font-weight: 600;
+        color: rgb(101, 103, 107);
+        column-gap: 0.8rem;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        //position: absolute;
 
-    .separate-follow {
-        font-size: 8px;
+        .separate-follow {
+            font-size: 8px;
+        }
     }
 }
+
 .profile-main-part-left {
     height: 100%;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     padding-bottom: 20px;
+    margin-top: 8px;
     button {
         height: 40px;
         border-radius: 8px;
@@ -134,9 +152,13 @@
 }
 
 .profile-nav {
-    padding: 4px calc(var(--profile-layout-padding) + 64px);
+    padding: 4px 0;
     height: 62px;
     background-color: #fff;
+
+    .profile-nav-grid {
+        height: 100%;
+    }
 
     ul {
         width: 100%;
@@ -161,9 +183,51 @@
 .profile-content {
     background-color: var(--light-background-color);
 
-    padding: 16px calc(var(--profile-layout-padding) + 64px);
+    padding: 16px 0;
 }
 
+@media (max-width: 740px) {
+    .profile-cover-photo {
+        height: 42vh;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .profile-main-part-center {
+        height: 230px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        //transform: translateY(-90px);
+    }
+
+    .profile-main-part-center-2 {
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-34px);
+    }
+    .profile-main-part-right {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .profile-name-follow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 0;
+        }
+    }
+
+    .profile-main-part-left {
+        margin-top: 16px;
+    }
+}
 ////////////////////////////////Dark mode//////////////////////////////////////
 .dark {
     .profile-main-part {

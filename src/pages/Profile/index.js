@@ -19,6 +19,9 @@ import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
 import EditProfileModal from '~/components/Modal/Modal/EditProfileModal';
 import { updateDocument } from '~/firebase/services';
 import { useApp } from '~/context/AppContext';
+import Grid from '~/components/Grid/Grid';
+import GridRow from '~/components/Grid/GridRow';
+import GridColumn from '~/components/Grid/GridColumn';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -188,130 +191,153 @@ function Profile() {
                 />
             )}
             <div className={cx('profile-main-part')}>
-                <img className={cx('profile-cover-photo')} src={selectedUser.photoURL} alt="Vu Hieu" />
-                <div className={cx('profile-main-part-center')}>
-                    <div className={cx('profile-main-part-right')}>
-                        <div className={cx('avatar')}>
-                            <div
-                                className={cx('set-status-wrapper')}
-                                onMouseEnter={toggleHover}
-                                onMouseLeave={toggleHover}
-                            >
-                                {params.id === currentUser.uid ? (
-                                    hovered ? (
-                                        <div
-                                            className={cx('hovered-set-status-btn')}
-                                            onClick={() => {
-                                                setStatusModalVisible(true);
-                                                console.log(selectedUser.status);
-                                            }}
-                                        >
-                                            {selectedUser.status ? (
-                                                selectedUser.status.icon
-                                            ) : (
-                                                <FontAwesomeIcon icon={faFaceSmile} />
-                                            )}
-                                            <div className={cx('set-status')}>
-                                                {selectedUser.status ? selectedUser.status.text : 'Set status'}
+                <Grid profile>
+                    <GridRow>
+                        <GridColumn l={11.5} l_o={0.25} m={12} s={12}>
+                            <img className={cx('profile-cover-photo')} src={selectedUser.photoURL} alt="Vu Hieu" />
+                        </GridColumn>
+
+                        <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={11} s_o={0.5}>
+                            <div className={cx('profile-main-part-center')}>
+                                <div className={cx('profile-main-part-center-2')}>
+                                    <div className={cx('profile-main-part-right')}>
+                                        <div className={cx('avatar')}>
+                                            <div
+                                                className={cx('set-status-wrapper')}
+                                                onMouseEnter={toggleHover}
+                                                onMouseLeave={toggleHover}
+                                            >
+                                                {params.id === currentUser.uid ? (
+                                                    hovered ? (
+                                                        <div
+                                                            className={cx('hovered-set-status-btn')}
+                                                            onClick={() => {
+                                                                setStatusModalVisible(true);
+                                                                console.log(selectedUser.status);
+                                                            }}
+                                                        >
+                                                            {selectedUser.status ? (
+                                                                selectedUser.status.icon
+                                                            ) : (
+                                                                <FontAwesomeIcon icon={faFaceSmile} />
+                                                            )}
+                                                            <div className={cx('set-status')}>
+                                                                {selectedUser.status
+                                                                    ? selectedUser.status.text
+                                                                    : 'Set status'}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className={cx('set-status-btn')}>
+                                                            {selectedUser.status ? (
+                                                                selectedUser.status.icon
+                                                            ) : (
+                                                                <FontAwesomeIcon icon={faFaceSmile} />
+                                                            )}
+                                                        </div>
+                                                    )
+                                                ) : (
+                                                    ''
+                                                )}
+                                            </div>
+                                            <img
+                                                className={cx('profile-avt')}
+                                                alt="Vu Minh Hieu"
+                                                src={selectedUser.photoURL}
+                                            />
+                                        </div>
+                                        <div className={cx('profile-name-follow')}>
+                                            <h1 className={cx('profile-name')}>{selectedUser.displayName}</h1>
+                                            <div className={cx('profile-follow-info')}>
+                                                <span className={cx('profile-following')}>
+                                                    {followingList ? Object.keys(followingList).length : '0'} following
+                                                </span>
+                                                <FontAwesomeIcon className={cx('separate-follow')} icon={faCircle} />
+                                                <span className={cx('profile-follower')}>
+                                                    {followerList ? Object.keys(followerList).length : '0'} follower
+                                                </span>
                                             </div>
                                         </div>
-                                    ) : (
-                                        <div className={cx('set-status-btn')}>
-                                            {selectedUser.status ? (
-                                                selectedUser.status.icon
-                                            ) : (
-                                                <FontAwesomeIcon icon={faFaceSmile} />
-                                            )}
+                                    </div>
+
+                                    {params.id === currentUser.uid ? (
+                                        <div className={cx('profile-main-part-left')}>
+                                            <Button
+                                                primary
+                                                className={cx('edit-account-btn')}
+                                                leftIcon={<FontAwesomeIcon icon={faWrench} />}
+                                                children={'Edit account'}
+                                            />
+
+                                            <Button
+                                                className={cx('edit-profile-btn')}
+                                                leftIcon={<FontAwesomeIcon icon={faPen} />}
+                                                children={'Edit profile'}
+                                                onClick={() => {
+                                                    setProfileModalVisible(true);
+                                                }}
+                                            />
                                         </div>
-                                    )
-                                ) : (
-                                    ''
-                                )}
+                                    ) : (
+                                        <div className={cx('profile-main-part-left')}>
+                                            {!following ? (
+                                                <Button
+                                                    primary
+                                                    className={cx('follow-btn')}
+                                                    leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
+                                                    children={'Follow'}
+                                                    onClick={() => {
+                                                        handleFollow();
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Button
+                                                    primary
+                                                    className={cx('unfollow-btn')}
+                                                    leftIcon={<FontAwesomeIcon icon={faUserMinus} />}
+                                                    children={'Unfollow'}
+                                                    onClick={() => {
+                                                        handleUnfollow();
+                                                    }}
+                                                />
+                                            )}
+
+                                            <Button
+                                                className={cx('chat-btn')}
+                                                leftIcon={<FontAwesomeIcon icon={faMessage} />}
+                                                children={'Message'}
+                                                onClick={() => {}}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                            <img className={cx('profile-avt')} alt="Vu Minh Hieu" src={selectedUser.photoURL} />
-                        </div>
-                        <div>
-                            <h1 className={cx('profile-name')}>{selectedUser.displayName}</h1>
-                            <div className={cx('profile-follow-info')}>
-                                <span className={cx('profile-following')}>
-                                    {followingList ? Object.keys(followingList).length : '0'} following
-                                </span>
-                                <FontAwesomeIcon className={cx('separate-follow')} icon={faCircle} />
-                                <span className={cx('profile-follower')}>
-                                    {followerList ? Object.keys(followerList).length : '0'} follower
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {params.id === currentUser.uid ? (
-                        <div className={cx('profile-main-part-left')}>
-                            <Button
-                                primary
-                                className={cx('edit-account-btn')}
-                                leftIcon={<FontAwesomeIcon icon={faWrench} />}
-                                children={'Edit account'}
-                            />
-
-                            <Button
-                                className={cx('edit-profile-btn')}
-                                leftIcon={<FontAwesomeIcon icon={faPen} />}
-                                children={'Edit profile'}
-                                onClick={() => {
-                                    setProfileModalVisible(true);
-                                }}
-                            />
-                        </div>
-                    ) : (
-                        <div className={cx('profile-main-part-left')}>
-                            {!following ? (
-                                <Button
-                                    primary
-                                    className={cx('follow-btn')}
-                                    leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
-                                    children={'Follow'}
-                                    onClick={() => {
-                                        handleFollow();
-                                    }}
-                                />
-                            ) : (
-                                <Button
-                                    primary
-                                    className={cx('unfollow-btn')}
-                                    leftIcon={<FontAwesomeIcon icon={faUserMinus} />}
-                                    children={'Unfollow'}
-                                    onClick={() => {
-                                        handleUnfollow();
-                                    }}
-                                />
-                            )}
-
-                            <Button
-                                className={cx('chat-btn')}
-                                leftIcon={<FontAwesomeIcon icon={faMessage} />}
-                                children={'Message'}
-                                onClick={() => {}}
-                            />
-                        </div>
-                    )}
-                </div>
+                        </GridColumn>
+                    </GridRow>
+                </Grid>
             </div>
             <div className={cx('profile-nav')}>
-                <ul>
-                    {NAV_LIST.map((items) => (
-                        <Button
-                            className={cx('profile-nav-btn')}
-                            nav
-                            activeNav={type === items ? true : false}
-                            key={items}
-                            onClick={() => {
-                                setType(items);
-                            }}
-                        >
-                            {items}
-                        </Button>
-                    ))}
-                </ul>
+                <Grid profile className={cx('profile-nav-grid')}>
+                    <GridRow>
+                        <GridColumn l={10} l_o={1} m={11} m_o={0.5} s={11} s_o={0.5}>
+                            <ul>
+                                {NAV_LIST.map((items) => (
+                                    <Button
+                                        className={cx('profile-nav-btn')}
+                                        nav
+                                        activeNav={type === items ? true : false}
+                                        key={items}
+                                        onClick={() => {
+                                            setType(items);
+                                        }}
+                                    >
+                                        {items}
+                                    </Button>
+                                ))}
+                            </ul>
+                        </GridColumn>
+                    </GridRow>
+                </Grid>
             </div>
             <div className={cx('profile-content')}>{main()}</div>
         </div>

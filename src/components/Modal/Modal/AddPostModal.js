@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import HeadlessTippy from '@tippyjs/react/headless';
 
 import Modal from '..';
 import styles from '~/components/Modal/Modal.module.scss';

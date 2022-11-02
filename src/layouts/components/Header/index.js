@@ -17,6 +17,9 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Button from '~/components/Button';
 import { useUI } from '~/context/UIContext';
 import Menu from '~/components/Popper/Menu';
+import Grid from '~/components/Grid/Grid';
+import GridRow from '~/components/Grid/GridRow';
+import GridColumn from '~/components/Grid/GridColumn';
 
 const cx = classNames.bind(styles);
 
@@ -86,47 +89,53 @@ function Header({ className }) {
     });
 
     return (
-        <header className={classes}>
-            <div className={cx('inner-wrapper')}>
-                <div className={cx('logo')}>facus</div>
+        <div className={classes}>
+            <Grid wide>
+                <GridRow className={cx('inner-wrapper')}>
+                    <GridColumn l={3.25} m={3} s={2} className={cx('logo')}>
+                        facus
+                    </GridColumn>
 
-                <AccountSearch
-                    className={cx('search')}
-                    placeHolder={'Search Facus...'}
-                    leftIcon={<FontAwesomeIcon icon={faSearch} />}
-                />
-
-                <div className={cx('actions')}>
-                    <div className={cx('actions-btn')}>
-                        <CircleButton to={config.routes.home} children={<FontAwesomeIcon icon={faHome} />} />
-                        <CircleButton
-                            to={config.routes.message}
-                            children={<FontAwesomeIcon icon={faFacebookMessenger} />}
+                    <GridColumn l={5.5} m={6} s={6}>
+                        <AccountSearch
+                            className={cx('search')}
+                            placeHolder={'Search Facus...'}
+                            leftIcon={<FontAwesomeIcon icon={faSearch} />}
                         />
+                    </GridColumn>
 
-                        <CircleButton
-                            children={dark ? <FontAwesomeIcon icon={faMoon} /> : <FontAwesomeIcon icon={faSun} />}
-                            onClick={() => {
-                                toggleTheme();
-                                console.log('darkModeState: ' + darkModeState);
-                            }}
-                        />
+                    <GridColumn l={3.25} m={3} s={4} className={cx('actions')}>
+                        <div className={cx('actions-btn')}>
+                            <CircleButton to={config.routes.home} children={<FontAwesomeIcon icon={faHome} />} />
+                            <CircleButton
+                                to={config.routes.message}
+                                children={<FontAwesomeIcon icon={faFacebookMessenger} />}
+                            />
 
-                        <Menu items={MENU_ITEMS_USER} isMenuVisible={isMenuVisible} onClickOutside={onClickOutside}>
-                            <img
-                                className={cx('user-avt')}
-                                alt="Vu Minh Hieu"
-                                src={currentUser.photoURL}
-                                ref={avtRef}
+                            <CircleButton
+                                children={dark ? <FontAwesomeIcon icon={faMoon} /> : <FontAwesomeIcon icon={faSun} />}
                                 onClick={() => {
-                                    setIsMenuVisible(!isMenuVisible);
+                                    toggleTheme();
+                                    console.log('darkModeState: ' + darkModeState);
                                 }}
                             />
-                        </Menu>
-                    </div>
-                </div>
-            </div>
-        </header>
+
+                            <Menu items={MENU_ITEMS_USER} isMenuVisible={isMenuVisible} onClickOutside={onClickOutside}>
+                                <img
+                                    className={cx('user-avt')}
+                                    alt="Vu Minh Hieu"
+                                    src={currentUser.photoURL}
+                                    ref={avtRef}
+                                    onClick={() => {
+                                        setIsMenuVisible(!isMenuVisible);
+                                    }}
+                                />
+                            </Menu>
+                        </div>
+                    </GridColumn>
+                </GridRow>
+            </Grid>
+        </div>
     );
 }
 

@@ -19,6 +19,9 @@ import Input from '~/components/Input';
 import { useUser } from '~/context/UserContext';
 import AddPostModal from '~/components/Modal/Modal/AddPostModal';
 import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
+import Grid from '~/components/Grid/Grid';
+import GridRow from '~/components/Grid/GridRow';
+import GridColumn from '~/components/Grid/GridColumn';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
@@ -158,7 +161,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
     };
 
     return (
-        <div className={cx('wrapper', checkDark('dark-post'))}>
+        <Grid profile className={cx('wrapper', checkDark('dark-post'))}>
             {openModal && (
                 <AddPostModal
                     addPostFunc={handleAddPost}
@@ -168,140 +171,142 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                     }}
                 />
             )}
-            <div className={cx('left-content')}>
-                <WrapperModal className={cx('intro')}>
-                    <h2>Intro</h2>
-                    {!editBio ? (
-                        <>
-                            {selectedUser.bio ? <p>{selectedUser.bio}</p> : <p>Hello world</p>}
-                            {isCurrentUser && (
-                                <Button
-                                    className={cx('edit-bio-btn')}
-                                    long
-                                    onClick={() => {
-                                        setEditBio(true);
-                                    }}
-                                >
-                                    Edit bio
-                                </Button>
-                            )}
-                        </>
-                    ) : (
-                        <div className={cx('edit-bio')}>
-                            <Input
-                                className={cx('bio-input')}
-                                placeHolder={'Type your bio...'}
-                                onChange={handleEditBio}
-                            />
-                            <div className={cx('edit-bio-btns')}>
-                                <Button
-                                    className={cx('cancel-bio-btn')}
-                                    children={'Cancel'}
-                                    onClick={() => {
-                                        setBioInput('');
-                                        setEditBio(false);
-                                    }}
+            <GridRow>
+                <GridColumn l={4} l_o={1.5} m={5} m_o={0.5} s={11} s_o={0.5} className={cx('left-content')}>
+                    <WrapperModal className={cx('intro')}>
+                        <h2>Intro</h2>
+                        {!editBio ? (
+                            <>
+                                {selectedUser.bio ? <p>{selectedUser.bio}</p> : <p>Hello world</p>}
+                                {isCurrentUser && (
+                                    <Button
+                                        className={cx('edit-bio-btn')}
+                                        long
+                                        onClick={() => {
+                                            setEditBio(true);
+                                        }}
+                                    >
+                                        Edit bio
+                                    </Button>
+                                )}
+                            </>
+                        ) : (
+                            <div className={cx('edit-bio')}>
+                                <Input
+                                    className={cx('bio-input')}
+                                    placeHolder={'Type your bio...'}
+                                    onChange={handleEditBio}
+                                />
+                                <div className={cx('edit-bio-btns')}>
+                                    <Button
+                                        className={cx('cancel-bio-btn')}
+                                        children={'Cancel'}
+                                        onClick={() => {
+                                            setBioInput('');
+                                            setEditBio(false);
+                                        }}
+                                    />
+                                    <Button
+                                        disabled={saveBioBtnDisable}
+                                        className={cx('save-bio-btn')}
+                                        children={'Save'}
+                                        onClick={() => {
+                                            handleSaveBio();
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </WrapperModal>
+                    <WrapperModal className={cx('photo')}>
+                        <h2>Photo</h2>
+                        <p>No image found!</p>
+                        <div className={cx('photo-box')}>
+                            {postList
+                                ?.sort((a, b) => b[1].date - a[1].date)
+                                .map(
+                                    (post) =>
+                                        post[1].img && (
+                                            <div key={post[0]}>
+                                                <a
+                                                    href={`/post/${post[0]}`}
+                                                    id=""
+                                                    onClick={() => {
+                                                        addToLocalStorage('selectPost', post[0]);
+                                                    }}
+                                                >
+                                                    <img src={post[1]?.img} alt={post[0]} />
+                                                </a>
+                                            </div>
+                                        ),
+                                )}
+                        </div>
+                    </WrapperModal>
+                </GridColumn>
+                <GridColumn l={5} m={6} s={11} s_o={0.5} className={cx('right-content')}>
+                    {isCurrentUser && (
+                        <WrapperModal className={cx('add-post')}>
+                            <div className={cx('add-post-top')}>
+                                <CircleAvatar
+                                    className={cx('add-post-user-avt')}
+                                    userName={currentUser.displayName}
+                                    avatar={currentUser.photoURL}
+                                    diameter="40px"
                                 />
                                 <Button
-                                    disabled={saveBioBtnDisable}
-                                    className={cx('save-bio-btn')}
-                                    children={'Save'}
+                                    className={cx('add-post-only-message-btn')}
+                                    children={"What's on your mind?"}
                                     onClick={() => {
-                                        handleSaveBio();
+                                        setOpenModal(true);
+                                        setAddPhotoVisible(false);
+                                        setButtonActive(false);
                                     }}
                                 />
                             </div>
-                        </div>
+                            <div className={cx('add-post-bottom')}>
+                                <Button
+                                    className={cx('add-post-with-video-btn')}
+                                    leftIcon={<FontAwesomeIcon icon={faVideo} />}
+                                    children={'Video'}
+                                />
+                                <Button
+                                    className={cx('add-post-with-photo-btn')}
+                                    leftIcon={<FontAwesomeIcon icon={faImage} />}
+                                    children={'Photo'}
+                                    onClick={() => {
+                                        setOpenModal(true);
+                                        setAddPhotoVisible(true);
+                                        setButtonActive(true);
+                                    }}
+                                />
+                            </div>
+                        </WrapperModal>
                     )}
-                </WrapperModal>
-                <WrapperModal className={cx('photo')}>
-                    <h2>Photo</h2>
-                    <p>No image found!</p>
-                    <div className={cx('photo-box')}>
-                        {postList
-                            ?.sort((a, b) => b[1].date - a[1].date)
-                            .map(
-                                (post) =>
-                                    post[1].img && (
-                                        <div key={post[0]}>
-                                            <a
-                                                href={`/post/${post[0]}`}
-                                                id=""
-                                                onClick={() => {
-                                                    addToLocalStorage('selectPost', post[0]);
-                                                }}
-                                            >
-                                                <img src={post[1]?.img} alt={post[0]} />
-                                            </a>
-                                        </div>
-                                    ),
-                            )}
-                    </div>
-                </WrapperModal>
-            </div>
-            <div className={cx('right-content')}>
-                {isCurrentUser && (
-                    <WrapperModal className={cx('add-post')}>
-                        <div className={cx('add-post-top')}>
-                            <CircleAvatar
-                                className={cx('add-post-user-avt')}
-                                userName={currentUser.displayName}
-                                avatar={currentUser.photoURL}
-                                diameter="40px"
-                            />
-                            <Button
-                                className={cx('add-post-only-message-btn')}
-                                children={"What's on your mind?"}
-                                onClick={() => {
-                                    setOpenModal(true);
-                                    setAddPhotoVisible(false);
-                                    setButtonActive(false);
-                                }}
-                            />
-                        </div>
-                        <div className={cx('add-post-bottom')}>
-                            <Button
-                                className={cx('add-post-with-video-btn')}
-                                leftIcon={<FontAwesomeIcon icon={faVideo} />}
-                                children={'Video'}
-                            />
-                            <Button
-                                className={cx('add-post-with-photo-btn')}
-                                leftIcon={<FontAwesomeIcon icon={faImage} />}
-                                children={'Photo'}
-                                onClick={() => {
-                                    setOpenModal(true);
-                                    setAddPhotoVisible(true);
-                                    setButtonActive(true);
-                                }}
-                            />
-                        </div>
-                    </WrapperModal>
-                )}
 
-                {postList.length > 0 ? (
-                    postList
-                        ?.sort((a, b) => b[1].date - a[1].date)
-                        .map((post) => (
-                            <PostLayout
-                                key={post[0]}
-                                postId={post[0]}
-                                userId={post[1]?.poster?.uid}
-                                userName={post[1]?.poster?.displayName}
-                                userAvt={post[1]?.poster?.photoURL}
-                                timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
-                                postImg={post[1]?.img && post[1]?.img}
-                                postCaption={post[1]?.caption}
-                                likeCount={post[1]?.like?.length}
-                                commentCount={post[1]?.comment?.length}
-                                deletePostFunc={handleDeletePost}
-                            />
-                        ))
-                ) : (
-                    <h1>No post found</h1>
-                )}
-            </div>
-        </div>
+                    {postList.length > 0 ? (
+                        postList
+                            ?.sort((a, b) => b[1].date - a[1].date)
+                            .map((post) => (
+                                <PostLayout
+                                    key={post[0]}
+                                    postId={post[0]}
+                                    userId={post[1]?.poster?.uid}
+                                    userName={post[1]?.poster?.displayName}
+                                    userAvt={post[1]?.poster?.photoURL}
+                                    timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
+                                    postImg={post[1]?.img && post[1]?.img}
+                                    postCaption={post[1]?.caption}
+                                    likeCount={post[1]?.like?.length}
+                                    commentCount={post[1]?.comment?.length}
+                                    deletePostFunc={handleDeletePost}
+                                />
+                            ))
+                    ) : (
+                        <h1>No post found</h1>
+                    )}
+                </GridColumn>
+            </GridRow>
+        </Grid>
     );
 }
 

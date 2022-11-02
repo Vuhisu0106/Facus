@@ -1,15 +1,15 @@
 .wrapper {
     min-height: 1000px;
     padding: 20px 0;
-    width: var(--home-layout-width);
+    //width: var(--home-layout-width);
     display: flex;
     justify-content: center;
 }
 .content {
-    max-width: 530px;
-    flex: 1;
+    //max-width: 530px;
+    //flex: 1;
     background-color: var(--light-background-color);
-    margin: 0px 24px;
+    //margin: 0px 24px;
     border-radius: var(--component-border-radius);
 }
 
@@ -54,16 +54,14 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: fixed;
-    top: 80px;
-    left: calc((100vw - 1178px) / 2);
+    //position: fixed;
+    //left: calc((100vw - 1178px) / 2);
     background-color: var(--light-background-color);
 }
 
 .right-sidebar {
-    position: fixed;
-    top: 80px;
-    right: calc((100vw - 1178px) / 2);
+    //position: fixed;
+    //right: calc((100vw - 1178px) / 2);
 }
 
 //Dark mode//

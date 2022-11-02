@@ -16,6 +16,9 @@ import ProfileCard from '~/components/ProfileCard';
 import { useUI } from '~/context/UIContext';
 import { deleteDocument, updateDocument } from '~/firebase/services';
 import { useApp } from '~/context/AppContext';
+import Grid from '~/components/Grid/Grid';
+import GridRow from '~/components/Grid/GridRow';
+import GridColumn from '~/components/Grid/GridColumn';
 
 const cx = classNames.bind(styles);
 function Home() {
@@ -98,62 +101,61 @@ function Home() {
     };
 
     return (
-        <div className={cx('wrapper', checkDark())}>
-            <Sidebar
-                children={
-                    <>
-                        <ProfileCard />
-                    </>
-                }
-                className={cx('left-sidebar')}
-            />
+        <Grid wide className={cx('wrapper', checkDark())}>
+            <GridRow className={cx('wrapper', checkDark())}>
+                <GridColumn l={3.25} m={0} s={0} className={cx('left-sidebar')}>
+                    <Sidebar
+                        children={
+                            <>
+                                <ProfileCard />
+                            </>
+                        }
+                    />
+                </GridColumn>
 
-            <div className={cx('content')}>
-                <div className={cx('horizontal-scroll')} ref={horizontalRef}>
-                    <button className={cx('btn-scroll-left')}>{<FontAwesomeIcon icon={faChevronLeft} />}</button>
-                    <div className={cx('status-container')} ref={storyRef}>
-                        <button
-                            onClick={() => {
-                                console.log(currentUser);
-                            }}
-                        >
-                            Click
-                        </button>
-                        {statusFollowingList?.map(
-                            (list) =>
-                                list.status && (
-                                    <RoundAccountItem
-                                        key={list.uid}
-                                        avt={list.photoURL}
-                                        userName={list.displayName}
-                                        status={list.status}
-                                    />
-                                ),
-                        )}
+                <GridColumn l={5.5} m={7.5} className={cx('content')}>
+                    <div className={cx('horizontal-scroll')} ref={horizontalRef}>
+                        <button className={cx('btn-scroll-left')}>{<FontAwesomeIcon icon={faChevronLeft} />}</button>
+                        <div className={cx('status-container')} ref={storyRef}>
+                            {statusFollowingList?.map(
+                                (list) =>
+                                    list.status && (
+                                        <RoundAccountItem
+                                            key={list.uid}
+                                            avt={list.photoURL}
+                                            userName={list.displayName}
+                                            status={list.status}
+                                        />
+                                    ),
+                            )}
+                        </div>
+                        <button className={cx('btn-scroll-right')}>{<FontAwesomeIcon icon={faChevronRight} />}</button>
                     </div>
-                    <button className={cx('btn-scroll-right')}>{<FontAwesomeIcon icon={faChevronRight} />}</button>
-                </div>
 
-                {postList
-                    ?.sort((a, b) => b.date - a.date)
-                    .map((post) => (
-                        <PostLayout
-                            key={post.postId}
-                            postId={post.postId}
-                            userId={post.poster.uid}
-                            userName={post.poster.displayName}
-                            userAvt={post.poster.photoURL}
-                            timeStamp={post.date && moment(post.date.toDate()).fromNow()}
-                            postImg={post.img && post.img}
-                            postCaption={post.caption}
-                            likeCount={post.like.length}
-                            commentCount={post.comment.length}
-                            deletePostFunc={handleDeletePost}
-                        />
-                    ))}
-            </div>
-            <Sidebar children={<SuggestAccount label="Suggested to you" />} className={cx('right-sidebar')} />
-        </div>
+                    {postList
+                        ?.sort((a, b) => b.date - a.date)
+                        .map((post) => (
+                            <PostLayout
+                                key={post.postId}
+                                postId={post.postId}
+                                userId={post.poster.uid}
+                                userName={post.poster.displayName}
+                                userAvt={post.poster.photoURL}
+                                timeStamp={post.date && moment(post.date.toDate()).fromNow()}
+                                postImg={post.img && post.img}
+                                postCaption={post.caption}
+                                likeCount={post.like.length}
+                                commentCount={post.comment.length}
+                                deletePostFunc={handleDeletePost}
+                            />
+                        ))}
+                </GridColumn>
+
+                <GridColumn l={3.25} m={4.5} s={0} className={cx('right-sidebar')}>
+                    <Sidebar children={<SuggestAccount label="Suggested to you" />} />
+                </GridColumn>
+            </GridRow>
+        </Grid>
     );
 }
 

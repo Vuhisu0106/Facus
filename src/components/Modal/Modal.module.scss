@@ -547,6 +547,25 @@ input[type='file'] {
     }
 }
 
+//////////////////////////////////////////////Status Modal////////////////////////////////////////
+.status-wrapper {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .status {
+        margin: 0;
+        padding: 0;
+    }
+    p {
+        font-size: 13px;
+        font-weight: 400;
+        margin-top: 5px;
+    }
+}
+
 /////////////////////////////////////////////Dark mode////////////////////////////////////////////////
 .dark {
     background-color: rgba(0, 0, 0, 0.7);
@@ -728,5 +747,11 @@ input[type='file'] {
                 background-color: var(--dark-element-hover-2);
             }
         }
+    }
+}
+
+.dark-status-modal {
+    p {
+        color: var(--dark-text-color-3);
     }
 }
