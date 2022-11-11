@@ -9,12 +9,6 @@ export function useUI() {
 const darkModeState = JSON.parse(localStorage.getItem('darkMode'));
 
 function UIProvider({ children }) {
-    //Add chat
-    const [isAddChatVisible, setIsAddChatVisible] = useState(false);
-    const clearState = () => {
-        setIsAddChatVisible(false);
-    };
-
     //Dark/light mode
     const [dark, setDark] = useState(false || darkModeState);
 
@@ -47,9 +41,6 @@ function UIProvider({ children }) {
     }
 
     const value = {
-        isAddChatVisible,
-        setIsAddChatVisible,
-        clearState,
         dark,
         toggleTheme,
         checkDark,

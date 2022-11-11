@@ -70,6 +70,12 @@ function SetStatusModal({ onClose }) {
     return (
         <Modal
             title="Edit status"
+            l={4}
+            l_o={4}
+            m={6}
+            m_o={3}
+            s={10}
+            s_o={1}
             onClose={onClose}
             children={
                 <div className={cx('set-status-wrapper', checkDark('dark-set-status'))}>
@@ -93,6 +99,7 @@ function SetStatusModal({ onClose }) {
                                 emojiStyle="google"
                                 theme={dark ? 'dark' : 'light'}
                                 lazyLoadEmojis={true}
+                                width={'100%'}
                                 height={'400px'}
                                 onEmojiClick={(e) => {
                                     onEmojiClick(e);
@@ -108,8 +115,8 @@ function SetStatusModal({ onClose }) {
                                     <p>🤒 Out sick af</p>
                                 </div>
                                 <div>
-                                    <p>🐧 Just feeling lazy</p>
-                                    <p>🥰 This web is pềct</p>
+                                    <p>🐧 I'm lazy</p>
+                                    <p>🥰 Awesome web</p>
                                 </div>
                             </div>
                         </div>

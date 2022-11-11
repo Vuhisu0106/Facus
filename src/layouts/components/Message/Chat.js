@@ -10,11 +10,11 @@ import { db, storage } from '~/firebase/config';
 import Input from '~/components/Input';
 import styles from './Message.module.scss';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { useChat } from '~/context/ChatContext';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useAuth } from '~/context/AuthContext';
 import { useUI } from '~/context/UIContext';
 import { updateDocument } from '~/firebase/services';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 function Chat() {
@@ -26,14 +26,15 @@ function Chat() {
 
     const { checkDark } = useUI();
     const { currentUser } = useAuth();
-    const { data } = useChat();
+
+    const chat = useSelector((state) => state.chat);
 
     useEffect(() => {
         messageRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
     useEffect(() => {
-        const unSub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
+        const unSub = onSnapshot(doc(db, 'chats', chat.chatId), (doc) => {
             doc.exists() && setMessages(doc.data().messages);
             //console.log(data);
         });
@@ -43,7 +44,7 @@ function Chat() {
         return () => {
             unSub();
         };
-    }, [data.chatId]);
+    }, [chat.chatId]);
 
     const handleSend = async () => {
         if (img) {
@@ -70,7 +71,7 @@ function Chat() {
         } else if (!text) {
             return;
         } else {
-            await updateDocument('chats', data.chatId, {
+            await updateDocument('chats', chat.chatId, {
                 messages: arrayUnion({
                     id: uuid(),
                     text,
@@ -81,33 +82,33 @@ function Chat() {
         }
 
         await updateDocument('userChats', currentUser.uid, {
-            [data.chatId + '.lastMessage']: {
+            [chat.chatId + '.lastMessage']: {
                 senderId: currentUser.uid,
                 text,
             },
 
-            [data.chatId + '.date']: serverTimestamp(),
-            [data.chatId + '.receiverHasRead']: true,
+            [chat.chatId + '.date']: serverTimestamp(),
+            [chat.chatId + '.receiverHasRead']: true,
         });
 
         //if current user is same as user messaging to, receiverHasRead will be true
-        if (currentUser.uid !== data.user.uid) {
-            await updateDocument('userChats', data.user.uid, {
-                [data.chatId + '.lastMessage']: {
+        if (currentUser.uid !== chat.user.uid) {
+            await updateDocument('userChats', chat.user.uid, {
+                [chat.chatId + '.lastMessage']: {
                     senderId: currentUser.uid,
                     text,
                 },
-                [data.chatId + '.date']: serverTimestamp(),
-                [data.chatId + '.receiverHasRead']: false,
+                [chat.chatId + '.date']: serverTimestamp(),
+                [chat.chatId + '.receiverHasRead']: false,
             });
         } else {
-            await updateDocument('userChats', data.user.uid, {
-                [data.chatId + '.lastMessage']: {
+            await updateDocument('userChats', chat.user.uid, {
+                [chat.chatId + '.lastMessage']: {
                     senderId: currentUser.uid,
                     text,
                 },
-                [data.chatId + '.date']: serverTimestamp(),
-                [data.chatId + '.receiverHasRead']: true,
+                [chat.chatId + '.date']: serverTimestamp(),
+                [chat.chatId + '.receiverHasRead']: true,
             });
         }
 
@@ -128,8 +129,8 @@ function Chat() {
     return (
         <div className={cx('chat-wrapper', checkDark('dark-chat'))}>
             <div className={cx('chat-header')}>
-                <img className={cx('user-avt')} alt={data.user?.displayName} src={data.user?.photoURL} />
-                <h3 className={cx('user-name')}>{data.user?.displayName}</h3>
+                <img className={cx('user-avt')} alt={chat.user?.displayName} src={chat.user?.photoURL} />
+                <h3 className={cx('user-name')}>{chat.user?.displayName}</h3>
             </div>
             <div className={cx('chat-box')}>
                 <div className={cx('message-list')}>

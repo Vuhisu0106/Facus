@@ -72,6 +72,7 @@ function SignUp() {
                             displayName: displayNameRef.current.value,
                             email: emailRef.current.value,
                             photoURL: downloadURL,
+                            coverPhotoURL: null,
                             keywords: generateKeywords(displayNameRef.current.value),
                             following: [],
                             follower: [],
@@ -80,6 +81,7 @@ function SignUp() {
                                 icon: '',
                                 text: '',
                             },
+                            isAdmin: false,
                         });
 
                         //create empty user chats on firestore
@@ -132,20 +134,6 @@ function SignUp() {
         //setIsSignedUp(true);
         setLoading(false);
     }
-
-    // function handleNavigate() {
-    //     if (isSignedUp) {
-    //         navigate('/home');
-    //         console.log('is signed up');
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     if (currentUser) {
-    //         navigate('/dkm');
-    //         console.log('is signed up');
-    //     }
-    // }, []);
 
     return (
         <div className={cx('sign-up-wrapper')}>

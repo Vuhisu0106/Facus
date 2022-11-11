@@ -1,17 +1,28 @@
-// const initialState = {
-//     chatId: 'null',
-//     user: {},
-// };
+import { createSlice } from '@reduxjs/toolkit';
 
-// const chatSlice = createSlice({
-//     name: 'chat',
-//     initialState,
-//     reducers: {
-//         changeUser: (state, action) => {
-//             // state.caption = action.payload.caption,
-//             // state.img = action.payload.img,
-//         },
-//     },
-// });
+const initialState = {
+    isAddChatVisible: false,
+    chatId: 'null',
+    user: {},
+};
 
-// export const { changeUser } = chatSlice.actions;
+const chat = createSlice({
+    name: 'chat',
+    initialState,
+    reducers: {
+        changeChatUser: (state, action) => {
+            state.user = action.payload.selectUser;
+            state.chatId =
+                action.payload.currentUser.uid > action.payload.selectUser.uid
+                    ? action.payload.currentUser.uid + action.payload.selectUser.uid
+                    : action.payload.selectUser.uid + action.payload.currentUser.uid;
+        },
+        setAddChatState: (state, action) => {
+            state.isAddChatVisible = action.payload.isAddChatVisible;
+        },
+    },
+});
+
+const { reducer, actions } = chat;
+export const { changeChatUser, setAddChatState } = actions;
+export default reducer;

@@ -12,6 +12,21 @@
     transform: translate(-50%, -50%);
 }
 
+.wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner-wrapper {
+    width: 100%;
+    height: fit-content;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: rgb(0 0 0 / 20%) 2px 10px 30px 0px;
+}
+
 .header {
     width: 100%;
     height: 60px;
@@ -37,17 +52,9 @@
     }
 }
 
-.wrapper {
-    min-width: 300px;
-    min-height: 100px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: rgb(0 0 0 / 20%) 2px 10px 30px 0px;
-}
-
 //////////////////////////////////////////////////////Add post modal//////////////////////////////////////////////////////////
 .add-post-wrapper {
-    width: 500px;
+    width: 100%;
     position: relative;
 }
 
@@ -106,7 +113,7 @@
 }
 
 .add-photo-container {
-    width: 466px;
+    width: 100%;
     height: 238px;
     padding: 8px;
     border-radius: 8px;
@@ -247,7 +254,7 @@ input[type='file'] {
 
 ////////////////////////////////////////////////////////Edit profile modal/////////////////////////////////////////////////////////
 .edit-profile-wrapper {
-    width: 700px;
+    width: 100%;
     position: relative;
 }
 
@@ -281,6 +288,7 @@ input[type='file'] {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 16px;
 
     .edit-avatar-wrapper,
     .avatar-upload-label,
@@ -360,7 +368,7 @@ input[type='file'] {
 }
 
 .edit-cover-photo-wrapper {
-    width: 500px;
+    width: 100%;
     height: 185px;
     border-radius: 10px;
     position: relative;
@@ -399,7 +407,7 @@ input[type='file'] {
     }
 }
 .cover-photo-upload-label {
-    width: 500px;
+    width: 100%;
     height: 185px;
     border-radius: 10px;
     background-size: contain;
@@ -411,7 +419,7 @@ input[type='file'] {
     position: absolute;
 
     .cover-photo-upload-hover {
-        width: 500px;
+        width: 100%;
         height: 185px;
         border-radius: 10px;
         background-color: rgb(255, 255, 255, 0.2);
@@ -456,7 +464,7 @@ input[type='file'] {
 
 /////////////////////////////////////////////////////////Set Status Modal//////////////////////////////////////////////////////
 .set-status-wrapper {
-    width: 446px;
+    width: 100%;
     position: relative;
 
     .status-content {
@@ -534,7 +542,7 @@ input[type='file'] {
 
     .set-status-btn,
     .clear-status-btn {
-        width: 200px;
+        width: 48%;
         height: 32px;
         background-color: var(--primary);
         color: var(--white);
@@ -581,7 +589,7 @@ input[type='file'] {
         }
     }
 
-    .wrapper {
+    .inner-wrapper {
         background-color: var(--dark-background-color-2);
     }
 }

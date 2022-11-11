@@ -100,6 +100,11 @@
     width: 100%;
     margin: 8px 0;
     align-items: center;
+    &:hover {
+        .sending-time {
+            opacity: 1;
+        }
+    }
 }
 
 .my-mess {
@@ -128,6 +133,7 @@
         margin-top: 4px;
         font-weight: 500;
         color: var(--light-text-color);
+        opacity: 0;
     }
 }
 

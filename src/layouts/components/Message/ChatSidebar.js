@@ -11,18 +11,22 @@ import MessageItem from '~/components/MessageItem';
 import ChatSearch from '~/components/Search/ChatSearch';
 import styles from './Message.module.scss';
 import { useAuth } from '~/context/AuthContext';
-import { useChat } from '~/context/ChatContext';
 import { useUI } from '~/context/UIContext';
 import { updateDocument } from '~/firebase/services';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeChatUser, setAddChatState } from '~/features/Chat/ChatSlice';
 
 const cx = classNames.bind(styles);
 function ChatSidebar() {
     const [chats, setChats] = useState([]);
     const [activeMessItem, setActiveMessItem] = useState(null);
 
-    const { setIsAddChatVisible, checkDark } = useUI();
+    const { checkDark } = useUI();
     const { currentUser } = useAuth();
-    const { data, dispatch } = useChat();
+
+    const chat = useSelector((state) => state.chat);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const getChats = () => {
@@ -39,7 +43,13 @@ function ChatSidebar() {
     }, [currentUser.uid]);
 
     const handleSelect = async (user) => {
-        await dispatch({ type: 'CHANGE_USER', payload: user.userInfo });
+        //await dispatch({ type: 'CHANGE_USER', payload: user.userInfo });
+        dispatch(
+            changeChatUser({
+                currentUser,
+                selectUser: user.userInfo,
+            }),
+        );
 
         console.log(user);
         if (user.receiverHasRead === false) {
@@ -53,9 +63,9 @@ function ChatSidebar() {
     };
 
     useEffect(() => {
-        setActiveMessItem(data.user.uid);
-        setIsAddChatVisible(false);
-    }, [data]);
+        setActiveMessItem(chat.user.uid);
+        dispatch(setAddChatState({ isAddChatVisible: false }));
+    }, [chat.user.uid]);
 
     return (
         <div className={cx('sidebar-wrapper', checkDark('dark-chat-sidebar'))}>
@@ -64,7 +74,7 @@ function ChatSidebar() {
                     <h2>Chat</h2>
                     <CircleButton
                         children={<FontAwesomeIcon icon={faSquarePlus} />}
-                        onClick={() => setIsAddChatVisible(true)}
+                        onClick={() => dispatch(setAddChatState({ isAddChatVisible: true }))}
                     />
                 </div>
                 <div className={cx('search')}>

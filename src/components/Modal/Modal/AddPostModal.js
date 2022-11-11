@@ -1,15 +1,15 @@
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileCirclePlus, faGlobeAsia, faImage, faVideo, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Modal from '..';
 import styles from '~/components/Modal/Modal.module.scss';
 import CircleButton from '~/components/Button/CircleButton';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileCirclePlus, faGlobeAsia, faImage, faVideo, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '~/context/AuthContext';
 import Button from '~/components/Button';
 import { useUI } from '~/context/UIContext';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 
 const cx = classNames.bind(styles);
@@ -59,6 +59,12 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
     return (
         <Modal
             title={edit ? 'Edit post' : 'Create post'}
+            l={4.5}
+            l_o={3.75}
+            m={6}
+            m_o={3}
+            s={10}
+            s_o={1}
             onClose={() => {
                 onCloseAddPostModal();
                 setEditCaption(prevCaption || '');
@@ -95,7 +101,10 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
                                             children={<FontAwesomeIcon icon={faXmark} />}
                                             onClick={() => {
                                                 dispatch(
-                                                    setImageInputState({ addPhotoVisible: false, buttonActive: false }),
+                                                    setImageInputState({
+                                                        addPhotoVisible: false,
+                                                        buttonActive: false,
+                                                    }),
                                                 );
 
                                                 setImg(null);
@@ -142,7 +151,12 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
                                     className={cx('circle-btn-footer', modal.buttonActive && 'active')}
                                     children={<FontAwesomeIcon icon={faImage} />}
                                     onClick={() => {
-                                        dispatch(setImageInputState({ addPhotoVisible: true, buttonActive: true }));
+                                        dispatch(
+                                            setImageInputState({
+                                                addPhotoVisible: true,
+                                                buttonActive: true,
+                                            }),
+                                        );
                                     }}
                                 />
                                 <CircleButton

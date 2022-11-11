@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { useSelector } from 'react-redux';
 
 import ChatSearch from '~/components/Search/ChatSearch';
 import { useUI } from '~/context/UIContext';
@@ -6,9 +7,11 @@ import styles from './Message.module.scss';
 
 const cx = classNames.bind(styles);
 function EmptyChat() {
-    const { isAddChatVisible, checkDark } = useUI();
+    const { checkDark } = useUI();
 
-    return isAddChatVisible === true ? (
+    const chat = useSelector((state) => state.chat);
+
+    return chat.isAddChatVisible ? (
         <div className={cx('chat-wrapper', checkDark('dark-empty-search-chat'))}>
             <div className={cx('chat-header')}>
                 <span>To:</span>

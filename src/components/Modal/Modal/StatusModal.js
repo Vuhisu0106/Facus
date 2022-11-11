@@ -11,6 +11,12 @@ function StatusModal({ userName, avt, status, onCloseStatusModal }) {
     return (
         <Modal
             title={'Status'}
+            l={3}
+            l_o={4.5}
+            m={4}
+            m_o={4}
+            s={8}
+            s_o={2}
             onClose={onCloseStatusModal}
             children={
                 <div className={cx('status-wrapper', checkDark('dark-status-modal'))}>

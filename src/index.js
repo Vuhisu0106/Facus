@@ -17,15 +17,13 @@ root.render(
         <AppProvider>
             <UIProvider>
                 <Provider store={store}>
-                    <ChatProvider>
-                        <React.StrictMode>
-                            <BrowserRouter>
-                                <GlobalStyles>
-                                    <App />
-                                </GlobalStyles>
-                            </BrowserRouter>
-                        </React.StrictMode>
-                    </ChatProvider>
+                    <React.StrictMode>
+                        <BrowserRouter>
+                            <GlobalStyles>
+                                <App />
+                            </GlobalStyles>
+                        </BrowserRouter>
+                    </React.StrictMode>
                 </Provider>
             </UIProvider>
         </AppProvider>

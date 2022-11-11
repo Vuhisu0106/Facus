@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, doc, getDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 
 import { useUI } from '~/context/UIContext';
-import { useChat } from '~/context/ChatContext';
 import { useAuth } from '~/context/AuthContext';
 import { db } from '~/firebase/config';
 import AccountItem from '~/components/AccountItem';
@@ -13,6 +12,9 @@ import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
 import { setDocument, updateDocument } from '~/firebase/services';
+import { useDispatch } from 'react-redux';
+import { changeChatUser, setAddChatState } from '~/features/Chat/ChatSlice';
+import { type } from '@testing-library/user-event/dist/type';
 
 const cx = classNames.bind(styles);
 function ChatSearch({ className, placeHolder, placement, autoFocus }) {
@@ -24,7 +26,8 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
 
     const { clearState, checkDark } = useUI();
     const { currentUser } = useAuth();
-    const { dispatch } = useChat();
+
+    const dispatch = useDispatch();
 
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();
@@ -105,7 +108,14 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
             }
         } catch (error) {}
 
-        await dispatch({ type: 'CHANGE_USER', payload: result });
+        //await dispatch({ type: 'CHANGE_USER', payload: result });
+
+        dispatch(
+            changeChatUser({
+                currentUser: currentUser,
+                selectUser: result,
+            }),
+        );
 
         setSearchResult([]);
         setSearchValue('');
@@ -129,7 +139,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
                                         data={result}
                                         onClick={() => {
                                             handleSelect(result);
-                                            clearState();
+                                            dispatch(setAddChatState({ isAddChatVisible: false }));
                                         }}
                                     />
                                 ))

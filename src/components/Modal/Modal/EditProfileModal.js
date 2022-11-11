@@ -20,6 +20,12 @@ function EditProfileModal({ onClose }) {
     return (
         <Modal
             title="Edit profile"
+            l={4.5}
+            l_o={3.75}
+            m={6}
+            m_o={3}
+            s={10}
+            s_o={1}
             onClose={onClose}
             children={
                 <div className={cx('edit-profile-wrapper', checkDark('dark-edit-profile'))}>
@@ -40,7 +46,7 @@ function EditProfileModal({ onClose }) {
                                                 className={cx('avatar-upload-label')}
                                                 style={{
                                                     backgroundImage:
-                                                        "url('https://scontent.fhan19-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=TlrXkLguNiwAX9C0W8-&_nc_ht=scontent.fhan19-1.fna&oh=00_AT_uPs-UN0BJjlLmtqgC-cWg9IeMNSu0S4IwrNM2SMo69Q&oe=636086CF')",
+                                                        "url('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=M-WMEgyEFy0AX9obj2b&_nc_ht=scontent.fhan17-1.fna&oh=00_AfBwmZCfUqyylG3hJ9-0LnLxRgnw3WQDjJb2wPVBevjurQ&oe=6395EB8F')",
                                                 }}
                                             >
                                                 <div className={cx('avatar-upload-hover')}>
@@ -92,7 +98,7 @@ function EditProfileModal({ onClose }) {
                                                 className={cx('cover-photo-upload-label')}
                                                 style={{
                                                     backgroundImage:
-                                                        "url('https://scontent.fhan19-1.fna.fbcdn.net/v/t1.6435-9/97948524_559253204991695_2663173301714550784_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=e3f864&_nc_ohc=-anRIl0YNr8AX-QhaxA&_nc_ht=scontent.fhan19-1.fna&oh=00_AT_rj_6Nzibe3VpF0dtFudr51_DhqiJy4RWsIMC6BX93Ww&oe=63626BD3')",
+                                                        "url('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=M-WMEgyEFy0AX9obj2b&_nc_ht=scontent.fhan17-1.fna&oh=00_AfBwmZCfUqyylG3hJ9-0LnLxRgnw3WQDjJb2wPVBevjurQ&oe=6395EB8F')",
                                                 }}
                                             >
                                                 <div className={cx('cover-photo-upload-hover')}>
