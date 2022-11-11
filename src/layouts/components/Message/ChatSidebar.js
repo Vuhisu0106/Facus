@@ -50,33 +50,7 @@ function ChatSidebar() {
         } else {
             console.log('sender is you');
         }
-
-        //var selectedMessage = localStorage.getItem('SelectedMessage') || 1;
-        //localStorage.setItem('SelectedMessage', user.userInfo.uid);
-        //setActiveMessItem(user.userInfo.uid);
     };
-
-    // useEffect(() => {
-    //     const unSub = onSnapshot(doc(db, 'userChats', data.chatId), (doc) => {
-    //         setMessageItem(doc.data());
-    //     });
-
-    //     return () => {
-    //         unSub();
-    //     };
-    // }, [data.chatId]);
-
-    // async function updateUnread(user) {
-    //     console.log('ms:' + messageItem);
-    //     if (user.receiverHasRead === false) {
-    //         await updateDoc(doc(db, 'userChats', currentUser.uid), {
-    //             [messageItem.chatId + '.receiverHasRead']: true,
-    //         });
-    //         console.log('sender is not you');
-    //     } else {
-    //         console.log('sender is you');
-    //     }
-    // }
 
     useEffect(() => {
         setActiveMessItem(data.user.uid);

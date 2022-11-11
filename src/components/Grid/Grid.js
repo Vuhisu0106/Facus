@@ -4,8 +4,8 @@ import styles from './Grid.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Grid({ full, wide, profile, className, children }) {
-    const classes = cx('grid', wide && 'wide', profile && 'profile', { [className]: className });
+function Grid({ full, wide, profile, chat, className, children }) {
+    const classes = cx('grid', wide && 'wide', profile && 'profile', chat && 'chat', { [className]: className });
     return <div className={classes}>{children}</div>;
 }
 

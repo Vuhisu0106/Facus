@@ -209,6 +209,12 @@
     font-weight: 400;
 }
 
+@media (max-width: 739px) {
+    .account {
+        flex-basis: 100%;
+    }
+}
+
 //////////////////////////////////////////Dark mode/////////////////////////////////////////
 /// Post
 .dark-post {

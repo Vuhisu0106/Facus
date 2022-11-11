@@ -11,7 +11,6 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
-import { useUser } from '~/context/UserContext';
 import { useUI } from '~/context/UIContext';
 
 const cx = classNames.bind(styles);
@@ -23,18 +22,12 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
     const [error, setError] = useState('');
 
     const { currentUser } = useAuth();
-    const { dispatch, addToLocalStorage } = useUser();
     const { checkDark } = useUI();
 
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();
 
     let navigate = useNavigate();
-
-    const handleClearSearch = () => {
-        setSearchValue('');
-        inputRef.current.focus();
-    };
 
     const handleHideResult = () => {
         setShowResult(false);
@@ -74,9 +67,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
         }
     };
 
-    const handleSelect = async (result) => {
-        await dispatch({ type: 'SELECT_USER', payload: result });
-        addToLocalStorage('selectUser', result.uid);
+    const handleSelect = (result) => {
         navigate(`/user/${result.uid}`);
         setSearchResult([]);
         setSearchValue('');

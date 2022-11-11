@@ -9,6 +9,8 @@ import { useAuth } from '~/context/AuthContext';
 import Button from '~/components/Button';
 import { useUI } from '~/context/UIContext';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setImageInputState } from '~/features/Modal/ModalSlice';
 
 const cx = classNames.bind(styles);
 function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPostFunc, editPostFunc }) {
@@ -21,7 +23,10 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
     const [editImg, setEditImg] = useState(prevImg || null); //init img received from prev post (exist as a firebase link )
     const [postButtonDisable, setPostButtonDisable] = useState(true);
 
-    const { addPhotoVisible, setAddPhotoVisible, buttonActive, setButtonActive, checkDark } = useUI();
+    const { checkDark } = useUI();
+
+    const modal = useSelector((state) => state.modal);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setEditCaption(prevCaption);
@@ -81,7 +86,7 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
                             placeholder={`What's on your mind, ${currentUser.displayName}?`}
                             onChange={handleCaption}
                         ></textarea>
-                        {addPhotoVisible && (
+                        {modal.addPhotoVisible && (
                             <div className={cx('add-photo-container')}>
                                 {!img && !editImg ? (
                                     <label htmlFor="photo-upload" className={cx('add-photo-wrapper')}>
@@ -89,8 +94,10 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
                                             className={cx('close-upload-btn')}
                                             children={<FontAwesomeIcon icon={faXmark} />}
                                             onClick={() => {
-                                                setAddPhotoVisible(false);
-                                                setButtonActive(false);
+                                                dispatch(
+                                                    setImageInputState({ addPhotoVisible: false, buttonActive: false }),
+                                                );
+
                                                 setImg(null);
                                             }}
                                         />
@@ -132,11 +139,10 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
                             <h4>Add photo or video into your post</h4>
                             <div className={cx('btn-footer-list')}>
                                 <CircleButton
-                                    className={cx('circle-btn-footer', buttonActive && 'active')}
+                                    className={cx('circle-btn-footer', modal.buttonActive && 'active')}
                                     children={<FontAwesomeIcon icon={faImage} />}
                                     onClick={() => {
-                                        setAddPhotoVisible(true);
-                                        setButtonActive(true);
+                                        dispatch(setImageInputState({ addPhotoVisible: true, buttonActive: true }));
                                     }}
                                 />
                                 <CircleButton

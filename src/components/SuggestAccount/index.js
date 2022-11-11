@@ -4,7 +4,6 @@ import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '~/firebase/config';
 import { useEffect, useState } from 'react';
 import { useApp } from '~/context/AppContext';
-import { useAuth } from '~/context/AuthContext';
 import { useUI } from '~/context/UIContext';
 import AccountItem from './AccountItem';
 
@@ -13,14 +12,14 @@ import styles from './SuggestAccount.module.scss';
 const cx = classNames.bind(styles);
 function SuggestAccount({ label }) {
     const { checkDark } = useUI();
-    const { currentUserFollowing } = useApp();
-    const { currentUser } = useAuth();
+    const { currentUserInfo } = useApp();
     const [suggestFollowList, setSuggestFollowList] = useState([]);
 
     useEffect(() => {
         const getSuggestFollowList = async () => {
-            const q = query(collection(db, 'users'), where('uid', 'not-in', currentUserFollowing), limit(6));
-            console.log('suggest follow: ' + currentUserFollowing);
+            const a = currentUserInfo?.following;
+            const q = query(collection(db, 'users'), where('uid', 'not-in', a), limit(6));
+            //console.log('suggest follow: ' + currentUserInfo);
             try {
                 const querySnapshot = await getDocs(q);
                 setSuggestFollowList(querySnapshot.docs.map((doc) => doc.data()));
@@ -30,7 +29,7 @@ function SuggestAccount({ label }) {
             }
         };
         getSuggestFollowList();
-    }, [currentUser]);
+    }, [currentUserInfo]);
 
     return (
         <div className={cx('wrapper', checkDark())}>

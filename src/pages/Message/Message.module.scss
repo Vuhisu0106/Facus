@@ -1,6 +1,6 @@
 .container {
-    height: calc(100vh - var(--default-layout-header-height));
-    width: var(--home-layout-width);
+    height: calc(100vh - 60px);
+    //width: var(--home-layout-width);
     display: flex;
     justify-content: space-between;
     position: relative;
@@ -11,5 +11,26 @@
     height: 100%;
     display: grid;
     position: relative;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.chat-col {
+    height: 100%;
+}
+
+@media (max-width: 739px) {
+    .wrapper {
+        display: flex;
+    }
+}
+
+@media (min-width: 1240px) {
+    .wrapper {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 740px) and (max-width: 1239px) {
+    .wrapper {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
 }

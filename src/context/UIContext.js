@@ -14,14 +14,15 @@ function UIProvider({ children }) {
     const clearState = () => {
         setIsAddChatVisible(false);
     };
-    //Add post modal
-    const [addPhotoVisible, setAddPhotoVisible] = useState(false);
-    const [buttonActive, setButtonActive] = useState(false);
-    //Edit profile modal
-    const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
 
     //Dark/light mode
     const [dark, setDark] = useState(false || darkModeState);
+
+    // if (dark) {
+    //     document.getElementsByTagName('HTML')[0].setAttribute('data-theme', 'dark');
+    // } else {
+    //     document.getElementsByTagName('HTML')[0].setAttribute('data-theme', 'light');
+    // }
 
     const toggleTheme = () => {
         setDark(!dark);
@@ -49,12 +50,6 @@ function UIProvider({ children }) {
         isAddChatVisible,
         setIsAddChatVisible,
         clearState,
-        addPhotoVisible,
-        setAddPhotoVisible,
-        buttonActive,
-        setButtonActive,
-        isEditProfileVisible,
-        setIsEditProfileVisible,
         dark,
         toggleTheme,
         checkDark,

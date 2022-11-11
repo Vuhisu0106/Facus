@@ -13,7 +13,7 @@ import { useState } from 'react';
 const cx = classNames.bind(styles);
 function EditProfileModal({ onClose }) {
     const { currentUser } = useAuth();
-    const { setIsEditProfileVisible, checkDark } = useUI();
+    const { checkDark } = useUI();
 
     const [avatar, setAvatar] = useState(null);
     const [coverPhoto, setCoverPhoto] = useState(null);
@@ -130,13 +130,6 @@ function EditProfileModal({ onClose }) {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className={cx('edit-current-city')}>
-                            <div className={cx('edit-title')}>
-                                <h3>Customize your intro</h3>
-                                <button></button>
-                            </div>
-                            <div className={cx('edit-current-city-body')}></div>
-                        </div> */}
                     </div>
                     <div className={cx('edit-profile-footer')}>
                         <Button children={'Save'} className={cx('save-btn')} />

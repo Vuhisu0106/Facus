@@ -12,9 +12,6 @@ function DefaultLayout({ children }) {
         <div className={cx('wrapper', checkDark())}>
             <Header className={cx('header')} />
             <div className={cx('container')}>{children}</div>
-            {/* {isAddPostVisible && <AddPostModal />}
-            {isEditProfileVisible && <EditProfileModal />}
-            {isEditStatusModal && <SetStatusModal />} */}
         </div>
     );
 }

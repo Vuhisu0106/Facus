@@ -7,15 +7,16 @@ import reportWebVitals from './reportWebVitals';
 import GlobalStyles from './components/GlobalStyles';
 import AuthProvider from './context/AuthContext';
 import ChatProvider from './context/ChatContext';
-import UserProvider from './context/UserContext';
 import UIProvider from './context/UIContext';
 import AppProvider from './context/AppContext';
+import { Provider } from 'react-redux';
+import store from './app/store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <AuthProvider>
         <AppProvider>
             <UIProvider>
-                <UserProvider>
+                <Provider store={store}>
                     <ChatProvider>
                         <React.StrictMode>
                             <BrowserRouter>
@@ -25,7 +26,7 @@ root.render(
                             </BrowserRouter>
                         </React.StrictMode>
                     </ChatProvider>
-                </UserProvider>
+                </Provider>
             </UIProvider>
         </AppProvider>
     </AuthProvider>,

@@ -73,12 +73,17 @@ function SignUp() {
                             email: emailRef.current.value,
                             photoURL: downloadURL,
                             keywords: generateKeywords(displayNameRef.current.value),
+                            following: [],
+                            follower: [],
+                            bio: '',
+                            status: {
+                                icon: '',
+                                text: '',
+                            },
                         });
 
                         //create empty user chats on firestore
                         await setDocument('userChats', res.user.uid, {});
-                        await setDocument('following', res.user.uid, {});
-                        await setDocument('follower', res.user.uid, {});
                         await setDocument('userPost', res.user.uid, {});
                         navigate('/');
                     } catch (err) {

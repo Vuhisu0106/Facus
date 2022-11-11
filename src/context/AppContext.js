@@ -12,26 +12,22 @@ export function useApp() {
 
 function AppProvider({ children }) {
     const { currentUser } = useAuth();
-    const [currentUserFollowing, setCurrentUserFollowing] = useState([]);
+    const [currentUserInfo, setCurrentUserInfo] = useState({});
 
     useEffect(() => {
-        const getFollowing = () => {
-            const unsub = onSnapshot(doc(db, 'following', currentUser.uid), (doc) => {
-                setCurrentUserFollowing(
-                    Object.entries(doc.data()).map((follow) => {
-                        return follow[0];
-                    }),
-                );
+        const getCurrentUser = () => {
+            const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
+                doc.exists() && setCurrentUserInfo(doc.data());
             });
             return () => {
                 unsub();
             };
         };
 
-        currentUser?.uid && getFollowing();
-    }, []);
+        currentUser?.uid && getCurrentUser();
+    }, [currentUser]);
 
-    const value = { currentUserFollowing };
+    const value = { currentUserInfo };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

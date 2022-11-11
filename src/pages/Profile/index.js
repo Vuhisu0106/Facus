@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { onSnapshot, doc, serverTimestamp, deleteField } from 'firebase/firestore';
+import { onSnapshot, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 import { db } from '~/firebase/config';
 import styles from './Profile.module.scss';
@@ -13,7 +13,6 @@ import Posts from '~/layouts/components/Profile/Posts';
 import Following from '~/layouts/components/Profile/Following';
 import Follower from '~/layouts/components/Profile/Follower';
 import { useUI } from '~/context/UIContext';
-import { useUser } from '~/context/UserContext';
 import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
 import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
 import EditProfileModal from '~/components/Modal/Modal/EditProfileModal';
@@ -27,20 +26,18 @@ const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
 function Profile() {
     const [selectedUser, setSelectedUser] = useState('');
-    const [following, setFollowing] = useState(false);
     const [type, setType] = useState('Posts');
     const [profileLayout, setProfileLayout] = useState('Posts');
     //const [currentUserFollowing, setCurrentUserFollowing] = useState([]);
     const [statusModalVisible, setStatusModalVisible] = useState(false);
     const [profileModalVisible, setProfileModalVisible] = useState(false);
 
-    const [followingList, setFollowingList] = useState();
-    const [followerList, setFollowerList] = useState();
+    //const [followingList, setFollowingList] = useState();
+    //const [followerList, setFollowerList] = useState();
 
     const { currentUser } = useAuth();
-    const { data } = useUser();
     const { checkDark } = useUI();
-    const { currentUserFollowing } = useApp();
+    const { currentUserInfo } = useApp();
 
     let params = useParams();
 
@@ -49,10 +46,10 @@ function Profile() {
 
     const main = () => {
         if (profileLayout === 'Following') {
-            return <Following list={followingList} />;
+            return <Following list={selectedUser.following} />;
         }
         if (profileLayout === 'Follower') {
-            return <Follower list={followerList} />;
+            return <Follower list={selectedUser.follower} />;
         }
         return <Posts selectedUser={selectedUser} isCurrentUser={params.id === currentUser.uid ? true : false} />;
     };
@@ -66,7 +63,7 @@ function Profile() {
         const getSelectedUser = () => {
             const unsub = onSnapshot(doc(db, 'users', params.id), (doc) => {
                 setSelectedUser(doc.data());
-                console.log(2);
+                console.log('logg: ' + currentUserInfo);
             });
 
             return () => {
@@ -76,45 +73,6 @@ function Profile() {
 
         params.id && getSelectedUser();
     }, [params.id]);
-
-    //following data
-    useEffect(() => {
-        const getFollowingList = () => {
-            const unsub = onSnapshot(doc(db, 'following', params.id), (doc) => {
-                doc.data() ? setFollowingList(doc.data()) : setFollowingList({});
-                console.log(3);
-            });
-
-            return () => {
-                unsub();
-            };
-        };
-
-        params.id && getFollowingList();
-    }, [params.id]);
-
-    //follower data
-    useEffect(() => {
-        const getFollowerList = () => {
-            const unsub = onSnapshot(doc(db, 'follower', params.id), (doc) => {
-                doc.data() ? setFollowerList(doc.data()) : setFollowerList({});
-            });
-
-            return () => {
-                unsub();
-            };
-        };
-
-        params.id && getFollowerList();
-    }, [params.id]);
-
-    useEffect(() => {
-        if (currentUserFollowing.indexOf(params.id) > -1) {
-            setFollowing(true);
-        } else {
-            setFollowing(false);
-        }
-    }, [params.id, data]);
 
     // useEffect(() => {
     //     function checkFollow() {
@@ -136,42 +94,30 @@ function Profile() {
 
     const handleFollow = async () => {
         try {
-            await updateDocument('following', currentUser.uid, {
-                [selectedUser.uid + '.userInfo']: {
-                    uid: selectedUser.uid,
-                    displayName: selectedUser.displayName,
-                    photoURL: selectedUser.photoURL,
-                },
-                [selectedUser.uid + '.date']: serverTimestamp(),
+            await updateDocument('users', currentUser.uid, {
+                following: arrayUnion(selectedUser.uid),
             });
 
-            await updateDocument('follower', selectedUser.uid, {
-                [currentUser.uid + '.userInfo']: {
-                    uid: currentUser.uid,
-                    displayName: currentUser.displayName,
-                    photoURL: currentUser.photoURL,
-                },
-                [currentUser.uid + '.date']: serverTimestamp(),
+            await updateDocument('users', selectedUser.uid, {
+                follower: arrayUnion(currentUser.uid),
             });
         } catch (error) {
             console.log(error);
         }
-        setFollowing(true);
     };
 
     const handleUnfollow = async () => {
         try {
-            await updateDocument('following', currentUser.uid, {
-                [selectedUser.uid]: deleteField(),
+            await updateDocument('users', currentUser.uid, {
+                following: arrayRemove(selectedUser.uid),
             });
 
-            await updateDocument('follower', selectedUser.uid, {
-                [currentUser.uid]: deleteField(),
+            await updateDocument('users', selectedUser.uid, {
+                follower: arrayRemove(currentUser.uid),
             });
         } catch (error) {
             console.log(error);
         }
-        setFollowing(false);
     };
 
     return (
@@ -193,7 +139,7 @@ function Profile() {
             <div className={cx('profile-main-part')}>
                 <Grid profile>
                     <GridRow>
-                        <GridColumn l={11.5} l_o={0.25} m={12} s={12}>
+                        <GridColumn l={12} m={12} s={12}>
                             <img className={cx('profile-cover-photo')} src={selectedUser.photoURL} alt="Vu Hieu" />
                         </GridColumn>
 
@@ -250,11 +196,17 @@ function Profile() {
                                             <h1 className={cx('profile-name')}>{selectedUser.displayName}</h1>
                                             <div className={cx('profile-follow-info')}>
                                                 <span className={cx('profile-following')}>
-                                                    {followingList ? Object.keys(followingList).length : '0'} following
+                                                    {selectedUser?.following?.length > 0
+                                                        ? selectedUser?.following?.length
+                                                        : '0'}{' '}
+                                                    following
                                                 </span>
                                                 <FontAwesomeIcon className={cx('separate-follow')} icon={faCircle} />
                                                 <span className={cx('profile-follower')}>
-                                                    {followerList ? Object.keys(followerList).length : '0'} follower
+                                                    {selectedUser?.follower?.length > 0
+                                                        ? selectedUser?.follower?.length
+                                                        : '0'}{' '}
+                                                    follower
                                                 </span>
                                             </div>
                                         </div>
@@ -280,17 +232,7 @@ function Profile() {
                                         </div>
                                     ) : (
                                         <div className={cx('profile-main-part-left')}>
-                                            {!following ? (
-                                                <Button
-                                                    primary
-                                                    className={cx('follow-btn')}
-                                                    leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
-                                                    children={'Follow'}
-                                                    onClick={() => {
-                                                        handleFollow();
-                                                    }}
-                                                />
-                                            ) : (
+                                            {currentUserInfo?.following?.indexOf(params.id) > -1 ? (
                                                 <Button
                                                     primary
                                                     className={cx('unfollow-btn')}
@@ -298,6 +240,16 @@ function Profile() {
                                                     children={'Unfollow'}
                                                     onClick={() => {
                                                         handleUnfollow();
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Button
+                                                    primary
+                                                    className={cx('follow-btn')}
+                                                    leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
+                                                    children={'Follow'}
+                                                    onClick={() => {
+                                                        handleFollow();
                                                     }}
                                                 />
                                             )}

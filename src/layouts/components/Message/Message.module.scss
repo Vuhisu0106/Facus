@@ -8,11 +8,11 @@
 }
 
 .sidebar-header {
-    width: calc(var(--home-layout-width) / 4);
-    position: fixed;
+    position: sticky;
     background-color: var(--white);
-    border-right: 1px solid rgb(204, 206, 209, 0.5);
+    top: 0px;
     z-index: 1;
+    padding-bottom: 3px;
 }
 
 .sidebar-top-header {
@@ -36,13 +36,13 @@
 }
 
 .user-message-list {
-    margin: 112px 4px 0 4px;
+    margin: 0px 4px 0 4px;
     position: relative;
 }
 
 //Chat
 .chat-wrapper {
-    flex: 1;
+    //height: 100%;
     background-color: #fff;
     grid-column: span 3 / span 3;
     position: relative;
@@ -51,13 +51,13 @@
 
 .chat-header {
     height: 64px;
-    width: calc(var(--home-layout-width) * 3 / 4);
+    width: 100%;
     background-color: #fff;
     display: flex;
     padding: 10px 18px;
     align-items: center;
     border-bottom: 1px solid rgb(204, 206, 209, 0.5);
-    position: fixed;
+    //position: fixed;
     z-index: 1;
 
     .user-avt {
@@ -77,7 +77,7 @@
 .chat-box {
     height: calc(100% - 64px * 2);
     width: 100%;
-    margin-top: 64px;
+    //margin-top: 64px;
 
     position: relative;
     overflow-y: auto;
@@ -166,6 +166,10 @@
 .chat-footer {
     height: 60px;
     border-top: 1px solid rgb(204, 206, 209, 0.5);
+    // position: fixed;
+    // bottom: 0;
+    // z-index: 1;
+    // background-color: var(--white);
 
     .mess-input {
         height: 100%;
@@ -216,6 +220,10 @@
     color: var(--light-text-color);
     grid-column: span 3 / span 3;
     position: relative;
+    h2 {
+        text-align: center;
+        margin: 0 30px;
+    }
 }
 
 .chat-header {
@@ -232,6 +240,43 @@
     font-weight: 400px;
 }
 
+@media (max-width: 739px) {
+    .sidebar-wrapper {
+        max-width: 75px;
+        .sidebar-top-header {
+            justify-content: center;
+            h2 {
+                display: none;
+            }
+            button {
+                margin: 0;
+            }
+        }
+
+        .search {
+            display: none;
+        }
+    }
+    .chat-wrapper {
+        flex: 1;
+    }
+    .empty-chat-wrapper {
+        flex: 1;
+    }
+}
+
+@media (min-width: 740px) and (max-width: 1239px) {
+    .sidebar-wrapper {
+        grid-column: 1 / span 3;
+    }
+    .chat-wrapper {
+        grid-column: span 5;
+    }
+    .empty-chat-wrapper {
+        grid-column: span 5;
+    }
+}
+
 ///////////////////Dark mode///////////////////////////////
 
 //Sidebar
@@ -241,7 +286,6 @@
 
     .sidebar-header {
         background-color: var(--dark-background-color-2);
-        border-right: 1px solid rgb(62, 64, 66);
     }
 
     .sidebar-top-header {
@@ -301,6 +345,7 @@
 
     .chat-footer {
         border-top: 1px solid rgb(62, 64, 66);
+        background-color: var(--dark-background-color-2);
 
         .img-btn {
             color: var(--dark-icon-color);

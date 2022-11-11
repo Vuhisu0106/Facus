@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc, serverTimestamp, deleteField } from 'firebase/firestore';
+import { onSnapshot, doc, serverTimestamp, deleteField, arrayUnion } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
@@ -16,18 +16,18 @@ import CircleAvatar from '~/components/CircleAvatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 import Input from '~/components/Input';
-import { useUser } from '~/context/UserContext';
 import AddPostModal from '~/components/Modal/Modal/AddPostModal';
 import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
 import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
+import { useDispatch } from 'react-redux';
+import { setImageInputState } from '~/features/Modal/ModalSlice';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
     const { currentUser } = useAuth();
-    const { setAddPhotoVisible, setButtonActive, checkDark } = useUI();
-    const { addToLocalStorage } = useUser();
+    const { checkDark } = useUI();
 
     const [postList, setPostList] = useState([]);
     const [bioInput, setBioInput] = useState('');
@@ -36,6 +36,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
 
     //Add post modal
     const [openModal, setOpenModal] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const getPost = () => {
@@ -167,7 +168,6 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                     addPostFunc={handleAddPost}
                     onCloseAddPostModal={() => {
                         setOpenModal(false);
-                        setButtonActive(false);
                     }}
                 />
             )}
@@ -175,6 +175,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                 <GridColumn l={4} l_o={1.5} m={5} m_o={0.5} s={11} s_o={0.5} className={cx('left-content')}>
                     <WrapperModal className={cx('intro')}>
                         <h2>Intro</h2>
+
                         {!editBio ? (
                             <>
                                 {selectedUser.bio ? <p>{selectedUser.bio}</p> : <p>Hello world</p>}
@@ -228,13 +229,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     (post) =>
                                         post[1].img && (
                                             <div key={post[0]}>
-                                                <a
-                                                    href={`/post/${post[0]}`}
-                                                    id=""
-                                                    onClick={() => {
-                                                        addToLocalStorage('selectPost', post[0]);
-                                                    }}
-                                                >
+                                                <a href={`/post/${post[0]}`}>
                                                     <img src={post[1]?.img} alt={post[0]} />
                                                 </a>
                                             </div>
@@ -258,8 +253,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     children={"What's on your mind?"}
                                     onClick={() => {
                                         setOpenModal(true);
-                                        setAddPhotoVisible(false);
-                                        setButtonActive(false);
+                                        dispatch(setImageInputState({ addPhotoVisible: false, buttonActive: false }));
                                     }}
                                 />
                             </div>
@@ -275,8 +269,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     children={'Photo'}
                                     onClick={() => {
                                         setOpenModal(true);
-                                        setAddPhotoVisible(true);
-                                        setButtonActive(true);
+                                        dispatch(setImageInputState({ addPhotoVisible: true, buttonActive: true }));
                                     }}
                                 />
                             </div>

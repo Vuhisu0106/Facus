@@ -13,43 +13,6 @@
     border-radius: var(--component-border-radius);
 }
 
-.horizontal-scroll {
-    height: 120px;
-    background-color: var(--white);
-    margin-bottom: 24px;
-    border-radius: var(--component-border-radius);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
-    overflow: hidden;
-    position: relative;
-
-    .btn-scroll-left,
-    .btn-scroll-right {
-        background-color: var(--white);
-        padding: 4px 8px;
-        margin: 0 5px;
-        border-radius: 50%;
-        z-index: 1;
-        color: #999;
-        cursor: pointer;
-        box-shadow: 0 0 4px #999;
-    }
-
-    .status-container {
-        padding: 16px 6px 16px 6px;
-        display: flex;
-        width: 100%;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        left: 0;
-        position: absolute;
-        transition: 0.5s all ease-out;
-    }
-}
-
 .left-sidebar {
     display: flex;
     flex-direction: column;
@@ -68,17 +31,6 @@
 .dark {
     .content {
         background-color: var(--dark-background-color);
-    }
-
-    .horizontal-scroll {
-        background-color: var(--dark-background-color-2);
-
-        .btn-scroll-left,
-        .btn-scroll-right {
-            background-color: var(--dark-element-color);
-            color: var(--dark-icon-color);
-            box-shadow: 0 0 4px rgb(203, 202, 202);
-        }
     }
 
     .left-sidebar {

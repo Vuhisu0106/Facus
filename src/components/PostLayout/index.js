@@ -23,7 +23,6 @@ import Input from '~/components/Input';
 import { faHeart as faHeartRegular, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
-import { useUser } from '~/context/UserContext';
 import { useAuth } from '~/context/AuthContext';
 import CircleAvatar from '../CircleAvatar';
 import CommentItem from '../CommentItem';
@@ -32,9 +31,12 @@ import Menu from '../Popper/Menu';
 import ImageInputArea from '../Input/ImageInputArea';
 import AddPostModal from '../Modal/Modal/AddPostModal';
 import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
+import { useDispatch } from 'react-redux';
+import { setImageInputState } from '~/features/Modal/ModalSlice';
 
 const cx = classNames.bind(styles);
 function PostLayout({
+    className,
     userId,
     postId,
     userName,
@@ -47,9 +49,8 @@ function PostLayout({
     deletePostFunc,
     postPage,
 }) {
-    const { addToLocalStorage } = useUser();
     const { currentUser } = useAuth();
-    const { setAddPhotoVisible, setButtonActive, checkDark } = useUI();
+    const { checkDark } = useUI();
 
     const [postDetail, setPostDetail] = useState({});
     const [caption, setCaption] = useState(postDetail?.caption || postCaption || '');
@@ -66,6 +67,10 @@ function PostLayout({
     const [isAddComment, setIsAddComment] = useState(false);
 
     const commentInputRef = useRef();
+
+    const dispatch = useDispatch();
+
+    const classes = cx('post-wrapper', checkDark(), { [className]: className });
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'post', postId), (doc) => {
@@ -239,8 +244,6 @@ function PostLayout({
             });
         }
     };
-    const handleDelete = () => {};
-
     const onClickOutside = () => {
         setPopperVisible(false);
     };
@@ -252,8 +255,7 @@ function PostLayout({
             onClick: () => {
                 setPopperVisible(false);
                 setOpenModal(true);
-                setAddPhotoVisible(true);
-                setButtonActive(true);
+                dispatch(setImageInputState({ addPhotoVisible: true, buttonActive: true }));
                 setCaption(postDetail?.caption || '');
                 setImg(postDetail?.img || null);
             },
@@ -270,7 +272,7 @@ function PostLayout({
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <div className={cx('post-wrapper', checkDark())}>
+        <div className={classes}>
             {openModal && (
                 <AddPostModal
                     edit
@@ -279,7 +281,6 @@ function PostLayout({
                     editPostFunc={handleEditPost}
                     onCloseAddPostModal={() => {
                         setOpenModal(false);
-                        setButtonActive(false);
                     }}
                 />
             )}
@@ -309,12 +310,7 @@ function PostLayout({
                 {!postPage
                     ? postDetail?.img && (
                           <div className={cx('post-image')}>
-                              <a
-                                  href={`/post/${postId}`}
-                                  onClick={() => {
-                                      addToLocalStorage('selectPost', postId);
-                                  }}
-                              >
+                              <a href={`/post/${postId}`}>
                                   <img alt={userName} src={postDetail?.img} />
                               </a>
                           </div>
@@ -408,7 +404,7 @@ function PostLayout({
                         )}
                     </div>
                 </div>
-                {commentVisible && (
+                {!postPage && commentVisible && (
                     <div className={cx('comment-list')}>
                         {commentList &&
                             commentList
