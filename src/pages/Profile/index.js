@@ -32,6 +32,8 @@ function Profile() {
     const [statusModalVisible, setStatusModalVisible] = useState(false);
     const [profileModalVisible, setProfileModalVisible] = useState(false);
 
+    const [followLoading, setFollowingLoading] = useState(false);
+
     //const [followingList, setFollowingList] = useState();
     //const [followerList, setFollowerList] = useState();
 
@@ -94,6 +96,7 @@ function Profile() {
 
     const handleFollow = async () => {
         try {
+            setFollowingLoading(true);
             await updateDocument('users', currentUser.uid, {
                 following: arrayUnion(selectedUser.uid),
             });
@@ -104,10 +107,12 @@ function Profile() {
         } catch (error) {
             console.log(error);
         }
+        setFollowingLoading(false);
     };
 
     const handleUnfollow = async () => {
         try {
+            setFollowingLoading(true);
             await updateDocument('users', currentUser.uid, {
                 following: arrayRemove(selectedUser.uid),
             });
@@ -118,6 +123,7 @@ function Profile() {
         } catch (error) {
             console.log(error);
         }
+        setFollowingLoading(false);
     };
 
     return (
@@ -162,14 +168,14 @@ function Profile() {
                                                                 console.log(selectedUser.status);
                                                             }}
                                                         >
-                                                            {selectedUser.status ? (
-                                                                selectedUser.status.icon
+                                                            {selectedUser?.status ? (
+                                                                selectedUser?.status?.icon
                                                             ) : (
                                                                 <FontAwesomeIcon icon={faFaceSmile} />
                                                             )}
                                                             <div className={cx('set-status')}>
-                                                                {selectedUser.status
-                                                                    ? selectedUser.status.text
+                                                                {selectedUser?.status
+                                                                    ? selectedUser?.status?.text
                                                                     : 'Set status'}
                                                             </div>
                                                         </div>
@@ -180,6 +186,19 @@ function Profile() {
                                                             ) : (
                                                                 <FontAwesomeIcon icon={faFaceSmile} />
                                                             )}
+                                                        </div>
+                                                    )
+                                                ) : selectedUser?.status ? (
+                                                    hovered ? (
+                                                        <div className={cx('hovered-set-status-btn')}>
+                                                            {selectedUser?.status?.icon}
+                                                            <div className={cx('set-status')}>
+                                                                {selectedUser?.status?.text}
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className={cx('set-status-btn')}>
+                                                            {selectedUser.status.icon}
                                                         </div>
                                                     )
                                                 ) : (
@@ -232,7 +251,14 @@ function Profile() {
                                         </div>
                                     ) : (
                                         <div className={cx('profile-main-part-left')}>
-                                            {currentUserInfo?.following?.indexOf(params.id) > -1 ? (
+                                            {followLoading ? (
+                                                <Button
+                                                    primary
+                                                    className={cx('follow-btn')}
+                                                    leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
+                                                    children={'Loading...'}
+                                                />
+                                            ) : currentUserInfo?.following?.indexOf(params.id) > -1 ? (
                                                 <Button
                                                     primary
                                                     className={cx('unfollow-btn')}

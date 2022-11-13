@@ -77,10 +77,6 @@ function SignUp() {
                             following: [],
                             follower: [],
                             bio: '',
-                            status: {
-                                icon: '',
-                                text: '',
-                            },
                             isAdmin: false,
                         });
 

@@ -64,6 +64,7 @@ function Header({ className }) {
                     handleLogout();
                 }
             },
+            separate: true,
         },
     ];
 
@@ -107,6 +108,7 @@ function Header({ className }) {
                     handleLogout();
                 }
             },
+            separate: true,
         },
     ];
 
@@ -163,7 +165,6 @@ function Header({ className }) {
                                     }
                                     onClick={() => {
                                         toggleTheme();
-                                        console.log('darkModeState: ' + darkModeState);
                                     }}
                                 />
 

@@ -4,7 +4,6 @@ import { onSnapshot, where, collection, query, deleteField, getDocs } from 'fire
 import moment from 'moment';
 
 import { db } from '~/firebase/config';
-import Sidebar from '~/layouts/components/Sidebar';
 import PostLayout from '~/components/PostLayout';
 import styles from './Home.module.scss';
 import { useAuth } from '~/context/AuthContext';
@@ -54,7 +53,7 @@ function Home() {
         const getPost = async () => {
             const a = [...currentUserInfo?.following, currentUserInfo?.uid];
             //a.push(currentUserInfo?.uid);
-            console.log('loggg : ' + currentUserInfo?.following);
+            console.log('loggg : ' + currentUser);
             const q = query(collection(db, 'post'), where('poster.uid', 'in', a));
             const qu = query(collection(db, 'users'), where('uid', 'in', a));
 
@@ -86,8 +85,8 @@ function Home() {
             };
         };
 
-        getPost();
-    }, [currentUserInfo]);
+        currentUserInfo.uid && getPost();
+    }, [currentUserInfo.uid]);
 
     // console.log(storyRef.current.offsetWidth);
 
@@ -113,6 +112,13 @@ function Home() {
 
     return (
         <Grid wide className={cx('wrapper', checkDark())}>
+            {/* <button
+                onClick={() => {
+                    console.log(currentUserInfo);
+                }}
+            >
+                Click
+            </button> */}
             <GridRow className={cx('wrapper', checkDark())}>
                 <GridColumn l={3.25} m={0} s={0} className={cx('left-sidebar')}>
                     <ProfileCard />

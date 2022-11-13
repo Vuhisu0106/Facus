@@ -4,11 +4,15 @@ import { useUI } from '~/context/UIContext';
 
 import StatusModal from '~/components/Modal/Modal/StatusModal';
 import styles from './RoundAccountItem.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
 
 const cx = classNames.bind(styles);
-function RoundAccountItem({ className, userName, avt, status, bigText }) {
+function RoundAccountItem({ className, userName, avt, status, bigText, addStatus }) {
     const { checkDark } = useUI();
     const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
+    const [isSetStatusVisible, setIsSetStatusVisible] = useState(false);
     const classes = cx('wrapper', checkDark(), {
         [className]: className,
     });
@@ -24,10 +28,17 @@ function RoundAccountItem({ className, userName, avt, status, bigText }) {
                     }}
                 />
             )}
+            {isSetStatusVisible && (
+                <SetStatusModal
+                    onClose={() => {
+                        setIsSetStatusVisible(false);
+                    }}
+                />
+            )}
             <div
                 className={cx('user-avt')}
                 onClick={() => {
-                    setIsStatusModalVisible(true);
+                    addStatus ? setIsSetStatusVisible(true) : setIsStatusModalVisible(true);
                 }}
             >
                 <div className={cx('story-circle')}>
@@ -46,7 +57,9 @@ function RoundAccountItem({ className, userName, avt, status, bigText }) {
                     )}
                 > */}
                 <div className={cx('status-wrapper')}>
-                    <div className={cx('status')}>{status.icon}</div>
+                    <div className={cx('status')}>
+                        {!addStatus ? status.icon : <FontAwesomeIcon icon={faPlusCircle} />}
+                    </div>
                 </div>
                 {/* </Tippy> */}
             </div>

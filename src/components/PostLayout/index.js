@@ -404,21 +404,38 @@ function PostLayout({
                         )}
                     </div>
                 </div>
-                {!postPage && commentVisible && (
-                    <div className={cx('comment-list')}>
-                        {commentList &&
-                            commentList
-                                ?.sort((a, b) => b.createdAt - a.createdAt)
-                                .map((comments) => (
-                                    <CommentItem
-                                        key={comments.commentId}
-                                        data={comments}
-                                        isAddComment={isAddComment}
-                                        deleteComment={handleDeleteComment}
-                                    />
-                                ))}
-                    </div>
-                )}
+                {commentVisible &&
+                    (!postPage ? (
+                        <div className={cx('comment-list')}>
+                            {commentList &&
+                                commentList
+                                    ?.sort((a, b) => b.createdAt - a.createdAt)
+                                    .map((comments) => (
+                                        <CommentItem
+                                            key={comments.commentId}
+                                            data={comments}
+                                            isAddComment={isAddComment}
+                                            deleteComment={handleDeleteComment}
+                                            sizeImg={'large'}
+                                        />
+                                    ))}
+                        </div>
+                    ) : (
+                        <div className={cx('comment-list-for-post-page')}>
+                            {commentList &&
+                                commentList
+                                    ?.sort((a, b) => b.createdAt - a.createdAt)
+                                    .map((comments) => (
+                                        <CommentItem
+                                            key={comments.commentId}
+                                            data={comments}
+                                            isAddComment={isAddComment}
+                                            deleteComment={handleDeleteComment}
+                                            sizeImg={'medium'}
+                                        />
+                                    ))}
+                        </div>
+                    ))}
             </div>
         </div>
     );

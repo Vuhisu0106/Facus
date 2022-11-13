@@ -25,7 +25,6 @@ function ChatSidebar() {
     const { currentUser } = useAuth();
 
     const chat = useSelector((state) => state.chat);
-
     const dispatch = useDispatch();
 
     useEffect(() => {

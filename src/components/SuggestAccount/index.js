@@ -38,7 +38,13 @@ function SuggestAccount({ label }) {
             </div>
             <div className="account-list">
                 {suggestFollowList?.map((account) => (
-                    <AccountItem key={account.uid} displayName={account.displayName} photoURL={account.photoURL} />
+                    <AccountItem
+                        key={account?.uid}
+                        uid={account?.uid}
+                        displayName={account?.displayName}
+                        photoURL={account?.photoURL}
+                        follower={account?.follower?.length}
+                    />
                 ))}
             </div>
         </div>

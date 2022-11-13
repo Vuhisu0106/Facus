@@ -10,11 +10,27 @@
         line-height: 20px;
 
         &.separate {
-            border-top: 1px solid rgba(22, 24, 35, 0.12);
+            &::after {
+                content: '';
+                position: absolute;
+                top: -1px;
+                height: 1px;
+                width: 85%; /* or 100px */
+                border-top: 1px solid rgba(22, 24, 35, 0.12);
+                text-align: center;
+            }
         }
     }
 }
 
 .menu-popper {
     padding-bottom: 8px;
+}
+
+.dark {
+    &.separate {
+        &::after {
+            border-top: 1px solid rgb(62, 64, 66) !important;
+        }
+    }
 }

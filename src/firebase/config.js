@@ -6,8 +6,8 @@ import { getAuth } from 'firebase/auth';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: 'AIzaSyBjYicfeSLcTHCTPkVHPaOeJOvne9iAuug',
-    authDomain: 'facus-f9b9c.firebaseapp.com',
+    apiKey: process.env.REACT_APP_FIREBASE_API,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
     projectId: 'facus-f9b9c',
     storageBucket: 'facus-f9b9c.appspot.com',
     messagingSenderId: '401562491338',

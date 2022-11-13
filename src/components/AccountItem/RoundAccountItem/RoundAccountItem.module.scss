@@ -7,7 +7,7 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    text-align: center;
+    //text-align: center;
     width: 64px;
     margin: 8px;
 }
@@ -46,6 +46,7 @@
             border: 1px solid rgb(204, 206, 209);
             position: absolute;
             margin: 0 8px 8px 0;
+            color: var(--primary);
             //z-index: 1;
         }
     }

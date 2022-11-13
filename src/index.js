@@ -6,7 +6,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from './components/GlobalStyles';
 import AuthProvider from './context/AuthContext';
-import ChatProvider from './context/ChatContext';
 import UIProvider from './context/UIContext';
 import AppProvider from './context/AppContext';
 import { Provider } from 'react-redux';

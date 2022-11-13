@@ -88,8 +88,19 @@
 
         .comment-image {
             border-radius: 10px;
-            max-width: 320px;
             margin-top: 4px;
+        }
+
+        .large {
+            max-width: 400px;
+        }
+
+        .medium {
+            max-width: 320px;
+        }
+
+        .small {
+            max-width: 320px;
         }
 
         .reaction-image-cmt {
