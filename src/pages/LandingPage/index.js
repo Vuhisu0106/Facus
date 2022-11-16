@@ -1,12 +1,5 @@
-import { faFacebook, faGoogle, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useState, useRef } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 
-import { useAuth } from '~/context/AuthContext';
-import { auth } from '~/firebase/config';
 import styles from './LandingPage.module.scss';
 import SignUp from '~/layouts/components/LandingLayout/SignUp';
 import LogIn from '~/layouts/components/LandingLayout/LogIn';
@@ -51,7 +44,6 @@ function LandingPage() {
         <div className={cx('wrapper')}>
             {/* Log in form  */}
             <LogIn />
-
             {/* Sign Up form */}
             <SignUp />
         </div>

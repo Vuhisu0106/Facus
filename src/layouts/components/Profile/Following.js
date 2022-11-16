@@ -9,12 +9,15 @@ import { useUI } from '~/context/UIContext';
 import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 function Following({ list }) {
     const { checkDark } = useUI();
     const [followingList, setFollowingList] = useState([]);
     const [error, setError] = useState(false);
+
+    let navigate = useNavigate();
 
     useEffect(() => {
         const unSub = async () => {
@@ -36,7 +39,7 @@ function Following({ list }) {
     }, [list]);
 
     return (
-        <Grid profile>
+        <Grid type={'profile'}>
             <GridRow>
                 <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={12}>
                     <WrapperModal className={cx('following', checkDark())}>
@@ -49,6 +52,9 @@ function Following({ list }) {
                                         className={cx('account-avt')}
                                         alt={following.displayName}
                                         src={following.photoURL}
+                                        onClick={() => {
+                                            navigate(`/user/${following.uid}`);
+                                        }}
                                     />
                                     <div className={cx('account-info')}>
                                         <h1 className={cx('account-name')}>{following.displayName}</h1>

@@ -21,6 +21,8 @@ import { useApp } from '~/context/AppContext';
 import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
+import { useDispatch } from 'react-redux';
+import { setBio, setProfileInfo, setStatus } from '~/features/Profile/ProfileSlice';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -42,6 +44,7 @@ function Profile() {
     const { currentUserInfo } = useApp();
 
     let params = useParams();
+    const dispatch = useDispatch();
 
     const [hovered, setHovered] = useState(false);
     const toggleHover = () => setHovered(!hovered);
@@ -66,6 +69,17 @@ function Profile() {
             const unsub = onSnapshot(doc(db, 'users', params.id), (doc) => {
                 setSelectedUser(doc.data());
                 console.log('logg: ' + currentUserInfo);
+                dispatch(
+                    setProfileInfo({
+                        status: {
+                            icon: doc.data()?.status?.icon,
+                            text: doc.data()?.status?.text,
+                        },
+                        bio: doc.data()?.bio,
+                        photoURL: doc.data()?.photoURL,
+                        coverPhotoURL: doc.data()?.coverPhotoURL,
+                    }),
+                );
             });
 
             return () => {
@@ -143,10 +157,14 @@ function Profile() {
                 />
             )}
             <div className={cx('profile-main-part')}>
-                <Grid profile>
+                <Grid type={'profile'}>
                     <GridRow>
                         <GridColumn l={12} m={12} s={12}>
-                            <img className={cx('profile-cover-photo')} src={selectedUser.photoURL} alt="Vu Hieu" />
+                            <img
+                                className={cx('profile-cover-photo')}
+                                src={selectedUser?.coverPhotoURL || selectedUser?.photoURL}
+                                alt="Vu Hieu"
+                            />
                         </GridColumn>
 
                         <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={11} s_o={0.5}>
@@ -208,7 +226,7 @@ function Profile() {
                                             <img
                                                 className={cx('profile-avt')}
                                                 alt="Vu Minh Hieu"
-                                                src={selectedUser.photoURL}
+                                                src={selectedUser?.photoURL}
                                             />
                                         </div>
                                         <div className={cx('profile-name-follow')}>
@@ -295,7 +313,7 @@ function Profile() {
                 </Grid>
             </div>
             <div className={cx('profile-nav')}>
-                <Grid profile className={cx('profile-nav-grid')}>
+                <Grid type={'profile'} className={cx('profile-nav-grid')}>
                     <GridRow>
                         <GridColumn l={10} l_o={1} m={11} m_o={0.5} s={11} s_o={0.5}>
                             <ul>

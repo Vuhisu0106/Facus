@@ -12,14 +12,19 @@ import Modal from '..';
 import { updateDocument } from '~/firebase/services';
 import { useAuth } from '~/context/AuthContext';
 import { deleteField } from 'firebase/firestore';
+import { useDispatch, useSelector } from 'react-redux';
+import { setStatus } from '~/features/Profile/ProfileSlice';
 
 const cx = classNames.bind(styles);
 function SetStatusModal({ onClose }) {
     const { checkDark, dark } = useUI();
     const { currentUser } = useAuth();
 
-    const [selectEmoji, setSelectEmoji] = useState('');
-    const [text, setText] = useState('');
+    const status = useSelector((state) => state.profile.status);
+    const dispatch = useDispatch();
+
+    const [selectEmoji, setSelectEmoji] = useState(status.icon || '');
+    const [text, setText] = useState(status.text || '');
     const [showPicker, setShowPicker] = useState(false);
     const [statusBtnDisable, setStatusBtnDisable] = useState(true);
 
@@ -32,6 +37,7 @@ function SetStatusModal({ onClose }) {
         await updateDocument('users', currentUser.uid, {
             status: deleteField(),
         });
+        dispatch(setStatus({ status: { icon: null, text: '' } }));
         setSelectEmoji('');
         setText('');
         setShowPicker(false);
@@ -64,6 +70,7 @@ function SetStatusModal({ onClose }) {
                 text,
             },
         });
+        dispatch(setStatus({ status: { icon: selectEmoji, text: text } }));
         onClose();
     };
 

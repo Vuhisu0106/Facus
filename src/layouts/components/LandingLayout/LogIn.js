@@ -1,12 +1,10 @@
 import { faFacebook, faGoogle, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useState, useRef, useEffect } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { useState, useRef } from 'react';
 
 import { useAuth } from '~/context/AuthContext';
-import { auth } from '~/firebase/config';
 import styles from './LandingLayout.module.scss';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +13,7 @@ const cx = classNames.bind(styles);
 function LogIn() {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const { login, currentUser } = useAuth();
+    const { login } = useAuth();
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);

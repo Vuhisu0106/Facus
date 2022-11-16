@@ -17,7 +17,7 @@ function Message() {
     const chat = useSelector((state) => state.chat);
 
     return (
-        <Grid chat className={cx('container', checkDark())}>
+        <Grid type={'chat'} className={cx('container', checkDark())}>
             <GridRow>
                 <GridColumn l={12} m={12} s={12} className={cx('chat-col')}>
                     <div className={cx('wrapper')}>

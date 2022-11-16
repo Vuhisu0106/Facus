@@ -10,7 +10,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '~/context/AuthContext';
 import styles from './LandingLayout.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { generateKeywords } from '~/services/generateKeywords';
+import { generateKeywords } from '~/utils/generateKeywords';
 import { setDocument } from '~/firebase/services';
 
 const cx = classNames.bind(styles);
@@ -41,22 +41,9 @@ function SignUp() {
             setLoading(true);
             const res = await signup(emailRef.current.value, passwordRef.current.value);
 
-            // await updateProfile(res.user, {
-            //     displayName: displayNameRef.current.value,
-            //     //photoURL: downloadURL,
-            // });
-
-            // await setDoc(doc(db, 'users', res.user.uid), {
-            //     uid: res.user.uid,
-            //     displayName: displayNameRef.current.value,
-            //     email: emailRef.current.value,
-            //     //photoURL: downloadURL,
-            // });
-            // navigate('/');
-
             //Create a unique image name
             const date = new Date().getTime();
-            const storageRef = ref(storage, `${displayNameRef.current.value + date}`);
+            const storageRef = ref(storage, `${'photoURL' + displayNameRef.current.value + date}`);
 
             await uploadBytesResumable(storageRef, file).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
@@ -91,38 +78,6 @@ function SignUp() {
                     }
                 });
             });
-
-            //Create a unique image name
-            // const date = new Date().getTime();
-            // const storageRef = ref(storage, `${displayNameRef + date}`);
-
-            // await uploadBytesResumable(storageRef, file).then(() => {
-            //     getDownloadURL(storageRef).then(async (downloadURL) => {
-            //         try {
-            //             //Update profile
-            //             await updateProfile(res.user, {
-            //                 displayNameRef,
-            //                 photoURL: downloadURL,
-            //             });
-            //             //create user on firestore
-            //             await setDoc(doc(db, 'usersabcd', res.user.uid), {
-            //                 uid: res.user.uid,
-            //                 displayName: displayNameRef.current.value,
-            //                 email: emailRef.current.value,
-            //                 //photoURL: downloadURL,
-            //             });
-
-            //             //create empty user chats on firestore
-            //             //await setDoc(doc(db, 'userChats', res.user.uid), {});
-            //             navigate('/');
-            //         } catch (err) {
-            //             console.log(err);
-            //             setError(true);
-            //             setLoading(false);
-            //         }
-            //     });
-            // });
-            //handleNavigate();
         } catch (e) {
             setError(error);
             console.log(e);

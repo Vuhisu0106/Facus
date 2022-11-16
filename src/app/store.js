@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import modalReducer from '~/features/Modal/ModalSlice';
 import chatReducer from '~/features/Chat/ChatSlice';
+import profileReducer from '~/features/Profile/ProfileSlice';
 
-const rootReducer = { modal: modalReducer, chat: chatReducer };
+const rootReducer = { modal: modalReducer, chat: chatReducer, profile: profileReducer };
 
 const store = configureStore({
     reducer: rootReducer,

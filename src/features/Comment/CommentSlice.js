@@ -11,6 +11,12 @@ const comment = createSlice({
         addCommentWithPhoto: (state, action) => {
             state.push(action.payload);
         },
+        editComment: (state, action) => {
+            state.push(action.payload);
+        },
+        deleteComment: (state, action) => {
+            state.push(action.payload);
+        },
     },
 });
 

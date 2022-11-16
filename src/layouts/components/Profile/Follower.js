@@ -9,6 +9,7 @@ import { useUI } from '~/context/UIContext';
 import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 function Follower({ list }) {
@@ -16,6 +17,8 @@ function Follower({ list }) {
 
     const [followerList, setFollowerList] = useState([]);
     const [error, setError] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const unSub = async () => {
@@ -37,7 +40,7 @@ function Follower({ list }) {
     }, [list]);
 
     return (
-        <Grid profile>
+        <Grid type={'profile'}>
             <GridRow>
                 <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={12}>
                     <WrapperModal className={cx('follower', checkDark())}>
@@ -49,6 +52,9 @@ function Follower({ list }) {
                                         className={cx('account-avt')}
                                         alt={follower.displayName}
                                         src={follower.photoURL}
+                                        onClick={() => {
+                                            navigate(`/user/${follower.uid}`);
+                                        }}
                                     />
                                     <div className={cx('account-info')}>
                                         <h1 className={cx('account-name')}>{follower.displayName}</h1>

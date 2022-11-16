@@ -1,7 +1,9 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
+import { storage } from '~/firebase/config';
 import styles from '~/components/Modal/Modal.module.scss';
 import Modal from '..';
 import CircleButton from '~/components/Button/CircleButton';
@@ -9,14 +11,55 @@ import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
 import { useUI } from '~/context/UIContext';
 import { useState } from 'react';
+import { updateDocument } from '~/firebase/services';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCoverPhotoURL, setPhotoAndCoverPhoto, setPhotoURL } from '~/features/Profile/ProfileSlice';
 
 const cx = classNames.bind(styles);
 function EditProfileModal({ onClose }) {
     const { currentUser } = useAuth();
     const { checkDark } = useUI();
 
+    const profile = useSelector((state) => state.profile);
+    const dispatch = useDispatch();
+
     const [avatar, setAvatar] = useState(null);
+    const [isAvatarChange, setIsAvatarChange] = useState(false);
     const [coverPhoto, setCoverPhoto] = useState(null);
+    const [iscoverPhotoChange, setIsCoverPhotoChange] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const savePhotoFunc = async (typeImg, img) => {
+        const date = new Date().getTime();
+        const storageRef = ref(storage, `${`${typeImg}` + currentUser.displayName + date}`);
+
+        await uploadBytesResumable(storageRef, img).then(() => {
+            getDownloadURL(storageRef).then(async (downloadURL) => {
+                await updateDocument('users', currentUser.uid, {
+                    [typeImg]: downloadURL,
+                });
+            });
+        });
+    };
+
+    const handleSavePhoto = async () => {
+        setLoading(true);
+        if (isAvatarChange && !iscoverPhotoChange) {
+            await savePhotoFunc('photoURL', avatar);
+            dispatch(setPhotoURL({ photoURL: avatar }));
+        } else if (!isAvatarChange && iscoverPhotoChange) {
+            await savePhotoFunc('coverPhotoURL', coverPhoto);
+            dispatch(setCoverPhotoURL({ coverPhotoURL: coverPhoto }));
+        } else if (isAvatarChange && iscoverPhotoChange) {
+            await savePhotoFunc('photoURL', avatar);
+            await savePhotoFunc('coverPhotoURL', coverPhoto);
+            dispatch(setPhotoAndCoverPhoto({ photoURL: avatar, coverPhotoURL: coverPhoto }));
+        } else {
+            return;
+        }
+        setLoading(false);
+        onClose();
+    };
     return (
         <Modal
             title="Edit profile"
@@ -26,7 +69,11 @@ function EditProfileModal({ onClose }) {
             m_o={3}
             s={10}
             s_o={1}
-            onClose={onClose}
+            onClose={() => {
+                onClose();
+                setIsAvatarChange(false);
+                setIsCoverPhotoChange(false);
+            }}
             children={
                 <div className={cx('edit-profile-wrapper', checkDark('dark-edit-profile'))}>
                     <div className={cx('edit-profile-body')}>
@@ -45,8 +92,7 @@ function EditProfileModal({ onClose }) {
                                                 htmlFor="avatar-upload"
                                                 className={cx('avatar-upload-label')}
                                                 style={{
-                                                    backgroundImage:
-                                                        "url('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=M-WMEgyEFy0AX9obj2b&_nc_ht=scontent.fhan17-1.fna&oh=00_AfBwmZCfUqyylG3hJ9-0LnLxRgnw3WQDjJb2wPVBevjurQ&oe=6395EB8F')",
+                                                    backgroundImage: `url(${profile.photoURL})`,
                                                 }}
                                             >
                                                 <div className={cx('avatar-upload-hover')}>
@@ -60,7 +106,10 @@ function EditProfileModal({ onClose }) {
                                             <input
                                                 id="avatar-upload"
                                                 type="file"
-                                                onChange={(e) => setAvatar(e.target.files[0])}
+                                                onChange={(e) => {
+                                                    setAvatar(e.target.files[0]);
+                                                    setIsAvatarChange(true);
+                                                }}
                                             ></input>
                                         </>
                                     ) : (
@@ -71,6 +120,7 @@ function EditProfileModal({ onClose }) {
                                                     children={<FontAwesomeIcon icon={faXmark} />}
                                                     onClick={() => {
                                                         setAvatar(null);
+                                                        setIsAvatarChange(false);
                                                     }}
                                                 />
                                             </div>
@@ -97,8 +147,9 @@ function EditProfileModal({ onClose }) {
                                                 htmlFor="cover-photo-upload"
                                                 className={cx('cover-photo-upload-label')}
                                                 style={{
-                                                    backgroundImage:
-                                                        "url('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.6435-9/190902909_816262175957462_3602706991838518816_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=M-WMEgyEFy0AX9obj2b&_nc_ht=scontent.fhan17-1.fna&oh=00_AfBwmZCfUqyylG3hJ9-0LnLxRgnw3WQDjJb2wPVBevjurQ&oe=6395EB8F')",
+                                                    backgroundImage: `url(${
+                                                        profile.coverPhotoURL || profile.photoURL
+                                                    })`,
                                                 }}
                                             >
                                                 <div className={cx('cover-photo-upload-hover')}>
@@ -112,7 +163,10 @@ function EditProfileModal({ onClose }) {
                                             <input
                                                 id="cover-photo-upload"
                                                 type="file"
-                                                onChange={(e) => setCoverPhoto(e.target.files[0])}
+                                                onChange={(e) => {
+                                                    setCoverPhoto(e.target.files[0]);
+                                                    setIsCoverPhotoChange(true);
+                                                }}
                                             ></input>
                                         </>
                                     ) : (
@@ -123,6 +177,7 @@ function EditProfileModal({ onClose }) {
                                                     children={<FontAwesomeIcon icon={faXmark} />}
                                                     onClick={() => {
                                                         setCoverPhoto(null);
+                                                        setIsCoverPhotoChange(false);
                                                     }}
                                                 />
                                             </div>
@@ -138,7 +193,13 @@ function EditProfileModal({ onClose }) {
                         </div>
                     </div>
                     <div className={cx('edit-profile-footer')}>
-                        <Button children={'Save'} className={cx('save-btn')} />
+                        <Button
+                            children={loading ? 'Loading...' : 'Save'}
+                            className={cx('save-btn')}
+                            onClick={() => {
+                                handleSavePhoto();
+                            }}
+                        />
                     </div>
                 </div>
             }

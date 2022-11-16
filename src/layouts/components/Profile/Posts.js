@@ -21,22 +21,30 @@ import { deleteDocument, setDocument, updateDocument } from '~/firebase/services
 import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
+import { setBio } from '~/features/Profile/ProfileSlice';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
     const { currentUser } = useAuth();
     const { checkDark } = useUI();
 
+    const dispatch = useDispatch();
+    const bio = useSelector((state) => state.profile.bio);
+
     const [postList, setPostList] = useState([]);
-    const [bioInput, setBioInput] = useState('');
+    const [bioInput, setBioInput] = useState(bio || '');
     const [editBio, setEditBio] = useState(false);
     const [saveBioBtnDisable, setSaveBioBtnDisable] = useState(true);
 
     //Add post modal
     const [openModal, setOpenModal] = useState(false);
-    const dispatch = useDispatch();
+
+    const postImgList = [];
+    postList.forEach((data) => {
+        if (data[1].img) return postImgList.push(data[1].img);
+    });
 
     useEffect(() => {
         const getPost = () => {
@@ -55,7 +63,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
     const handleEditBio = (e) => {
         const editValueInput = e.target.value;
 
-        if (editValueInput.trim() !== '') {
+        if (!editValueInput.startsWith(' ')) {
             setBioInput(editValueInput);
             setSaveBioBtnDisable(false);
         } else {
@@ -67,8 +75,11 @@ function Posts({ selectedUser, isCurrentUser = false }) {
         await updateDocument('users', currentUser.uid, {
             bio: bioInput,
         });
-
-        setBioInput('');
+        dispatch(
+            setBio({
+                bio: bioInput,
+            }),
+        );
         setEditBio(false);
     };
 
@@ -154,7 +165,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                     [postId]: deleteField(),
                 });
 
-                setPostList((cmtList) => cmtList.filter((x) => x.postId !== postId));
+                //setPostList((cmtList) => cmtList.filter((x) => x.postId !== postId));
             } catch (error) {
                 console.log(error);
             }
@@ -162,7 +173,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
     };
 
     return (
-        <Grid profile className={cx('wrapper', checkDark('dark-post'))}>
+        <Grid type={'profile'} className={cx('wrapper', checkDark('dark-post'))}>
             {openModal && (
                 <AddPostModal
                     addPostFunc={handleAddPost}
@@ -178,13 +189,14 @@ function Posts({ selectedUser, isCurrentUser = false }) {
 
                         {!editBio ? (
                             <>
-                                {selectedUser.bio ? <p>{selectedUser.bio}</p> : <p>Hello world</p>}
+                                {selectedUser?.bio ? <p>{selectedUser?.bio}</p> : <p>Hello world</p>}
                                 {isCurrentUser && (
                                     <Button
                                         className={cx('edit-bio-btn')}
                                         long
                                         onClick={() => {
                                             setEditBio(true);
+                                            console.log(bio);
                                         }}
                                     >
                                         Edit bio
@@ -194,6 +206,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                         ) : (
                             <div className={cx('edit-bio')}>
                                 <Input
+                                    value={bioInput}
                                     className={cx('bio-input')}
                                     placeHolder={'Type your bio...'}
                                     onChange={handleEditBio}
@@ -203,7 +216,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                         className={cx('cancel-bio-btn')}
                                         children={'Cancel'}
                                         onClick={() => {
-                                            setBioInput('');
+                                            setBioInput(bio);
                                             setEditBio(false);
                                         }}
                                     />
@@ -221,21 +234,24 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                     </WrapperModal>
                     <WrapperModal className={cx('photo')}>
                         <h2>Photo</h2>
-                        <p>No image found!</p>
-                        <div className={cx('photo-box')}>
-                            {postList
-                                ?.sort((a, b) => b[1].date - a[1].date)
-                                .map(
-                                    (post) =>
-                                        post[1].img && (
-                                            <div key={post[0]}>
-                                                <a href={`/post/${post[0]}`}>
-                                                    <img src={post[1]?.img} alt={post[0]} />
-                                                </a>
-                                            </div>
-                                        ),
-                                )}
-                        </div>
+                        {!postImgList.length ? (
+                            <p>No image found!</p>
+                        ) : (
+                            <div className={cx('photo-box')}>
+                                {postList
+                                    ?.sort((a, b) => b[1].date - a[1].date)
+                                    .map(
+                                        (post) =>
+                                            post[1].img && (
+                                                <div key={post[0]}>
+                                                    <a href={`/post/${post[0]}`}>
+                                                        <img src={post[1]?.img} alt={post[0]} />
+                                                    </a>
+                                                </div>
+                                            ),
+                                    )}
+                            </div>
+                        )}
                     </WrapperModal>
                 </GridColumn>
                 <GridColumn l={5} m={6} s={11} s_o={0.5} className={cx('right-content')}>

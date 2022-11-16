@@ -6,11 +6,11 @@ const initialState = {
     user: {},
 };
 
-const user = createSlice({
+const chat = createSlice({
     name: 'chat',
     initialState,
     reducers: {
-        changeChatUser: (state, action) => {
+        setPost: (state, action) => {
             state.user = action.payload.selectUser;
             state.chatId =
                 action.payload.currentUser.uid > action.payload.selectUser.uid
@@ -23,6 +23,6 @@ const user = createSlice({
     },
 });
 
-const { reducer, actions } = user;
+const { reducer, actions } = chat;
 export const { changeChatUser, setAddChatState } = actions;
 export default reducer;

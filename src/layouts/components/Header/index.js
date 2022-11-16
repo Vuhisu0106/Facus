@@ -1,8 +1,7 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket, faHome, faMoon, faSearch, faSun } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './Header.module.scss';
 import CircleButton from '~/components/Button/CircleButton';
@@ -27,7 +26,7 @@ function Header({ className }) {
     const avtRef = useRef();
 
     const { currentUser, logout } = useAuth();
-    const { darkModeState, toggleTheme, dark, checkDark } = useUI();
+    const { toggleTheme, dark, checkDark } = useUI();
     const navigate = useNavigate();
     const viewPort = useViewport();
     const isSmall = viewPort.width <= 740;
@@ -118,10 +117,16 @@ function Header({ className }) {
 
     return (
         <div className={classes}>
-            <Grid wide className={cx('inner-wrapper')}>
+            <Grid type={'wide'} className={cx('inner-wrapper')}>
                 <GridRow>
-                    <GridColumn l={3.25} m={2} s={2} className={cx('logo')}>
-                        {isSmall ? <CircleButton children={<FontAwesomeIcon icon={faFacebookF} />} /> : <h4>facus</h4>}
+                    <GridColumn l={3.25} m={2} s={2}>
+                        <Link className={cx('logo')} to={config.routes.home}>
+                            {isSmall ? (
+                                <CircleButton children={<FontAwesomeIcon icon={faFacebookF} />} />
+                            ) : (
+                                <h4>Facus</h4>
+                            )}
+                        </Link>
                     </GridColumn>
 
                     <GridColumn l={5.5} m={7} s={8}>

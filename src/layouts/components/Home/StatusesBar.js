@@ -11,31 +11,30 @@ const cx = classNames.bind(styles);
 function StatusesBar({ data }) {
     const { checkDark } = useUI();
     const { currentUser } = useAuth();
-    const statusList = [];
-    data.forEach((data) => {
-        if (data.status) return statusList.push(data.status);
-    });
+    // const statusList = [];
+    // data.forEach((data) => {
+    //     if (data.status) return statusList.push(data.status);
+    // });
 
     return (
         <div className={cx('horizontal-scroll', checkDark())}>
             {/* <button className={cx('btn-scroll-left')}>{<FontAwesomeIcon icon={faChevronLeft} />}</button> */}
-
             <div className={cx('status-container')}>
-                {statusList.length > 0 ? (
-                    data?.map(
-                        (list) =>
-                            list.status && (
-                                <RoundAccountItem
-                                    key={list.uid}
-                                    avt={list.photoURL}
-                                    userName={list.displayName}
-                                    status={list.status}
-                                    statusIcon={list.status.icon}
-                                />
-                            ),
-                    )
-                ) : (
+                {/* Check if current user having status, add status button will not be shown */}
+                {!data?.find((list) => list.uid === currentUser.uid)?.status && (
                     <RoundAccountItem addStatus avt={currentUser.photoURL} />
+                )}
+                {data?.map(
+                    (list) =>
+                        list.status && (
+                            <RoundAccountItem
+                                key={list.uid}
+                                avt={list.photoURL}
+                                userName={list.displayName}
+                                status={list.status}
+                                statusIcon={list.status.icon}
+                            />
+                        ),
                 )}
             </div>
             {/* <button className={cx('btn-scroll-right')}>{<FontAwesomeIcon icon={faChevronRight} />}</button> */}

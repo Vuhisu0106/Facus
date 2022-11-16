@@ -44,26 +44,14 @@ function RoundAccountItem({ className, userName, avt, status, bigText, addStatus
                 <div className={cx('story-circle')}>
                     <img className={cx('user-img')} alt={userName} src={avt} />
                 </div>
-                {/* <Tippy
-                    //interactive="true"
-                    placement={'bottom-end'}
-                    //offset={'10, 10'}
-                    render={(attrs) => (
-                        <div tabIndex="-1" {...attrs}>
-                            <PopperWrapper>
-                                <p>{status.text}</p>
-                            </PopperWrapper>
-                        </div>
-                    )}
-                > */}
+
                 <div className={cx('status-wrapper')}>
                     <div className={cx('status')}>
                         {!addStatus ? status.icon : <FontAwesomeIcon icon={faPlusCircle} />}
                     </div>
                 </div>
-                {/* </Tippy> */}
             </div>
-            <span className={cx('user-name', bigText && 'big-font')}>{userName}</span>
+            <span className={cx('user-name', bigText && 'big-font')}>{addStatus ? 'Add status' : userName}</span>
         </div>
     );
 }

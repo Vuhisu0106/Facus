@@ -111,7 +111,7 @@ function Home() {
     };
 
     return (
-        <Grid wide className={cx('wrapper', checkDark())}>
+        <Grid type={'wide'} className={cx('wrapper', checkDark())}>
             {/* <button
                 onClick={() => {
                     console.log(currentUserInfo);

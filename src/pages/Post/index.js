@@ -35,7 +35,7 @@ function Post() {
     return (
         postDetail && (
             <div className={cx('container', checkDark())}>
-                <Grid chat>
+                <Grid type={'chat'}>
                     <GridRow className={'post-grid-row'}>
                         <GridColumn l={7.75} m={6.75} s={12} className={cx('post-img-wrapper')}>
                             <div className={cx('post-image')}>

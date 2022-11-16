@@ -4,7 +4,6 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthState
 import { auth } from '~/firebase/config';
 
 const AuthContext = createContext();
-
 export function useAuth() {
     return useContext(AuthContext);
 }

@@ -12,6 +12,9 @@ import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
 import { useUI } from '~/context/UIContext';
+import Grid from '~/components/Grid/Grid';
+import GridRow from '~/components/Grid/GridRow';
+import GridColumn from '~/components/Grid/GridColumn';
 
 const cx = classNames.bind(styles);
 function AccountSearch({ className, placeHolder, placement, autoFocus }) {
@@ -80,23 +83,27 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
                 placement={placement}
                 visible={showResult && searchValue}
                 render={(attrs) => (
-                    <div className={cx('account-search-result')} tabIndex="-1" {...attrs}>
-                        <PopperWrapper>
-                            {loading === false && searchResult.length === 0 ? (
-                                <span>User not found</span>
-                            ) : (
-                                searchResult.map((result) => (
-                                    <AccountItem
-                                        key={result.uid}
-                                        data={result}
-                                        onClick={() => {
-                                            handleSelect(result);
-                                        }}
-                                    />
-                                ))
-                            )}
-                        </PopperWrapper>
-                    </div>
+                    <Grid type={'wide'} className={cx('account-search-result')} tabIndex="-1" {...attrs}>
+                        <GridRow>
+                            <GridColumn l={12}>
+                                <PopperWrapper>
+                                    {loading === false && searchResult.length === 0 ? (
+                                        <span>User not found</span>
+                                    ) : (
+                                        searchResult.map((result) => (
+                                            <AccountItem
+                                                key={result.uid}
+                                                data={result}
+                                                onClick={() => {
+                                                    handleSelect(result);
+                                                }}
+                                            />
+                                        ))
+                                    )}
+                                </PopperWrapper>
+                            </GridColumn>
+                        </GridRow>
+                    </Grid>
                 )}
                 onClickOutside={handleHideResult}
             >
