@@ -68,28 +68,6 @@
     &:focus-within {
         border-color: rgba(22, 24, 35, 0.2);
     }
-
-    .loading {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba(22, 24, 35, 0.34);
-        //not
-    }
-
-    .loading {
-        animation: spinner 1s infinite linear;
-    }
-
-    @keyframes spinner {
-        from {
-            transform: translateY(-50%) rotate(0);
-        }
-        to {
-            transform: translateY(-50%) rotate(360deg);
-        }
-    }
 }
 
 //Image Input Area//

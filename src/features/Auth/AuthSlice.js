@@ -1,4 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { onSnapshot, doc } from 'firebase/firestore';
+
+import { db } from '~/firebase/config';
+import { useAuth } from './AuthContext';
+
+const { currentUser } = useAuth();
+const [currentUserInfo, setCurrentUserInfo] = useState({});
 
 const initialState = {
     displayName: null,
@@ -6,6 +14,20 @@ const initialState = {
     uid: null,
     email: null,
 };
+
+useEffect(() => {
+    const getCurrentUser = () => {
+        console.log('call api: ' + currentUser.displayName);
+        const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
+            doc.exists() && setCurrentUserInfo(doc.data());
+        });
+        return () => {
+            unsub();
+        };
+    };
+
+    currentUser?.uid && getCurrentUser();
+}, [currentUser]);
 
 const auth = createSlice({
     name: 'auth',

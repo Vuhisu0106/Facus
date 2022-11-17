@@ -91,18 +91,6 @@
             margin-top: 4px;
         }
 
-        .large {
-            max-width: 400px;
-        }
-
-        .medium {
-            max-width: 320px;
-        }
-
-        .small {
-            max-width: 320px;
-        }
-
         .reaction-image-cmt {
             position: absolute;
             bottom: -3px;
@@ -166,6 +154,21 @@
         &:hover {
             text-decoration: underline;
         }
+    }
+}
+@media (min-width: 1240px) {
+    .comment-image {
+        max-width: 100%;
+    }
+}
+@media (min-width: 740px) and (max-width: 1239px) {
+    .comment-image {
+        max-width: 200px;
+    }
+}
+@media (max-width: 739px) {
+    .comment-image {
+        max-width: 100%;
     }
 }
 

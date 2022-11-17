@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { useNavigate } from 'react-router-dom';
 
-import styles from '~/components/SuggestAccount/SuggestAccount.module.scss';
+import styles from '~/layouts/components/Home/Home.module.scss';
 import { useAuth } from '~/context/AuthContext';
 
 const cx = classNames.bind(styles);

@@ -22,7 +22,7 @@ import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
 import { useDispatch } from 'react-redux';
-import { setBio, setProfileInfo, setStatus } from '~/features/Profile/ProfileSlice';
+import { setProfileInfo } from '~/features/Profile/ProfileSlice';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -66,6 +66,7 @@ function Profile() {
 
     useEffect(() => {
         const getSelectedUser = () => {
+            setType('Posts');
             const unsub = onSnapshot(doc(db, 'users', params.id), (doc) => {
                 setSelectedUser(doc.data());
                 console.log('logg: ' + currentUserInfo);
@@ -183,7 +184,7 @@ function Profile() {
                                                             className={cx('hovered-set-status-btn')}
                                                             onClick={() => {
                                                                 setStatusModalVisible(true);
-                                                                console.log(selectedUser.status);
+                                                                console.log(selectedUser?.status);
                                                             }}
                                                         >
                                                             {selectedUser?.status ? (
@@ -199,8 +200,8 @@ function Profile() {
                                                         </div>
                                                     ) : (
                                                         <div className={cx('set-status-btn')}>
-                                                            {selectedUser.status ? (
-                                                                selectedUser.status.icon
+                                                            {selectedUser?.status ? (
+                                                                selectedUser?.status.icon
                                                             ) : (
                                                                 <FontAwesomeIcon icon={faFaceSmile} />
                                                             )}

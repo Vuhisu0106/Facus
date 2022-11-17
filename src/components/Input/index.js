@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Input.module.scss';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useUI } from '~/context/UIContext';
+import { LoadingIcon } from '../Icon';
 
 const cx = classNames.bind(styles);
 function Input({
@@ -55,7 +56,7 @@ function Input({
                 autoFocus={autoFocus}
                 {...props}
             ></input>
-            {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
+            {loading && <LoadingIcon />}
             {rightIcon &&
                 (!rightBtnTypeFile ? (
                     <button

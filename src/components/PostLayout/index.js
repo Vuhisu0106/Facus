@@ -1,4 +1,4 @@
-import { faCamera, faEllipsis, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faEllipsis, faPaperPlane, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState, useEffect, useRef } from 'react';
@@ -33,6 +33,7 @@ import AddPostModal from '../Modal/Modal/AddPostModal';
 import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
 import { useDispatch } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
+import { useViewport } from '../Hook';
 
 const cx = classNames.bind(styles);
 function PostLayout({
@@ -69,9 +70,10 @@ function PostLayout({
     const commentInputRef = useRef();
 
     const dispatch = useDispatch();
+    const viewPort = useViewport();
+    const isSmall = viewPort.width <= 740;
 
     const classes = cx('post-wrapper', checkDark(), { [className]: className });
-
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'post', postId), (doc) => {
             doc.exists() && setPostDetail(doc.data());
@@ -375,25 +377,44 @@ function PostLayout({
                     />
 
                     <div className={cx('comment-input-area')}>
-                        <Input
-                            className={cx('comment-input')}
-                            value={comment}
-                            type="text"
-                            placeHolder={'Write comment here...'}
-                            inputRef={commentInputRef}
-                            //classNameInputRight={`${postId}`}
-                            rightIcon={<FontAwesomeIcon icon={faCamera} />}
-                            onChange={handleCommentInput}
-                            rightBtnTypeFile
-                            onChangeRightBtn={(e) => {
-                                setCommentImg(e.target.files[0]);
-                            }}
-                            onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
+                        {isSmall ? (
+                            <Input
+                                className={cx('comment-input')}
+                                value={comment}
+                                type="text"
+                                placeHolder={'Write comment here...'}
+                                inputRef={commentInputRef}
+                                leftIcon={<FontAwesomeIcon icon={faCamera} />}
+                                onChange={handleCommentInput}
+                                leftBtnTypeFile
+                                onChangeLeftBtn={(e) => {
+                                    setCommentImg(e.target.files[0]);
+                                }}
+                                rightIcon={<FontAwesomeIcon icon={faPaperPlane} />}
+                                onClickRightBtn={() => {
                                     handleComment();
-                                }
-                            }}
-                        />
+                                }}
+                            />
+                        ) : (
+                            <Input
+                                className={cx('comment-input')}
+                                value={comment}
+                                type="text"
+                                placeHolder={'Write comment here...'}
+                                inputRef={commentInputRef}
+                                rightIcon={<FontAwesomeIcon icon={faCamera} />}
+                                onChange={handleCommentInput}
+                                rightBtnTypeFile
+                                onChangeRightBtn={(e) => {
+                                    setCommentImg(e.target.files[0]);
+                                }}
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleComment();
+                                    }
+                                }}
+                            />
+                        )}
                         {commentImg && (
                             <ImageInputArea
                                 src={URL.createObjectURL(commentImg)}
@@ -421,7 +442,7 @@ function PostLayout({
                                     ))}
                         </div>
                     ) : (
-                        <div className={cx('comment-list-for-post-page')}>
+                        <div className={cx('comment-list-for-post-page')} style={{ overflowY: isSmall && 'hidden' }}>
                             {commentList &&
                                 commentList
                                     ?.sort((a, b) => b.createdAt - a.createdAt)

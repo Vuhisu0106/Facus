@@ -7,17 +7,20 @@ import { useApp } from '~/context/AppContext';
 import { useUI } from '~/context/UIContext';
 import AccountItem from './AccountItem';
 
-import styles from './SuggestAccount.module.scss';
+import styles from './Home.module.scss';
+import { useAuth } from '~/context/AuthContext';
 
 const cx = classNames.bind(styles);
 function SuggestAccount({ label }) {
+    const { currentUser } = useAuth();
     const { checkDark } = useUI();
     const { currentUserInfo } = useApp();
     const [suggestFollowList, setSuggestFollowList] = useState([]);
 
     useEffect(() => {
         const getSuggestFollowList = async () => {
-            const a = currentUserInfo?.following;
+            const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
+            //console.log('sfwsgfv' + a);
             const q = query(collection(db, 'users'), where('uid', 'not-in', a), limit(6));
             //console.log('suggest follow: ' + currentUserInfo);
             try {
@@ -29,10 +32,10 @@ function SuggestAccount({ label }) {
             }
         };
         getSuggestFollowList();
-    }, [currentUserInfo]);
+    }, [currentUser, currentUserInfo?.following]);
 
     return (
-        <div className={cx('wrapper', checkDark())}>
+        <div className={cx('wrapper', checkDark('dark-suggest-account'))}>
             <div className={cx('label')}>
                 <p>{label}</p>
             </div>

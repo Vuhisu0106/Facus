@@ -17,6 +17,7 @@ import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
 import { useViewport } from '~/components/Hook';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +27,7 @@ function Header({ className }) {
     const avtRef = useRef();
 
     const { currentUser, logout } = useAuth();
+    const { currentUserInfo } = useApp();
     const { toggleTheme, dark, checkDark } = useUI();
     const navigate = useNavigate();
     const viewPort = useViewport();
@@ -148,7 +150,7 @@ function Header({ className }) {
                                     <img
                                         className={cx('user-avt')}
                                         alt="Vu Minh Hieu"
-                                        src={currentUser.photoURL}
+                                        src={currentUserInfo?.photoURL}
                                         ref={avtRef}
                                         onClick={() => {
                                             setIsMenuVisible(!isMenuVisible);
@@ -177,7 +179,7 @@ function Header({ className }) {
                                     <img
                                         className={cx('user-avt')}
                                         alt="Vu Minh Hieu"
-                                        src={currentUser.photoURL}
+                                        src={currentUserInfo?.photoURL}
                                         ref={avtRef}
                                         onClick={() => {
                                             setIsMenuVisible(!isMenuVisible);

@@ -1,5 +1,4 @@
 import Home from '~/pages/Home';
-import Upload from '~/pages/Upload';
 import LandingPage from '~/pages/LandingPage';
 import Message from '~/pages/Message';
 import Profile from '~/pages/Profile';
@@ -21,10 +20,7 @@ const privateRoutes = [
         path: config.routes.home,
         component: Home,
     },
-    {
-        path: config.routes.upload,
-        component: Upload,
-    },
+
     {
         path: config.routes.profile,
         component: Profile,

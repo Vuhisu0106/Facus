@@ -11,11 +11,14 @@ import PostLayout from '~/components/PostLayout';
 import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
+import { useViewport } from '~/components/Hook';
 
 const cx = classNames.bind(styles);
 function Post() {
     let params = useParams();
     const { checkDark } = useUI();
+    const viewPort = useViewport();
+    const isSmall = viewPort.width <= 740;
 
     const [postDetail, setPostDetail] = useState();
 
@@ -45,6 +48,7 @@ function Post() {
                         <GridColumn l={4} l_o={0.25} m={5} m_o={0.25} s={12} className={cx('post-detail')}>
                             <PostLayout
                                 className={cx('post-detail-wrapper')}
+                                style={{ overflowY: isSmall && 'scroll' }}
                                 postPage
                                 key={postDetail.postId}
                                 postId={postDetail.postId}

@@ -210,7 +210,7 @@ function CommentItem({ data, sizeImg, deleteComment }) {
 
                     {commentDetail?.img && (
                         <div className={cx('comment-img-n-reaction')}>
-                            <img className={cx('comment-image', sizeImg)} src={commentDetail?.img} alt="" />
+                            <img className={cx('comment-image')} src={commentDetail?.img} alt="" />
                             {commentDetail.like && commentDetail.like.length > 0 && (
                                 <div className={cx('reaction-image-cmt')}>
                                     <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
