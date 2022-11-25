@@ -11,6 +11,11 @@
     margin: 0 auto;
 }
 
+.grid.landing {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
 .grid.profile {
     max-width: 1128.92px;
     margin: 0 auto;
@@ -84,7 +89,8 @@
         width: 744px;
     }
     .profile,
-    .chat {
+    .chat,
+    .landing {
         width: 100%;
     }
 }
@@ -97,30 +103,38 @@
         width: 1000px;
     }
 
+    .landing {
+        width: 100%;
+    }
+
     .wide .row,
     .profile .row,
-    .chat .row {
+    .chat .row,
+    .landing .row {
         margin-left: 0;
         margin-right: 0;
     }
 
     .wide .row.sm-gutter,
     .profile .row.sm-gutter,
-    .chat .row.sm-gutter {
+    .chat .row.sm-gutter,
+    .landing .row.sm-gutter {
         margin-left: -5px;
         margin-right: -5px;
     }
 
     .wide .col,
     .profile .col,
-    .chat .col {
+    .chat .col,
+    .landing .col {
         padding-left: 12px;
         padding-right: 12px;
     }
 
     .wide .row.sm-gutter .col,
     .profile .row.sm-gutter .col,
-    .chat .row.sm-gutter .col {
+    .chat .row.sm-gutter .col,
+    .landing .row.sm-gutter .col {
         padding-left: 5px;
         padding-right: 5px;
     }

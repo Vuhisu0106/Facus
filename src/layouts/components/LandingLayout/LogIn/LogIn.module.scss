@@ -1,0 +1,247 @@
+.log-in-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    background-color: rgba(136, 167, 250, 0.6);
+    backdrop-filter: blur(15px);
+    padding-top: 70px;
+    overflow: hidden;
+}
+
+.log-in-col {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    //z-index: 1;
+}
+
+form {
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 0 5rem;
+    top: 50%;
+    left: 75%;
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 25px;
+    h2 {
+        font-size: 3.2rem;
+        color: #444;
+        margin-bottom: 5px;
+    }
+    p {
+        color: rgb(109, 108, 108);
+        font-weight: 500;
+    }
+}
+
+.input {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+
+    h4 {
+        color: #3a3b3c;
+    }
+}
+
+.input-field {
+    //max-width: 380px;
+    width: 100%;
+    background-color: #fff;
+    margin: 5px 0;
+    height: 55px;
+    border-radius: 10px;
+    height: 50px;
+    padding: 0 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--primary);
+
+    input {
+        width: 100%;
+        background: none;
+        outline: none;
+        border: none;
+        line-height: 1;
+        font-weight: 600;
+        font-size: 1.6rem;
+        color: #333;
+    }
+
+    input::placeholder {
+        color: #aaa;
+        font-weight: 500;
+    }
+
+    .icon {
+        text-align: center;
+        margin-right: 8px;
+        color: #acacac;
+        transition: 0.5s;
+        font-size: 1.6rem;
+    }
+}
+
+.other-features {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+        display: flex;
+        align-items: center;
+        column-count: 2;
+        column-gap: 5px;
+        color: #3a3b3c;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+
+        input[type='checkbox'] {
+            accent-color: var(--primary);
+        }
+    }
+    a {
+        color: #3a3b3c;
+        font-size: 14px;
+        font-weight: 600;
+    }
+}
+
+.btn {
+    width: 100%;
+    background: linear-gradient(120deg, #e54c91 49.6%, #f48b7b 100%);
+    border: none;
+    outline: none;
+    height: 45px;
+    border-radius: 10px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: 0.1s;
+    font-size: 1.5rem;
+
+    &:hover {
+        background: linear-gradient(120deg, #e54c91 49.6%, #f48b7b 100%);
+        opacity: 0.8;
+    }
+}
+
+.social-text {
+    padding: 0.7rem 0;
+    font-size: 1.8rem;
+}
+
+.social-media {
+    display: flex;
+    justify-content: center;
+}
+
+.social-icon {
+    height: 46px;
+    width: 46px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0.45rem;
+    color: #333;
+    border-radius: 50%;
+    border: 1px solid #333;
+    text-decoration: none;
+    font-size: 1.8rem;
+    transition: 0.3s;
+}
+
+.social-icon:hover {
+    color: #4481eb;
+    border-color: #4481eb;
+}
+
+///////Log in/////////////
+
+.animate-col {
+    position: relative;
+}
+
+.hand {
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+
+    .hand-image {
+        width: 95%;
+    }
+}
+.cloud {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+
+    .cloud-image {
+        height: 100%;
+        max-width: 100%;
+        opacity: 0.7;
+    }
+    .heart-image-1 {
+        position: absolute;
+        top: 50px;
+        left: 100px;
+    }
+
+    .heart-image-2 {
+        position: absolute;
+        top: 420px;
+        left: 140px;
+    }
+
+    .heart-image-3 {
+        position: absolute;
+        top: 300px;
+        left: 200px;
+    }
+
+    .image-4 {
+        position: absolute;
+        top: 100px;
+        left: 800px;
+        max-width: 150%;
+        opacity: 0.55;
+
+        -webkit-transform: rotate(120deg); /* Safari and Chrome */
+        -moz-transform: rotate(120deg); /* Firefox */
+        -ms-transform: rotate(120deg); /* IE 9 */
+        -o-transform: rotate(120deg); /* Opera */
+        transform: rotate(120deg);
+    }
+}

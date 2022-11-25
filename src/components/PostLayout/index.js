@@ -136,7 +136,7 @@ function PostLayout({
 
     const handleOnClickCommentBtn = () => {
         commentInputRef.current.focus();
-        setCommentVisible(true);
+        !isSmall && setCommentVisible(true);
     };
 
     const handleComment = async () => {

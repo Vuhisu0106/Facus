@@ -7,11 +7,27 @@ import Post from '~/pages/Post';
 import config from '~/configs';
 import HeaderOnly from '~/layouts/HeaderOnly';
 
+import SignUp from '~/layouts/components/LandingLayout/SignUp';
+
+import LandingLayout from '~/layouts/LandingLayout';
+import HomePage from '~/layouts/components/LandingLayout/HomePage';
+import LogIn from '~/layouts/components/LandingLayout/LogIn';
+
 const publicRoutes = [
     {
-        path: config.routes.landing,
-        component: LandingPage,
-        layout: null,
+        path: config.routes.homepage,
+        component: HomePage,
+        layout: LandingLayout,
+    },
+    {
+        path: config.routes.signup,
+        component: SignUp,
+        layout: LandingLayout,
+    },
+    {
+        path: config.routes.login,
+        component: LogIn,
+        layout: LandingLayout,
     },
 ];
 

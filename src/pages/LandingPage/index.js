@@ -3,6 +3,9 @@ import classNames from 'classnames/bind';
 import styles from './LandingPage.module.scss';
 import SignUp from '~/layouts/components/LandingLayout/SignUp';
 import LogIn from '~/layouts/components/LandingLayout/LogIn';
+import { Outlet, Route, Router, Routes } from 'react-router-dom';
+import HomePage from '~/layouts/components/LandingLayout/HomePage';
+import Header from '~/layouts/components/Header';
 
 const cx = classNames.bind(styles);
 
@@ -40,14 +43,7 @@ function LandingPage() {
     //     await signOut(auth);
     // };
 
-    return (
-        <div className={cx('wrapper')}>
-            {/* Log in form  */}
-            <LogIn />
-            {/* Sign Up form */}
-            <SignUp />
-        </div>
-    );
+    return <SignUp />;
 }
 
 export default LandingPage;

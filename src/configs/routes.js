@@ -1,9 +1,11 @@
 const routes = {
-    home: '/',
+    home: '/home',
     profile: '/user/:id',
     post: '/post/:id',
     message: '/message',
-    landing: '/landing',
+    homepage: '/',
+    signup: '/sign-up',
+    login: '/log-in',
 };
 
 export default routes;

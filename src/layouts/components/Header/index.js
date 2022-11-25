@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket, faHome, faMoon, faSearch, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faHome, faMoon, faSearch, faSun, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './Header.module.scss';
 import CircleButton from '~/components/Button/CircleButton';
 import { faFacebookF, faFacebookMessenger } from '@fortawesome/free-brands-svg-icons';
-import { faUser } from '@fortawesome/free-regular-svg-icons';
+import { faUser as faUserRegular } from '@fortawesome/free-regular-svg-icons';
 import config from '~/configs';
 import { useRef, useState } from 'react';
 import { useAuth } from '~/context/AuthContext';
@@ -38,7 +38,7 @@ function Header({ className }) {
 
         try {
             await logout();
-            navigate('/landing');
+            navigate('/');
         } catch {
             setError('Failed to log out');
         }
@@ -50,7 +50,7 @@ function Header({ className }) {
 
     const HEADER_MENU = [
         {
-            icon: <FontAwesomeIcon icon={faUser} />,
+            icon: <FontAwesomeIcon icon={faUserRegular} />,
             title: 'View profile',
             onClick: () => {
                 navigate(`/user/${currentUser.uid}`);
