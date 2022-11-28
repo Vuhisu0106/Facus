@@ -4,9 +4,7 @@
 }
 
 .profile-main-part {
-    //width: 100%;
-    //padding: 0 216px;
-    background-color: #fff;
+    background-color: var(--background-color);
 }
 
 .profile-cover-photo {
@@ -21,10 +19,7 @@
     height: 160px;
     padding-top: 10px;
     padding-bottom: 16px;
-    //margin: 0 32px;
-
     border-bottom: 1px solid rgb(204, 206, 209);
-    //transform: translateY(-42px);
 }
 
 .profile-main-part-center-2 {
@@ -87,7 +82,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--white);
+    background-color: var(--background-color);
     border: 1px solid rgb(204, 206, 209);
     position: absolute;
     margin: 0 8px 8px 0;
@@ -154,7 +149,7 @@
 .profile-nav {
     padding: 4px 0;
     height: 62px;
-    background-color: #fff;
+    background-color: var(--background-color);
 
     .profile-nav-grid {
         height: 100%;
@@ -230,10 +225,6 @@
 }
 ////////////////////////////////Dark mode//////////////////////////////////////
 .dark {
-    .profile-main-part {
-        background-color: var(--dark-background-color-2);
-    }
-
     .profile-main-part-center {
         border-bottom: 1px solid rgb(62, 64, 66);
     }
@@ -248,7 +239,6 @@
 
     .hovered-set-status-btn,
     .set-status-btn {
-        background-color: var(--dark-background-color-2);
         border: 1px solid rgb(62, 64, 66);
     }
 
@@ -284,8 +274,6 @@
     }
 
     .profile-nav {
-        background-color: var(--dark-background-color-2);
-
         ul {
             li {
                 font-size: 15px;

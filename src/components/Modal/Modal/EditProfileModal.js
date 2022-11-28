@@ -106,6 +106,7 @@ function EditProfileModal({ onClose }) {
                                             <input
                                                 id="avatar-upload"
                                                 type="file"
+                                                accept="image/*"
                                                 onChange={(e) => {
                                                     setAvatar(e.target.files[0]);
                                                     setIsAvatarChange(true);
@@ -163,6 +164,7 @@ function EditProfileModal({ onClose }) {
                                             <input
                                                 id="cover-photo-upload"
                                                 type="file"
+                                                accept="image/*"
                                                 onChange={(e) => {
                                                     setCoverPhoto(e.target.files[0]);
                                                     setIsCoverPhotoChange(true);

@@ -8,10 +8,17 @@ import { useUI } from '~/context/UIContext';
 import Grid from '../Grid/Grid';
 import GridRow from '../Grid/GridRow';
 import GridColumn from '../Grid/GridColumn';
+import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 function Modal({ title, children, onClose, s, s_o, m, m_o, l, l_o }) {
     const { checkDark } = useUI();
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => (document.body.style.overflow = 'unset');
+    }, []);
+
     return (
         <div className={cx('container', checkDark())}>
             <Grid>

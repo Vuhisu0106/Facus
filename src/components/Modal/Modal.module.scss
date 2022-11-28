@@ -22,7 +22,7 @@
 .inner-wrapper {
     width: 100%;
     height: fit-content;
-    background-color: #fff;
+    background-color: var(--background-color);
     border-radius: 5px;
     box-shadow: rgb(0 0 0 / 20%) 2px 10px 30px 0px;
 }
@@ -490,7 +490,7 @@ input[type='file'] {
     .status-icon {
         border-bottom-left-radius: 8px;
         border-top-left-radius: 8px;
-        background-color: var(--white);
+        background-color: var(--background-color);
         border-right: 1.5px solid rgba(22, 24, 35, 0.2);
 
         &:hover {
@@ -588,10 +588,6 @@ input[type='file'] {
         h2 {
             color: var(--dark-text-color-3);
         }
-    }
-
-    .inner-wrapper {
-        background-color: var(--dark-background-color-2);
     }
 }
 
@@ -712,7 +708,6 @@ input[type='file'] {
         }
 
         .status-icon {
-            background-color: var(--dark-background-color-2);
             border-right: 1px solid rgb(62, 64, 66);
             color: var(--dark-icon-color);
 

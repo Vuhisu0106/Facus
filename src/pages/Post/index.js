@@ -57,7 +57,7 @@ function Post() {
                                 userAvt={postDetail?.poster?.photoURL}
                                 timeStamp={postDetail?.date && moment(postDetail?.date.toDate()).fromNow()}
                                 postCaption={postDetail?.caption}
-                                likeCount={postDetail?.like?.length}
+                                like={postDetail?.like}
                                 //commentCount={post[1]?.comment?.length}
                             />
                         </GridColumn>

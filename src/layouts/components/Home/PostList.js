@@ -1,15 +1,12 @@
-import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useState, useEffect } from 'react';
-import { onSnapshot, where, collection, query, deleteField } from 'firebase/firestore';
+import { onSnapshot, where, collection, query } from 'firebase/firestore';
 
 import { db } from '~/firebase/config';
 import PostLayout from '~/components/PostLayout';
 import { useAuth } from '~/context/AuthContext';
-import { deleteDocument, updateDocument } from '~/firebase/services';
 import styles from './Home.module.scss';
 
-const cx = classNames.bind(styles);
 function PostList({ listFollowingUid }) {
     const [postList, setPostList] = useState([]);
     const { currentUser } = useAuth();
@@ -17,7 +14,6 @@ function PostList({ listFollowingUid }) {
     useEffect(() => {
         const getPost = async () => {
             const q = query(collection(db, 'post'), where('poster.uid', 'in', listFollowingUid));
-
             const unsub = onSnapshot(q, (querySnapshot) => {
                 const posts = [];
                 querySnapshot.forEach((doc) => {
@@ -34,20 +30,6 @@ function PostList({ listFollowingUid }) {
         getPost();
     }, [listFollowingUid]);
 
-    const handleDeletePost = async (postId) => {
-        if (window.confirm('Do you want delete this post?')) {
-            try {
-                await deleteDocument('post', postId);
-                await updateDocument('userPost', currentUser.uid, {
-                    [postId]: deleteField(),
-                });
-
-                setPostList((cmtList) => cmtList.filter((x) => x.postId !== postId));
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    };
     return (
         <div>
             {postList
@@ -60,11 +42,10 @@ function PostList({ listFollowingUid }) {
                         userName={post.poster.displayName}
                         userAvt={post.poster.photoURL}
                         timeStamp={post.date && moment(post.date.toDate()).fromNow()}
-                        postImg={post.img && post.img}
+                        postImg={post?.img}
                         postCaption={post.caption}
-                        likeCount={post.like.length}
+                        like={post?.like}
                         commentCount={post.comment.length}
-                        deletePostFunc={handleDeletePost}
                     />
                 ))}
         </div>

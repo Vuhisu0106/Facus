@@ -305,8 +305,8 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
                                     postImg={post[1]?.img && post[1]?.img}
                                     postCaption={post[1]?.caption}
-                                    likeCount={post[1]?.like?.length}
-                                    commentCount={post[1]?.comment?.length}
+                                    like={post[1]?.like}
+                                    comment={post[1]?.comment?.length}
                                     deletePostFunc={handleDeletePost}
                                 />
                             ))

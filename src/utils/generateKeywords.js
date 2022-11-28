@@ -1,7 +1,5 @@
 // tao keywords cho displayName, su dung cho search
-export const generateKeywords = (displayName) => {
-    // liet ke tat cac hoan vi. vd: name = ["David", "Van", "Teo"]
-    // => ["David", "Van", "Teo"], ["David", "Teo", "Van"], ["Teo", "David", "Van"],...
+const generateKeywords = (displayName) => {
     const name = displayName.split(' ').filter((word) => word);
 
     const length = name.length;
@@ -9,12 +7,6 @@ export const generateKeywords = (displayName) => {
     let result = [];
     let stringArray = [];
 
-    /**
-     * khoi tao mang flag false
-     * dung de danh dau xem gia tri
-     * tai vi tri nay da duoc su dung
-     * hay chua
-     **/
     for (let i = 0; i < length; i++) {
         flagArray[i] = false;
     }
@@ -54,3 +46,5 @@ export const generateKeywords = (displayName) => {
 
     return keywords;
 };
+
+export default generateKeywords;

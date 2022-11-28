@@ -141,7 +141,12 @@ function AddPostModal({ edit, prevCaption, prevImg, onCloseAddPostModal, addPost
                                 )}
                             </div>
                         )}
-                        <input id="photo-upload" type="file" onChange={(e) => setImg(e.target.files[0])}></input>
+                        <input
+                            id="photo-upload"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setImg(e.target.files[0])}
+                        ></input>
                     </div>
                     <div className={cx('add-post-footer')}>
                         <div className={cx('btn-nav-footer')}>

@@ -12,11 +12,11 @@ function UIProvider({ children }) {
     //Dark/light mode
     const [dark, setDark] = useState(false || darkModeState);
 
-    // if (dark) {
-    //     document.getElementsByTagName('HTML')[0].setAttribute('data-theme', 'dark');
-    // } else {
-    //     document.getElementsByTagName('HTML')[0].setAttribute('data-theme', 'light');
-    // }
+    if (dark) {
+        document.getElementsByTagName('HTML')[0].setAttribute('data-theme', 'dark');
+    } else {
+        document.getElementsByTagName('HTML')[0].setAttribute('data-theme', 'light');
+    }
 
     const toggleTheme = () => {
         setDark(!dark);

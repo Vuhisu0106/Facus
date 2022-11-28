@@ -71,7 +71,7 @@ function Input({
                             className={cx('right-input-file', { [classNameRightBtn]: classNameRightBtn })}
                             onClick={onClickInputRight}
                         >
-                            <input type="file" onChange={onChangeRightBtn} />
+                            <input type="file" accept="image/*" onChange={onChangeRightBtn} />
                             {rightIcon}
                         </label>
                     </>

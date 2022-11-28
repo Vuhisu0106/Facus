@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
-    background-color: var(--white);
+    background-color: var(--background-color);
     border-radius: 10px;
     position: relative;
 }
@@ -19,7 +19,7 @@
 .profile-card-wrapper {
     max-width: 100%;
     height: 100%;
-    background-color: var(--white);
+    background-color: var(--background-color);
     border-radius: 5px;
     color: var(--text-color);
     padding-top: 20px;
@@ -75,7 +75,7 @@
     }
 
     .follow-btn {
-        background-color: var(--white);
+        background-color: var(--background-color);
         border: 1px solid var(--primary);
         color: var(--primary);
     }
@@ -109,16 +109,10 @@
 //Dark mode//
 
 .dark {
-    .wrapper {
-        background-color: var(--white);
-    }
-
     .blur-wrapper {
     }
 
     .profile-card-wrapper {
-        background-color: var(--dark-background-color-2);
-
         color: var(--text-color);
         background-image: none;
     }
@@ -149,8 +143,6 @@
         }
 
         .follow-btn {
-            background-color: var(--dark-background-color-2);
-
             border: 1px solid var(--primary);
             color: var(--primary);
         }

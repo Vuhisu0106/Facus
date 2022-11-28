@@ -4,15 +4,6 @@
     column-gap: 1.4rem;
 }
 
-.left-content,
-.right-content {
-    //min-height: 300px;
-}
-
-.left-content {
-    //width: 386px;
-}
-
 .intro,
 .photo {
     margin-bottom: 1.4rem;
@@ -94,7 +85,6 @@
 
 .right-content {
     flex: 1;
-    //background-color: #fff;
     h1 {
         color: #65676b;
         text-align: center;
@@ -221,7 +211,6 @@
 .dark-post {
     .intro,
     .photo {
-        background-color: var(--dark-background-color-2);
         box-shadow: none;
         p {
             color: var(--dark-text-color-3);
@@ -271,7 +260,6 @@
     }
 
     .add-post {
-        background-color: var(--dark-background-color-2);
         box-shadow: none;
     }
 
@@ -304,7 +292,6 @@
 
 ///Following
 .dark {
-    background-color: var(--dark-background-color-2);
     box-shadow: none;
 
     h2 {

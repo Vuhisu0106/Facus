@@ -2,7 +2,7 @@
     height: 60px;
     width: 100%;
     padding: 13px 0;
-    background-color: #fff;
+    background-color: var(--background-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -96,7 +96,6 @@
 
 //Dark mode
 .dark {
-    background-color: var(--dark-background-color-2);
     border-bottom: 1px solid rgb(62, 64, 66);
 
     .logo {

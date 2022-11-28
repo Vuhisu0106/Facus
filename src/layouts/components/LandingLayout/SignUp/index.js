@@ -10,7 +10,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '~/context/AuthContext';
 import styles from './SignUp.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { generateKeywords } from '~/utils/generateKeywords';
+import { generateKeywords } from '~/utils';
 import { setDocument } from '~/firebase/services';
 import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';

@@ -23,6 +23,7 @@ import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
 import { useDispatch } from 'react-redux';
 import { setProfileInfo } from '~/features/Profile/ProfileSlice';
+import Test2 from '~/components/test/test2';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -313,6 +314,7 @@ function Profile() {
                     </GridRow>
                 </Grid>
             </div>
+
             <div className={cx('profile-nav')}>
                 <Grid type={'profile'} className={cx('profile-nav-grid')}>
                     <GridRow>

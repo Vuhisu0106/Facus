@@ -7,6 +7,7 @@
     backdrop-filter: blur(15px);
     padding-top: 70px;
     overflow: hidden;
+    transition: all 0.5s;
 }
 
 .log-in-col {
@@ -47,9 +48,10 @@ form {
     justify-content: flex-start;
     margin-bottom: 25px;
     h2 {
-        font-size: 3.2rem;
+        font-size: 3.8rem;
         color: #444;
         margin-bottom: 5px;
+        font-family: 'Lato', sans-serif;
     }
     p {
         color: rgb(109, 108, 108);
@@ -81,7 +83,11 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--primary);
+    border: 1.6px solid rgb(229, 76, 145, 0.5);
+
+    &:focus-within {
+        border: 1.6px solid var(--primary);
+    }
 
     input {
         width: 100%;
@@ -113,24 +119,12 @@ form {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    span {
-        display: flex;
-        align-items: center;
-        column-count: 2;
-        column-gap: 5px;
-        color: #3a3b3c;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
 
-        input[type='checkbox'] {
-            accent-color: var(--primary);
-        }
-    }
     a {
         color: #3a3b3c;
         font-size: 14px;
         font-weight: 600;
+        cursor: pointer;
     }
 }
 
@@ -157,32 +151,37 @@ form {
 
 .social-text {
     padding: 0.7rem 0;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #3a3b3c;
 }
 
 .social-media {
     display: flex;
     justify-content: center;
-}
 
-.social-icon {
-    height: 46px;
-    width: 46px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 0.45rem;
-    color: #333;
-    border-radius: 50%;
-    border: 1px solid #333;
-    text-decoration: none;
-    font-size: 1.8rem;
-    transition: 0.3s;
-}
+    .social-icons {
+        height: 46px;
+        width: 46px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 0.45rem;
+        color: #333;
+        border-radius: 15px;
+        border: 1px solid #333;
+        text-decoration: none;
+        font-size: 1.8rem;
 
-.social-icon:hover {
-    color: #4481eb;
-    border-color: #4481eb;
+        .icon {
+            //transition: 0.1s !important;
+        }
+
+        &:hover {
+            color: #e54c91;
+            border-color: var(--primary);
+        }
+    }
 }
 
 ///////Log in/////////////

@@ -15,8 +15,9 @@ function HomePage() {
     return (
         <div className={cx('wrapper')}>
             <Grid type={'landing'} className={cx('home')}>
+                <div className={cx('home-test2')}></div>
                 <GridRow className={cx('home-test')}>
-                    <GridColumn l={5.5} m={6} className={cx('home-content')}>
+                    <GridColumn l={5.5} m={6} s={12} className={cx('home-content')}>
                         <div className={cx('content-inner')}>
                             <h1 className={cx('home-title')}>A new world is rising. Let’s discover it.</h1>
                             <div className={cx('home-description')}>
@@ -32,7 +33,7 @@ function HomePage() {
                             </div>
                         </div>
                     </GridColumn>
-                    <GridColumn l={6} l_o={0.5} m={6} className={cx('home-animation')}>
+                    <GridColumn l={6} l_o={0.5} m={6} s={12} className={cx('home-animation')}>
                         <div className={cx('animation-inner')}>
                             <img className={cx('vector')} src="images/Vector-1.png" alt="" />
                             <img className={cx('man')} src="images/Saly-13.0.png" alt="" />

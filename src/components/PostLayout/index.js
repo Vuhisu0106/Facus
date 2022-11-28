@@ -34,6 +34,7 @@ import { deleteDocument, setDocument, updateDocument } from '~/firebase/services
 import { useDispatch } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { useViewport } from '../Hook';
+import { handleDeletePost, handleLikePost } from '~/utils';
 
 const cx = classNames.bind(styles);
 function PostLayout({
@@ -45,17 +46,16 @@ function PostLayout({
     timeStamp,
     postImg,
     postCaption,
-    likeCount,
+    like,
     commentCount,
-    deletePostFunc,
     postPage,
 }) {
     const { currentUser } = useAuth();
     const { checkDark } = useUI();
 
-    const [postDetail, setPostDetail] = useState({});
-    const [caption, setCaption] = useState(postDetail?.caption || postCaption || '');
-    const [img, setImg] = useState(postDetail?.img || postImg || null);
+    //const [postDetail, setPostDetail] = useState({});
+    const [caption, setCaption] = useState(postCaption || '');
+    const [img, setImg] = useState(postImg || null);
     const [popperVisible, setPopperVisible] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [error, setError] = useState('');
@@ -74,16 +74,16 @@ function PostLayout({
     const isSmall = viewPort.width <= 740;
 
     const classes = cx('post-wrapper', checkDark(), { [className]: className });
-    useEffect(() => {
-        const unSub = onSnapshot(doc(db, 'post', postId), (doc) => {
-            doc.exists() && setPostDetail(doc.data());
-            console.log('1: read');
-        });
+    // useEffect(() => {
+    //     const unSub = onSnapshot(doc(db, 'post', postId), (doc) => {
+    //         doc.exists() && setPostDetail(doc.data());
+    //         console.log('1: read');
+    //     });
 
-        return () => {
-            unSub();
-        };
-    }, [postId]);
+    //     return () => {
+    //         unSub();
+    //     };
+    // }, [postId]);
 
     useEffect(() => {
         const unSub = async () => {
@@ -91,7 +91,6 @@ function PostLayout({
             try {
                 const querySnapshot = await getDocs(q);
                 setCommentList(querySnapshot.docs.map((doc) => doc.data()));
-                console.log('2: read');
 
                 //setLoading(false);
             } catch (err) {
@@ -103,26 +102,6 @@ function PostLayout({
 
         unSub();
     }, [postId, isAddComment]);
-
-    const handleLike = async () => {
-        //console.log(postDetail);
-        if (postDetail.like.indexOf(currentUser.uid) === -1) {
-            await updateDocument('post', postId, {
-                like: arrayUnion(currentUser.uid),
-            });
-
-            await updateDocument('userPost', userId, {
-                [postId + '.like']: arrayUnion(currentUser.uid),
-            });
-        } else {
-            await updateDocument('post', postId, {
-                like: arrayRemove(currentUser.uid),
-            });
-            await updateDocument('userPost', userId, {
-                [postId + '.like']: arrayRemove(currentUser.uid),
-            });
-        }
-    };
 
     const handleCommentInput = (e) => {
         const sendValueInput = e.target.value;
@@ -246,6 +225,7 @@ function PostLayout({
             });
         }
     };
+
     const onClickOutside = () => {
         setPopperVisible(false);
     };
@@ -258,8 +238,8 @@ function PostLayout({
                 setPopperVisible(false);
                 setOpenModal(true);
                 dispatch(setImageInputState({ addPhotoVisible: true, buttonActive: true }));
-                setCaption(postDetail?.caption || '');
-                setImg(postDetail?.img || null);
+                setCaption(postCaption || '');
+                setImg(postImg || null);
             },
         },
         {
@@ -267,7 +247,7 @@ function PostLayout({
             title: 'Delete post',
             onClick: () => {
                 setPopperVisible(false);
-                deletePostFunc(postId);
+                handleDeletePost(postId, currentUser.uid);
             },
         },
     ];
@@ -292,7 +272,7 @@ function PostLayout({
                     <p className={cx('user-name')}>{userName}</p>
                     <p className={cx('time-post')}>{timeStamp}</p>
                 </div>
-                {currentUser.uid === postDetail?.poster?.uid && (
+                {currentUser.uid === userId && (
                     <Menu items={MENU_POST} isMenuVisible={popperVisible} onClickOutside={onClickOutside}>
                         <div
                             className={cx('more-btn')}
@@ -307,29 +287,29 @@ function PostLayout({
             </div>
             <div className={cx('post-content')}>
                 <div className={cx('post-caption')}>
-                    <p>{postDetail?.caption}</p>
+                    <p>{postCaption}</p>
                 </div>
                 {!postPage
-                    ? postDetail?.img && (
+                    ? postImg && (
                           <div className={cx('post-image')}>
                               <a href={`/post/${postId}`}>
-                                  <img alt={userName} src={postDetail?.img} />
+                                  <img alt={userName} src={postImg} />
                               </a>
                           </div>
                       )
                     : ''}
             </div>
             <div className={cx('post-interaction')}>
-                {(likeCount > 0 || commentList.length > 0) && (
+                {(like.length > 0 || commentList.length > 0) && (
                     <div className={cx('post-interaction-detail')}>
-                        {likeCount > 0 && (
+                        {like.length > 0 && (
                             <div className={cx('post-reaction-detail')}>
                                 <FontAwesomeIcon className={cx('reaction-icon')} icon={faHeartSolid} />{' '}
-                                {postDetail.like && postDetail.like.indexOf(currentUser.uid) !== -1
-                                    ? likeCount === 1
+                                {like && like.indexOf(currentUser.uid) !== -1
+                                    ? like.length === 1
                                         ? 'You'
-                                        : 'You and ' + (likeCount - 1)
-                                    : likeCount}
+                                        : 'You and ' + (like.length - 1)
+                                    : like.length}
                             </div>
                         )}
 
@@ -345,8 +325,13 @@ function PostLayout({
                     </div>
                 )}
                 <div className={cx('post-interact')}>
-                    <button className={cx('reaction-btn')} onClick={handleLike}>
-                        {postDetail.like && postDetail.like.indexOf(currentUser.uid) !== -1 ? (
+                    <button
+                        className={cx('reaction-btn')}
+                        onClick={() => {
+                            handleLikePost(currentUser.uid, like, postId, userId);
+                        }}
+                    >
+                        {like && like.indexOf(currentUser.uid) !== -1 ? (
                             <>
                                 <FontAwesomeIcon icon={faHeartSolid} style={{ color: '#fe2c55' }} />
                                 <span style={{ color: '#fe2c55' }}>Like</span>

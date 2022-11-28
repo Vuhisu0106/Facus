@@ -11,6 +11,7 @@ import Grid from '~/components/Grid/Grid';
 import GridRow from '~/components/Grid/GridRow';
 import GridColumn from '~/components/Grid/GridColumn';
 import Shape from '../Shape';
+import Checkbox from '~/components/Checkbox';
 
 const cx = classNames.bind(styles);
 
@@ -72,8 +73,7 @@ function LogIn() {
                         </div>
                         <form onSubmit={handleSubmit} className={cx('log-in-form')}>
                             <div className={cx('title')}>
-                                <h2>Log In</h2>
-                                <p>Enter the information you enter while registering</p>
+                                <h2>Log in</h2>
                             </div>
 
                             <div className={cx('input')}>
@@ -92,10 +92,7 @@ function LogIn() {
                             </div>
 
                             <div className={cx('other-features')}>
-                                <span>
-                                    <input type={'checkbox'} />
-                                    Remember me
-                                </span>
+                                <Checkbox text={'Remember me'} />
                                 <a>Forget password</a>
                             </div>
 
@@ -105,17 +102,17 @@ function LogIn() {
 
                             <p className={cx('social-text')}>Or Log in with social platforms</p>
                             <div className={cx('social-media')}>
-                                <a href="" className={cx('social-icon')}>
-                                    <FontAwesomeIcon icon={faFacebook} />
+                                <a href="" className={cx('social-icons')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faFacebook} />
                                 </a>
-                                <a href="" className={cx('social-icon')}>
-                                    <FontAwesomeIcon icon={faTwitter} />
+                                <a href="" className={cx('social-icons')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faTwitter} />
                                 </a>
-                                <a href="" className={cx('social-icon')}>
-                                    <FontAwesomeIcon icon={faGoogle} />
+                                <a href="" className={cx('social-icons')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faGoogle} />
                                 </a>
-                                <a href="" className={cx('social-icon')}>
-                                    <FontAwesomeIcon icon={faLinkedin} />
+                                <a href="" className={cx('social-icons')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faLinkedin} />
                                 </a>
                             </div>
                         </form>
