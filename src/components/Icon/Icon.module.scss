@@ -4,12 +4,8 @@
     top: 50%;
     transform: translateY(-50%);
     animation: spinner 1s infinite linear;
-    color: rgba(22, 24, 35, 0.34);
+    color: var(--circle-btn-color);
     //not
-}
-
-.dark {
-    color: var(--dark-icon-color);
 }
 
 @keyframes spinner {

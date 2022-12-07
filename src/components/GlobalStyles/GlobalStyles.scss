@@ -103,12 +103,197 @@ html *::-webkit-scrollbar-track {
 
 ////////////// Theme //////////////
 
-html[data-theme='light'] {
+html[theme='light'] {
     --background-color: #fff;
     --background-color-2: #f2f5f7;
+    --wrapper-box-shadow: 0 2px 8px 0 rgb(99 99 99 / 20%);
+
+    // Input //
+    --background-input: #f2f5f7;
+    --color-input: #333333;
+    --right-btn-input-color: #3e3e3e;
+
+    // Account Item //
+    --account-item-hover: #4449501f;
+    --account-item-name-color: #333;
+    --account-item-name-font-weight: 600;
+    --account-item-following-color: #16182380;
+    --account-item-following-font-weight: 500;
+    --account-item-following-font-size: 13px;
+
+    // Circle Button //
+    --circle-btn-bc: #f0f0f0;
+    --circle-btn-color: #353434;
+    --circle-btn-hover-bc: rgba(22, 24, 35, 0.12);
+    --circle-btn-active-bc: rgb(22, 24, 35, 0.18);
+
+    // Menu //
+    --border-menu-separate: rgba(22, 24, 35, 0.12);
+
+    // Header //
+    --header-border: transparent;
+    --header-logo-color: #fff;
+    --header-logo-bc: rgb(254, 44, 85);
+
+    // Round Account Item Status //
+    --round-acc-item-img-border: #fff;
+    --round-acc-item-name-color: #000;
+    --round-acc-item-status-bc: #fff;
+    --round-acc-item-status-border-color: rgb(204, 206, 209);
+    --scroll-btn-bc: #fff;
+    --scroll-btn-color: #999;
+    --scroll-btn-box-shadow: 0 0 4px #999;
+
+    // Suggest Account Item //
+    --acc-item-color: #000;
+    --acc-item-font-weight: 600;
+    --sub-acc-item-color: rgba(22, 24, 35, 0.7);
+
+    // Post Layout //
+    --box-shadow: 0 2px 8px 0 rgb(99 99 99 / 10%);
+    --post-time-color: rgb(101, 103, 107);
+    --post-caption-color: #333;
+    --post-interact-border-color: rgb(206, 208, 212);
+    --post-more-btn-hover-color: #f2f5f7;
+    --post-interact-detail-color: #333;
+
+    // Button //
+    --primary-btn-hover-bc: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
+    --long-btn-hover-color: rgb(224, 224, 224, 0.5);
+
+    // Comment //
+    --cmt-reaction-border-color: rgb(206, 208, 212);
+    --cmt-reaction-bc: #fff;
+    --cmt-reaction-color: #333;
+    --cmt-wrapper-bc: #f2f5f7;
+    --cmt-color: #000;
+    --cmt-interact-color: rgb(101, 103, 107);
+    --cmt-font-weight: 500;
+
+    // Chat //
+    --chat-border: rgb(204, 206, 209, 0.5);
+    --chat-font-weight: 600;
+    --chat-sending-time-font-weight: 500;
+    --chat-sending-time-color: #b6bbbf;
+    --fr-chat-bc: #ffebef;
+    --fr-chat-color: #75172a;
+    --chat-btn: #b6bbbf;
+    --chat-btn-hover: #b6bbbf;
+    --chat-item-active-bc: rgba(68, 73, 80, 0.08);
+
+    // Profile //
+    --profile-border: 1px solid rgb(204, 206, 209);
+    --profile-avt-border: 4px solid #fff;
+    --set-status-box-shadow: rgb(0 0 0 / 8%) 0px 2px 12px;
+    --sub-profile-btn-bc: #e7e7e9;
+    --sub-profile-btn-color: #000;
+    --profile-nav-color: #333;
+    --bio-color: #000;
+    --bio-input-border: 1.8px solid rgb(204, 206, 209);
+    --right-content-h1-color: #65676b;
+    --add-post-only-text-btn-color: #65676b;
+    --add-post-only-text-btn-bc: #f0f2f5;
+    --add-post-only-text-hover-btn: rgb(175, 177, 182, 0.3);
+
+    // Modal //
+    --modal-outside-bc: rgba(255, 255, 255, 0.5);
+    --modal-add-photo-bc: #f7f8fa;
+    --modal-upload-icon-bc: #e4e6eb;
 }
 
-html[data-theme='dark'] {
+html[theme='dark'] {
     --background-color: #242526;
     --background-color-2: #18191a;
+    --wrapper-box-shadow: none;
+
+    // Input //
+    --background-input: #3a3b3c;
+    --color-input: #e4e6eb;
+    --right-btn-input-color: #8c8e91;
+
+    // Account Item //
+    --account-item-hover: #292a2c;
+    --account-item-name-color: #e4e6eb;
+    --account-item-name-font-weight: 400;
+    --account-item-following-color: #b0b3b8;
+    --account-item-following-font-weight: 300;
+    --account-item-following-font-size: 12px;
+
+    // Circle Button //
+    --circle-btn-bc: #3a3b3c;
+    --circle-btn-color: #8c8e91;
+    --circle-btn-hover-bc: #4e4f50;
+    --circle-btn-active-bc: #3a3b3c;
+
+    // Menu //
+    --border-menu-separate: rgb(62, 64, 66);
+
+    // Header //
+    --header-border: rgb(62, 64, 66);
+    --header-logo-color: rgb(254, 44, 85);
+    --header-logo-bc: #3a3b3c;
+
+    // Round Account Item Status //
+    --round-acc-item-img-border: #242526;
+    --round-acc-item-name-color: #b0b3b8;
+    --round-acc-item-status-bc: #242526;
+    --round-acc-item-status-border-color: rgb(62, 64, 66);
+    --scroll-btn-bc: #3a3b3c;
+    --scroll-btn-color: #8c8e91;
+    --scroll-btn-box-shadow: 0 0 4px rgb(203, 202, 202);
+
+    // Suggest Account Item //
+    --acc-item-color: #e4e6eb;
+    --acc-item-font-weight: 500;
+    --sub-acc-item-color: #b0b3b8;
+
+    // Post Layout //
+    --box-shadow: none;
+    --post-time-color: #b0b3b8;
+    --post-caption-color: #e4e6eb;
+    --post-interact-border-color: rgb(62, 64, 66);
+    --post-more-btn-hover-color: #3a3b3c;
+    --post-interact-detail-color: #b0b3b8;
+
+    // Button //
+    --primary-btn-hover-bc: #fc3e64;
+    --long-btn-hover-color: #292a2c;
+
+    // Comment //
+    --cmt-reaction-border-color: rgb(206, 208, 212, 0.5);
+    --cmt-reaction-bc: #3a3b3c;
+    --cmt-reaction-color: #b0b3b8;
+    --cmt-wrapper-bc: #3a3b3c;
+    --cmt-color: #e4e6eb;
+    --cmt-interact-color: #b0b3b8;
+    --cmt-font-weight: 300;
+
+    // Chat //
+    --chat-border: rgb(62, 64, 66);
+    --chat-font-weight: 400;
+    --chat-sending-time-font-weight: 700;
+    --chat-sending-time-color: #3a3b3c;
+    --fr-chat-bc: rgba(68, 43, 48, 0.302);
+    --fr-chat-color: #b0b3b8;
+    --chat-btn: #8c8e91;
+    --chat-item-active-bc: #292a2c;
+
+    // Profile //
+    --profile-border: 1px solid rgb(62, 64, 66);
+    --profile-avt-border: 4px solid #242526;
+    --set-status-box-shadow: 0 2px 4px #010409;
+    --sub-profile-btn-bc: #3a3b3c;
+    --sub-profile-btn-color: #e4e6eb;
+    --profile-nav-color: #b0b3b8;
+    --bio-color: #b0b3b8;
+    --bio-input-border: 1.8px solid rgb(176, 179, 184, 0.3);
+    --right-content-h1-color: #b0b3b8;
+    --add-post-only-text-btn-color: #b0b3b8;
+    --add-post-only-text-btn-bc: #3a3b3c;
+    --add-post-only-text-hover-btn: #4e4f50;
+
+    // Modal //
+    --modal-outside-bc: rgba(0, 0, 0, 0.7);
+    --modal-add-photo-bc: #323436;
+    --modal-upload-icon-bc: #47494a;
 }

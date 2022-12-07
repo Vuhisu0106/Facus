@@ -27,25 +27,19 @@ function StatusesBar({ listFollowingUid }) {
 
     useEffect(() => {
         setLoading(true);
-        const getStatus = async () => {
-            const q = query(collection(db, 'users'), where('uid', 'in', listFollowingUid));
-
-            const unsub = onSnapshot(q, (querySnapshot) => {
-                const statuses = [];
-                querySnapshot.forEach((doc) => {
-                    statuses.push(doc.data());
-                });
-                setStatusFollowingList(statuses);
-                setLoading(false);
+        const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
+        const q = query(collection(db, 'users'), where('uid', 'in', a));
+        const getStatus = onSnapshot(q, (querySnapshot) => {
+            const statuses = [];
+            querySnapshot.forEach((doc) => {
+                statuses.push(doc.data());
             });
+            setStatusFollowingList(statuses);
+            setLoading(false);
+        });
 
-            return () => {
-                unsub();
-            };
-        };
-
-        getStatus();
-    }, [listFollowingUid]);
+        return getStatus;
+    }, [currentUser, currentUserInfo?.following]);
 
     return (
         <div className={cx('horizontal-scroll', checkDark())}>

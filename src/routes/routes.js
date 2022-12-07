@@ -3,6 +3,7 @@ import LandingPage from '~/pages/LandingPage';
 import Message from '~/pages/Message';
 import Profile from '~/pages/Profile';
 import Post from '~/pages/Post';
+import Dashboard from '~/pages/Dashboard';
 
 import config from '~/configs';
 import HeaderOnly from '~/layouts/HeaderOnly';
@@ -34,7 +35,7 @@ const publicRoutes = [
 const privateRoutes = [
     {
         path: config.routes.home,
-        component: Home,
+        component: Dashboard,
     },
 
     {

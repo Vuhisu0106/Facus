@@ -8,10 +8,10 @@ import styles from './Post.module.scss';
 import { useState, useEffect } from 'react';
 import { useUI } from '~/context/UIContext';
 import PostLayout from '~/components/PostLayout';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
 import { useViewport } from '~/components/Hook';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import { useDispatch } from 'react-redux';
+import { setPost } from '~/features/PostAndComment/PostAndCommentSlice';
 
 const cx = classNames.bind(styles);
 function Post() {
@@ -22,11 +22,14 @@ function Post() {
 
     const [postDetail, setPostDetail] = useState();
 
+    const dispatch = useDispatch();
+    //const post = useSelector((state) => state.postNcomment.posts);
+
     useEffect(() => {
         const getPostDetail = () => {
             const unsub = onSnapshot(doc(db, 'post', params.id), (doc) => {
                 setPostDetail(doc.data());
-                console.log(postDetail);
+                dispatch(setPost([doc.data()]));
             });
             return () => {
                 unsub();
@@ -50,8 +53,8 @@ function Post() {
                                 className={cx('post-detail-wrapper')}
                                 style={{ overflowY: isSmall && 'scroll' }}
                                 postPage
-                                key={postDetail.postId}
-                                postId={postDetail.postId}
+                                key={postDetail?.postId}
+                                postId={postDetail?.postId}
                                 userId={postDetail?.poster?.uid}
                                 userName={postDetail?.poster?.displayName}
                                 userAvt={postDetail?.poster?.photoURL}

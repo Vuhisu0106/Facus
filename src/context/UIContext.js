@@ -13,9 +13,9 @@ function UIProvider({ children }) {
     const [dark, setDark] = useState(false || darkModeState);
 
     if (dark) {
-        document.getElementsByTagName('HTML')[0].setAttribute('data-theme', 'dark');
+        document.getElementsByTagName('HTML')[0].setAttribute('theme', 'dark');
     } else {
-        document.getElementsByTagName('HTML')[0].setAttribute('data-theme', 'light');
+        document.getElementsByTagName('HTML')[0].setAttribute('theme', 'light');
     }
 
     const toggleTheme = () => {
@@ -23,15 +23,7 @@ function UIProvider({ children }) {
         localStorage.setItem('darkMode', String(!dark));
     };
 
-    const checkDark = (className) => {
-        if (dark && !className) {
-            return 'dark';
-        } else if (dark && className) {
-            return className;
-        } else {
-            return '';
-        }
-    };
+    const checkDark = (className) => {};
 
     //Change background color of body based on theme
     if (dark) {

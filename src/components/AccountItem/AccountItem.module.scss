@@ -6,7 +6,7 @@
     cursor: pointer;
     border-radius: 8px;
     &:hover {
-        background: #4449501f;
+        background: var(--account-item-hover);
     }
 }
 
@@ -23,8 +23,9 @@
 }
 
 .name {
+    color: var(--account-item-name-color);
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: var(--account-item-name-font-weight);
     margin-top: 5px;
 }
 
@@ -33,24 +34,8 @@
     color: rgb(32, 213, 236);
 }
 
-.username {
-    font-size: 1.3rem;
-    color: rgba(22, 24, 35, 0.5);
-    font-weight: 500;
-}
-
-////Dark//////
-.dark {
-    &:hover {
-        background-color: var(--dark-element-hover);
-    }
-    .name {
-        color: var(--dark-text-color-2);
-        font-weight: 400;
-    }
-    .username {
-        color: var(--dark-text-color-3);
-        font-weight: 300;
-        font-size: 12px;
-    }
+.following {
+    font-size: var(--account-item-following-font-size);
+    color: var(--account-item-following-color);
+    font-weight: var(--account-item-following-font-weight);
 }

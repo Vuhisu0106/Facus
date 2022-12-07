@@ -1,9 +1,8 @@
 import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
-import { collection, query, where, doc, getDoc, getDocs, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
-import { useUI } from '~/context/UIContext';
 import { useAuth } from '~/context/AuthContext';
 import { db } from '~/firebase/config';
 import AccountItem from '~/components/AccountItem';
@@ -11,10 +10,9 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
-import { setDocument, updateDocument } from '~/firebase/services';
 import { useDispatch } from 'react-redux';
 import { changeChatUser, setAddChatState } from '~/features/Chat/ChatSlice';
-import { type } from '@testing-library/user-event/dist/type';
+import { handleSelectChat } from '~/utils';
 
 const cx = classNames.bind(styles);
 function ChatSearch({ className, placeHolder, placement, autoFocus }) {
@@ -24,18 +22,12 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { clearState, checkDark } = useUI();
     const { currentUser } = useAuth();
 
     const dispatch = useDispatch();
 
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();
-
-    const handleClearSearch = () => {
-        setSearchValue('');
-        inputRef.current.focus();
-    };
 
     const handleHideResult = () => {
         setShowResult(false);
@@ -47,12 +39,9 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
             setSearchResult([]);
             return;
         }
-
         setLoading(true);
-
         const handleSearch = async () => {
             const q = query(collection(db, 'users'), where('keywords', 'array-contains', searchValue));
-
             try {
                 const querySnapshot = await getDocs(q);
                 setSearchResult(querySnapshot.docs.map((doc) => doc.data()));
@@ -76,40 +65,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     };
 
     const handleSelect = async (result) => {
-        const combinedId = currentUser.uid > result.uid ? currentUser.uid + result.uid : result.uid + currentUser.uid;
-        //console.log(combinedId);
-        try {
-            const res = await getDoc(doc(db, 'chats', combinedId));
-            //console.log(res);
-            if (!res.exists()) {
-                //create a chat in chats collection (if chat hasn't existed before)
-                await setDocument('chats', combinedId, { messages: [] });
-
-                //create user chats
-                await updateDocument('userChats', currentUser.uid, {
-                    [combinedId + '.userChatId']: combinedId,
-                    [combinedId + '.userInfo']: {
-                        uid: result.uid,
-                        displayName: result.displayName,
-                        photoURL: result.photoURL,
-                    },
-                    [combinedId + '.date']: serverTimestamp(),
-                });
-
-                await updateDocument('userChats', result.uid, {
-                    [combinedId + '.userChatId']: combinedId,
-                    [combinedId + '.userInfo']: {
-                        uid: currentUser.uid,
-                        displayName: currentUser.displayName,
-                        photoURL: currentUser.photoURL,
-                    },
-                    [combinedId + '.date']: serverTimestamp(),
-                });
-            }
-        } catch (error) {}
-
-        //await dispatch({ type: 'CHANGE_USER', payload: result });
-
+        await handleSelectChat(currentUser, result);
         dispatch(
             changeChatUser({
                 currentUser: currentUser,
@@ -122,7 +78,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     };
 
     return (
-        <div className={cx('mess-search', checkDark())}>
+        <div className={cx('mess-search')}>
             <HeadlessTippy
                 interactive
                 placement={placement}
@@ -130,7 +86,7 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
                 render={(attrs) => (
                     <div className={cx('chat-search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
-                            {loading === false && searchResult.length === 0 ? (
+                            {!loading && searchResult.length === 0 ? (
                                 <span>User not found</span>
                             ) : (
                                 searchResult.map((result) => (

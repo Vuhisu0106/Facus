@@ -13,11 +13,9 @@ import { useAuth } from '~/context/AuthContext';
 import AccountSearch from '~/components/Search/AccountSearch';
 import { useUI } from '~/context/UIContext';
 import Menu from '~/components/Popper/Menu';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
 import { useViewport } from '~/components/Hook';
 import { useApp } from '~/context/AppContext';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
 
 const cx = classNames.bind(styles);
 

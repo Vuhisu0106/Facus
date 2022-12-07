@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { onSnapshot, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { useNavigate, useParams } from 'react-router-dom';
+import { onSnapshot, doc } from 'firebase/firestore';
 
 import { db } from '~/firebase/config';
 import styles from './Profile.module.scss';
@@ -16,14 +16,14 @@ import { useUI } from '~/context/UIContext';
 import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
 import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
 import EditProfileModal from '~/components/Modal/Modal/EditProfileModal';
-import { updateDocument } from '~/firebase/services';
 import { useApp } from '~/context/AppContext';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
+
 import { useDispatch } from 'react-redux';
 import { setProfileInfo } from '~/features/Profile/ProfileSlice';
-import Test2 from '~/components/test/test2';
+import { follow, unfollow } from '~/utils/FollowUtils';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import { handleSelectChat } from '~/utils';
+import { changeChatUser } from '~/features/Chat/ChatSlice';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -37,13 +37,11 @@ function Profile() {
 
     const [followLoading, setFollowingLoading] = useState(false);
 
-    //const [followingList, setFollowingList] = useState();
-    //const [followerList, setFollowerList] = useState();
-
     const { currentUser } = useAuth();
     const { checkDark } = useUI();
     const { currentUserInfo } = useApp();
 
+    const navigate = useNavigate();
     let params = useParams();
     const dispatch = useDispatch();
 
@@ -70,7 +68,6 @@ function Profile() {
             setType('Posts');
             const unsub = onSnapshot(doc(db, 'users', params.id), (doc) => {
                 setSelectedUser(doc.data());
-                console.log('logg: ' + currentUserInfo);
                 dispatch(
                     setProfileInfo({
                         status: {
@@ -83,7 +80,6 @@ function Profile() {
                     }),
                 );
             });
-
             return () => {
                 unsub();
             };
@@ -92,34 +88,10 @@ function Profile() {
         params.id && getSelectedUser();
     }, [params.id]);
 
-    // useEffect(() => {
-    //     function checkFollow() {
-    //         const item = localStorage.getItem('userData');
-
-    //         if (currentUserFollowing.indexOf(params.id) > -1) {
-    //             setFollowing(true);
-    //         } else {
-    //             setFollowing(false);
-    //         }
-    //     }
-
-    //     window.addEventListener('storage', checkFollow);
-
-    //     return () => {
-    //         window.removeEventListener('storage', checkFollow);
-    //     };
-    // }, [params.id]);
-
     const handleFollow = async () => {
         try {
             setFollowingLoading(true);
-            await updateDocument('users', currentUser.uid, {
-                following: arrayUnion(selectedUser.uid),
-            });
-
-            await updateDocument('users', selectedUser.uid, {
-                follower: arrayUnion(currentUser.uid),
-            });
+            await follow(currentUser.uid, selectedUser.uid);
         } catch (error) {
             console.log(error);
         }
@@ -129,17 +101,22 @@ function Profile() {
     const handleUnfollow = async () => {
         try {
             setFollowingLoading(true);
-            await updateDocument('users', currentUser.uid, {
-                following: arrayRemove(selectedUser.uid),
-            });
-
-            await updateDocument('users', selectedUser.uid, {
-                follower: arrayRemove(currentUser.uid),
-            });
+            await unfollow(currentUser.uid, selectedUser.uid);
         } catch (error) {
             console.log(error);
         }
         setFollowingLoading(false);
+    };
+
+    const handleMessage = async () => {
+        await handleSelectChat(currentUser, selectedUser);
+        dispatch(
+            changeChatUser({
+                currentUser: currentUser,
+                selectUser: selectedUser,
+            }),
+        );
+        navigate('/message');
     };
 
     return (
@@ -304,7 +281,7 @@ function Profile() {
                                                 className={cx('chat-btn')}
                                                 leftIcon={<FontAwesomeIcon icon={faMessage} />}
                                                 children={'Message'}
-                                                onClick={() => {}}
+                                                onClick={handleMessage}
                                             />
                                         </div>
                                     )}

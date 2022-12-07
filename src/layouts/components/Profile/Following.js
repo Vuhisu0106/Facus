@@ -1,15 +1,13 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import { onSnapshot, doc, collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 import { db } from '~/firebase/config';
 import styles from './Profile.module.scss';
 import WrapperModal from '~/components/Wrapper';
 import { useUI } from '~/context/UIContext';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
 import { useNavigate } from 'react-router-dom';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
 
 const cx = classNames.bind(styles);
 function Following({ list }) {

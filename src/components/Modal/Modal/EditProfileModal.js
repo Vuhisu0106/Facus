@@ -54,8 +54,6 @@ function EditProfileModal({ onClose }) {
             await savePhotoFunc('photoURL', avatar);
             await savePhotoFunc('coverPhotoURL', coverPhoto);
             dispatch(setPhotoAndCoverPhoto({ photoURL: avatar, coverPhotoURL: coverPhoto }));
-        } else {
-            return;
         }
         setLoading(false);
         onClose();

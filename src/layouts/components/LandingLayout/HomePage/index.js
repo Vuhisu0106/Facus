@@ -1,13 +1,9 @@
 import classNames from 'classnames/bind';
-import Button from '~/components/Button';
-import Grid from '~/components/Grid/Grid';
-import GridColumn from '~/components/Grid/GridColumn';
-import GridRow from '~/components/Grid/GridRow';
-import config from '~/configs';
-import Shape from '../Shape';
 
+import Button from '~/components/Button';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import config from '~/configs';
 import styles from './HomePage.module.scss';
-import HpBackground from './HpBackground';
 
 const cx = classNames.bind(styles);
 

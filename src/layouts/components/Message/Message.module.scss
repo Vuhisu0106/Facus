@@ -3,7 +3,7 @@
     grid-column: span 1 / span 1;
     background-color: var(--background-color);
     position: relative;
-    border-right: 1px solid rgb(204, 206, 209, 0.5);
+    border-right: 1px solid var(--chat-border);
     overflow-y: auto;
 }
 
@@ -16,6 +16,7 @@
 }
 
 .sidebar-top-header {
+    color: var(--post-caption-color);
     height: 64px;
     width: 100%;
     display: flex;
@@ -55,7 +56,7 @@
     display: flex;
     padding: 10px 18px;
     align-items: center;
-    border-bottom: 1px solid rgb(204, 206, 209, 0.5);
+    border-bottom: 1px solid var(--chat-border);
     z-index: 1;
 
     .user-avt {
@@ -63,12 +64,13 @@
         height: 38px;
         border-radius: 50%;
         object-fit: cover;
-        margin-right: 8px;
+        margin-right: 12px;
     }
 
     .user-name {
+        color: var(--account-item-name-color);
         font-size: 16px;
-        font-weight: 700;
+        font-weight: 600;
     }
 }
 
@@ -116,7 +118,7 @@
     .my-mess-content {
         color: var(--white);
         font-size: 15px;
-        font-weight: 600;
+        font-weight: var(--chat-font-weight);
         white-space: normal !important;
         overflow: hidden;
         display: -webkit-box;
@@ -127,8 +129,8 @@
     .sending-time {
         font-size: 11px;
         margin-top: 4px;
-        font-weight: 500;
-        color: var(--light-text-color);
+        font-weight: var(--chat-sending-time-font-weight);
+        color: var(--chat-sending-time-color);
         opacity: 0;
     }
 }
@@ -140,16 +142,16 @@
         position: relative;
         padding: 8px;
         margin-right: 8px;
-        background-color: #ffebef;
+        background-color: var(--fr-chat-bc);
         border-radius: 10px;
         max-width: 65%;
-        border: 1.5px solid rgba(255, 190, 190, 0.5);
+        border: 1.5px solid var(--chat-border);
     }
 
     .fr-mess-content {
-        color: #75172a;
+        color: var(--fr-chat-color);
         font-size: 15px;
-        font-weight: 600;
+        font-weight: var(--chat-font-weight);
         white-space: normal !important;
         overflow: hidden;
         display: -webkit-box;
@@ -159,8 +161,8 @@
 
     .sending-time {
         font-size: 11px;
-        font-weight: 500;
-        color: var(--light-text-color);
+        font-weight: var(--chat-sending-time-font-weight);
+        color: var(--chat-sending-time-color);
         margin-top: 4px;
         opacity: 0;
     }
@@ -168,7 +170,7 @@
 
 .chat-footer {
     height: 60px;
-    border-top: 1px solid rgb(204, 206, 209, 0.5);
+    border-top: 1px solid var(--chat-border);
 
     .mess-input {
         height: 100%;
@@ -182,11 +184,10 @@
     .img-btn {
         width: 58px;
         height: 56px;
-
         margin-right: 1px;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
-        color: var(--light-text-color);
+        color: var(--chat-btn);
         &:hover {
             color: var(--primary);
             background-color: transparent;
@@ -196,10 +197,10 @@
     .send-btn {
         width: 58px;
         height: 56px;
-        border-left: 1px solid rgb(204, 206, 209, 0.5);
+        border-left: 1px solid var(--chat-border);
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
-        color: var(--light-text-color);
+        color: var(--chat-btn);
         &:hover {
             background-color: transparent;
             color: var(--primary);
@@ -214,19 +215,24 @@
     justify-content: center;
     align-items: center;
     background-color: var(--background-color);
-    color: var(--light-text-color);
+    color: var(--chat-btn);
     grid-column: span 3 / span 3;
     position: relative;
     h2 {
+        color: var(--chat-btn);
+
         text-align: center;
         margin: 0 30px;
     }
 }
 
 .chat-header {
+    border-bottom: 1px solid var(--chat-border);
+
     span {
+        color: var(--round-acc-item-name-color);
         font-size: 15px;
-        font-weight: 400px;
+        font-weight: var(--chat-font-weight);
     }
 }
 
@@ -271,108 +277,5 @@
     }
     .empty-chat-wrapper {
         grid-column: span 5;
-    }
-}
-
-///////////////////Dark mode///////////////////////////////
-
-//Sidebar
-.dark-chat-sidebar {
-    border-right: 1px solid rgb(62, 64, 66);
-
-    .sidebar-top-header {
-        h2 {
-            color: var(--dark-text-color-2);
-        }
-    }
-}
-
-//Chat
-.dark-chat {
-    .chat-header {
-        border-bottom: 1px solid rgb(62, 64, 66);
-
-        .user-name {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--dark-text-color-3);
-        }
-    }
-
-    .my-mess {
-        .my-mess-content-wrapper {
-            background-color: var(--primary);
-        }
-        .my-mess-content {
-            color: var(--white);
-            font-weight: 400;
-        }
-
-        .sending-time {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--dark-text-color);
-        }
-    }
-
-    .fr-mess {
-        .fr-mess-content-wrapper {
-            background-color: rgba(68, 43, 48, 0.302);
-            border: 1px solid rgb(62, 64, 66);
-        }
-
-        .fr-mess-content {
-            font-weight: 400;
-            color: var(--dark-text-color-3);
-        }
-
-        .sending-time {
-            font-weight: 700;
-            color: var(--dark-text-color);
-        }
-    }
-
-    .chat-footer {
-        border-top: 1px solid rgb(62, 64, 66);
-
-        .img-btn {
-            color: var(--dark-icon-color);
-            &:hover {
-                background-color: transparent;
-                color: var(--primary);
-            }
-        }
-
-        .send-btn {
-            border-left: 1px solid rgb(62, 64, 66);
-            color: var(--dark-icon-color);
-            &:hover {
-                background-color: transparent;
-                color: var(--primary);
-            }
-        }
-    }
-}
-
-//Empty chat
-
-.dark-empty-search-chat {
-    .chat-header {
-        border-bottom: 1px solid rgb(62, 64, 66);
-
-        span {
-            color: var(--dark-text-color-3);
-        }
-    }
-
-    .chat-header-input {
-        border: none;
-    }
-}
-.dark-empty-chat {
-    color: var(--light-text-color);
-
-    h2 {
-        color: var(--dark-text-color-3);
     }
 }

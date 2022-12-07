@@ -16,13 +16,11 @@ root.render(
         <AppProvider>
             <UIProvider>
                 <Provider store={store}>
-                    <React.StrictMode>
-                        <BrowserRouter>
-                            <GlobalStyles>
-                                <App />
-                            </GlobalStyles>
-                        </BrowserRouter>
-                    </React.StrictMode>
+                    <BrowserRouter>
+                        <GlobalStyles>
+                            <App />
+                        </GlobalStyles>
+                    </BrowserRouter>
                 </Provider>
             </UIProvider>
         </AppProvider>

@@ -4,9 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
     background-color: var(--background-color);
-    border-radius: 10px;
     position: relative;
 }
 
@@ -109,9 +107,6 @@
 //Dark mode//
 
 .dark {
-    .blur-wrapper {
-    }
-
     .profile-card-wrapper {
         color: var(--text-color);
         background-image: none;

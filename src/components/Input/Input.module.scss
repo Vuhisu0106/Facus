@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     flex: 1;
-    background-color: var(--light-background-color);
+    background-color: var(--background-input);
     min-height: 34px;
     border: 1.5px solid transparent;
     border-radius: var(--input-border-radius);
@@ -52,7 +52,7 @@
         font-size: 16px;
         background-color: transparent;
         cursor: pointer;
-        color: var(--light-mode-black);
+        color: var(--right-btn-input-color);
     }
 
     input {
@@ -63,6 +63,7 @@
         font-weight: 500;
         caret-color: var(--primary);
         text-decoration: none !important;
+        color: var(--color-input);
     }
 
     &:focus-within {
@@ -87,20 +88,5 @@
         height: 24px;
         width: 24px;
         font-size: 14px;
-    }
-}
-
-//Dark mode//
-
-.dark {
-    background-color: var(--dark-element-color);
-    color: var(--dark-text-color);
-
-    input {
-        color: var(--dark-text-color-2);
-    }
-
-    .right-input-file {
-        color: var(--dark-icon-color);
     }
 }

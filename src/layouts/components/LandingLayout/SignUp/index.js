@@ -12,10 +12,8 @@ import styles from './SignUp.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { generateKeywords } from '~/utils';
 import { setDocument } from '~/firebase/services';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
 import Shape from '../Shape';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
 
 const cx = classNames.bind(styles);
 

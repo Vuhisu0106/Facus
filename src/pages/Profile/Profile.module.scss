@@ -19,7 +19,7 @@
     height: 160px;
     padding-top: 10px;
     padding-bottom: 16px;
-    border-bottom: 1px solid rgb(204, 206, 209);
+    border-bottom: var(--profile-border);
 }
 
 .profile-main-part-center-2 {
@@ -50,7 +50,7 @@
 .profile-avt {
     width: 170px;
     height: 170px;
-    border: 4px solid #fff;
+    border: var(--profile-avt-border);
     border-radius: 50%;
     bottom: 0;
     margin-right: 16px;
@@ -82,8 +82,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--circle-btn-color);
     background-color: var(--background-color);
-    border: 1px solid rgb(204, 206, 209);
+    border: var(--profile-border);
     position: absolute;
     margin: 0 8px 8px 0;
     z-index: 1;
@@ -93,7 +94,8 @@
     right: -60;
     padding: 0px 8px;
     color: var(--primary);
-    box-shadow: rgb(0 0 0 / 8%) 0px 2px 12px;
+    box-shadow: var(--set-status-box-shadow);
+    font-weight: 600;
 
     .set-status {
         margin-left: 5px;
@@ -109,12 +111,13 @@
 
     .profile-name {
         font-size: 32px;
+        color: var(--account-item-name-color);
     }
 
     .profile-follow-info {
         font-size: 17px;
-        font-weight: 600;
-        color: rgb(101, 103, 107);
+        font-weight: var(--acc-item-font-weight);
+        color: var(--post-time-color);
         column-gap: 0.8rem;
         display: flex;
         justify-content: flex-start;
@@ -142,7 +145,13 @@
 
     .edit-profile-btn,
     .chat-btn {
+        background-color: var(--sub-profile-btn-bc);
+        color: var(--sub-profile-btn-color);
         margin-left: 10px;
+
+        &:hover {
+            background-color: var(--circle-btn-hover-bc);
+        }
     }
 }
 
@@ -173,10 +182,14 @@
 .profile-nav-btn {
     font-size: 16px;
     font-weight: 700;
+    color: var(--profile-nav-color);
+    &:hover {
+        background-color: var(--circle-btn-hover-bc);
+    }
 }
 
 .profile-content {
-    background-color: var(--light-background-color);
+    background-color: var(--background-color-2);
 
     padding: 16px 0;
 }
@@ -221,78 +234,5 @@
 
     .profile-main-part-left {
         margin-top: 16px;
-    }
-}
-////////////////////////////////Dark mode//////////////////////////////////////
-.dark {
-    .profile-main-part-center {
-        border-bottom: 1px solid rgb(62, 64, 66);
-    }
-
-    .profile-avt {
-        border: 4px solid var(--dark-background-color-2);
-    }
-
-    .set-status-wrapper {
-        background-color: transparent;
-    }
-
-    .hovered-set-status-btn,
-    .set-status-btn {
-        border: 1px solid rgb(62, 64, 66);
-    }
-
-    .set-status-btn {
-        color: var(--dark-icon-color);
-    }
-
-    .hovered-set-status-btn {
-        font-weight: 500;
-        color: var(--primary);
-        box-shadow: 0 2px 4px #010409;
-    }
-
-    .profile-name {
-        font-size: 32px;
-        color: var(--dark-text-color-2);
-    }
-
-    .profile-follow-info {
-        font-weight: 500;
-        color: var(--dark-text-color-3);
-    }
-    .profile-main-part-left {
-        .edit-profile-btn,
-        .chat-btn {
-            background-color: var(--dark-text-color);
-            color: var(--dark-text-color-2);
-
-            &:hover {
-                background-color: var(--dark-element-hover-2);
-            }
-        }
-    }
-
-    .profile-nav {
-        ul {
-            li {
-                font-size: 15px;
-                width: 100%;
-            }
-        }
-    }
-
-    .profile-nav-btn {
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--dark-text-color-3);
-
-        &:hover {
-            background-color: var(--dark-element-hover-2);
-        }
-    }
-
-    .profile-content {
-        background-color: var(--dark-background-color);
     }
 }

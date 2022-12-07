@@ -13,23 +13,31 @@ import { db } from '~/firebase/config';
 import CircleAvatar from '../CircleAvatar';
 import styles from './CommentItem.module.scss';
 import { useAuth } from '~/context/AuthContext';
-import { useUI } from '~/context/UIContext';
 import Menu from '../Popper/Menu';
 import Input from '../Input';
 import ImageInputArea from '../Input/ImageInputArea';
 import { updateDocument } from '~/firebase/services';
+import { useSelector } from 'react-redux';
+import { editCommentFunction } from '~/utils';
 
 const cx = classNames.bind(styles);
-function CommentItem({ data, sizeImg, deleteComment }) {
+function CommentItem({ data, deleteComment }) {
     const [commentDetail, setCommentDetail] = useState({});
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditComment, setIsEditComment] = useState(false);
-    const [comment, setComment] = useState(commentDetail?.content || data.content || '');
-    const [commentImg, setCommentImg] = useState(commentDetail?.img || data.img || null);
+
+    const [comment, setComment] = useState('');
+    const [commentImg, setCommentImg] = useState('');
     const [isEditCommentImg, setIsEditCommentImg] = useState(false);
 
+    const [cancelEdit, setCancelEdit] = useState(false);
+
     const { currentUser } = useAuth();
-    const { checkDark } = useUI();
+
+    const editedComment = useSelector((state) => {
+        const postComment = state.postNcomment.posts.find((post) => post.postId === data.postId).comment;
+        return postComment.find((comment) => comment.commentId === data.commentId);
+    });
 
     const MENU_COMMENT = [
         {
@@ -38,19 +46,26 @@ function CommentItem({ data, sizeImg, deleteComment }) {
             onClick: () => {
                 setIsEditComment(true);
                 setIsModalVisible(false);
-                setIsEditCommentImg(false);
-                setCommentImg(commentDetail?.img || data.img || null);
-                setComment(commentDetail?.content || data.content || '');
+                //setIsEditCommentImg(false);
+                // setCommentImg(commentDetail?.img || data.img || null);
+                // setComment(commentDetail?.content || data.content || '');
             },
         },
         {
             icon: <FontAwesomeIcon icon={faTrashCan} />,
             title: 'Delete comment',
             onClick: () => {
-                deleteComment(data.commentId);
+                deleteComment(data);
             },
         },
     ];
+
+    useEffect(() => {
+        if (editedComment) {
+            setComment(editedComment.content);
+            setCommentImg(editedComment.img);
+        }
+    }, [editedComment, cancelEdit]);
     /////////////////////////////////////////////////////////////////////////////////////////////
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'comment', data.commentId), (doc) => {
@@ -63,6 +78,7 @@ function CommentItem({ data, sizeImg, deleteComment }) {
     }, [data.commentId]);
     ///////////////////////////////////////////////////////////////////////////////////////////////
     const handleLikeComment = async (commentId) => {
+        console.log(data.like.indexOf(currentUser.uid) === -1);
         if (commentDetail.like.indexOf(currentUser.uid) === -1) {
             await updateDocument('comment', data.commentId, {
                 like: arrayUnion(currentUser.uid),
@@ -72,10 +88,6 @@ function CommentItem({ data, sizeImg, deleteComment }) {
                 like: arrayRemove(currentUser.uid),
             });
         }
-    };
-
-    const onClickOutside = () => {
-        setIsModalVisible(false);
     };
 
     //Edit comment
@@ -90,80 +102,104 @@ function CommentItem({ data, sizeImg, deleteComment }) {
     };
 
     const handleEditComment = async () => {
-        if (isEditComment && commentImg) {
-            const storageRef = ref(storage, data.commentId);
-
-            await uploadBytesResumable(storageRef, commentImg).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDocument('comment', data.commentId, {
-                        content: comment,
-                        img: downloadURL,
-                    });
-                });
-            });
-        } else if (isEditComment && !comment && commentImg) {
-            const storageRef = ref(storage, data.commentId);
-            //const uploadTask = await uploadBytesResumable(storageRef, img);
-
-            await uploadBytesResumable(storageRef, commentImg).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDocument('comment', data.commentId, {
-                        img: downloadURL,
-                    });
-                });
-            });
-        } else if (!comment && !commentImg) {
-            return;
+        const dataEdit = { commentId: data.commentId, comment, commentImg };
+        if (editedComment.img) {
+            console.log('checked: ', editedComment.img);
+            if (commentImg === editedComment.img) {
+                //update text only
+                await editCommentFunction({ ...dataEdit, commentImg: '' });
+            } else if (!commentImg) {
+                //update text and delete img/set img ''
+                await editCommentFunction({ ...dataEdit, commentImg: '', isImgChanged: false, isImgDeleted: true });
+            } else {
+                // delete old img and update new text/img
+                await editCommentFunction({ ...dataEdit, isImgChanged: true });
+            }
         } else {
-            await updateDocument('comment', data.commentId, {
-                content: comment,
-                img: deleteField(),
-            });
+            // update text and img
+            await editCommentFunction(dataEdit);
         }
 
+        // if (commentImg) {
+        //     const storageRef = ref(storage, data.commentId);
+
+        //     await uploadBytesResumable(storageRef, commentImg).then(() => {
+        //         getDownloadURL(storageRef).then(async (downloadURL) => {
+        //             await updateDocument('comment', data.commentId, {
+        //                 content: comment,
+        //                 img: downloadURL,
+        //             });
+        //         });
+        //     });
+        // } else if (!comment && commentImg) {
+        //     const storageRef = ref(storage, data.commentId);
+        //     //const uploadTask = await uploadBytesResumable(storageRef, img);
+
+        //     await uploadBytesResumable(storageRef, commentImg).then(() => {
+        //         getDownloadURL(storageRef).then(async (downloadURL) => {
+        //             await updateDocument('comment', data.commentId, {
+        //                 img: downloadURL,
+        //             });
+        //         });
+        //     });
+        // } else if (!comment && !commentImg) {
+        //     return;
+        // } else {
+        //     await updateDocument('comment', data.commentId, {
+        //         content: comment,
+        //         img: deleteField(),
+        //     });
+        // }
         setIsEditComment(false);
     };
 
+    const editComment = () => {
+        return (
+            <>
+                <Input
+                    value={comment}
+                    type="text"
+                    rightIcon={<FontAwesomeIcon icon={faCamera} />}
+                    onChangeRightBtn={(e) => {
+                        setCommentImg(e.target.files[0]);
+                        //setIsEditCommentImg(true);
+                    }}
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                            handleEditComment();
+                        }
+                    }}
+                    onChange={handleCommentInput}
+                    rightBtnTypeFile
+                />
+                {commentImg && (
+                    <ImageInputArea
+                        src={commentImg === editedComment.img ? commentImg : URL.createObjectURL(commentImg)}
+                        onClickCancel={() => {
+                            setCommentImg('');
+                        }}
+                    />
+                )}
+
+                <span
+                    onClick={() => {
+                        setIsEditComment(false);
+                        setCancelEdit(!cancelEdit);
+                        // setComment(commentDetail?.content || data.content || '');
+                        // setCommentImg(commentDetail?.img || data.img || null);
+                    }}
+                >
+                    Cancel
+                </span>
+            </>
+        );
+    };
+
     return (
-        <div className={cx('comment-element', checkDark())} key={data.commentId}>
+        <div className={cx('comment-element')} key={data.commentId}>
             <CircleAvatar userName={data.commenter.displayName} avatar={data.commenter.photoURL} diameter="32px" />
             {isEditComment ? (
-                <div className={cx('edit-comment-content')}>
-                    <Input
-                        value={comment}
-                        type="text"
-                        rightIcon={<FontAwesomeIcon icon={faCamera} />}
-                        onChangeRightBtn={(e) => {
-                            setCommentImg(e.target.files[0]);
-                            setIsEditCommentImg(true);
-                        }}
-                        onKeyPress={(e) => {
-                            if (e.key === 'Enter') {
-                                handleEditComment();
-                            }
-                        }}
-                        onChange={handleCommentInput}
-                        rightBtnTypeFile
-                    />
-                    {commentImg && (
-                        <ImageInputArea
-                            src={!isEditCommentImg ? commentImg : URL.createObjectURL(commentImg)}
-                            onClickCancel={() => {
-                                setCommentImg(null);
-                            }}
-                        />
-                    )}
-
-                    <span
-                        onClick={() => {
-                            setIsEditComment(false);
-                            setComment(commentDetail?.content || data.content || '');
-                            setCommentImg(commentDetail?.img || data.img || null);
-                        }}
-                    >
-                        Cancel
-                    </span>
-                </div>
+                <div className={cx('edit-comment-content')}>{editComment()}</div>
             ) : (
                 <div className={cx('comment-element-content')}>
                     <div className={cx('comment-content-n-setting')}>
@@ -194,7 +230,9 @@ function CommentItem({ data, sizeImg, deleteComment }) {
                                 items={MENU_COMMENT}
                                 placement={'bottom-start'}
                                 isMenuVisible={isModalVisible}
-                                onClickOutside={onClickOutside}
+                                onClickOutside={() => {
+                                    setIsModalVisible(false);
+                                }}
                             >
                                 <div
                                     className={cx('comment-setting')}
@@ -237,8 +275,15 @@ function CommentItem({ data, sizeImg, deleteComment }) {
                         >
                             Like
                         </button>
-                        <button className={cx('reply-comment-btn')}>Reply</button>
-                        <span>{data.createdAt && moment(data.createdAt.toDate()).fromNow()}</span>
+                        <button
+                            className={cx('reply-comment-btn')}
+                            onClick={() => {
+                                console.log(editedComment);
+                            }}
+                        >
+                            Reply
+                        </button>
+                        <span>{data.createdAt && moment(data.createdAt).fromNow()}</span>
                     </div>
                 </div>
             )}

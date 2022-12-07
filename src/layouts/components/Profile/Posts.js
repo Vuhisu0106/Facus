@@ -1,39 +1,39 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc, serverTimestamp, deleteField, arrayUnion } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { v4 as uuid } from 'uuid';
+import { onSnapshot, doc, deleteField } from 'firebase/firestore';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
-import { db, storage } from '~/firebase/config';
+import { db } from '~/firebase/config';
 import Button from '~/components/Button';
 import WrapperModal from '~/components/Wrapper';
 import PostLayout from '~/components/PostLayout';
 import styles from './Profile.module.scss';
 import { useAuth } from '~/context/AuthContext';
-import { useUI } from '~/context/UIContext';
 import CircleAvatar from '~/components/CircleAvatar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 import Input from '~/components/Input';
 import AddPostModal from '~/components/Modal/Modal/AddPostModal';
-import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
+import { deleteDocument, updateDocument } from '~/firebase/services';
 import { useDispatch, useSelector } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { setBio } from '~/features/Profile/ProfileSlice';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import { resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
+import { addPost } from '~/utils';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
     const { currentUser } = useAuth();
-    const { checkDark } = useUI();
-
     const dispatch = useDispatch();
     const bio = useSelector((state) => state.profile.bio);
+    //const post = useSelector((state) => state.postNcomment.posts.find((post) => post.poster.uid === selectedUser.uid));
+    // const post = useSelector((state) =>
+    //     state.postNcomment.posts.filter((post) => post.poster.uid === selectedUser.uid),
+    // );
 
-    const [postList, setPostList] = useState([]);
+    const postList = useSelector((state) => state.postNcomment.posts);
+
     const [bioInput, setBioInput] = useState(bio || '');
     const [editBio, setEditBio] = useState(false);
     const [saveBioBtnDisable, setSaveBioBtnDisable] = useState(true);
@@ -43,22 +43,30 @@ function Posts({ selectedUser, isCurrentUser = false }) {
 
     const postImgList = [];
     postList.forEach((data) => {
-        if (data[1].img) return postImgList.push(data[1].img);
+        if (data.img) return postImgList.push(data.img);
     });
 
     useEffect(() => {
         const getPost = () => {
             const unsub = onSnapshot(doc(db, 'userPost', selectedUser.uid), (doc) => {
-                doc.data() ? setPostList(Object.entries(doc.data())) : setPostList([]);
+                console.log('something happening');
+                dispatch(resetPost());
+                const posts = [];
+                if (doc.data()) {
+                    Object.entries(doc.data()).forEach((post) => {
+                        posts.push({ ...post[1], comment: [] });
+                    });
+                } else {
+                    return;
+                }
+                dispatch(setPost(posts));
             });
-
             return () => {
                 unsub();
             };
         };
-
         selectedUser && getPost();
-    }, [selectedUser]);
+    }, [selectedUser.uid]);
 
     const handleEditBio = (e) => {
         const editValueInput = e.target.value;
@@ -85,76 +93,8 @@ function Posts({ selectedUser, isCurrentUser = false }) {
 
     //Add post
     const handleAddPost = async (caption, img) => {
+        await addPost(currentUser, caption, img);
         setOpenModal(false);
-        let uuId = uuid();
-        if (img) {
-            const storageRef = ref(storage, uuid());
-            //const uploadTask = await uploadBytesResumable(storageRef, img);
-
-            await uploadBytesResumable(storageRef, img).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDocument('userPost', currentUser.uid, {
-                        [uuId]: {
-                            postId: uuId,
-                            poster: {
-                                uid: currentUser.uid,
-                                displayName: currentUser.displayName,
-                                photoURL: currentUser.photoURL,
-                            },
-                            caption: caption,
-                            img: downloadURL,
-                            date: serverTimestamp(),
-                            like: [],
-                            comment: [],
-                        },
-                    });
-
-                    await setDocument('post', uuId, {
-                        postId: uuId,
-                        poster: {
-                            uid: currentUser.uid,
-                            displayName: currentUser.displayName,
-                            photoURL: currentUser.photoURL,
-                        },
-                        caption: caption,
-                        img: downloadURL,
-                        date: serverTimestamp(),
-                        like: [],
-                        comment: [],
-                    });
-                });
-            });
-        } else if (!caption) {
-            return;
-        } else {
-            await updateDocument('userPost', currentUser.uid, {
-                [uuId]: {
-                    postId: uuId,
-                    poster: {
-                        uid: currentUser.uid,
-                        displayName: currentUser.displayName,
-                        photoURL: currentUser.photoURL,
-                    },
-                    caption: caption,
-                    date: serverTimestamp(),
-                    like: [],
-                    comment: [],
-                },
-            });
-            await setDocument('post', uuId, {
-                postId: uuId,
-                poster: {
-                    uid: currentUser.uid,
-                    displayName: currentUser.displayName,
-                    photoURL: currentUser.photoURL,
-                },
-                caption: caption,
-
-                date: serverTimestamp(),
-                like: [],
-                comment: [],
-            });
-        }
     };
 
     const handleDeletePost = async (postId) => {
@@ -173,7 +113,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
     };
 
     return (
-        <Grid type={'profile'} className={cx('wrapper', checkDark('dark-post'))}>
+        <Grid type={'profile'} className={cx('wrapper')}>
             {openModal && (
                 <AddPostModal
                     addPostFunc={handleAddPost}
@@ -239,13 +179,14 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                         ) : (
                             <div className={cx('photo-box')}>
                                 {postList
-                                    ?.sort((a, b) => b[1].date - a[1].date)
+                                    ?.slice()
+                                    .sort((a, b) => b.date - a.date)
                                     .map(
                                         (post) =>
-                                            post[1].img && (
-                                                <div key={post[0]}>
-                                                    <a href={`/post/${post[0]}`}>
-                                                        <img src={post[1]?.img} alt={post[0]} />
+                                            post?.img && (
+                                                <div key={post.postId} className={cx('image-wrapper')}>
+                                                    <a href={`/post/${post.postId}`}>
+                                                        <img src={post?.img} alt={post.postId} />
                                                     </a>
                                                 </div>
                                             ),
@@ -294,19 +235,20 @@ function Posts({ selectedUser, isCurrentUser = false }) {
 
                     {postList.length > 0 ? (
                         postList
-                            ?.sort((a, b) => b[1].date - a[1].date)
+                            ?.slice()
+                            .sort((a, b) => b.date - a.date)
                             .map((post) => (
                                 <PostLayout
-                                    key={post[0]}
-                                    postId={post[0]}
-                                    userId={post[1]?.poster?.uid}
-                                    userName={post[1]?.poster?.displayName}
-                                    userAvt={post[1]?.poster?.photoURL}
-                                    timeStamp={post[1]?.date && moment(post[1]?.date.toDate()).fromNow()}
-                                    postImg={post[1]?.img && post[1]?.img}
-                                    postCaption={post[1]?.caption}
-                                    like={post[1]?.like}
-                                    comment={post[1]?.comment?.length}
+                                    key={post.postId}
+                                    postId={post.postId}
+                                    userId={post?.poster?.uid}
+                                    userName={post?.poster?.displayName}
+                                    userAvt={post?.poster?.photoURL}
+                                    timeStamp={post?.date && moment(post?.date.toDate()).fromNow()}
+                                    postImg={post?.img}
+                                    postCaption={post?.caption}
+                                    like={post?.like}
+                                    comment={post?.comment?.length}
                                     deletePostFunc={handleDeletePost}
                                 />
                             ))

@@ -1,26 +1,21 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useEffect } from 'react';
 
 import styles from './Modal.module.scss';
 import CircleButton from '../Button/CircleButton';
-import { useUI } from '~/context/UIContext';
-import Grid from '../Grid/Grid';
-import GridRow from '../Grid/GridRow';
-import GridColumn from '../Grid/GridColumn';
-import { useEffect } from 'react';
+import { Grid, GridColumn, GridRow } from '../Grid';
 
 const cx = classNames.bind(styles);
 function Modal({ title, children, onClose, s, s_o, m, m_o, l, l_o }) {
-    const { checkDark } = useUI();
-
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => (document.body.style.overflow = 'unset');
     }, []);
 
     return (
-        <div className={cx('container', checkDark())}>
+        <div className={cx('container')}>
             <Grid>
                 <GridRow>
                     <GridColumn l={l} l_o={l_o} m={m} m_o={m_o} s={s} s_o={s_o}>

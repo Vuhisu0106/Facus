@@ -1,18 +1,8 @@
-import { faCamera, faEllipsis, faPaperPlane, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faEllipsis, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState, useEffect, useRef } from 'react';
-import {
-    doc,
-    onSnapshot,
-    arrayUnion,
-    arrayRemove,
-    serverTimestamp,
-    collection,
-    query,
-    where,
-    getDocs,
-} from 'firebase/firestore';
+import { serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import { db } from '~/firebase/config';
@@ -30,11 +20,12 @@ import { useUI } from '~/context/UIContext';
 import Menu from '../Popper/Menu';
 import ImageInputArea from '../Input/ImageInputArea';
 import AddPostModal from '../Modal/Modal/AddPostModal';
-import { deleteDocument, setDocument, updateDocument } from '~/firebase/services';
-import { useDispatch } from 'react-redux';
+import { setDocument } from '~/firebase/services';
+import { useDispatch, useSelector } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { useViewport } from '../Hook';
-import { handleDeletePost, handleLikePost } from '~/utils';
+import { deleteCommentFunction, deletePost, editPost, likePost } from '~/utils';
+import { addComment, deleteComment, setComments } from '~/features/PostAndComment/PostAndCommentSlice';
 
 const cx = classNames.bind(styles);
 function PostLayout({
@@ -53,12 +44,8 @@ function PostLayout({
     const { currentUser } = useAuth();
     const { checkDark } = useUI();
 
-    //const [postDetail, setPostDetail] = useState({});
-    const [caption, setCaption] = useState(postCaption || '');
-    const [img, setImg] = useState(postImg || null);
     const [popperVisible, setPopperVisible] = useState(false);
     const [openModal, setOpenModal] = useState(false);
-    const [error, setError] = useState('');
 
     //Comment
     const [comment, setComment] = useState('');
@@ -70,38 +57,48 @@ function PostLayout({
     const commentInputRef = useRef();
 
     const dispatch = useDispatch();
+    const postComment = useSelector((state) => state.postNcomment.posts.find((post) => post.postId === postId).comment);
+
     const viewPort = useViewport();
     const isSmall = viewPort.width <= 740;
 
     const classes = cx('post-wrapper', checkDark(), { [className]: className });
-    // useEffect(() => {
-    //     const unSub = onSnapshot(doc(db, 'post', postId), (doc) => {
-    //         doc.exists() && setPostDetail(doc.data());
-    //         console.log('1: read');
-    //     });
-
-    //     return () => {
-    //         unSub();
-    //     };
-    // }, [postId]);
 
     useEffect(() => {
         const unSub = async () => {
             const q = query(collection(db, 'comment'), where('postId', '==', postId));
             try {
                 const querySnapshot = await getDocs(q);
-                setCommentList(querySnapshot.docs.map((doc) => doc.data()));
 
+                const comments = [];
+                querySnapshot.forEach((doc) => {
+                    comments.push(doc.data());
+                });
+                dispatch(
+                    setComments({
+                        postId: postId,
+                        comments: comments.map((comment) => {
+                            return { ...comment, createdAt: comment.createdAt.toDate() };
+                        }),
+                    }),
+                );
+
+                // setCommentList(
+                //     querySnapshot.docs.map((doc) => {
+                //         const data = doc.data();
+
+                //         return { ...data, createdAt: data.createdAt.toDate() };
+                //     }),
+                // );
                 //setLoading(false);
             } catch (err) {
-                setError(true);
                 console.log(err);
                 //setLoading(false);
             }
         };
 
         unSub();
-    }, [postId, isAddComment]);
+    }, [postId]);
 
     const handleCommentInput = (e) => {
         const sendValueInput = e.target.value;
@@ -115,80 +112,95 @@ function PostLayout({
 
     const handleOnClickCommentBtn = () => {
         commentInputRef.current.focus();
-        !isSmall && setCommentVisible(true);
+        (!isSmall || !postPage) && setCommentVisible(true);
     };
 
     const handleComment = async () => {
         let uuId = uuid();
+
+        const data = {
+            commentId: uuId,
+            postId: postId,
+            commenter: {
+                uid: currentUser.uid,
+                displayName: currentUser.displayName,
+                photoURL: currentUser.photoURL,
+            },
+            content: comment,
+            createdAt: serverTimestamp(),
+            like: [],
+        };
+
         if (commentImg) {
-            const storageRef = ref(storage, uuid());
+            const storageRef = ref(storage, uuId);
 
             await uploadBytesResumable(storageRef, commentImg).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
+                    // const data = {
+                    //     commentId: uuId,
+                    //     postId: postId,
+                    //     commenter: {
+                    //         uid: currentUser.uid,
+                    //         displayName: currentUser.displayName,
+                    //         photoURL: currentUser.photoURL,
+                    //     },
+                    //     content: comment,
+                    //     img: downloadURL,
+                    //     createdAt: serverTimestamp(),
+                    //     like: [],
+                    // };
                     await setDocument('comment', uuId, {
-                        commentId: uuId,
-                        postId: postId,
-                        commenter: {
-                            uid: currentUser.uid,
-                            displayName: currentUser.displayName,
-                            photoURL: currentUser.photoURL,
-                        },
-                        content: comment,
+                        ...data,
                         img: downloadURL,
-                        createdAt: serverTimestamp(),
-                        like: [],
                     });
-                });
-            });
-        } else if (!comment && commentImg) {
-            const storageRef = ref(storage, uuid());
-            //const uploadTask = await uploadBytesResumable(storageRef, img);
-
-            await uploadBytesResumable(storageRef, commentImg).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await setDocument('comment', uuId, {
-                        commentId: uuId,
-                        postId: postId,
-                        commenter: {
-                            uid: currentUser.uid,
-                            displayName: currentUser.displayName,
-                            photoURL: currentUser.photoURL,
-                        },
-
-                        img: downloadURL,
-                        createdAt: serverTimestamp(),
-                        like: [],
-                    });
+                    dispatch(addComment({ postId: postId, comment: { ...data, createdAt: new Date() } }));
+                    // setCommentList([
+                    //     ...commentList,
+                    //     {
+                    //         ...data,
+                    //         createdAt: new Date(),
+                    //     },
+                    // ]);
                 });
             });
         } else if (!comment && !commentImg) {
             return;
         } else {
             await setDocument('comment', uuId, {
-                commentId: uuId,
-                postId: postId,
-                commenter: {
-                    uid: currentUser.uid,
-                    displayName: currentUser.displayName,
-                    photoURL: currentUser.photoURL,
-                },
-                content: comment,
-                createdAt: serverTimestamp(),
-                like: [],
+                ...data,
             });
+            dispatch(addComment({ postId: postId, comment: { ...data, createdAt: new Date() } }));
+            // await setDocument('comment', uuId, {
+            //     commentId: uuId,
+            //     postId: postId,
+            //     commenter: {
+            //         uid: currentUser.uid,
+            //         displayName: currentUser.displayName,
+            //         photoURL: currentUser.photoURL,
+            //     },
+
+            //     content: comment,
+            //     createdAt: serverTimestamp(),
+            //     like: [],
+            // });
         }
 
         setComment('');
         setCommentImg(null);
         setIsAddComment(!isAddComment);
-        console.log('add cmt' + isAddComment);
+        console.log(uuId);
     };
 
-    const handleDeleteComment = async (commentId) => {
+    const handleDeleteComment = async (data) => {
+        const filteredComments = postComment.filter((x) => x.commentId !== data.commentId);
         if (window.confirm('Do you want delete this comment?')) {
             try {
-                await deleteDocument('comment', commentId);
-                setCommentList((cmtList) => cmtList.filter((x) => x.commentId !== commentId));
+                await deleteCommentFunction(data);
+                console.log({ postId, filteredComments });
+                if (postId && filteredComments) {
+                    dispatch(deleteComment({ postId, filteredComments }));
+                }
+                //setCommentList((cmtList) => cmtList.filter((x) => x.commentId !== commentId));
             } catch (error) {
                 console.log(error);
             }
@@ -196,38 +208,52 @@ function PostLayout({
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const handleEditPost = async (caption, img) => {
+    const handleEditPost = async (caption, img, isImgChanged, isImgDeleted) => {
+        // if (img) {
+        //     if (isImgChanged) {
+        //         await deleteFileStorage(postId);
+        //     }
+        //     const storageRef = ref(storage, postId);
+
+        //     //const uploadTask = await uploadBytesResumable(storageRef, img);
+        //     await uploadBytesResumable(storageRef, img).then(() => {
+        //         getDownloadURL(storageRef).then(async (downloadURL) => {
+        //             await updateDocument('userPost', currentUser.uid, {
+        //                 [postId + '.caption']: caption,
+        //                 [postId + '.img']: downloadURL,
+        //             });
+
+        //             await updateDocument('post', postId, {
+        //                 caption: caption,
+        //                 img: downloadURL,
+        //             });
+        //         });
+        //     });
+        //     console.log('1');
+        // } else if (!caption && !img) {
+        //     return;
+        // } else if (isImgDeleted) {
+        //     await deleteFileStorage(postId);
+        //     await updateDocument('userPost', currentUser.uid, {
+        //         [postId + '.caption']: caption,
+        //         [postId + '.img']: '',
+        //     });
+        //     await updateDocument('post', postId, {
+        //         caption: caption,
+        //         img: '',
+        //     });
+        //     console.log('3');
+        // } else {
+        //     console.log('4');
+        //     await updateDocument('userPost', currentUser.uid, {
+        //         [postId + '.caption']: caption,
+        //     });
+        //     await updateDocument('post', postId, {
+        //         caption: caption,
+        //     });
+        // }
+        await editPost({ currentUser, postId, caption, img, isImgChanged, isImgDeleted });
         setOpenModal(false);
-        if (img) {
-            const storageRef = ref(storage, postId);
-            //const uploadTask = await uploadBytesResumable(storageRef, img);
-            await uploadBytesResumable(storageRef, img).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDocument('userPost', currentUser.uid, {
-                        [postId + '.caption']: caption,
-                        [postId + '.img']: img,
-                    });
-
-                    await updateDocument('post', postId, {
-                        caption: caption,
-                        img: downloadURL,
-                    });
-                });
-            });
-        } else if (!caption) {
-            return;
-        } else {
-            await updateDocument('userPost', currentUser.uid, {
-                [postId + '.caption']: caption,
-            });
-            await updateDocument('post', postId, {
-                caption: caption,
-            });
-        }
-    };
-
-    const onClickOutside = () => {
-        setPopperVisible(false);
     };
 
     const MENU_POST = [
@@ -238,8 +264,6 @@ function PostLayout({
                 setPopperVisible(false);
                 setOpenModal(true);
                 dispatch(setImageInputState({ addPhotoVisible: true, buttonActive: true }));
-                setCaption(postCaption || '');
-                setImg(postImg || null);
             },
         },
         {
@@ -247,7 +271,7 @@ function PostLayout({
             title: 'Delete post',
             onClick: () => {
                 setPopperVisible(false);
-                handleDeletePost(postId, currentUser.uid);
+                deletePost(postId, currentUser.uid);
             },
         },
     ];
@@ -257,9 +281,8 @@ function PostLayout({
         <div className={classes}>
             {openModal && (
                 <AddPostModal
+                    editPostId={postId}
                     edit
-                    prevCaption={caption}
-                    prevImg={img}
                     editPostFunc={handleEditPost}
                     onCloseAddPostModal={() => {
                         setOpenModal(false);
@@ -273,7 +296,13 @@ function PostLayout({
                     <p className={cx('time-post')}>{timeStamp}</p>
                 </div>
                 {currentUser.uid === userId && (
-                    <Menu items={MENU_POST} isMenuVisible={popperVisible} onClickOutside={onClickOutside}>
+                    <Menu
+                        items={MENU_POST}
+                        isMenuVisible={popperVisible}
+                        onClickOutside={() => {
+                            setPopperVisible(false);
+                        }}
+                    >
                         <div
                             className={cx('more-btn')}
                             onClick={() => {
@@ -300,7 +329,7 @@ function PostLayout({
                     : ''}
             </div>
             <div className={cx('post-interaction')}>
-                {(like.length > 0 || commentList.length > 0) && (
+                {(like.length > 0 || postComment.length > 0) && (
                     <div className={cx('post-interaction-detail')}>
                         {like.length > 0 && (
                             <div className={cx('post-reaction-detail')}>
@@ -313,12 +342,12 @@ function PostLayout({
                             </div>
                         )}
 
-                        {commentList.length > 0 && (
+                        {postComment.length > 0 && (
                             <div className={cx('post-comment-detail')}>
                                 <span onClick={handleOnClickCommentBtn}>
-                                    {!commentList
+                                    {!postComment
                                         ? ''
-                                        : commentList.length + ' ' + (commentList.length > 1 ? 'comments' : 'comment')}
+                                        : postComment.length + ' ' + (postComment.length > 1 ? 'comments' : 'comment')}
                                 </span>
                             </div>
                         )}
@@ -328,7 +357,7 @@ function PostLayout({
                     <button
                         className={cx('reaction-btn')}
                         onClick={() => {
-                            handleLikePost(currentUser.uid, like, postId, userId);
+                            likePost(currentUser.uid, like, postId, userId);
                         }}
                     >
                         {like && like.indexOf(currentUser.uid) !== -1 ? (
@@ -410,38 +439,24 @@ function PostLayout({
                         )}
                     </div>
                 </div>
-                {commentVisible &&
-                    (!postPage ? (
-                        <div className={cx('comment-list')}>
-                            {commentList &&
-                                commentList
-                                    ?.sort((a, b) => b.createdAt - a.createdAt)
-                                    .map((comments) => (
-                                        <CommentItem
-                                            key={comments.commentId}
-                                            data={comments}
-                                            isAddComment={isAddComment}
-                                            deleteComment={handleDeleteComment}
-                                            sizeImg={'large'}
-                                        />
-                                    ))}
-                        </div>
-                    ) : (
-                        <div className={cx('comment-list-for-post-page')} style={{ overflowY: isSmall && 'hidden' }}>
-                            {commentList &&
-                                commentList
-                                    ?.sort((a, b) => b.createdAt - a.createdAt)
-                                    .map((comments) => (
-                                        <CommentItem
-                                            key={comments.commentId}
-                                            data={comments}
-                                            isAddComment={isAddComment}
-                                            deleteComment={handleDeleteComment}
-                                            sizeImg={'medium'}
-                                        />
-                                    ))}
-                        </div>
-                    ))}
+                {commentVisible && (
+                    <div
+                        className={cx(!postPage ? 'comment-list' : 'comment-list-for-post-page')}
+                        style={{ overflowY: !postPage ? 'none' : isSmall && 'hidden' }}
+                    >
+                        {postComment &&
+                            postComment
+                                ?.slice()
+                                .sort((a, b) => b.createdAt - a.createdAt)
+                                .map((comments) => (
+                                    <CommentItem
+                                        key={comments.commentId}
+                                        data={comments}
+                                        deleteComment={handleDeleteComment}
+                                    />
+                                ))}
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -46,19 +46,20 @@
     background-color: var(--primary);
     color: var(--white);
     &:hover {
-        background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
+        background: var(--primary-btn-hover-bc);
     }
 }
 
 .popper {
     background-color: var(--background-color);
+    color: var(--post-interact-detail-color);
     .icon {
         border-radius: 50%;
         font-size: 17px;
         text-align: center;
     }
     &:hover {
-        background-color: rgb(22, 24, 35, 0.05);
+        background-color: var(--long-btn-hover-color);
     }
 }
 
@@ -99,20 +100,4 @@
     width: 100%;
     padding: 8px 0;
     background-color: rgb(175, 177, 182, 0.3);
-}
-
-//Dark mode//
-
-.dark.primary {
-    &:hover {
-        background: #fc3e64;
-    }
-}
-
-.dark.popper {
-    color: var(--dark-text-color-3);
-
-    &:hover {
-        background-color: var(--dark-element-hover);
-    }
 }

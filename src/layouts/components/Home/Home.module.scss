@@ -13,14 +13,14 @@
 
     .btn-scroll-left,
     .btn-scroll-right {
-        background-color: var(--white);
+        background-color: var(--scroll-btn-bc);
         padding: 4px 8px;
         margin: 0 5px;
         border-radius: 50%;
         z-index: 1;
-        color: #999;
+        color: var(--scroll-btn-color);
         cursor: pointer;
-        box-shadow: 0 0 4px #999;
+        box-shadow: var(--scroll-btn-box-shadow);
     }
 
     .status-container {
@@ -33,17 +33,6 @@
         left: 0;
         position: absolute;
         transition: 0.5s all ease-out;
-    }
-}
-
-.dark {
-    background-color: var(--dark-background-color-2);
-
-    .btn-scroll-left,
-    .btn-scroll-right {
-        background-color: var(--dark-element-color);
-        color: var(--dark-icon-color);
-        box-shadow: 0 0 4px rgb(203, 202, 202);
     }
 }
 
@@ -63,9 +52,6 @@
         font-weight: 600;
         color: rgb(142, 142, 142);
     }
-}
-
-.account-list {
 }
 
 //Account item
@@ -100,11 +86,15 @@
 
 .name {
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: var(--acc-item-font-weight);
 
     line-height: 20px;
     display: flex;
     align-items: center;
+
+    span {
+        color: var(--acc-item-color);
+    }
 }
 
 .check {
@@ -112,9 +102,9 @@
     color: rgb(32, 213, 236);
 }
 
-.username {
+.follower {
     font-size: 1.2rem;
-    color: rgba(22, 24, 35, 0.5);
+    color: var(--sub-acc-item-color);
     font-weight: 500;
     line-height: 18px;
     display: flex;
@@ -122,42 +112,13 @@
 }
 
 .follow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: none;
     outline: none;
     background-color: transparent;
     color: var(--primary);
-    font-weight: 700;
+    font-weight: var(--acc-item-font-weight);
     cursor: pointer;
-}
-
-//Dark mode//
-
-.dark-suggest-account {
-    .label {
-        p {
-            font-weight: 600;
-            color: rgb(142, 142, 142);
-        }
-    }
-
-    .info {
-        flex: 1;
-        margin-left: 8px;
-    }
-
-    .name {
-        font-size: 1.4rem;
-        font-weight: 600;
-        span {
-            color: var(--dark-text-color-2);
-        }
-    }
-
-    .username {
-        color: var(--dark-text-color-3);
-    }
-
-    .follow {
-        font-weight: 500;
-    }
 }

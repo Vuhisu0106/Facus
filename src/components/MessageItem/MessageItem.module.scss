@@ -6,14 +6,14 @@
     cursor: pointer;
     border-radius: 8px;
     &:hover {
-        background: rgba(68, 73, 80, 0.08);
+        background: var(--chat-item-active-bc);
     }
 
     margin: 2px 0;
 }
 
 .active {
-    background: rgba(68, 73, 80, 0.08);
+    background: var(--chat-item-active-bc);
 }
 
 .user-avt {
@@ -47,6 +47,7 @@
     top: -2px;
 
     .user-name {
+        color: var(--acc-item-color);
         font-size: 15px;
         max-width: 110px;
         display: -webkit-box;
@@ -57,6 +58,7 @@
     }
 
     .closest-mess-time {
+        color: var(--sub-acc-item-color);
         font-size: 11px;
         margin-bottom: 4px;
     }
@@ -78,6 +80,7 @@
 }
 
 .closest-mess {
+    color: var(--sub-acc-item-color);
     font-size: 12px;
     max-width: 180px;
     overflow: hidden;
@@ -109,31 +112,5 @@
     }
     .user-avt {
         margin: 0;
-    }
-}
-
-//Dark mode//
-
-.dark.active {
-    background: var(--dark-element-hover);
-}
-.dark {
-    &:hover {
-        background: var(--dark-element-hover);
-    }
-
-    .mess-top-content {
-        .user-name {
-            font-weight: 600;
-            color: var(--dark-text-color-2);
-        }
-
-        .closest-mess-time {
-            color: var(--dark-text-color-3);
-        }
-    }
-
-    .closest-mess {
-        color: var(--dark-text-color-3);
     }
 }

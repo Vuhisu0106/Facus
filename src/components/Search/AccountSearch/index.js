@@ -4,17 +4,13 @@ import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '~/context/AuthContext';
 import { db } from '~/firebase/config';
 import AccountItem from '~/components/AccountItem';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
-import { useUI } from '~/context/UIContext';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
 
 const cx = classNames.bind(styles);
 function AccountSearch({ className, placeHolder, placement, autoFocus }) {
@@ -23,9 +19,6 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
     const [showResult, setShowResult] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
-    const { currentUser } = useAuth();
-    const { checkDark } = useUI();
 
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();

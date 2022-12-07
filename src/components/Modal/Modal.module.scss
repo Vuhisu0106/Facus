@@ -1,7 +1,7 @@
 .container {
     width: 100vw;
     height: 100vh;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--modal-outside-bc);
     z-index: 10;
     position: fixed;
     display: flex;
@@ -33,11 +33,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid rgb(204, 206, 209, 0.5);
+    background-color: var(--background-color);
+    border-bottom: 1px solid var(--chat-border);
     z-index: 1;
     position: relative;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 
     h2 {
+        color: var(--profile-nav-color);
         font-size: 20px;
     }
 
@@ -80,10 +84,13 @@
         flex-direction: column;
         justify-content: space-between;
         h4 {
+            color: var(--acc-item-color);
             transform: translateY(-2.5px);
         }
 
         .global {
+            background-color: var(--circle-btn-bc);
+            color: var(--color-input);
             height: 26px;
             padding: 4px 8px;
             border-radius: 6px;
@@ -105,6 +112,8 @@
         border: none;
         outline: none;
         font-size: 15px;
+        background-color: var(--background-color);
+        color: var(--profile-nav-color);
     }
 }
 
@@ -113,14 +122,14 @@
     height: 238px;
     padding: 8px;
     border-radius: 8px;
-    border: 1px solid rgb(204, 208, 212, 1);
+    border: var(--profile-border);
 }
 
 .add-photo-wrapper {
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: #f7f8fa;
+    background-color: var(--modal-add-photo-bc);
     border-radius: 5px;
     position: relative;
     justify-content: center;
@@ -129,7 +138,7 @@
     cursor: pointer;
 
     &:hover {
-        background-color: #f4f4f5;
+        background-color: var(--post-more-btn-hover-color);
     }
 
     .upload-icon {
@@ -140,7 +149,13 @@
         align-items: center;
         border-radius: 50%;
         margin-left: 0;
-        background-color: #e4e6eb;
+        background-color: var(--modal-upload-icon-bc);
+        color: var(--add-post-only-text-btn-color);
+    }
+
+    h3,
+    span {
+        color: var(--add-post-only-text-btn-color);
     }
 
     h3 {
@@ -159,13 +174,14 @@
     top: 10px;
     right: 16px;
     position: absolute;
-    background-color: #fff;
+    background-color: var(--circle-btn-bc);
+    color: var(--circle-btn-color);
     border: rgb(101, 103, 107, 0.3) 1px solid;
 
     &:hover {
-        background-color: #fff;
-        color: var(--primary);
-        border: rgb(254, 44, 85, 0.5) 1px solid;
+        background-color: var(--circle-btn-hover-bc);
+        color: red;
+        border: rgb(101, 103, 107, 0.3) 1px solid;
     }
 }
 
@@ -173,7 +189,7 @@
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: #fff;
+    background-color: var(--circle-btn-bc);
     border-radius: 5px;
     position: relative;
     justify-content: center;
@@ -207,8 +223,8 @@ input[type='file'] {
         margin-bottom: 16px;
         padding: 12px;
         border-radius: 8px;
-        border: 1px solid rgb(204, 208, 212, 1);
-
+        border: var(--profile-border);
+        color: var(--sub-profile-btn-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -252,6 +268,9 @@ input[type='file'] {
 .edit-profile-wrapper {
     width: 100%;
     position: relative;
+    h3 {
+        color: var(--right-content-h1-color);
+    }
 }
 
 .edit-profile-header {
@@ -470,41 +489,49 @@ input[type='file'] {
 
     .status-content {
         padding: 12px 16px;
-    }
-}
 
-.status-bar {
-    border-bottom-right-radius: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    background-color: var(--light-background-color);
-    border-color: rgba(22, 24, 35, 0.2);
-    margin-bottom: 8px;
-    transition: none;
+        .status-bar {
+            border-bottom-right-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-left-radius: 8px;
+            border-top-left-radius: 8px;
+            background-color: var(--background-color-2);
+            border: 1px solid var(--chat-border);
+            margin-bottom: 8px;
+            transition: none;
 
-    .status-input {
-        margin-left: 6px;
-    }
+            button {
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+            }
 
-    .status-icon {
-        border-bottom-left-radius: 8px;
-        border-top-left-radius: 8px;
-        background-color: var(--background-color);
-        border-right: 1.5px solid rgba(22, 24, 35, 0.2);
+            .status-input {
+                color: var(--bio-color);
+                margin-left: 6px;
+                font-weight: 500;
+            }
 
-        &:hover {
-            background-color: #fff;
-            color: var(--primary);
-        }
+            .status-icon {
+                color: var(--circle-btn-color);
+                border-bottom-left-radius: 8px;
+                border-top-left-radius: 8px;
+                background-color: var(--background-color);
+                border-right: 1.5px solid var(--border-menu-separate);
 
-        &:active {
-            background-color: var(--primary);
-            color: var(--white);
-        }
+                &:hover {
+                    background-color: var(--long-btn-hover-color);
+                    color: var(--primary);
+                }
 
-        &:focus-within {
-            border-color: none;
+                &:active {
+                    background-color: var(--primary);
+                    color: var(--white);
+                }
+
+                &:focus-within {
+                    border-color: none;
+                }
+            }
         }
     }
 }
@@ -519,12 +546,14 @@ input[type='file'] {
         margin: 8px 0 16px 0;
         font-size: 13px;
         font-weight: 500;
+        color: var(--sub-acc-item-color);
     }
 
     .suggest-examples {
         div {
             width: 50%;
         }
+        color: var(--sub-acc-item-color);
         margin: 8px 16px 0 16px;
         display: flex;
         justify-content: space-between;
@@ -535,7 +564,7 @@ input[type='file'] {
 .status-footer {
     width: 100%;
     height: 65px;
-    border-top: 1px solid rgb(204, 206, 209, 0.5);
+    border-top: var(--profile-border);
     padding: 16px;
     display: flex;
     justify-content: space-between;
@@ -545,14 +574,19 @@ input[type='file'] {
     .clear-status-btn {
         width: 48%;
         height: 32px;
-        background-color: var(--primary);
-        color: var(--white);
         border-radius: 6px;
     }
+    .set-status-btn {
+        background-color: var(--primary);
+        color: var(--white);
+    }
     .clear-status-btn {
-        border: 1px solid rgb(204, 206, 209, 0.5);
-        background-color: var(--light-background-color);
-        color: #000;
+        border: 1px solid var(--chat-border);
+        background-color: var(--circle-btn-bc);
+        color: var(--sub-profile-btn-color);
+        &:hover {
+            background-color: var(--circle-btn-hover-bc);
+        }
     }
 }
 
@@ -569,193 +603,9 @@ input[type='file'] {
         padding: 0;
     }
     p {
+        color: var(--bio-color);
         font-size: 13px;
         font-weight: 400;
         margin-top: 5px;
-    }
-}
-
-/////////////////////////////////////////////Dark mode////////////////////////////////////////////////
-.dark {
-    background-color: rgba(0, 0, 0, 0.7);
-
-    .header {
-        background-color: var(--dark-background-color-2);
-        border-bottom: 1px solid rgb(62, 64, 66);
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-
-        h2 {
-            color: var(--dark-text-color-3);
-        }
-    }
-}
-
-.dark-add-post {
-    .add-post-user-info {
-        .user-info {
-            h4 {
-                color: var(--dark-text-color-2);
-            }
-
-            .global {
-                background-color: var(--dark-element-color);
-                color: var(--dark-text-color-2);
-            }
-        }
-    }
-
-    .add-post-body {
-        textarea {
-            background-color: var(--dark-background-color-2);
-            color: var(--dark-text-color-3);
-        }
-    }
-
-    .add-photo-container {
-        border: 1px solid rgb(62, 64, 66);
-    }
-
-    .add-photo-wrapper {
-        background-color: #323436;
-
-        &:hover {
-            background-color: var(--dark-element-color);
-        }
-
-        .upload-icon {
-            color: var(--dark-text-color-3);
-            background-color: #47494a;
-        }
-
-        h3,
-        span {
-            color: var(--dark-text-color-3);
-        }
-    }
-
-    .close-upload-btn,
-    .cancel-photo-btn {
-        background-color: var(--dark-element-color);
-        color: var(--dark-icon-color);
-
-        &:hover {
-            background-color: var(--dark-element-hover-2);
-            color: var(--primary);
-            border: rgb(254, 44, 85, 0.5) 1px solid;
-        }
-    }
-
-    .selected-photo-wrapper {
-        background-color: var(--dark-element-color);
-    }
-
-    .add-post-footer {
-        .btn-nav-footer {
-            border: 1px solid rgb(62, 64, 66);
-            color: var(--dark-text-color-2);
-
-            h4 {
-                font-size: 14px;
-            }
-
-            .btn-footer-list {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                .circle-btn-footer {
-                    transition: 0;
-                }
-                .active {
-                    background: var(--primary);
-                    color: var(--white);
-
-                    &:hover {
-                        background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
-                        color: var(--white);
-                    }
-                }
-            }
-        }
-
-        .post-btn {
-            width: 100%;
-            transition: 0.1s;
-            background: var(--primary);
-            color: var(--white);
-            &:hover {
-                background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
-                color: var(--white);
-            }
-        }
-    }
-}
-
-.dark-edit-profile {
-    h3 {
-        color: var(--dark-text-color-3);
-    }
-}
-
-.dark-set-status {
-    .status-bar {
-        background-color: var(--dark-background-color);
-        border: 1px solid rgb(62, 64, 66);
-
-        .status-input {
-            color: var(--dark-text-color-3);
-            font-weight: 400;
-        }
-
-        .status-icon {
-            border-right: 1px solid rgb(62, 64, 66);
-            color: var(--dark-icon-color);
-
-            &:hover {
-                background-color: var(--dark-element-hover);
-                color: var(--primary);
-            }
-
-            &:active {
-                background-color: var(--primary);
-                color: var(--white);
-            }
-        }
-    }
-
-    .suggestions {
-        h4 {
-            color: var(--dark-text-color-3);
-        }
-
-        .suggest-examples {
-            color: var(--dark-text-color-3);
-        }
-    }
-
-    .status-footer {
-        border-top: 1px solid rgb(62, 64, 66);
-
-        .set-status-btn,
-        .clear-status-btn {
-            color: var(--white);
-            &:hover {
-                background: #fc476b;
-            }
-        }
-        .clear-status-btn {
-            background-color: var(--dark-text-color);
-            color: var(--dark-text-color-2);
-
-            &:hover {
-                background-color: var(--dark-element-hover-2);
-            }
-        }
-    }
-}
-
-.dark-status-modal {
-    p {
-        color: var(--dark-text-color-3);
     }
 }

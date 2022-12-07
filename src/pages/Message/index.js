@@ -5,10 +5,8 @@ import Chat from '~/layouts/components/Message/Chat';
 import ChatSidebar from '~/layouts/components/Message/ChatSidebar';
 import EmptyChat from '~/layouts/components/Message/EmptyChat';
 import { useUI } from '~/context/UIContext';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
 import { useSelector } from 'react-redux';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
 
 const cx = classNames.bind(styles);
 function Message() {

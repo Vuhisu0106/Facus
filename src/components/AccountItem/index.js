@@ -14,7 +14,7 @@ function AccountItem({ data, onClick }) {
                     <span>{data.displayName}</span>
                     {/* <FontAwesomeIcon className={cx('check')} icon={faCheckCircle} /> */}
                 </h4>
-                <span className={cx('username')}>Following</span>
+                <span className={cx('following')}>Following</span>
             </div>
         </div>
     );

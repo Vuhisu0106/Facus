@@ -8,14 +8,21 @@
 .photo {
     margin-bottom: 1.4rem;
     p {
+        color: var(--bio-color);
+
         margin-top: 16px;
         text-align: center;
         margin-bottom: 12px;
     }
     h2 {
+        color: var(--profile-nav-color);
         font-size: 2.5rem;
         font-weight: 700;
     }
+}
+
+.edit-bio-btn {
+    color: var(--sub-profile-btn-color);
 }
 
 .edit-bio {
@@ -29,8 +36,9 @@
         width: 248px;
         padding: 8px 24px;
         margin: 12px 0;
-        border: 1.8px solid rgb(204, 206, 209, 1);
-        background-color: var(--white);
+        border: var(--bio-input-border);
+        background-color: var(--background-input);
+        color: var(--background-input);
 
         &:focus-within {
             border: 1.8px solid var(--primary);
@@ -46,6 +54,12 @@
         .cancel-bio-btn {
             height: 32px;
             border-radius: 8px;
+            background-color: var(--sub-profile-btn-bc);
+            color: var(--sub-profile-btn-color);
+
+            &:hover {
+                background-color: var(--circle-btn-hover-bc);
+            }
         }
         .save-bio-btn {
             height: 32px;
@@ -54,7 +68,7 @@
             color: var(--white);
 
             &:hover {
-                background-color: red;
+                background: #fc476b;
             }
         }
     }
@@ -63,30 +77,45 @@
 .photo-box {
     width: 100%;
     height: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-gap: 5px;
+    display: flex;
+    // grid-template-columns: repeat(3, minmax(0, 1fr));
+    // grid-gap: 5px;
+    flex-wrap: wrap;
     margin-top: 15px;
     border-radius: 15px;
     border-radius: 10px;
     overflow: hidden;
 
-    div img {
-        width: 11.5rem;
-        height: 11.5rem;
-        object-fit: cover;
-        cursor: pointer;
+    .image-wrapper {
+        width: 33.333333333333336%;
+        aspect-ratio: 1 / 1;
+        padding-right: 4px;
+        margin-bottom: 10px;
         top: 0;
         bottom: 0;
         left: 0;
         right: 0;
+        a {
+            width: 100%;
+            height: 100%;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                cursor: pointer;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
     }
 }
 
 .right-content {
     flex: 1;
     h1 {
-        color: #65676b;
+        color: var(--right-content-h1-color);
         text-align: center;
         margin-top: 50px;
     }
@@ -110,21 +139,21 @@
     .add-post-only-message-btn {
         width: 100%;
         border-radius: 20px;
-        color: #65676b;
-        background-color: #f0f2f5;
+        color: var(--add-post-only-text-btn-color);
+        background-color: var(--add-post-only-text-btn-bc);
         font-size: 17px;
         font-weight: 500;
         justify-content: left;
 
         &:hover {
-            background-color: rgb(175, 177, 182, 0.3);
+            background-color: var(--add-post-only-text-hover-btn);
         }
     }
 }
 
 .add-post-bottom {
     height: 46px;
-    border-top: 1px solid rgb(204, 206, 209, 0.5);
+    border-top: 1px solid var(--chat-border);
     margin-top: 8px;
     padding-top: 5px;
     display: flex;
@@ -133,10 +162,11 @@
     .add-post-with-video-btn,
     .add-post-with-photo-btn {
         width: 100%;
-        background-color: var(--white);
+        background-color: transparent;
+        color: var(--profile-nav-color);
 
         &:hover {
-            background-color: #f0f2f5;
+            background-color: var(--long-btn-hover-color);
             color: var(--primary);
         }
     }
@@ -159,6 +189,7 @@
     h2 {
         width: 100%;
         margin-bottom: 16px;
+        color: var(--right-content-h1-color);
     }
 }
 
@@ -172,6 +203,7 @@
     margin-bottom: 8px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    border: var(--profile-border);
 }
 
 .account-avt {
@@ -191,11 +223,13 @@
 }
 
 .account-name {
+    color: var(--acc-item-color);
     font-size: 17px;
     font-weight: 600;
 }
 
 .account-bio {
+    color: var(--sub-acc-item-color);
     font-size: 12px;
     font-weight: 400;
 }
@@ -203,109 +237,5 @@
 @media (max-width: 739px) {
     .account {
         flex-basis: 100%;
-    }
-}
-
-//////////////////////////////////////////Dark mode/////////////////////////////////////////
-/// Post
-.dark-post {
-    .intro,
-    .photo {
-        box-shadow: none;
-        p {
-            color: var(--dark-text-color-3);
-        }
-        h2 {
-            color: var(--dark-text-color-3);
-        }
-    }
-
-    .edit-bio-btn {
-        color: var(--dark-text-color-2);
-    }
-
-    .edit-bio {
-        .bio-input {
-            background-color: var(--dark-element-color);
-            color: var(--dark-text-color);
-            border: 1.8px solid rgb(176, 179, 184, 0.3);
-
-            &:focus-within {
-                border: 1.8px solid var(--primary);
-            }
-        }
-
-        .edit-bio-btns {
-            .cancel-bio-btn {
-                background-color: var(--dark-text-color);
-                color: var(--dark-text-color-2);
-
-                &:hover {
-                    background-color: var(--dark-element-hover-2);
-                }
-            }
-            .save-bio-btn {
-                color: var(--white);
-                &:hover {
-                    background: #fc476b;
-                }
-            }
-        }
-    }
-
-    .right-content {
-        h1 {
-            color: var(--dark-text-color-3);
-        }
-    }
-
-    .add-post {
-        box-shadow: none;
-    }
-
-    .add-post-top {
-        .add-post-only-message-btn {
-            background-color: var(--dark-text-color);
-            color: var(--dark-text-color-3);
-
-            &:hover {
-                background-color: var(--dark-element-hover-2);
-            }
-        }
-    }
-
-    .add-post-bottom {
-        border-top: 1px solid rgb(62, 64, 66);
-
-        .add-post-with-video-btn,
-        .add-post-with-photo-btn {
-            background-color: transparent;
-            color: var(--dark-text-color-3);
-
-            &:hover {
-                background-color: var(--dark-element-hover);
-                color: var(--primary);
-            }
-        }
-    }
-}
-
-///Following
-.dark {
-    box-shadow: none;
-
-    h2 {
-        color: var(--dark-text-color-3);
-    }
-    .account {
-        border: 1px solid rgb(62, 64, 66);
-    }
-
-    .account-name {
-        color: var(--dark-text-color-2);
-    }
-
-    .account-bio {
-        color: var(--dark-text-color-3);
     }
 }

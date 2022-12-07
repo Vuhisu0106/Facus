@@ -31,8 +31,8 @@
             align-items: center;
             justify-content: center;
             border-radius: 9999px;
-            border: 1px solid rgb(206, 208, 212);
-            background-color: var(--white);
+            border: 1px solid var(--cmt-reaction-border-color);
+            background-color: var(--cmt-reaction-bc);
             padding: 4px 4px;
             position: absolute;
             .reaction-cmt-icon {
@@ -42,6 +42,7 @@
             .reaction-cmt-count {
                 font-size: 11px;
                 margin-left: 2px;
+                color: var(--cmt-reaction-color);
             }
         }
 
@@ -51,8 +52,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #fff;
-            color: rgb(0, 0, 0, 0.5);
+            background-color: transparent;
+            color: var(--circle-btn-color);
             margin-left: 6px;
             opacity: 0;
             transition: 0.1s;
@@ -62,8 +63,8 @@
         .comment-content-wrapper {
             position: relative;
             padding: 8px;
-            background-color: var(--light-background-color);
-            color: var(--black);
+            background-color: var(--cmt-wrapper-bc);
+            color: var(--cmt-color);
             font-size: 15px;
             font-weight: 500;
             border-radius: 10px;
@@ -74,6 +75,10 @@
             .comment-user-name {
                 font-weight: 700;
                 font-size: 13px;
+            }
+
+            .comment-content {
+                font-weight: var(--cmt-font-weight);
             }
         }
 
@@ -103,8 +108,8 @@
             align-items: center;
             justify-content: center;
             border-radius: 9999px;
-            border: 1px solid rgb(206, 208, 212);
-            background-color: var(--white);
+            border: 1px solid var(--cmt-reaction-border-color);
+            background-color: var(--cmt-reaction-bc);
             padding: 4px 4px;
             .reaction-cmt-icon {
                 color: var(--primary);
@@ -113,6 +118,7 @@
             .reaction-cmt-count {
                 font-size: 11px;
                 margin-left: 2px;
+                color: var(--cmt-reaction-color);
             }
         }
     }
@@ -126,7 +132,7 @@
         .reply-comment-btn {
             font-size: 12px;
             font-weight: 700;
-            color: rgb(101, 103, 107);
+            color: var(--cmt-interact-color);
             background-color: transparent;
             border: none;
             outline: none;
@@ -136,6 +142,7 @@
 
         span {
             font-size: 12px;
+            color: var(--cmt-reaction-color);
         }
     }
 }
@@ -144,6 +151,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    margin: 0 16px 0 6px;
 
     span {
         padding: 4px;
@@ -161,73 +169,13 @@
         max-width: 100%;
     }
 }
-@media (min-width: 740px) and (max-width: 1239px) {
-    .comment-image {
-        max-width: 200px;
-    }
-}
-@media (max-width: 739px) {
+@media (min-width: 740px) and (max-width: 1240px) {
     .comment-image {
         max-width: 100%;
     }
 }
-
-//Dark mode//
-.dark {
-    .comment-element-content {
-        .comment-content-n-setting {
-            .reaction-cmt {
-                border: 1px solid rgb(206, 208, 212, 0.5);
-                background-color: var(--dark-element-color);
-
-                .reaction-cmt-count {
-                    color: var(--dark-text-color-3);
-                }
-            }
-
-            .comment-setting {
-                color: var(--dark-icon-color);
-                background-color: transparent;
-            }
-
-            .comment-content-wrapper {
-                background-color: var(--dark-element-color);
-                color: var(--dark-text-color-2);
-
-                .comment-user-name {
-                    font-size: 400;
-                }
-
-                .comment-content {
-                    font-weight: 400;
-                }
-            }
-
-            .comment-content-wrapper.no-text-wrapper {
-                background-color: transparent;
-            }
-        }
-
-        .comment-img-n-reaction {
-            .reaction-image-cmt {
-                border: 1px solid rgb(206, 208, 212, 0.5);
-                background-color: var(--dark-element-color);
-
-                .reaction-cmt-count {
-                    color: var(--dark-text-color-3);
-                }
-            }
-        }
-
-        .comment-interact {
-            .like-comment-btn,
-            .reply-comment-btn {
-                color: var(--dark-text-color-3);
-            }
-
-            span {
-                color: var(--dark-text-color-3);
-            }
-        }
+@media (max-width: 740px) {
+    .comment-image {
+        max-width: 100%;
     }
 }

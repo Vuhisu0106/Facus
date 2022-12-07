@@ -9,29 +9,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
+    background-color: var(--circle-btn-bc);
+    color: var(--circle-btn-color);
 
     &:hover {
-        background-color: rgba(22, 24, 35, 0.12);
+        background-color: var(--circle-btn-hover-bc);
     }
 
     &:active {
         cursor: pointer;
-        background-color: rgb(22, 24, 35, 0.18);
-    }
-}
-
-//Dark mode//
-.dark {
-    background-color: var(--dark-element-color);
-    color: var(--dark-icon-color);
-
-    &:hover {
-        background-color: var(--dark-element-hover-2);
-    }
-
-    &:active {
-        cursor: pointer;
-        background-color: var(--dark-element-color);
+        background-color: var(--circle-btn-active-bc);
     }
 }

@@ -7,11 +7,9 @@ import { useState, useRef } from 'react';
 import { useAuth } from '~/context/AuthContext';
 import styles from './LogIn.module.scss';
 import { useNavigate } from 'react-router-dom';
-import Grid from '~/components/Grid/Grid';
-import GridRow from '~/components/Grid/GridRow';
-import GridColumn from '~/components/Grid/GridColumn';
 import Shape from '../Shape';
 import Checkbox from '~/components/Checkbox';
+import { Grid, GridColumn, GridRow } from '~/components/Grid';
 
 const cx = classNames.bind(styles);
 

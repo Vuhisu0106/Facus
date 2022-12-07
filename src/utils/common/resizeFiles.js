@@ -1,6 +1,6 @@
 import Resizer from 'react-image-file-resizer';
 
-function useResizeFile() {
+function resizeFiles() {
     const resizeFile = (file) =>
         new Promise((resolve) => {
             Resizer.imageFileResizer(
@@ -20,4 +20,4 @@ function useResizeFile() {
     return { resizeFile };
 }
 
-export default useResizeFile;
+export default resizeFiles;

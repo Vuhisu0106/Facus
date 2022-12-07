@@ -7,7 +7,6 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    //text-align: center;
     width: 64px;
     margin: 8px;
 }
@@ -37,17 +36,24 @@
             min-width: 34px;
             border-radius: 50%;
             font-size: 17px;
-            cursor: pointer;
             transition: ease 50ms;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--white);
-            border: 1px solid rgb(204, 206, 209);
+            background-color: var(--round-acc-item-status-bc);
+            border: 1px solid var(--round-acc-item-status-border-color);
             position: absolute;
             margin: 0 8px 8px 0;
             color: var(--primary);
             //z-index: 1;
+        }
+    }
+
+    &:hover {
+        .story-circle {
+            .user-img {
+                border: none;
+            }
         }
     }
 }
@@ -67,32 +73,17 @@
     height: 62px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2.5px solid var(--white);
+    border: 2.5px solid var(--round-acc-item-img-border);
+    transition: all 0.1s linear;
 }
 
 .user-name {
     font-size: 1.2rem;
     font-weight: 500;
+    color: var(--round-acc-item-name-color);
 }
 
 .user-name.big-font {
     font-size: 19px;
     font-weight: 700;
-}
-
-.dark {
-    .user-img {
-        border: 2.5px solid var(--dark-background-color-2);
-    }
-
-    .user-name {
-        color: var(--dark-text-color-3);
-    }
-
-    .status-wrapper {
-        .status {
-            background-color: var(--dark-background-color-2);
-            border: 1px solid rgb(62, 64, 66);
-        }
-    }
 }

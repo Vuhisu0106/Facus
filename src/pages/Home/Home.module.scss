@@ -1,15 +1,11 @@
 .wrapper {
     min-height: 1000px;
     padding: 12px 0;
-    //width: var(--home-layout-width);
     display: flex;
     justify-content: center;
 }
 .content {
-    //max-width: 530px;
-    //flex: 1;
-    background-color: var(--light-background-color);
-    //margin: 0px 24px;
+    background-color: var(--background-color-2);
     border-radius: var(--component-border-radius);
 }
 
@@ -18,25 +14,13 @@
     flex-direction: column;
     justify-content: space-between;
     position: sticky;
-    top: 84px;
-    //left: calc((100vw - 1178px) / 2);
-    background-color: var(--light-background-color);
+    top: 73px;
+    background-color: var(--background-color);
+    border-radius: 10px;
+    padding: 12px 0;
 }
 
 .right-sidebar {
-    //position: fixed;
-    //right: calc((100vw - 1178px) / 2);
     position: sticky;
-    top: 84px;
-}
-
-//Dark mode//
-.dark {
-    .content {
-        background-color: var(--dark-background-color);
-    }
-
-    .left-sidebar {
-        background-color: var(--dark-background-color);
-    }
+    top: 73px;
 }
