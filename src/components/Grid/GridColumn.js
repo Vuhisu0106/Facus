@@ -7,13 +7,13 @@ import styles from './Grid.module.scss';
 const cx = classNames.bind(styles);
 
 function GridColumn({ s, s_o, m, m_o, l, l_o, className, children }) {
-    const viewPort = useViewport();
-    const isSmall = viewPort.width <= 740;
-    const isMedium = viewPort.width <= 740;
-    const isLarge = viewPort.width <= 740;
+    //const viewPort = useViewport();
+    // const isSmall = viewPort.width <= 740;
+    // const isMedium = viewPort.width <= 740;
+    // const isLarge = viewPort.width <= 740;
     const classes = cx('col', { [className]: className });
-    const x = isLarge ? l : isMedium ? m : s;
-    const x_o = isLarge ? l_o : isMedium ? m_o : s_o;
+    // const x = isLarge ? l : isMedium ? m : s;
+    // const x_o = isLarge ? l_o : isMedium ? m_o : s_o;
     return (
         <StyleRoot
             className={classes}

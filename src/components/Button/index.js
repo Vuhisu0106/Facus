@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import { useUI } from '~/context/UIContext';
+
 import styles from './Button.module.scss';
 
 const cx = classNames.bind(styles);
@@ -20,7 +20,6 @@ function Button({
     disabled = false,
     ...passProps
 }) {
-    const { checkDark } = useUI();
     let Comp = 'button';
 
     const props = {
@@ -44,7 +43,7 @@ function Button({
         Comp = 'a';
     }
 
-    const classes = cx('wrapper', checkDark(), {
+    const classes = cx('wrapper', {
         [className]: className,
         primary,
         popper,

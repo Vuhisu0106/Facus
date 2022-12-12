@@ -223,7 +223,9 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
+        .avatar {
+            margin-right: 0;
+        }
         .profile-name-follow {
             display: flex;
             flex-direction: column;

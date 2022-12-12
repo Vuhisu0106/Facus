@@ -6,7 +6,7 @@ import moment from 'moment';
 import { db } from '~/firebase/config';
 import styles from './Post.module.scss';
 import { useState, useEffect } from 'react';
-import { useUI } from '~/context/UIContext';
+
 import PostLayout from '~/components/PostLayout';
 import { useViewport } from '~/components/Hook';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
@@ -16,7 +16,7 @@ import { setPost } from '~/features/PostAndComment/PostAndCommentSlice';
 const cx = classNames.bind(styles);
 function Post() {
     let params = useParams();
-    const { checkDark } = useUI();
+
     const viewPort = useViewport();
     const isSmall = viewPort.width <= 740;
 
@@ -40,7 +40,7 @@ function Post() {
 
     return (
         postDetail && (
-            <div className={cx('container', checkDark())}>
+            <div className={cx('container')}>
                 <Grid type={'chat'}>
                     <GridRow className={'post-grid-row'}>
                         <GridColumn l={7.75} m={6.75} s={12} className={cx('post-img-wrapper')}>

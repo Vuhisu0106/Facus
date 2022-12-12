@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
 import styles from '~/components/Modal/Modal.module.scss';
-import { useUI } from '~/context/UIContext';
+
 import Modal from '..';
 import { updateDocument } from '~/firebase/services';
 import { useAuth } from '~/context/AuthContext';
@@ -17,10 +17,11 @@ import { setStatus } from '~/features/Profile/ProfileSlice';
 
 const cx = classNames.bind(styles);
 function SetStatusModal({ onClose }) {
-    const { checkDark, dark } = useUI();
     const { currentUser } = useAuth();
 
     const status = useSelector((state) => state.profile.status);
+    const dark = useSelector((state) => state.theme.darkMode);
+
     const dispatch = useDispatch();
 
     const [selectEmoji, setSelectEmoji] = useState(status.icon || '');
@@ -85,7 +86,7 @@ function SetStatusModal({ onClose }) {
             s_o={1}
             onClose={onClose}
             children={
-                <div className={cx('set-status-wrapper', checkDark('dark-set-status'))}>
+                <div className={cx('set-status-wrapper')}>
                     <div className={cx('status-content')}>
                         <Input
                             value={text}

@@ -11,7 +11,7 @@ import MessageItem from '~/components/MessageItem';
 import ChatSearch from '~/components/Search/ChatSearch';
 import styles from './Message.module.scss';
 import { useAuth } from '~/context/AuthContext';
-import { useUI } from '~/context/UIContext';
+
 import { updateDocument } from '~/firebase/services';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeChatUser, setAddChatState } from '~/features/Chat/ChatSlice';
@@ -21,7 +21,6 @@ function ChatSidebar() {
     const [chats, setChats] = useState([]);
     const [activeMessItem, setActiveMessItem] = useState(null);
 
-    const { checkDark } = useUI();
     const { currentUser } = useAuth();
 
     const chat = useSelector((state) => state.chat);
@@ -67,7 +66,7 @@ function ChatSidebar() {
     }, [chat.user.uid]);
 
     return (
-        <div className={cx('sidebar-wrapper', checkDark('dark-chat-sidebar'))}>
+        <div className={cx('sidebar-wrapper')}>
             <div className={cx('sidebar-header')}>
                 <div className={cx('sidebar-top-header')}>
                     <h2>Chat</h2>

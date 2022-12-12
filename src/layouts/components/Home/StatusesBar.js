@@ -1,29 +1,23 @@
 import classNames from 'classnames/bind';
-import { faChevronLeft, faChevronRight, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect } from 'react';
-import { onSnapshot, where, collection, query, deleteField, getDocs } from 'firebase/firestore';
+import { onSnapshot, where, collection, query } from 'firebase/firestore';
 
 import { db } from '~/firebase/config';
 import RoundAccountItem from '~/components/AccountItem/RoundAccountItem';
 import styles from './Home.module.scss';
-import { useUI } from '~/context/UIContext';
+
 import { useAuth } from '~/context/AuthContext';
 import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function StatusesBar({ listFollowingUid }) {
-    const { checkDark } = useUI();
     const { currentUser } = useAuth();
     const { currentUserInfo } = useApp();
 
     const [statusFollowingList, setStatusFollowingList] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    // const statusList = [];
-    // data.forEach((data) => {
-    //     if (data.status) return statusList.push(data.status);
-    // });
 
     useEffect(() => {
         setLoading(true);
@@ -42,8 +36,8 @@ function StatusesBar({ listFollowingUid }) {
     }, [currentUser, currentUserInfo?.following]);
 
     return (
-        <div className={cx('horizontal-scroll', checkDark())}>
-            {/* <button className={cx('btn-scroll-left')}>{<FontAwesomeIcon icon={faChevronLeft} />}</button> */}
+        <div className={cx('horizontal-scroll')}>
+            <button className={cx('btn-scroll-left')}>{<FontAwesomeIcon icon={faChevronLeft} />}</button>
             {loading ? (
                 <h2>Loading</h2>
             ) : (
@@ -67,7 +61,7 @@ function StatusesBar({ listFollowingUid }) {
                     )}
                 </div>
             )}
-            {/* <button className={cx('btn-scroll-right')}>{<FontAwesomeIcon icon={faChevronRight} />}</button> */}
+            <button className={cx('btn-scroll-right')}>{<FontAwesomeIcon icon={faChevronRight} />}</button>
         </div>
     );
 }

@@ -9,10 +9,7 @@ import styles from './Profile.module.scss';
 import { faCircle, faMessage, faPen, faUserMinus, faUserPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
-import Posts from '~/layouts/components/Profile/Posts';
-import Following from '~/layouts/components/Profile/Following';
-import Follower from '~/layouts/components/Profile/Follower';
-import { useUI } from '~/context/UIContext';
+
 import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
 import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
 import EditProfileModal from '~/components/Modal/Modal/EditProfileModal';
@@ -24,6 +21,7 @@ import { follow, unfollow } from '~/utils/FollowUtils';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
 import { handleSelectChat } from '~/utils';
 import { changeChatUser } from '~/features/Chat/ChatSlice';
+import { Follower, Following, Posts } from '~/layouts/components/Profile';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -31,14 +29,11 @@ function Profile() {
     const [selectedUser, setSelectedUser] = useState('');
     const [type, setType] = useState('Posts');
     const [profileLayout, setProfileLayout] = useState('Posts');
-    //const [currentUserFollowing, setCurrentUserFollowing] = useState([]);
     const [statusModalVisible, setStatusModalVisible] = useState(false);
     const [profileModalVisible, setProfileModalVisible] = useState(false);
-
     const [followLoading, setFollowingLoading] = useState(false);
 
     const { currentUser } = useAuth();
-    const { checkDark } = useUI();
     const { currentUserInfo } = useApp();
 
     const navigate = useNavigate();
@@ -46,7 +41,6 @@ function Profile() {
     const dispatch = useDispatch();
 
     const [hovered, setHovered] = useState(false);
-    const toggleHover = () => setHovered(!hovered);
 
     const main = () => {
         if (profileLayout === 'Following') {
@@ -60,7 +54,6 @@ function Profile() {
 
     useEffect(() => {
         setProfileLayout(type);
-        console.log(1);
     }, [type]);
 
     useEffect(() => {
@@ -84,7 +77,6 @@ function Profile() {
                 unsub();
             };
         };
-
         params.id && getSelectedUser();
     }, [params.id]);
 
@@ -120,7 +112,7 @@ function Profile() {
     };
 
     return (
-        <div className={cx('wrapper', checkDark())}>
+        <div className={cx('wrapper')}>
             {statusModalVisible && (
                 <SetStatusModal
                     onClose={() => {
@@ -153,8 +145,8 @@ function Profile() {
                                         <div className={cx('avatar')}>
                                             <div
                                                 className={cx('set-status-wrapper')}
-                                                onMouseEnter={toggleHover}
-                                                onMouseLeave={toggleHover}
+                                                onMouseEnter={() => setHovered(!hovered)}
+                                                onMouseLeave={() => setHovered(!hovered)}
                                             >
                                                 {params.id === currentUser.uid ? (
                                                     hovered ? (

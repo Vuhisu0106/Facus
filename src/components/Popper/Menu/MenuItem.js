@@ -2,12 +2,10 @@ import classNames from 'classnames/bind';
 
 import styles from './Menu.module.scss';
 import Button from '~/components/Button';
-import { useUI } from '~/context/UIContext';
 
 const cx = classNames.bind(styles);
 function MenuItem({ data, onClick }) {
-    const { checkDark } = useUI();
-    const classes = cx('menu-item', checkDark(), {
+    const classes = cx('menu-item', {
         separate: data.separate,
     });
     return (

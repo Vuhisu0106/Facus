@@ -1,9 +1,6 @@
 import classNames from 'classnames/bind';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styles from './Input.module.scss';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { useUI } from '~/context/UIContext';
 import { LoadingIcon } from '../Icon';
 
 const cx = classNames.bind(styles);
@@ -31,14 +28,14 @@ function Input({
     ...passProps
 }) {
     //const inputRef = useRef();
-    const { checkDark } = useUI();
+
     const props = {
         onChange,
         ...passProps,
     };
 
     return (
-        <div className={cx('wrapper', checkDark(), { [className]: className })}>
+        <div className={cx('wrapper', { [className]: className })}>
             {leftIcon && (
                 <button
                     className={cx('left-button', { [classNameLeftBtn]: classNameLeftBtn })}

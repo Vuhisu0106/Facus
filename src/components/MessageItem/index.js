@@ -1,13 +1,11 @@
 import classNames from 'classnames/bind';
-import { useUI } from '~/context/UIContext';
 
 import styles from './MessageItem.module.scss';
 
 const cx = classNames.bind(styles);
 function MessageItem({ userAvt, userName, active = false, closestMess, unread, closestMessTime, onClick }) {
-    const { checkDark } = useUI();
     return (
-        <div className={cx('wrapper', checkDark(), active && 'active')} onClick={onClick}>
+        <div className={cx('wrapper', active && 'active')} onClick={onClick}>
             <img className={cx('user-avt')} alt={userName} src={userAvt} />
 
             <div className={cx('message-content')}>

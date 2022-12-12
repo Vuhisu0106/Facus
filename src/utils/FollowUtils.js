@@ -5,7 +5,7 @@ export const follow = async (currentUserUid, otherUserUid) => {
     await updateDocument('users', currentUserUid, {
         following: arrayUnion(otherUserUid),
     });
-    console.log('follow!!!');
+
     await updateDocument('users', otherUserUid, {
         follower: arrayUnion(currentUserUid),
     });

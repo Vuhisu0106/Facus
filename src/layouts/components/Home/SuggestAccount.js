@@ -4,7 +4,7 @@ import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '~/firebase/config';
 import { useEffect, useState } from 'react';
 import { useApp } from '~/context/AppContext';
-import { useUI } from '~/context/UIContext';
+
 import AccountItem from './AccountItem';
 
 import styles from './Home.module.scss';
@@ -13,7 +13,7 @@ import { useAuth } from '~/context/AuthContext';
 const cx = classNames.bind(styles);
 function SuggestAccount({ label }) {
     const { currentUser } = useAuth();
-    const { checkDark } = useUI();
+
     const { currentUserInfo } = useApp();
     const [suggestFollowList, setSuggestFollowList] = useState([]);
 
@@ -33,7 +33,7 @@ function SuggestAccount({ label }) {
     }, [currentUser, currentUserInfo?.following]);
 
     return (
-        <div className={cx('wrapper', checkDark('dark-suggest-account'))}>
+        <div className={cx('wrapper')}>
             <div className={cx('label')}>
                 <p>{label}</p>
             </div>

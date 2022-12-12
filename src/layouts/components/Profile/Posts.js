@@ -1,8 +1,9 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc, deleteField } from 'firebase/firestore';
+import { query, collection, where, getDocs, Timestamp } from 'firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 
 import { db } from '~/firebase/config';
@@ -14,24 +15,19 @@ import { useAuth } from '~/context/AuthContext';
 import CircleAvatar from '~/components/CircleAvatar';
 import Input from '~/components/Input';
 import AddPostModal from '~/components/Modal/Modal/AddPostModal';
-import { deleteDocument, updateDocument } from '~/firebase/services';
+import { updateDocument } from '~/firebase/services';
 import { useDispatch, useSelector } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { setBio } from '~/features/Profile/ProfileSlice';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
-import { resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
-import { addPost } from '~/utils';
+import { addPost, resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
+import { addPostFunction } from '~/utils';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
     const { currentUser } = useAuth();
     const dispatch = useDispatch();
     const bio = useSelector((state) => state.profile.bio);
-    //const post = useSelector((state) => state.postNcomment.posts.find((post) => post.poster.uid === selectedUser.uid));
-    // const post = useSelector((state) =>
-    //     state.postNcomment.posts.filter((post) => post.poster.uid === selectedUser.uid),
-    // );
-
     const postList = useSelector((state) => state.postNcomment.posts);
 
     const [bioInput, setBioInput] = useState(bio || '');
@@ -43,28 +39,27 @@ function Posts({ selectedUser, isCurrentUser = false }) {
 
     const postImgList = [];
     postList.forEach((data) => {
-        if (data.img) return postImgList.push(data.img);
+        if (data.img) return postImgList.push(data);
     });
 
     useEffect(() => {
-        const getPost = () => {
-            const unsub = onSnapshot(doc(db, 'userPost', selectedUser.uid), (doc) => {
-                console.log('something happening');
+        const getPost = async () => {
+            const q = query(collection(db, 'post'), where('poster.uid', '==', selectedUser.uid));
+            try {
                 dispatch(resetPost());
+                const querySnapshot = await getDocs(q);
                 const posts = [];
-                if (doc.data()) {
-                    Object.entries(doc.data()).forEach((post) => {
-                        posts.push({ ...post[1], comment: [] });
-                    });
-                } else {
-                    return;
-                }
-                dispatch(setPost(posts));
-            });
-            return () => {
-                unsub();
-            };
+                querySnapshot.forEach((doc) => {
+                    posts.push({ ...doc.data() });
+                });
+                dispatch(setPost([...posts]));
+                //setLoading(false);
+            } catch (err) {
+                console.log(err);
+                //setLoading(false);
+            }
         };
+
         selectedUser && getPost();
     }, [selectedUser.uid]);
 
@@ -93,23 +88,23 @@ function Posts({ selectedUser, isCurrentUser = false }) {
 
     //Add post
     const handleAddPost = async (caption, img) => {
-        await addPost(currentUser, caption, img);
+        let uuId = uuid();
+        const data = {
+            postId: uuId,
+            poster: {
+                uid: currentUser.uid,
+                displayName: currentUser.displayName,
+                photoURL: currentUser.photoURL,
+            },
+            caption: caption,
+            date: Timestamp.now(),
+            img: img,
+            like: [],
+            comment: [],
+        };
+        await addPostFunction(data, img);
+        dispatch(addPost({ ...data }));
         setOpenModal(false);
-    };
-
-    const handleDeletePost = async (postId) => {
-        if (window.confirm('Do you want delete this post?')) {
-            try {
-                await deleteDocument('post', postId);
-                await updateDocument('userPost', currentUser.uid, {
-                    [postId]: deleteField(),
-                });
-
-                //setPostList((cmtList) => cmtList.filter((x) => x.postId !== postId));
-            } catch (error) {
-                console.log(error);
-            }
-        }
     };
 
     return (
@@ -174,23 +169,27 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                     </WrapperModal>
                     <WrapperModal className={cx('photo')}>
                         <h2>Photo</h2>
-                        {!postImgList.length ? (
+                        {postImgList.length === 0 ? (
                             <p>No image found!</p>
                         ) : (
                             <div className={cx('photo-box')}>
-                                {postList
+                                {postImgList
                                     ?.slice()
                                     .sort((a, b) => b.date - a.date)
-                                    .map(
-                                        (post) =>
-                                            post?.img && (
-                                                <div key={post.postId} className={cx('image-wrapper')}>
-                                                    <a href={`/post/${post.postId}`}>
-                                                        <img src={post?.img} alt={post.postId} />
-                                                    </a>
-                                                </div>
-                                            ),
-                                    )}
+                                    .map((post) => (
+                                        <div key={post.postId} className={cx('image-wrapper')}>
+                                            <a href={`/post/${post.postId}`}>
+                                                <img
+                                                    src={
+                                                        typeof post?.img === 'object'
+                                                            ? URL.createObjectURL(post?.img)
+                                                            : post?.img
+                                                    }
+                                                    alt={post.postId}
+                                                />
+                                            </a>
+                                        </div>
+                                    ))}
                             </div>
                         )}
                     </WrapperModal>
@@ -249,7 +248,6 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     postCaption={post?.caption}
                                     like={post?.like}
                                     comment={post?.comment?.length}
-                                    deletePostFunc={handleDeletePost}
                                 />
                             ))
                     ) : (

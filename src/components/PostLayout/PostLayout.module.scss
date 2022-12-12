@@ -151,18 +151,6 @@
         border-radius: 50%;
         margin-right: 6px;
     }
-
-    .comment-input-area {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-
-        .comment-input {
-            &:focus-within {
-                border: 1px transparent solid;
-            }
-        }
-    }
 }
 
 .comment-list {

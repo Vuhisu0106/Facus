@@ -2,10 +2,8 @@ import classNames from 'classnames/bind';
 
 import styles from './Home.module.scss';
 import ProfileCard from '~/components/ProfileCard';
-import StatusesBar from '~/layouts/components/Home/StatusesBar';
-import SuggestAccount from '~/layouts/components/Home/SuggestAccount';
-import PostList from '~/layouts/components/Home/PostList';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import { PostList, StatusesBar, SuggestAccount } from '~/layouts/components/Home';
 
 const cx = classNames.bind(styles);
 function Home() {

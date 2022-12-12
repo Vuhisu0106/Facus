@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { onSnapshot, where, collection, query } from 'firebase/firestore';
 
 import { db } from '~/firebase/config';
@@ -7,14 +7,14 @@ import PostLayout from '~/components/PostLayout';
 import { useAuth } from '~/context/AuthContext';
 import styles from './Home.module.scss';
 import { useApp } from '~/context/AppContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
 
 function PostList() {
-    const [postList, setPostList] = useState([]);
     const { currentUser } = useAuth();
     const { currentUserInfo } = useApp();
     const dispatch = useDispatch();
+    const post = useSelector((state) => state.postNcomment.posts);
 
     useEffect(() => {
         const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
@@ -23,10 +23,9 @@ function PostList() {
             dispatch(resetPost());
             const posts = [];
             querySnapshot.forEach((doc) => {
-                posts.push({ ...doc.data(), comment: [] });
+                posts.push({ ...doc.data() });
             });
             dispatch(setPost([...posts]));
-            setPostList(posts);
         });
 
         return getPost;
@@ -34,8 +33,9 @@ function PostList() {
 
     return (
         <div>
-            {postList
-                ?.sort((a, b) => b.date - a.date)
+            {post
+                ?.slice()
+                .sort((a, b) => b.date - a.date)
                 .map((post) => (
                     <PostLayout
                         key={post?.postId}
@@ -47,7 +47,6 @@ function PostList() {
                         postImg={post?.img}
                         postCaption={post?.caption}
                         like={post?.like}
-                        commentCount={post?.comment.length}
                     />
                 ))}
         </div>

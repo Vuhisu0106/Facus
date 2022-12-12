@@ -9,7 +9,7 @@ import Modal from '..';
 import CircleButton from '~/components/Button/CircleButton';
 import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
-import { useUI } from '~/context/UIContext';
+
 import { useState } from 'react';
 import { updateDocument } from '~/firebase/services';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +18,6 @@ import { setCoverPhotoURL, setPhotoAndCoverPhoto, setPhotoURL } from '~/features
 const cx = classNames.bind(styles);
 function EditProfileModal({ onClose }) {
     const { currentUser } = useAuth();
-    const { checkDark } = useUI();
 
     const profile = useSelector((state) => state.profile);
     const dispatch = useDispatch();
@@ -73,7 +72,7 @@ function EditProfileModal({ onClose }) {
                 setIsCoverPhotoChange(false);
             }}
             children={
-                <div className={cx('edit-profile-wrapper', checkDark('dark-edit-profile'))}>
+                <div className={cx('edit-profile-wrapper')}>
                     <div className={cx('edit-profile-body')}>
                         {/* Edit profile picture */}
                         <div className={cx('edit-avatar')}>

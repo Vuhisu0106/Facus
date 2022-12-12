@@ -4,14 +4,19 @@ import { Fragment, useState } from 'react';
 import { publicRoutes, privateRoutes } from './routes';
 import DefaultLayout from './layouts/DefaultLayout';
 import PrivateRoute from './components/Route/PrivateRoute';
-import PublicRoute from './components/Route/PublicRoute';
-import LandingPage from './pages/LandingPage';
-import HomePage from './layouts/components/LandingLayout/HomePage';
-import LogIn from './layouts/components/LandingLayout/LogIn';
-import SignUp from './layouts/components/LandingLayout/SignUp';
+import { useSelector } from 'react-redux';
 
 function App() {
     const [error, setError] = useState(null);
+    const dark = useSelector((state) => state.theme.darkMode);
+
+    if (dark) {
+        document.getElementsByTagName('HTML')[0].setAttribute('theme', 'dark');
+        document.body.style.backgroundColor = '#18191a';
+    } else {
+        document.getElementsByTagName('HTML')[0].setAttribute('theme', 'light');
+        document.body.style.backgroundColor = '#f2f5f7';
+    }
 
     return (
         <div className="App">

@@ -1,6 +1,5 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
-import { useUI } from '~/context/UIContext';
 
 import StatusModal from '~/components/Modal/Modal/StatusModal';
 import styles from './RoundAccountItem.module.scss';
@@ -10,10 +9,9 @@ import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
 
 const cx = classNames.bind(styles);
 function RoundAccountItem({ className, userName, avt, status, bigText, addStatus }) {
-    const { checkDark } = useUI();
     const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
     const [isSetStatusVisible, setIsSetStatusVisible] = useState(false);
-    const classes = cx('wrapper', checkDark(), {
+    const classes = cx('wrapper', {
         [className]: className,
     });
     return (

@@ -1,16 +1,13 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import { useUI } from '~/context/UIContext';
 
 import styles from './CircleButton.module.scss';
 
 const cx = classNames.bind(styles);
 function CircleButton({ className, to, href, children, onClick }) {
-    const { checkDark } = useUI();
-
     let Comp = 'button';
 
-    const classes = cx('wrapper', checkDark(), { [className]: className });
+    const classes = cx('wrapper', { [className]: className });
     const props = {
         onClick,
     };

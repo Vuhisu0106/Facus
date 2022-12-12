@@ -12,7 +12,7 @@ import styles from './Message.module.scss';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useAuth } from '~/context/AuthContext';
-import { useUI } from '~/context/UIContext';
+
 import { updateDocument } from '~/firebase/services';
 import { useSelector } from 'react-redux';
 
@@ -24,7 +24,6 @@ function Chat() {
 
     const messageRef = useRef();
 
-    const { checkDark } = useUI();
     const { currentUser } = useAuth();
 
     const chat = useSelector((state) => state.chat);
@@ -125,7 +124,7 @@ function Chat() {
     };
 
     return (
-        <div className={cx('chat-wrapper', checkDark('dark-chat'))}>
+        <div className={cx('chat-wrapper')}>
             <div className={cx('chat-header')}>
                 <img className={cx('user-avt')} alt={chat.user?.displayName} src={chat.user?.photoURL} />
                 <h3 className={cx('user-name')}>{chat.user?.displayName}</h3>

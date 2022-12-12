@@ -11,11 +11,14 @@ import config from '~/configs';
 import { useRef, useState } from 'react';
 import { useAuth } from '~/context/AuthContext';
 import AccountSearch from '~/components/Search/AccountSearch';
-import { useUI } from '~/context/UIContext';
+
 import Menu from '~/components/Popper/Menu';
 import { useViewport } from '~/components/Hook';
 import { useApp } from '~/context/AppContext';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleTheme } from '~/features/Theme/ThemeSlice';
+import { MOBILE } from '~/components/Hook/useViewport';
 
 const cx = classNames.bind(styles);
 
@@ -26,14 +29,16 @@ function Header({ className }) {
 
     const { currentUser, logout } = useAuth();
     const { currentUserInfo } = useApp();
-    const { toggleTheme, dark, checkDark } = useUI();
     const navigate = useNavigate();
-    const viewPort = useViewport();
-    const isSmall = viewPort.width <= 740;
+    const { viewport } = useViewport();
+    //const isSmall = viewPort.width <= 740;
+
+    const dark = useSelector((state) => state.theme.darkMode);
+
+    const dispatch = useDispatch();
 
     async function handleLogout() {
         setError('');
-
         try {
             await logout();
             navigate('/');
@@ -44,6 +49,11 @@ function Header({ className }) {
 
     const onClickOutside = () => {
         setIsMenuVisible(false);
+    };
+
+    const changeTheme = () => {
+        dispatch(toggleTheme());
+        localStorage.setItem('darkMode', String(!dark));
     };
 
     const HEADER_MENU = [
@@ -96,7 +106,7 @@ function Header({ className }) {
             icon: <FontAwesomeIcon icon={faSun} />,
             title: 'Theme',
             onClick: () => {
-                toggleTheme();
+                changeTheme();
             },
         },
         {
@@ -111,7 +121,7 @@ function Header({ className }) {
         },
     ];
 
-    const classes = cx('wrapper', checkDark(), {
+    const classes = cx('wrapper', {
         [className]: className,
     });
 
@@ -121,7 +131,7 @@ function Header({ className }) {
                 <GridRow>
                     <GridColumn l={3.25} m={2} s={2}>
                         <Link className={cx('logo')} to={config.routes.home}>
-                            {isSmall ? (
+                            {viewport.device === MOBILE ? (
                                 <CircleButton children={<FontAwesomeIcon icon={faFacebookF} />} />
                             ) : (
                                 <h4>Facus</h4>
@@ -138,7 +148,7 @@ function Header({ className }) {
                     </GridColumn>
 
                     <GridColumn l={3.25} m={3} s={2} className={cx('actions')}>
-                        {isSmall ? (
+                        {viewport.device === MOBILE ? (
                             <div className={cx('actions-btn')}>
                                 <Menu
                                     items={SMALL_VIEWPORT_HEADER_MENU}
@@ -169,7 +179,7 @@ function Header({ className }) {
                                         dark ? <FontAwesomeIcon icon={faMoon} /> : <FontAwesomeIcon icon={faSun} />
                                     }
                                     onClick={() => {
-                                        toggleTheme();
+                                        changeTheme();
                                     }}
                                 />
 

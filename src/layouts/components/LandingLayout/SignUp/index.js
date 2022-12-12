@@ -72,7 +72,7 @@ function SignUp() {
 
                         //create empty user chats on firestore
                         await setDocument('userChats', res.user.uid, {});
-                        await setDocument('userPost', res.user.uid, {});
+                        //await setDocument('userPost', res.user.uid, {});
                         navigate('/home');
                     } catch (err) {
                         console.log(err);

@@ -46,14 +46,18 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
     const handleEditPost = async () => {
         if (editedPost.img) {
             if (img === editedPost.img) {
-                await editPostFunc(caption);
+                await editPostFunc(caption, img);
             } else if (!img) {
-                await editPostFunc(caption, img, false, true);
+                await editPostFunc(caption, img, false, false, true);
             } else {
-                await editPostFunc(caption, img, true);
+                await editPostFunc(caption, img, false, true);
             }
         } else {
-            await editPostFunc(caption, img);
+            if (img) {
+                await editPostFunc(caption, img, true, true);
+            } else {
+                await editPostFunc(caption, img);
+            }
         }
     };
 
@@ -114,16 +118,7 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
                                     </label>
                                 ) : (
                                     <div className={cx('selected-photo-wrapper')}>
-                                        <img
-                                            src={
-                                                edit
-                                                    ? img === editedPost.img
-                                                        ? img
-                                                        : URL.createObjectURL(img)
-                                                    : URL.createObjectURL(img)
-                                            }
-                                            alt="img"
-                                        />
+                                        <img src={typeof img === 'object' ? URL.createObjectURL(img) : img} alt="img" />
                                         <CircleButton
                                             className={cx('cancel-photo-btn')}
                                             children={<FontAwesomeIcon icon={faXmark} />}

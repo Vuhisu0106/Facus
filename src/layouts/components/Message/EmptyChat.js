@@ -2,17 +2,15 @@ import classNames from 'classnames/bind';
 import { useSelector } from 'react-redux';
 
 import ChatSearch from '~/components/Search/ChatSearch';
-import { useUI } from '~/context/UIContext';
+
 import styles from './Message.module.scss';
 
 const cx = classNames.bind(styles);
 function EmptyChat() {
-    const { checkDark } = useUI();
-
     const chat = useSelector((state) => state.chat);
 
     return chat.isAddChatVisible ? (
-        <div className={cx('chat-wrapper', checkDark('dark-empty-search-chat'))}>
+        <div className={cx('chat-wrapper')}>
             <div className={cx('chat-header')}>
                 <span>To:</span>
                 <ChatSearch
@@ -24,7 +22,7 @@ function EmptyChat() {
             </div>
         </div>
     ) : (
-        <div className={cx('empty-chat-wrapper', checkDark('dark-empty-chat'))}>
+        <div className={cx('empty-chat-wrapper')}>
             <h2>Select a chat or start a new conversation!</h2>
         </div>
     );

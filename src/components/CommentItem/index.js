@@ -4,11 +4,9 @@ import moment from 'moment';
 import { faCamera, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { doc, onSnapshot, arrayUnion, arrayRemove, deleteField } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-import { storage } from '~/firebase/config';
 import { db } from '~/firebase/config';
 import CircleAvatar from '../CircleAvatar';
 import styles from './CommentItem.module.scss';
@@ -16,23 +14,21 @@ import { useAuth } from '~/context/AuthContext';
 import Menu from '../Popper/Menu';
 import Input from '../Input';
 import ImageInputArea from '../Input/ImageInputArea';
-import { updateDocument } from '~/firebase/services';
-import { useSelector } from 'react-redux';
-import { editCommentFunction } from '~/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { likeComment, unlikeComment } from '~/features/PostAndComment/PostAndCommentSlice';
 
 const cx = classNames.bind(styles);
-function CommentItem({ data, deleteComment }) {
-    const [commentDetail, setCommentDetail] = useState({});
+function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditComment, setIsEditComment] = useState(false);
 
     const [comment, setComment] = useState('');
     const [commentImg, setCommentImg] = useState('');
-    const [isEditCommentImg, setIsEditCommentImg] = useState(false);
 
     const [cancelEdit, setCancelEdit] = useState(false);
 
     const { currentUser } = useAuth();
+    const dispatch = useDispatch();
 
     const editedComment = useSelector((state) => {
         const postComment = state.postNcomment.posts.find((post) => post.postId === data.postId).comment;
@@ -46,9 +42,6 @@ function CommentItem({ data, deleteComment }) {
             onClick: () => {
                 setIsEditComment(true);
                 setIsModalVisible(false);
-                //setIsEditCommentImg(false);
-                // setCommentImg(commentDetail?.img || data.img || null);
-                // setComment(commentDetail?.content || data.content || '');
             },
         },
         {
@@ -67,25 +60,37 @@ function CommentItem({ data, deleteComment }) {
         }
     }, [editedComment, cancelEdit]);
     /////////////////////////////////////////////////////////////////////////////////////////////
-    useEffect(() => {
-        const unSub = onSnapshot(doc(db, 'comment', data.commentId), (doc) => {
-            doc.exists() && setCommentDetail(doc.data());
-        });
+    // useEffect(() => {
+    //     const unSub = onSnapshot(doc(db, 'comment', data.commentId), (doc) => {
+    //         doc.exists() && setCommentDetail(doc.data());
+    //     });
 
-        return () => {
-            unSub();
-        };
-    }, [data.commentId]);
+    //     return () => {
+    //         unSub();
+    //     };
+    // }, [data.commentId]);
     ///////////////////////////////////////////////////////////////////////////////////////////////
     const handleLikeComment = async (commentId) => {
-        console.log(data.like.indexOf(currentUser.uid) === -1);
-        if (commentDetail.like.indexOf(currentUser.uid) === -1) {
-            await updateDocument('comment', data.commentId, {
-                like: arrayUnion(currentUser.uid),
+        if (data.like.indexOf(currentUser.uid) === -1) {
+            data.like = [...data.like, currentUser.uid];
+            toggleLikeComment({
+                dataComment: data,
+                postId: data.postId,
+                commentId,
             });
+            dispatch(likeComment({ currentUserUid: currentUser.uid, postId: data.postId, commentId }));
         } else {
-            await updateDocument('comment', data.commentId, {
-                like: arrayRemove(currentUser.uid),
+            const likeIndex = data.like.indexOf(currentUser.uid);
+            if (likeIndex !== -1) {
+                var newLike = [...data.like];
+                newLike.splice(likeIndex, 1);
+                data.like = newLike;
+            }
+            dispatch(unlikeComment({ currentUserUid: currentUser.uid, postId: data.postId, commentId }));
+            toggleLikeComment({
+                dataComment: data,
+                postId: data.postId,
+                commentId,
             });
         }
     };
@@ -102,58 +107,27 @@ function CommentItem({ data, deleteComment }) {
     };
 
     const handleEditComment = async () => {
-        const dataEdit = { commentId: data.commentId, comment, commentImg };
+        setIsEditComment(false);
+        const dataEdit = { postId: data.postId, commentId: data.commentId, comment, commentImg };
+        //if prev comment already has image
         if (editedComment.img) {
-            console.log('checked: ', editedComment.img);
             if (commentImg === editedComment.img) {
-                //update text only
-                await editCommentFunction({ ...dataEdit, commentImg: '' });
+                await editComment({ ...dataEdit, commentImg: editedComment.img });
             } else if (!commentImg) {
-                //update text and delete img/set img ''
-                await editCommentFunction({ ...dataEdit, commentImg: '', isImgChanged: false, isImgDeleted: true });
+                await editComment({ ...dataEdit, isImgChanged: false, isImgDeleted: true });
             } else {
-                // delete old img and update new text/img
-                await editCommentFunction({ ...dataEdit, isImgChanged: true });
+                await editComment({ ...dataEdit, isImgChanged: true });
             }
         } else {
-            // update text and img
-            await editCommentFunction(dataEdit);
+            if (commentImg) {
+                await editComment({ ...dataEdit, isImgChanged: true, isImgAdded: true });
+            } else {
+                await editComment(dataEdit);
+            }
         }
-
-        // if (commentImg) {
-        //     const storageRef = ref(storage, data.commentId);
-
-        //     await uploadBytesResumable(storageRef, commentImg).then(() => {
-        //         getDownloadURL(storageRef).then(async (downloadURL) => {
-        //             await updateDocument('comment', data.commentId, {
-        //                 content: comment,
-        //                 img: downloadURL,
-        //             });
-        //         });
-        //     });
-        // } else if (!comment && commentImg) {
-        //     const storageRef = ref(storage, data.commentId);
-        //     //const uploadTask = await uploadBytesResumable(storageRef, img);
-
-        //     await uploadBytesResumable(storageRef, commentImg).then(() => {
-        //         getDownloadURL(storageRef).then(async (downloadURL) => {
-        //             await updateDocument('comment', data.commentId, {
-        //                 img: downloadURL,
-        //             });
-        //         });
-        //     });
-        // } else if (!comment && !commentImg) {
-        //     return;
-        // } else {
-        //     await updateDocument('comment', data.commentId, {
-        //         content: comment,
-        //         img: deleteField(),
-        //     });
-        // }
-        setIsEditComment(false);
     };
 
-    const editComment = () => {
+    const editCommentJSX = () => {
         return (
             <>
                 <Input
@@ -162,7 +136,6 @@ function CommentItem({ data, deleteComment }) {
                     rightIcon={<FontAwesomeIcon icon={faCamera} />}
                     onChangeRightBtn={(e) => {
                         setCommentImg(e.target.files[0]);
-                        //setIsEditCommentImg(true);
                     }}
                     onKeyPress={(e) => {
                         if (e.key === 'Enter') {
@@ -174,7 +147,8 @@ function CommentItem({ data, deleteComment }) {
                 />
                 {commentImg && (
                     <ImageInputArea
-                        src={commentImg === editedComment.img ? commentImg : URL.createObjectURL(commentImg)}
+                        //src={commentImg === editedComment.img ? commentImg : URL.createObjectURL(commentImg)}
+                        src={typeof commentImg === 'object' ? URL.createObjectURL(commentImg) : commentImg}
                         onClickCancel={() => {
                             setCommentImg('');
                         }}
@@ -185,8 +159,6 @@ function CommentItem({ data, deleteComment }) {
                     onClick={() => {
                         setIsEditComment(false);
                         setCancelEdit(!cancelEdit);
-                        // setComment(commentDetail?.content || data.content || '');
-                        // setCommentImg(commentDetail?.img || data.img || null);
                     }}
                 >
                     Cancel
@@ -199,27 +171,25 @@ function CommentItem({ data, deleteComment }) {
         <div className={cx('comment-element')} key={data.commentId}>
             <CircleAvatar userName={data.commenter.displayName} avatar={data.commenter.photoURL} diameter="32px" />
             {isEditComment ? (
-                <div className={cx('edit-comment-content')}>{editComment()}</div>
+                <div className={cx('edit-comment-content')}>{editCommentJSX()}</div>
             ) : (
                 <div className={cx('comment-element-content')}>
                     <div className={cx('comment-content-n-setting')}>
                         <div
                             className={cx(
                                 'comment-content-wrapper',
-                                !commentDetail?.content && commentDetail?.img ? 'no-text-wrapper' : '',
+                                !data?.content && data?.img ? 'no-text-wrapper' : '',
                             )}
                         >
-                            <div className={cx('comment-user-name')}>{commentDetail?.commenter?.displayName}</div>
-                            <div className={cx('comment-content')}>{commentDetail?.content}</div>
+                            <div className={cx('comment-user-name')}>{data?.commenter?.displayName}</div>
+                            <div className={cx('comment-content')}>{data?.content}</div>
 
                             {/* Use data from rendering in this component (not from props of parents component) must check if they exist or not */}
-                            {!commentDetail.img && commentDetail.like && commentDetail.like.length > 0 && (
+                            {!data.img && data.like && data.like.length > 0 && (
                                 <div className={cx('reaction-cmt')}>
                                     <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
-                                    {commentDetail && commentDetail.like.length > 1 && (
-                                        <div className={cx('reaction-cmt-count')}>
-                                            {commentDetail && commentDetail.like.length}
-                                        </div>
+                                    {data && data.like.length > 1 && (
+                                        <div className={cx('reaction-cmt-count')}>{data && data.like.length}</div>
                                     )}
                                 </div>
                             )}
@@ -246,16 +216,18 @@ function CommentItem({ data, deleteComment }) {
                         )}
                     </div>
 
-                    {commentDetail?.img && (
+                    {data?.img && (
                         <div className={cx('comment-img-n-reaction')}>
-                            <img className={cx('comment-image')} src={commentDetail?.img} alt="" />
-                            {commentDetail.like && commentDetail.like.length > 0 && (
+                            <img
+                                className={cx('comment-image')}
+                                src={typeof data?.img === 'object' ? URL.createObjectURL(data?.img) : data?.img}
+                                alt=""
+                            />
+                            {data.like && data.like.length > 0 && (
                                 <div className={cx('reaction-image-cmt')}>
                                     <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
-                                    {commentDetail && commentDetail.like.length > 1 && (
-                                        <div className={cx('reaction-cmt-count')}>
-                                            {commentDetail && commentDetail.like.length}
-                                        </div>
+                                    {data && data.like.length > 1 && (
+                                        <div className={cx('reaction-cmt-count')}>{data && data.like.length}</div>
                                     )}
                                 </div>
                             )}
@@ -266,10 +238,7 @@ function CommentItem({ data, deleteComment }) {
                         <button
                             className={cx('like-comment-btn')}
                             style={{
-                                color:
-                                    commentDetail.like &&
-                                    commentDetail.like.indexOf(currentUser.uid) !== -1 &&
-                                    '#fe2c55',
+                                color: data.like && data.like.indexOf(currentUser.uid) !== -1 && '#fe2c55',
                             }}
                             onClick={() => handleLikeComment(data.commentId)}
                         >
@@ -278,7 +247,7 @@ function CommentItem({ data, deleteComment }) {
                         <button
                             className={cx('reply-comment-btn')}
                             onClick={() => {
-                                console.log(editedComment);
+                                console.log(data);
                             }}
                         >
                             Reply

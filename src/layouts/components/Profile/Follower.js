@@ -1,18 +1,17 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import { v4 as uuid } from 'uuid';
 
 import { db } from '~/firebase/config';
 import styles from './Profile.module.scss';
 import WrapperModal from '~/components/Wrapper';
-import { useUI } from '~/context/UIContext';
+
 import { useNavigate } from 'react-router-dom';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
 
 const cx = classNames.bind(styles);
 function Follower({ list }) {
-    const { checkDark } = useUI();
-
     const [followerList, setFollowerList] = useState([]);
     const [error, setError] = useState(false);
 
@@ -20,12 +19,10 @@ function Follower({ list }) {
 
     useEffect(() => {
         const unSub = async () => {
-            const q = query(collection(db, 'users'), where('uid', 'in', list));
+            const q = query(collection(db, 'users'), where('uid', 'in', list?.length > 0 ? list : [uuid()]));
             try {
                 const querySnapshot = await getDocs(q);
                 setFollowerList(querySnapshot.docs.map((doc) => doc.data()));
-                //console.log('2: read');
-
                 //setLoading(false);
             } catch (err) {
                 setError(true);
@@ -41,7 +38,7 @@ function Follower({ list }) {
         <Grid type={'profile'}>
             <GridRow>
                 <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={12}>
-                    <WrapperModal className={cx('follower', checkDark())}>
+                    <WrapperModal className={cx('follower')}>
                         <h2>Follower</h2>
                         {list?.length > 0 ? (
                             followerList?.map((follower) => (
