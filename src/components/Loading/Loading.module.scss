@@ -1,0 +1,221 @@
+//Account Item//
+.account-item {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-radius: 8px;
+}
+
+.account-info {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--loading-element-color);
+}
+
+.info {
+    flex: 1;
+    margin-left: 8px;
+}
+
+.name {
+    width: 75px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    background-color: var(--loading-element-color);
+    border-radius: 10px;
+    margin-bottom: 4px;
+}
+
+.follower {
+    width: 40px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    background-color: var(--loading-element-color);
+    border-radius: 10px;
+}
+
+//Loading Round Account Item//
+.round-wrapper {
+    padding: 6px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    width: 64px;
+    margin: 8px;
+}
+
+.round-user-avt {
+    align-items: center;
+    align-self: center;
+    display: block;
+    flex: none;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 6px;
+    margin-top: 4px;
+}
+
+.round-story-circle {
+    width: 66px;
+    height: 66px;
+    background-color: var(--loading-element-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.round-user-name {
+    height: 10px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: var(--loading-element-color);
+}
+
+//Loading Follow Account Item//
+.follow-account {
+    flex-basis: 49.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 115px;
+    padding: 16px;
+    margin-bottom: 8px;
+
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: var(--profile-border);
+}
+
+.follow-account-avt {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    margin-right: 16px;
+    background-color: var(--loading-element-color);
+}
+.follow-account-info {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.follow-account-name {
+    width: 85px;
+    height: 20px;
+    background-color: var(--loading-element-color);
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.follow-account-bio {
+    width: 40px;
+    height: 10px;
+    border-radius: 10px;
+    background-color: var(--loading-element-color);
+}
+
+@media (max-width: 740px) {
+    .follow-account {
+        flex-basis: 100%;
+    }
+}
+
+// Post Loading //
+.post-wrapper {
+    width: 100%;
+    padding: 12px 16px 2px 16px;
+    margin-bottom: 20px;
+    background-color: var(--background-color);
+    border-radius: 10px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.post-user-avt {
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--loading-element-color);
+}
+
+.post-header-info {
+    margin: -5px 7px;
+    flex: 1;
+
+    .post-user-name {
+        height: 15px;
+        width: 50px;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        background-color: var(--loading-element-color);
+    }
+
+    .time-post {
+        height: 15px;
+        width: 30px;
+        border-radius: 10px;
+        background-color: var(--loading-element-color);
+    }
+}
+
+.post-content {
+    width: 100%;
+    .post-caption {
+        background-color: var(--loading-element-color);
+        height: 20px;
+        width: 120px;
+        border-radius: 10px;
+        padding: 8px 0 12px 0;
+        margin-bottom: 10px;
+    }
+    .post-image {
+        height: 250px;
+        width: 100%;
+        border-radius: 10px;
+        background-color: var(--loading-element-color);
+    }
+}
+
+.post-interaction {
+    display: flex;
+    justify-content: space-between;
+    line-height: 20px;
+    height: 50px;
+    padding: 10px 16px;
+
+    .post-reaction {
+        height: 25px;
+        width: 175px;
+        border-radius: 10px;
+        background-color: var(--loading-element-color);
+    }
+
+    .post-comment {
+        height: 25px;
+        width: 175px;
+        border-radius: 10px;
+        background-color: var(--loading-element-color);
+    }
+}

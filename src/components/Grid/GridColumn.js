@@ -29,7 +29,7 @@ function GridColumn({ s, s_o, m, m_o, l, l_o, className, children }) {
                 },
 
                 //>= Tablet
-                '@media (min-width: 740px) and (max-width: 1023px)': {
+                '@media (min-width: 740px) and (max-width: 1024px)': {
                     flex: m !== 0 && `0 0 calc((100%/12)*${m})`,
                     maxWidth: m !== 0 && `calc((100%/12)*${m})`,
                     display: m === 0 ? 'none' : 'block',

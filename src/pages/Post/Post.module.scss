@@ -53,6 +53,12 @@
     box-shadow: none;
 }
 
+@media (max-width: 740px) {
+    .post-detail {
+        padding: 16px 0 2px 0;
+    }
+}
+
 @media (min-width: 740px) {
     .post-img-wrapper {
         height: 100% !important;

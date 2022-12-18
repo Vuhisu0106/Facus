@@ -7,13 +7,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import Modal from '..';
 import styles from '~/components/Modal/Modal.module.scss';
 import CircleButton from '~/components/Button/CircleButton';
-import { useAuth } from '~/context/AuthContext';
 import Button from '~/components/Button';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, editPostFunc }) {
-    const { currentUser } = useAuth();
+    const { currentUserInfo } = useApp();
     const dispatch = useDispatch();
 
     const [caption, setCaption] = useState('');
@@ -75,9 +75,9 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
                 <div className={cx('add-post-wrapper')}>
                     <div className={cx('add-post-header')}>
                         <div className={cx('add-post-user-info')}>
-                            <img alt={currentUser.displayName} src={currentUser.photoURL} />
+                            <img alt={currentUserInfo.displayName} src={currentUserInfo.photoURL} />
                             <div className={cx('user-info')}>
-                                <h4>{currentUser.displayName}</h4>
+                                <h4>{currentUserInfo.displayName}</h4>
                                 <Button
                                     children={'Global'}
                                     className={cx('global')}
@@ -89,7 +89,7 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
                     <div className={cx('add-post-body')}>
                         <textarea
                             value={caption}
-                            placeholder={`What's on your mind, ${currentUser.displayName}?`}
+                            placeholder={`What's on your mind, ${currentUserInfo.displayName}?`}
                             onChange={handleCaption}
                         ></textarea>
                         {addPhotoVisible && (

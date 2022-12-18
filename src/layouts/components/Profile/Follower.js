@@ -9,25 +9,28 @@ import WrapperModal from '~/components/Wrapper';
 
 import { useNavigate } from 'react-router-dom';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import { LoadingFollowAccItem } from '~/components/Loading';
 
 const cx = classNames.bind(styles);
 function Follower({ list }) {
     const [followerList, setFollowerList] = useState([]);
     const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        setLoading(true);
         const unSub = async () => {
             const q = query(collection(db, 'users'), where('uid', 'in', list?.length > 0 ? list : [uuid()]));
             try {
                 const querySnapshot = await getDocs(q);
                 setFollowerList(querySnapshot.docs.map((doc) => doc.data()));
-                //setLoading(false);
+                setLoading(false);
             } catch (err) {
                 setError(true);
                 console.log(err);
-                //setLoading(false);
+                setLoading(false);
             }
         };
 
@@ -40,7 +43,15 @@ function Follower({ list }) {
                 <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={12}>
                     <WrapperModal className={cx('follower')}>
                         <h2>Follower</h2>
-                        {list?.length > 0 ? (
+                        {loading ? (
+                            <>
+                                {Array(2)
+                                    .fill(0)
+                                    .map((item, index) => (
+                                        <LoadingFollowAccItem key={index} />
+                                    ))}
+                            </>
+                        ) : list?.length > 0 ? (
                             followerList?.map((follower) => (
                                 <div key={follower.uid} className={cx('account')}>
                                     <img

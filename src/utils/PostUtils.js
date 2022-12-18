@@ -73,7 +73,7 @@ export const likePostFunction = async (currentUserUid, likeData, postId) => {
     }
 };
 
-export const deletePostFunction = async (postId, posterId) => {
+export const deletePostFunction = async (postId) => {
     if (window.confirm('Do you want delete this post?')) {
         try {
             await deleteDocument('post', postId);

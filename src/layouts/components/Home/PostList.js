@@ -1,42 +1,113 @@
 import moment from 'moment';
-import { useEffect } from 'react';
-import { onSnapshot, where, collection, query } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { where, collection, query, getDocs, orderBy, limit, startAfter } from 'firebase/firestore';
 
 import { db } from '~/firebase/config';
 import PostLayout from '~/components/PostLayout';
-import { useAuth } from '~/context/AuthContext';
-import styles from './Home.module.scss';
-import { useApp } from '~/context/AppContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { LoadingPost } from '~/components/Loading';
 
-function PostList() {
-    const { currentUser } = useAuth();
-    const { currentUserInfo } = useApp();
+function PostList({ followingList }) {
     const dispatch = useDispatch();
     const post = useSelector((state) => state.postNcomment.posts);
 
+    const [last, setLast] = useState(null);
+    const [hasMore, setHasMore] = useState(true);
+    const [showEndOfPost, setShowEndOfPost] = useState(false);
+
     useEffect(() => {
-        const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
-        const q = query(collection(db, 'post'), where('poster.uid', 'in', a));
-        const getPost = onSnapshot(q, (querySnapshot) => {
-            dispatch(resetPost());
+        window.scrollTo(0, 0);
+    }, []);
+
+    // useEffect(() => {
+    //     //const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
+    //     const q = query(
+    //         collection(db, 'post'),
+    //         where('poster.uid', 'in', followingList.length > 0 ? followingList : ['èqew']),
+    //     );
+    //     const getPost = onSnapshot(q, (querySnapshot) => {
+    //         dispatch(resetPost());
+    //         const posts = [];
+    //         querySnapshot.forEach((doc) => {
+    //             posts.push({ ...doc.data() });
+    //         });
+    //         dispatch(setPost([...posts]));
+    //     });
+
+    //     return getPost;
+    // }, [followingList]);
+
+    useEffect(() => {
+        const getPost = async () => {
+            const q = query(
+                collection(db, 'post'),
+                where('poster.uid', 'in', followingList),
+                orderBy('date', 'desc'),
+                limit(3),
+            );
+            try {
+                dispatch(resetPost());
+                const querySnapshot = await getDocs(q);
+                //get last post we get
+                const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+                setLast(lastVisible?.data());
+                //get post list render in first time
+                const posts = [];
+                querySnapshot.forEach((doc) => {
+                    posts.push({ ...doc.data() });
+                });
+                dispatch(setPost([...posts]));
+                //setLoading(false);
+            } catch (err) {
+                console.log(err);
+                //setLoading(false);
+            }
+        };
+
+        followingList.length > 0 && getPost();
+    }, [followingList]);
+
+    const loadMorePost = async () => {
+        const q = query(
+            collection(db, 'post'),
+            where('poster.uid', 'in', followingList),
+            orderBy('date', 'desc'),
+            startAfter(last['date']),
+            limit(1),
+        );
+        try {
+            const querySnapshot = await getDocs(q);
+            const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
             const posts = [];
             querySnapshot.forEach((doc) => {
                 posts.push({ ...doc.data() });
             });
-            dispatch(setPost([...posts]));
-        });
 
-        return getPost;
-    }, [currentUser, currentUserInfo?.following]);
+            if (lastVisible !== undefined) {
+                setTimeout(() => {
+                    dispatch(setPost([...post, ...posts]));
+                }, 1000);
+
+                setLast(lastVisible.data());
+            } else {
+                setHasMore(false);
+                setShowEndOfPost(true);
+                console.log('Nothing to load');
+                return;
+            }
+            //setLoading(false);
+        } catch (err) {
+            console.log(err);
+            //setLoading(false);
+        }
+    };
 
     return (
         <div>
-            {post
-                ?.slice()
-                .sort((a, b) => b.date - a.date)
-                .map((post) => (
+            <InfiniteScroll dataLength={post.length} next={loadMorePost} hasMore={hasMore} loader={<LoadingPost />}>
+                {post?.slice().map((post) => (
                     <PostLayout
                         key={post?.postId}
                         postId={post?.postId}
@@ -49,6 +120,8 @@ function PostList() {
                         like={post?.like}
                     />
                 ))}
+            </InfiniteScroll>
+            {showEndOfPost && <h3>There are no more posts to show right now.</h3>}
         </div>
     );
 }

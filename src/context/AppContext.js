@@ -16,9 +16,8 @@ function AppProvider({ children }) {
 
     useEffect(() => {
         const getCurrentUser = () => {
-            console.log('call api: ' + currentUser.displayName);
             const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
-                doc.exists() && setCurrentUserInfo(doc.data());
+                Object.keys(doc.data()).length > 0 && setCurrentUserInfo(doc.data());
             });
             return () => {
                 unsub();

@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { query, collection, where, getDocs, Timestamp } from 'firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
@@ -22,10 +22,12 @@ import { setBio } from '~/features/Profile/ProfileSlice';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
 import { addPost, resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
 import { addPostFunction } from '~/utils';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
     const { currentUser } = useAuth();
+    const { currentUserInfo } = useApp();
     const dispatch = useDispatch();
     const bio = useSelector((state) => state.profile.bio);
     const postList = useSelector((state) => state.postNcomment.posts);
@@ -107,6 +109,34 @@ function Posts({ selectedUser, isCurrentUser = false }) {
         setOpenModal(false);
     };
 
+    const postListMemo = useMemo(() => {
+        return (
+            <>
+                {postList.length > 0 ? (
+                    postList
+                        ?.slice()
+                        .sort((a, b) => b.date - a.date)
+                        .map((post) => (
+                            <PostLayout
+                                key={post.postId}
+                                postId={post.postId}
+                                userId={post?.poster?.uid}
+                                userName={post?.poster?.displayName}
+                                userAvt={post?.poster?.photoURL}
+                                timeStamp={post?.date && moment(post?.date.toDate()).fromNow()}
+                                postImg={post?.img}
+                                postCaption={post?.caption}
+                                like={post?.like}
+                                comment={post?.comment?.length}
+                            />
+                        ))
+                ) : (
+                    <h1>No post found</h1>
+                )}
+            </>
+        );
+    }, [postList]);
+
     return (
         <Grid type={'profile'} className={cx('wrapper')}>
             {openModal && (
@@ -131,7 +161,6 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                         long
                                         onClick={() => {
                                             setEditBio(true);
-                                            console.log(bio);
                                         }}
                                     >
                                         Edit bio
@@ -200,8 +229,8 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                             <div className={cx('add-post-top')}>
                                 <CircleAvatar
                                     className={cx('add-post-user-avt')}
-                                    userName={currentUser.displayName}
-                                    avatar={currentUser.photoURL}
+                                    userName={currentUserInfo.displayName}
+                                    avatar={currentUserInfo.photoURL}
                                     diameter="40px"
                                 />
                                 <Button
@@ -232,27 +261,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                         </WrapperModal>
                     )}
 
-                    {postList.length > 0 ? (
-                        postList
-                            ?.slice()
-                            .sort((a, b) => b.date - a.date)
-                            .map((post) => (
-                                <PostLayout
-                                    key={post.postId}
-                                    postId={post.postId}
-                                    userId={post?.poster?.uid}
-                                    userName={post?.poster?.displayName}
-                                    userAvt={post?.poster?.photoURL}
-                                    timeStamp={post?.date && moment(post?.date.toDate()).fromNow()}
-                                    postImg={post?.img}
-                                    postCaption={post?.caption}
-                                    like={post?.like}
-                                    comment={post?.comment?.length}
-                                />
-                            ))
-                    ) : (
-                        <h1>No post found</h1>
-                    )}
+                    {postListMemo}
                 </GridColumn>
             </GridRow>
         </Grid>

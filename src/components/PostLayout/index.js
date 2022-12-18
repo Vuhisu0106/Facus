@@ -1,12 +1,10 @@
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useState, useRef } from 'react';
-import { Timestamp } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useState, useRef, useMemo, useEffect } from 'react';
+import { doc, onSnapshot, Timestamp } from 'firebase/firestore';
 import { v4 as uuid } from 'uuid';
 
-import { storage } from '~/firebase/config';
 import styles from './PostLayout.module.scss';
 import { faHeart as faHeartRegular, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
@@ -20,25 +18,35 @@ import { updateDocument } from '~/firebase/services';
 import { useDispatch, useSelector } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import {
+    addCommentFunction,
     deleteCommentFunction,
     deletePostFunction,
     editCommentFunction,
     editPostFunction,
     likePostFunction,
-    unlikePostFunction,
 } from '~/utils';
-import {
-    addComment,
-    deleteComment,
-    deletePost,
-    editComment,
-    editPost,
-    likePost,
-} from '~/features/PostAndComment/PostAndCommentSlice';
+import { deletePost, editPost, likePost } from '~/features/PostAndComment/PostAndCommentSlice';
 import CommentInput from '../Input/CommentInput';
+import { db } from '~/firebase/config';
+import { useApp } from '~/context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
-function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, postImg, postCaption, like, postPage }) {
+function PostLayout({
+    className,
+    userId,
+    postId,
+    userName,
+    userAvt,
+    timeStamp,
+    postImg,
+    postCaption,
+    like,
+    isPostPage = false,
+}) {
+    const [posterInfo, setPosterInfo] = useState({});
+    const [imgLoading, setImgLoading] = useState(false);
+
     const [popperVisible, setPopperVisible] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     //Comment
@@ -48,12 +56,8 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
     const commentInputRef = useRef();
 
     const dispatch = useDispatch();
-    // const postComment = useSelector((state) => {
-    //     const postComment = state.postNcomment.posts.find((post) => post.postId === postId).comment;
-    //     return postComment.map((postCmt) => {
-    //         return { ...postCmt, createdAt: postCmt.createdAt.toDate() };
-    //     });
-    // });
+
+    let navigate = useNavigate();
 
     const postCommentBefore = useSelector(
         (state) => state.postNcomment.posts.find((post) => post.postId === postId).comment,
@@ -63,7 +67,36 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
     });
 
     const { currentUser } = useAuth();
+    const { currentUserInfo } = useApp();
     const classes = cx('post-wrapper', { [className]: className });
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    useEffect(() => {
+        const getPosterInfo = () => {
+            const unsub = onSnapshot(doc(db, 'users', userId), (doc) => {
+                Object.keys(doc.data()).length > 0 && setPosterInfo(doc.data());
+            });
+            return () => {
+                unsub();
+            };
+        };
+
+        userId && getPosterInfo();
+    }, [userId]);
+
+    const handleEditPost = async (caption, img, isImgAdded, isImgChanged, isImgDeleted) => {
+        await editPostFunction({ currentUser, postId, caption, img, isImgAdded, isImgChanged, isImgDeleted });
+        dispatch(editPost({ postId, caption, img }));
+        setOpenModal(false);
+    };
+
+    const handleLikePost = async () => {
+        dispatch(likePost({ currentUserUid: currentUser.uid, like, postId }));
+        likePostFunction(currentUser.uid, like, postId);
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const handleCommentInput = (e) => {
         const sendValueInput = e.target.value;
@@ -77,8 +110,7 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
 
     const handleOnClickCommentBtn = () => {
         commentInputRef.current.focus();
-        //(viewport.device !== MOBILE || !postPage) && setCommentVisible(true);
-        !postPage && setCommentVisible(true);
+        setCommentVisible(true);
     };
 
     const handleAddComment = async () => {
@@ -92,43 +124,12 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
                 photoURL: currentUser.photoURL,
             },
             content: comment,
-            createdAt: new Date(),
+            img: commentImg,
+            createdAt: Timestamp.now(),
             like: [],
         };
-        if (commentImg) {
-            const storageRef = ref(storage, uuId);
-            await uploadBytesResumable(storageRef, commentImg).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDocument('post', data.postId, {
-                        comment: [
-                            ...postComment,
-                            {
-                                ...data,
-                                img: downloadURL,
-                            },
-                        ],
-                    });
-                    dispatch(
-                        addComment({
-                            postId: postId,
-                            comment: { ...data, img: downloadURL, createdAt: Timestamp.now() },
-                        }),
-                    );
-                });
-            });
-        } else if (!comment && !commentImg) {
-            return;
-        } else {
-            await updateDocument('post', data.postId, {
-                comment: [
-                    ...postComment,
-                    {
-                        ...data,
-                    },
-                ],
-            });
-            dispatch(addComment({ postId: postId, comment: { ...data, createdAt: Timestamp.now() } }));
-        }
+
+        await addCommentFunction(postComment, data, commentImg);
         setComment('');
         setCommentImg('');
     };
@@ -138,7 +139,7 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
             return cmt.commentId === data.commentId ? { ...cmt, content: data.comment, img: data.commentImg } : cmt;
         });
         await editCommentFunction(data, updatedComments);
-        dispatch(editComment({ postId, updatedComments }));
+        //dispatch(editComment({ postId, updatedComments }));
     };
 
     const handleToggleLikeComment = async (data) => {
@@ -151,11 +152,11 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
     };
 
     const handleDeleteComment = async (data) => {
-        const filteredComments = postCommentBefore.filter((x) => x.commentId !== data.commentId);
+        const filterComments = postCommentBefore.filter((x) => x.commentId !== data.commentId);
         if (window.confirm('Do you want delete this comment?')) {
             try {
-                await deleteCommentFunction(data, filteredComments);
-                dispatch(deleteComment({ postId, filteredComments }));
+                await deleteCommentFunction(data, filterComments);
+                //dispatch(deleteComment({ postId, filterComments }));
             } catch (error) {
                 console.log(error);
             }
@@ -163,16 +164,6 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const handleEditPost = async (caption, img, isImgAdded, isImgChanged, isImgDeleted) => {
-        await editPostFunction({ currentUser, postId, caption, img, isImgAdded, isImgChanged, isImgDeleted });
-        dispatch(editPost({ postId, caption, img }));
-        setOpenModal(false);
-    };
-
-    const handleLikePost = async () => {
-        dispatch(likePost({ currentUserUid: currentUser.uid, like, postId }));
-        likePostFunction(currentUser.uid, like, postId);
-    };
 
     const MENU_POST = [
         {
@@ -195,6 +186,68 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
         },
     ];
 
+    const commentInput = () => {
+        return (
+            <div className={cx('comment-bar')}>
+                <CircleAvatar
+                    className={cx('user-avt-comment')}
+                    userName={currentUserInfo.displayName}
+                    avatar={currentUserInfo.photoURL}
+                />
+
+                <CommentInput
+                    commentValue={comment}
+                    commentInputRef={commentInputRef}
+                    handleCommentInput={handleCommentInput}
+                    handleAddComment={() => {
+                        handleAddComment();
+                    }}
+                    commentImg={commentImg}
+                    onChangeImage={(e) => {
+                        setCommentImg(e.target.files[0]);
+                    }}
+                    cancelImage={() => {
+                        setCommentImg('');
+                    }}
+                />
+            </div>
+        );
+    };
+
+    const commentListMemo = useMemo(() => {
+        return (
+            <>
+                {postComment
+                    ?.slice()
+                    .sort((a, b) => b.createdAt - a.createdAt)
+                    .map((comments) => (
+                        <CommentItem
+                            key={comments.commentId}
+                            data={comments}
+                            editComment={handleEditComment}
+                            toggleLikeComment={handleToggleLikeComment}
+                            deleteComment={handleDeleteComment}
+                        />
+                    ))}
+            </>
+        );
+    }, [postComment]);
+
+    const commentListJSX = () => {
+        return (
+            <>
+                {commentVisible && (
+                    <div
+                        className={cx(isPostPage ? 'comment-list-for-post-page' : 'comment-list')}
+                        style={{ overflowY: isPostPage ? 'scroll' : 'none' }}
+                    >
+                        {commentListMemo}
+                    </div>
+                )}
+            </>
+        );
+    };
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
         <div className={classes}>
@@ -209,12 +262,18 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
                 />
             )}
             <div className={cx('post-header')}>
-                <img className={cx('user-avt')} alt={userName} src={userAvt} />
+                <CircleAvatar
+                    className={cx('user-avt')}
+                    userUid={posterInfo.uid}
+                    userName={posterInfo.displayName}
+                    avatar={posterInfo.photoURL}
+                    diameter={'40px'}
+                />
                 <div className={cx('post-header-info')}>
-                    <p className={cx('user-name')}>{userName}</p>
+                    <p className={cx('user-name')}>{posterInfo.displayName}</p>
                     <p className={cx('time-post')}>{timeStamp}</p>
                 </div>
-                {currentUser.uid === userId && !postPage && (
+                {currentUser.uid === userId && !isPostPage && (
                     <Menu
                         items={MENU_POST}
                         isMenuVisible={popperVisible}
@@ -237,15 +296,21 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
                 <div className={cx('post-caption')}>
                     <p>{postCaption}</p>
                 </div>
-                {!postPage
+                {!isPostPage
                     ? postImg && (
                           <div className={cx('post-image')}>
-                              <a href={`/post/${postId}`}>
-                                  <img
-                                      alt={userName}
-                                      src={typeof postImg === 'object' ? URL.createObjectURL(postImg) : postImg}
-                                  />
-                              </a>
+                              {imgLoading ? null : <div className={cx('loading-post-img')} />}
+                              <img
+                                  alt={posterInfo.displayName}
+                                  src={typeof postImg === 'object' ? URL.createObjectURL(postImg) : postImg}
+                                  style={imgLoading ? {} : { display: 'none' }}
+                                  onClick={() => {
+                                      navigate(`/post/${postId}`);
+                                  }}
+                                  onLoad={() => {
+                                      setImgLoading(true);
+                                  }}
+                              />
                           </div>
                       )
                     : ''}
@@ -279,7 +344,6 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
                     <button
                         className={cx('reaction-btn')}
                         onClick={() => {
-                            //likePost(currentUser.uid, like, postId, userId);
                             handleLikePost();
                         }}
                     >
@@ -305,50 +369,20 @@ function PostLayout({ className, userId, postId, userName, userAvt, timeStamp, p
                         <span>Comment</span>
                     </button>
                 </div>
-                <div className={cx('comment-bar')}>
-                    <CircleAvatar
-                        className={cx('user-avt-comment')}
-                        userName={currentUser.displayName}
-                        avatar={currentUser.photoURL}
-                    />
 
-                    <CommentInput
-                        commentValue={comment}
-                        commentInputRef={commentInputRef}
-                        handleCommentInput={handleCommentInput}
-                        handleAddComment={() => {
-                            handleAddComment();
-                        }}
-                        commentImg={commentImg}
-                        onChangeImage={(e) => {
-                            setCommentImg(e.target.files[0]);
-                        }}
-                        cancelImage={() => {
-                            setCommentImg('');
-                        }}
-                    />
+                <div className={cx('comment-area')}>
+                    {isPostPage ? (
+                        <>
+                            {commentListJSX()}
+                            {commentInput()}
+                        </>
+                    ) : (
+                        <>
+                            {commentInput()}
+                            {commentListJSX()}
+                        </>
+                    )}
                 </div>
-                {commentVisible && (
-                    <div
-                        className={cx(!postPage ? 'comment-list' : 'comment-list-for-post-page')}
-                        //style={{ overflowY: !postPage ? 'none' : viewport.device === MOBILE && 'hidden' }}
-                        style={{ overflowY: !postPage ? 'none' : 'hidden' }}
-                    >
-                        {postComment &&
-                            postComment
-                                ?.slice()
-                                .sort((a, b) => b.createdAt - a.createdAt)
-                                .map((comments) => (
-                                    <CommentItem
-                                        key={comments.commentId}
-                                        data={comments}
-                                        editComment={handleEditComment}
-                                        toggleLikeComment={handleToggleLikeComment}
-                                        deleteComment={handleDeleteComment}
-                                    />
-                                ))}
-                    </div>
-                )}
             </div>
         </div>
     );

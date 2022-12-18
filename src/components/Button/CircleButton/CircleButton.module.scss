@@ -11,6 +11,17 @@
     justify-content: center;
     background-color: var(--circle-btn-bc);
     color: var(--circle-btn-color);
+    position: relative;
+
+    .badge {
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background-color: var(--primary);
+    }
 
     &:hover {
         background-color: var(--circle-btn-hover-bc);

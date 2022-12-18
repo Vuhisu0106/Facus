@@ -6,9 +6,12 @@ import CircleButton from '~/components/Button/CircleButton';
 import styles from '~/components/Input/Input.module.scss';
 
 const cx = classNames.bind(styles);
-function ImageInputArea({ src, onClickCancel }) {
+function ImageInputArea({ className, src, onClickCancel }) {
+    const classes = cx('image-sending-comment', {
+        [className]: className,
+    });
     return (
-        <div className={cx('image-sending-comment')}>
+        <div className={classes}>
             <img className={cx('select-photo')} src={src} alt="" />
             <CircleButton
                 className={cx('cancel-photo-btn')}

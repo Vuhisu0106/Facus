@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect, useRef } from 'react';
 import { doc, onSnapshot, arrayUnion, serverTimestamp, Timestamp } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 
@@ -15,6 +15,9 @@ import { useAuth } from '~/context/AuthContext';
 
 import { updateDocument } from '~/firebase/services';
 import { useSelector } from 'react-redux';
+import ImageInputArea from '~/components/Input/ImageInputArea';
+import { resizeFiles } from '~/utils';
+import ChatHeader from './ChatHeader';
 
 const cx = classNames.bind(styles);
 function Chat() {
@@ -27,6 +30,8 @@ function Chat() {
     const { currentUser } = useAuth();
 
     const chat = useSelector((state) => state.chat);
+
+    const { resizeFile } = resizeFiles();
 
     useEffect(() => {
         messageRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -44,6 +49,8 @@ function Chat() {
     }, [chat.chatId]);
 
     const handleSend = async () => {
+        setText('');
+        setImg(null);
         if (img) {
             // const storageRef = ref(storage, uuid());
             // const uploadTask = uploadBytesResumable(storageRef, img);
@@ -65,6 +72,24 @@ function Chat() {
             //         });
             //     },
             // );
+
+            const date = new Date().getTime();
+            const storageRef = ref(storage, `${'chat' + currentUser.uid + date}`);
+            const uri = await resizeFile(img);
+
+            await uploadString(storageRef, uri, 'data_url').then(() => {
+                getDownloadURL(storageRef).then(async (downloadURL) => {
+                    await updateDocument('chats', chat.chatId, {
+                        messages: arrayUnion({
+                            id: uuid(),
+                            text,
+                            senderId: currentUser.uid,
+                            date: Timestamp.now(),
+                            img: downloadURL,
+                        }),
+                    });
+                });
+            });
         } else if (!text) {
             return;
         } else {
@@ -108,9 +133,6 @@ function Chat() {
                 [chat.chatId + '.receiverHasRead']: true,
             });
         }
-
-        setText('');
-        setImg(null);
     };
 
     const handleSendInput = (e) => {
@@ -125,10 +147,8 @@ function Chat() {
 
     return (
         <div className={cx('chat-wrapper')}>
-            <div className={cx('chat-header')}>
-                <img className={cx('user-avt')} alt={chat.user?.displayName} src={chat.user?.photoURL} />
-                <h3 className={cx('user-name')}>{chat.user?.displayName}</h3>
-            </div>
+            <ChatHeader uid={chat.user.uid} />
+
             <div className={cx('chat-box')}>
                 <div className={cx('message-list')}>
                     {messages.map((mess) =>
@@ -140,14 +160,17 @@ function Chat() {
                                         ? moment(mess.date.toDate()).calendar()
                                         : moment(mess.date.toDate()).format('LT')}
                                 </span>
+
                                 <div className={cx('my-mess-content-wrapper')}>
-                                    <div className={cx('my-mess-content')}>{mess.text}</div>
+                                    {mess.text && <div className={cx('my-mess-content')}>{mess.text}</div>}
+                                    {mess.img && <img src={mess.img} alt="" />}
                                 </div>
                             </div>
                         ) : (
                             <div className={cx('message', 'fr-mess')} key={mess.id} ref={messageRef}>
                                 <div className={cx('fr-mess-content-wrapper')}>
-                                    <div className={cx('fr-mess-content')}>{mess.text}</div>
+                                    {mess.text && <div className={cx('fr-mess-content')}>{mess.text}</div>}
+                                    {mess.img && <img src={mess.img} alt="" />}
                                 </div>
                                 <span className={cx('sending-time')}>
                                     {moment(mess.date.toDate()).diff(moment(moment().format('L'))) < 0
@@ -160,6 +183,15 @@ function Chat() {
                 </div>
             </div>
             <div className={cx('chat-footer')}>
+                {img && (
+                    <ImageInputArea
+                        className={cx('image-input-area')}
+                        src={URL.createObjectURL(img)}
+                        onClickCancel={() => {
+                            setImg(null);
+                        }}
+                    />
+                )}
                 <Input
                     className={cx('mess-input')}
                     value={text}
@@ -168,9 +200,18 @@ function Chat() {
                     onChange={handleSendInput}
                     classNameLeftBtn={cx('img-btn')}
                     leftIcon={<FontAwesomeIcon icon={faImage} />}
+                    leftBtnTypeFile
+                    onChangeLeftBtn={(e) => {
+                        setImg(e.target.files[0]);
+                    }}
                     classNameRightBtn={cx('send-btn')}
                     rightIcon={<FontAwesomeIcon icon={faPaperPlane} />}
                     onClickRightBtn={handleSend}
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSend();
+                        }
+                    }}
                 />
             </div>
         </div>

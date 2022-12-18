@@ -39,7 +39,7 @@ function Test2() {
 
     return (
         <div className={cx('test2')}>
-            <button onClick={onClickDelete}>Click</button>
+            <button onClick={onClick}>Click</button>
             <label htmlFor="photo-upload" className={cx('add-photo-wrapper')}>
                 <h3>Add photo</h3>
             </label>

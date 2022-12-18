@@ -78,7 +78,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
                 render={(attrs) => (
                     <Grid type={'wide'} className={cx('account-search-result')} tabIndex="-1" {...attrs}>
                         <GridRow>
-                            <GridColumn l={12}>
+                            <GridColumn l={12} m={7} m_o={2} s={8} s_o={2}>
                                 <PopperWrapper>
                                     {loading === false && searchResult.length === 0 ? (
                                         <span>User not found</span>

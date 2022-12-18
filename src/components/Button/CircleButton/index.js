@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styles from './CircleButton.module.scss';
 
 const cx = classNames.bind(styles);
-function CircleButton({ className, to, href, children, onClick }) {
+function CircleButton({ className, to, href, children, onClick, notified }) {
     let Comp = 'button';
 
     const classes = cx('wrapper', { [className]: className });
@@ -21,6 +21,7 @@ function CircleButton({ className, to, href, children, onClick }) {
     return (
         <Comp className={classes} {...props}>
             <span>{children}</span>
+            {notified && <span className={cx('badge')}></span>}
         </Comp>
     );
 }

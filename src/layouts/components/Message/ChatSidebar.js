@@ -15,11 +15,13 @@ import { useAuth } from '~/context/AuthContext';
 import { updateDocument } from '~/firebase/services';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeChatUser, setAddChatState } from '~/features/Chat/ChatSlice';
+import { LoadingAccountItem } from '~/components/Loading';
 
 const cx = classNames.bind(styles);
 function ChatSidebar() {
     const [chats, setChats] = useState([]);
     const [activeMessItem, setActiveMessItem] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const { currentUser } = useAuth();
 
@@ -27,11 +29,14 @@ function ChatSidebar() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        setLoading(true);
         const getChats = () => {
             const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
                 setChats(Object.entries(doc.data()));
-            });
+                setLoading(false);
 
+                //dispatch(getHaveUnreadMessage(Object.entries(doc.data()).map((user) => user[1].receiverHasRead)));
+            });
             return () => {
                 unsub();
             };
@@ -49,14 +54,12 @@ function ChatSidebar() {
             }),
         );
 
-        console.log(user);
         if (user.receiverHasRead === false) {
             await updateDocument('userChats', currentUser.uid, {
                 [user.userChatId + '.receiverHasRead']: true,
             });
-            console.log('sender is not you');
         } else {
-            console.log('sender is you');
+            return;
         }
     };
 
@@ -80,28 +83,36 @@ function ChatSidebar() {
                 </div>
             </div>
             <div className={cx('user-message-list')}>
-                {chats
-                    ?.sort((a, b) => b[1].date - a[1].date)
-                    .map((chat) => (
-                        <MessageItem
-                            key={chat[0]}
-                            active={activeMessItem === chat[1].userInfo.uid && true}
-                            userName={chat[1].userInfo.displayName}
-                            userAvt={chat[1].userInfo.photoURL}
-                            closestMess={
-                                !chat[1].lastMessage
-                                    ? ''
-                                    : (chat[1].lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
-                                      chat[1].lastMessage?.text
-                            }
-                            unread={chat[1].receiverHasRead === false && true}
-                            closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
-                            onClick={() => {
-                                handleSelect(chat[1]);
-                                //console.log(data);
-                            }}
-                        />
-                    ))}
+                {loading ? (
+                    <div className={cx('user-message-loading')}>
+                        {Array(11)
+                            .fill(0)
+                            .map((item, index) => (
+                                <LoadingAccountItem key={index} />
+                            ))}
+                    </div>
+                ) : (
+                    chats
+                        ?.sort((a, b) => b[1].date - a[1].date)
+                        .map((chat) => (
+                            <MessageItem
+                                key={chat[0]}
+                                active={activeMessItem === chat[1].userInfo.uid && true}
+                                userUid={chat[1].userInfo.uid}
+                                closestMess={
+                                    !chat[1].lastMessage
+                                        ? ''
+                                        : (chat[1].lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
+                                          chat[1].lastMessage?.text
+                                }
+                                unread={chat[1].receiverHasRead === false && true}
+                                closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
+                                onClick={() => {
+                                    handleSelect(chat[1]);
+                                }}
+                            />
+                        ))
+                )}
             </div>
         </div>
     );

@@ -199,6 +199,9 @@ html[theme='light'] {
     --modal-outside-bc: rgba(255, 255, 255, 0.5);
     --modal-add-photo-bc: #f7f8fa;
     --modal-upload-icon-bc: #e4e6eb;
+
+    // Loading //
+    --loading-element-color: #999;
 }
 
 html[theme='dark'] {
@@ -296,4 +299,7 @@ html[theme='dark'] {
     --modal-outside-bc: rgba(0, 0, 0, 0.7);
     --modal-add-photo-bc: #323436;
     --modal-upload-icon-bc: #47494a;
+
+    // Loading //
+    --loading-element-color: #8c8e91;
 }

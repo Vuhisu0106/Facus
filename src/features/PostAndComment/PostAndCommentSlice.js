@@ -8,7 +8,7 @@ const postNcomment = createSlice({
     name: 'postNcomment',
     initialState,
     reducers: {
-        //Post
+        ///////////////////////////////////////Post///////////////////////////////////////
         resetPost: (state, action) => {
             state = initialState;
             return state;
@@ -50,7 +50,7 @@ const postNcomment = createSlice({
             return state;
         },
 
-        //Comment
+        /////////////////////////////////////Comment/////////////////////////////////////
         setComments: (state, action) => {
             const { postId, comments } = action.payload;
             const postIndex = state.posts.findIndex((post) => post.postId === postId);

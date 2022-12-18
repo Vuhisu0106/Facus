@@ -14,7 +14,7 @@
         font-size: 16px;
         background-color: transparent;
         cursor: pointer;
-        color: var(--light-mode-black);
+        color: var(--right-btn-input-color);
 
         &:hover {
             background-color: rgba(22, 24, 35, 0.03);
@@ -39,14 +39,11 @@
         border-bottom-right-radius: var(--input-border-radius);
         margin-left: -8px;
     }
-
-    .right-input-file {
+    .right-input-file,
+    .left-input-file {
         display: flex;
         align-items: center;
         justify-content: center;
-        border-top-right-radius: var(--input-border-radius);
-        border-bottom-right-radius: var(--input-border-radius);
-        margin-left: -8px;
         height: 100%;
         width: 38px;
         font-size: 16px;
@@ -54,7 +51,16 @@
         cursor: pointer;
         color: var(--right-btn-input-color);
     }
-
+    .left-input-file {
+        border-top-left-radius: var(--input-border-radius);
+        border-bottom-left-radius: var(--input-border-radius);
+        margin-right: -8px;
+    }
+    .right-input-file {
+        border-top-right-radius: var(--input-border-radius);
+        border-bottom-right-radius: var(--input-border-radius);
+        margin-left: -8px;
+    }
     input {
         width: 100%;
         min-height: 100%;

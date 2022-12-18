@@ -13,16 +13,16 @@ function Input({
     placeHolder,
     leftIcon,
     rightIcon,
-    onClickRightBtn,
+    onClickRightBtn, //on click function of right icon
     onClickLeftBtn,
-    classNameRightBtn,
+    classNameRightBtn, //class name of right icon
     classNameLeftBtn,
     leftBtnTypeFile = false,
-    rightBtnTypeFile = false,
+    rightBtnTypeFile = false, // if right icon is input type 'file', return true
     onChangeLeftBtn,
-    onChangeRightBtn,
-    inputRef,
-    onChange,
+    onChangeRightBtn, // on change function of right icon
+    inputRef, //input ref of input text
+    onChange, // on change function of input text
     autoFocus,
     loading = false,
     ...passProps
@@ -36,14 +36,34 @@ function Input({
 
     return (
         <div className={cx('wrapper', { [className]: className })}>
-            {leftIcon && (
+            {/* {leftIcon && (
                 <button
                     className={cx('left-button', { [classNameLeftBtn]: classNameLeftBtn })}
                     onClick={onClickLeftBtn}
                 >
                     {leftIcon}
                 </button>
-            )}
+            )} */}
+
+            {leftIcon &&
+                (!leftBtnTypeFile ? (
+                    <button
+                        className={cx('left-button', { [classNameLeftBtn]: classNameLeftBtn })}
+                        onClick={onClickLeftBtn}
+                    >
+                        {leftIcon}
+                    </button>
+                ) : (
+                    <>
+                        <label
+                            className={cx('left-input-file', { [classNameLeftBtn]: classNameLeftBtn })}
+                            //onClick={onClickInputRight}
+                        >
+                            <input type="file" accept="image/*" onChange={onChangeLeftBtn} />
+                            {leftIcon}
+                        </label>
+                    </>
+                ))}
             <input
                 className={inputClassName}
                 value={value}

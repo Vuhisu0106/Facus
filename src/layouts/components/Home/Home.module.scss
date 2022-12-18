@@ -21,9 +21,20 @@
         color: var(--scroll-btn-color);
         cursor: pointer;
         box-shadow: var(--scroll-btn-box-shadow);
+        transition: 0.1s;
+        position: absolute;
+
+        &:hover {
+            scale: 1.1;
+        }
     }
 
-    .status-container {
+    .btn-scroll-right {
+        right: 0;
+    }
+
+    .status-container,
+    .loading-status-container {
         padding: 16px 6px 16px 6px;
         display: flex;
         width: 100%;

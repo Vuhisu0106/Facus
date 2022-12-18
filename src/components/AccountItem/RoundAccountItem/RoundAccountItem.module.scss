@@ -68,6 +68,14 @@
     justify-content: center;
 }
 
+.loading-user-img {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background-color: var(--loading-element-color);
+    border: 2.5px solid var(--round-acc-item-img-border);
+}
+
 .user-img {
     width: 62px;
     height: 62px;

@@ -90,7 +90,7 @@
         width: 33.333333333333336%;
         aspect-ratio: 1 / 1;
         padding-right: 4px;
-        margin-bottom: 10px;
+        //margin-bottom: 4px;
         top: 0;
         bottom: 0;
         left: 0;
@@ -234,7 +234,7 @@
     font-weight: 400;
 }
 
-@media (max-width: 739px) {
+@media (max-width: 740px) {
     .account {
         flex-basis: 100%;
     }

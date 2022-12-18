@@ -11,6 +11,7 @@ const cx = classNames.bind(styles);
 function RoundAccountItem({ className, userName, avt, status, bigText, addStatus }) {
     const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
     const [isSetStatusVisible, setIsSetStatusVisible] = useState(false);
+    const [imgLoading, setImgLoading] = useState(false);
     const classes = cx('wrapper', {
         [className]: className,
     });
@@ -40,7 +41,16 @@ function RoundAccountItem({ className, userName, avt, status, bigText, addStatus
                 }}
             >
                 <div className={cx('story-circle')}>
-                    <img className={cx('user-img')} alt={userName} src={avt} />
+                    {imgLoading ? null : <div className={cx('loading-user-img')} />}
+                    <img
+                        className={cx('user-img')}
+                        alt={userName}
+                        src={avt}
+                        style={imgLoading ? {} : { display: 'none' }}
+                        onLoad={() => {
+                            setImgLoading(true);
+                        }}
+                    />
                 </div>
 
                 <div className={cx('status-wrapper')}>

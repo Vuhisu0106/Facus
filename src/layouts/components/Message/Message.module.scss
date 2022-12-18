@@ -39,6 +39,10 @@
 .user-message-list {
     margin: 0px 4px 0 4px;
     position: relative;
+
+    .user-message-loading {
+        padding: 5px 15px;
+    }
 }
 
 //Chat
@@ -109,11 +113,23 @@
     justify-content: flex-end;
     .my-mess-content-wrapper {
         position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
         padding: 8px;
         margin-left: 8px;
         background-color: var(--primary);
         border-radius: 10px;
-        max-width: 520px;
+        max-width: 320px;
+        -ms-word-break: break-all;
+        word-break: break-all;
+        word-wrap: break-word; /* IE */
+
+        img {
+            margin-top: 5px;
+            max-width: 100%;
+            border-radius: 10px;
+        }
     }
     .my-mess-content {
         color: var(--white);
@@ -144,8 +160,17 @@
         margin-right: 8px;
         background-color: var(--fr-chat-bc);
         border-radius: 10px;
-        max-width: 65%;
+        max-width: 320px;
         border: 1.5px solid var(--chat-border);
+        -ms-word-break: break-all;
+        word-break: break-all;
+        word-wrap: break-word; /* IE */
+
+        img {
+            margin-top: 5px;
+            max-width: 100%;
+            border-radius: 10px;
+        }
     }
 
     .fr-mess-content {
@@ -169,8 +194,17 @@
 }
 
 .chat-footer {
+    position: relative;
     height: 60px;
     border-top: 1px solid var(--chat-border);
+
+    .image-input-area {
+        position: absolute;
+        top: -84px;
+        background-color: var(--background-color);
+        padding: 10px 10px;
+        border-top: 1px solid var(--chat-border);
+    }
 
     .mess-input {
         height: 100%;
@@ -243,7 +277,7 @@
     font-weight: 400px;
 }
 
-@media (max-width: 739px) {
+@media (max-width: 740px) {
     .sidebar-wrapper {
         max-width: 75px;
         .sidebar-top-header {

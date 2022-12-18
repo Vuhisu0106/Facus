@@ -22,6 +22,7 @@ export const handleSelectChat = async (currentUser, otherUser) => {
                     photoURL: otherUser.photoURL,
                 },
                 [combinedId + '.date']: serverTimestamp(),
+                [combinedId + '.receiverHasRead']: true,
             });
 
             await updateDocument('userChats', otherUser.uid, {
@@ -32,6 +33,7 @@ export const handleSelectChat = async (currentUser, otherUser) => {
                     photoURL: currentUser.photoURL,
                 },
                 [combinedId + '.date']: serverTimestamp(),
+                [combinedId + '.receiverHasRead']: true,
             });
         }
     } catch (error) {}

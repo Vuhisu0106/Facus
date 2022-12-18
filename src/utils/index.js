@@ -5,3 +5,4 @@ export * from './CommentUtils';
 export * from './PostUtils';
 export * from './FollowUtils';
 export * from './ChatUtils';
+export * from './ProfileUtils';

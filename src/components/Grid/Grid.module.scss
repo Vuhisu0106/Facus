@@ -84,7 +84,7 @@
 }
 
 /* Tablet - PC low resolution */
-@media (min-width: 740px) and (max-width: 1023px) {
+@media (min-width: 740px) and (max-width: 1024px) {
     .wide {
         width: 744px;
     }
@@ -96,7 +96,7 @@
 }
 
 /* > PC low resolution */
-@media (min-width: 1024px) and (max-width: 1239px) {
+@media (min-width: 1024px) and (max-width: 1240px) {
     .wide,
     .profile,
     .chat {

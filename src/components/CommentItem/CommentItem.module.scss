@@ -7,6 +7,8 @@
 .comment-element-content {
     width: 100%;
     margin: 0 16px 0 6px;
+    display: flex;
+    flex-direction: column;
 
     .comment-content-n-setting {
         width: 100%;
@@ -90,8 +92,10 @@
     .comment-img-n-reaction {
         position: relative;
         display: inline-block;
+        width: 95%;
 
         .comment-image {
+            width: 100%;
             border-radius: 10px;
             margin-top: 4px;
         }
@@ -153,29 +157,34 @@
     flex-direction: column;
     margin: 0 16px 0 6px;
 
-    span {
-        padding: 4px;
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--primary);
-        cursor: pointer;
-        &:hover {
-            text-decoration: underline;
+    .edit-footer-btn {
+        span {
+            padding: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--primary);
+            cursor: pointer;
+            margin-right: 25px;
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 }
-@media (min-width: 1240px) {
-    .comment-image {
-        max-width: 100%;
-    }
-}
-@media (min-width: 740px) and (max-width: 1240px) {
-    .comment-image {
-        max-width: 100%;
-    }
-}
+// @media (min-width: 1240px) {
+//     .comment-image {
+//         max-width: 95%;
+//     }
+// }
+// @media (min-width: 740px) and (max-width: 1240px) {
+//     .comment-image {
+//         max-width: 95%;
+//     }
+// }
 @media (max-width: 740px) {
-    .comment-image {
-        max-width: 100%;
+    .comment-content-n-setting {
+        .comment-setting {
+            opacity: 1 !important;
+        }
     }
 }

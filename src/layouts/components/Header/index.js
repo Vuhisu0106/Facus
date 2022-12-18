@@ -19,21 +19,23 @@ import { Grid, GridColumn, GridRow } from '~/components/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '~/features/Theme/ThemeSlice';
 import { MOBILE } from '~/components/Hook/useViewport';
+import { useChatNoti } from '~/context/ChatNotiContext';
 
 const cx = classNames.bind(styles);
 
 function Header({ className }) {
     const [error, setError] = useState();
     const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [avatarLoad, setAvatarLoad] = useState(false);
     const avtRef = useRef();
 
     const { currentUser, logout } = useAuth();
     const { currentUserInfo } = useApp();
     const navigate = useNavigate();
     const { viewport } = useViewport();
-    //const isSmall = viewPort.width <= 740;
 
     const dark = useSelector((state) => state.theme.darkMode);
+    const { isHaveChatNoti } = useChatNoti();
 
     const dispatch = useDispatch();
 
@@ -150,6 +152,7 @@ function Header({ className }) {
                     <GridColumn l={3.25} m={3} s={2} className={cx('actions')}>
                         {viewport.device === MOBILE ? (
                             <div className={cx('actions-btn')}>
+                                {avatarLoad ? null : <div className={cx('loading-user-avt')} />}
                                 <Menu
                                     items={SMALL_VIEWPORT_HEADER_MENU}
                                     isMenuVisible={isMenuVisible}
@@ -157,11 +160,15 @@ function Header({ className }) {
                                 >
                                     <img
                                         className={cx('user-avt')}
-                                        alt="Vu Minh Hieu"
+                                        alt={currentUserInfo?.displayName}
                                         src={currentUserInfo?.photoURL}
+                                        style={avatarLoad ? {} : { display: 'none' }}
                                         ref={avtRef}
                                         onClick={() => {
                                             setIsMenuVisible(!isMenuVisible);
+                                        }}
+                                        onLoad={() => {
+                                            setAvatarLoad(true);
                                         }}
                                     />
                                 </Menu>
@@ -172,6 +179,7 @@ function Header({ className }) {
                                 <CircleButton
                                     to={config.routes.message}
                                     children={<FontAwesomeIcon icon={faFacebookMessenger} />}
+                                    notified={isHaveChatNoti ? true : false}
                                 />
 
                                 <CircleButton
@@ -182,15 +190,19 @@ function Header({ className }) {
                                         changeTheme();
                                     }}
                                 />
-
+                                {avatarLoad ? null : <div className={cx('loading-user-avt')} />}
                                 <Menu items={HEADER_MENU} isMenuVisible={isMenuVisible} onClickOutside={onClickOutside}>
                                     <img
                                         className={cx('user-avt')}
-                                        alt="Vu Minh Hieu"
+                                        alt={currentUserInfo?.displayName}
                                         src={currentUserInfo?.photoURL}
+                                        style={avatarLoad ? {} : { display: 'none' }}
                                         ref={avtRef}
                                         onClick={() => {
                                             setIsMenuVisible(!isMenuVisible);
+                                        }}
+                                        onLoad={() => {
+                                            setAvatarLoad(true);
                                         }}
                                     />
                                 </Menu>

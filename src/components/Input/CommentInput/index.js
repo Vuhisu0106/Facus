@@ -27,8 +27,8 @@ function CommentInput({
                     type="text"
                     placeHolder={'Write comment here...'}
                     inputRef={commentInputRef}
-                    leftIcon={<FontAwesomeIcon icon={faCamera} />}
                     onChange={handleCommentInput}
+                    leftIcon={<FontAwesomeIcon icon={faCamera} />}
                     leftBtnTypeFile
                     onChangeLeftBtn={onChangeImage}
                     rightIcon={<FontAwesomeIcon icon={faPaperPlane} />}
@@ -42,10 +42,11 @@ function CommentInput({
                     value={commentValue}
                     type="text"
                     placeHolder={'Write comment here...'}
+                    //only right icon (add image) in deskop
                     inputRef={commentInputRef}
                     rightIcon={<FontAwesomeIcon icon={faCamera} />}
-                    onChange={handleCommentInput}
                     rightBtnTypeFile
+                    onChange={handleCommentInput}
                     onChangeRightBtn={onChangeImage}
                     onKeyPress={(e) => {
                         if (e.key === 'Enter') {

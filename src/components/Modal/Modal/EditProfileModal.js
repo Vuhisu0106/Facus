@@ -1,9 +1,7 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-import { storage } from '~/firebase/config';
 import styles from '~/components/Modal/Modal.module.scss';
 import Modal from '..';
 import CircleButton from '~/components/Button/CircleButton';
@@ -11,9 +9,10 @@ import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
 
 import { useState } from 'react';
-import { updateDocument } from '~/firebase/services';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { setCoverPhotoURL, setPhotoAndCoverPhoto, setPhotoURL } from '~/features/Profile/ProfileSlice';
+import { setAvatarFunction, setCoverPhotoFunction } from '~/utils';
 
 const cx = classNames.bind(styles);
 function EditProfileModal({ onClose }) {
@@ -28,31 +27,23 @@ function EditProfileModal({ onClose }) {
     const [iscoverPhotoChange, setIsCoverPhotoChange] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const savePhotoFunc = async (typeImg, img) => {
-        const date = new Date().getTime();
-        const storageRef = ref(storage, `${`${typeImg}` + currentUser.displayName + date}`);
-
-        await uploadBytesResumable(storageRef, img).then(() => {
-            getDownloadURL(storageRef).then(async (downloadURL) => {
-                await updateDocument('users', currentUser.uid, {
-                    [typeImg]: downloadURL,
-                });
-            });
-        });
-    };
-
     const handleSavePhoto = async () => {
         setLoading(true);
         if (isAvatarChange && !iscoverPhotoChange) {
-            await savePhotoFunc('photoURL', avatar);
+            //only avatar
+            await setAvatarFunction(currentUser, avatar);
             dispatch(setPhotoURL({ photoURL: avatar }));
         } else if (!isAvatarChange && iscoverPhotoChange) {
-            await savePhotoFunc('coverPhotoURL', coverPhoto);
+            //only cover photo
+            await setCoverPhotoFunction(currentUser, coverPhoto);
             dispatch(setCoverPhotoURL({ coverPhotoURL: coverPhoto }));
         } else if (isAvatarChange && iscoverPhotoChange) {
-            await savePhotoFunc('photoURL', avatar);
-            await savePhotoFunc('coverPhotoURL', coverPhoto);
+            //both
+            await setAvatarFunction(currentUser, avatar);
+            await setCoverPhotoFunction(currentUser, coverPhoto);
             dispatch(setPhotoAndCoverPhoto({ photoURL: avatar, coverPhotoURL: coverPhoto }));
+        } else {
+            return;
         }
         setLoading(false);
         onClose();

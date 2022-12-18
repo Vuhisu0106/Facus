@@ -4,10 +4,8 @@ import moment from 'moment';
 import { faCamera, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-import { db } from '~/firebase/config';
 import CircleAvatar from '../CircleAvatar';
 import styles from './CommentItem.module.scss';
 import { useAuth } from '~/context/AuthContext';
@@ -16,6 +14,8 @@ import Input from '../Input';
 import ImageInputArea from '../Input/ImageInputArea';
 import { useDispatch, useSelector } from 'react-redux';
 import { likeComment, unlikeComment } from '~/features/PostAndComment/PostAndCommentSlice';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '~/firebase/config';
 
 const cx = classNames.bind(styles);
 function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
@@ -26,6 +26,8 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
     const [commentImg, setCommentImg] = useState('');
 
     const [cancelEdit, setCancelEdit] = useState(false);
+
+    const [commenterInfo, setCommenterInfo] = useState({});
 
     const { currentUser } = useAuth();
     const dispatch = useDispatch();
@@ -54,22 +56,25 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
     ];
 
     useEffect(() => {
+        const getCommenterInfo = () => {
+            const unsub = onSnapshot(doc(db, 'users', data?.commenter.uid), (doc) => {
+                Object.keys(doc.data()).length > 0 && setCommenterInfo(doc.data());
+            });
+            return () => {
+                unsub();
+            };
+        };
+
+        data?.commenter.uid && getCommenterInfo();
+    }, [data?.commenter.uid]);
+
+    useEffect(() => {
         if (editedComment) {
             setComment(editedComment.content);
             setCommentImg(editedComment.img);
         }
     }, [editedComment, cancelEdit]);
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    // useEffect(() => {
-    //     const unSub = onSnapshot(doc(db, 'comment', data.commentId), (doc) => {
-    //         doc.exists() && setCommentDetail(doc.data());
-    //     });
 
-    //     return () => {
-    //         unSub();
-    //     };
-    // }, [data.commentId]);
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     const handleLikeComment = async (commentId) => {
         if (data.like.indexOf(currentUser.uid) === -1) {
             data.like = [...data.like, currentUser.uid];
@@ -154,22 +159,35 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
                         }}
                     />
                 )}
-
-                <span
-                    onClick={() => {
-                        setIsEditComment(false);
-                        setCancelEdit(!cancelEdit);
-                    }}
-                >
-                    Cancel
-                </span>
+                <div className={cx('edit-footer-btn')}>
+                    <span
+                        onClick={() => {
+                            setIsEditComment(false);
+                            setCancelEdit(!cancelEdit);
+                        }}
+                    >
+                        Cancel
+                    </span>
+                    <span
+                        onClick={() => {
+                            handleEditComment();
+                        }}
+                    >
+                        Done
+                    </span>
+                </div>
             </>
         );
     };
 
     return (
         <div className={cx('comment-element')} key={data.commentId}>
-            <CircleAvatar userName={data.commenter.displayName} avatar={data.commenter.photoURL} diameter="32px" />
+            <CircleAvatar
+                userUid={commenterInfo.uid}
+                userName={commenterInfo.displayName}
+                avatar={commenterInfo.photoURL}
+                diameter="32px"
+            />
             {isEditComment ? (
                 <div className={cx('edit-comment-content')}>{editCommentJSX()}</div>
             ) : (
@@ -181,7 +199,7 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
                                 !data?.content && data?.img ? 'no-text-wrapper' : '',
                             )}
                         >
-                            <div className={cx('comment-user-name')}>{data?.commenter?.displayName}</div>
+                            <div className={cx('comment-user-name')}>{commenterInfo.displayName}</div>
                             <div className={cx('comment-content')}>{data?.content}</div>
 
                             {/* Use data from rendering in this component (not from props of parents component) must check if they exist or not */}
@@ -226,8 +244,8 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
                             {data.like && data.like.length > 0 && (
                                 <div className={cx('reaction-image-cmt')}>
                                     <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
-                                    {data && data.like.length > 1 && (
-                                        <div className={cx('reaction-cmt-count')}>{data && data.like.length}</div>
+                                    {data?.like?.length > 1 && (
+                                        <div className={cx('reaction-cmt-count')}>{data?.like?.length}</div>
                                     )}
                                 </div>
                             )}

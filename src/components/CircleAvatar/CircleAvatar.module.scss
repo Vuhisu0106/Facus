@@ -1,4 +1,10 @@
 .user-avt {
     border-radius: 50%;
     object-fit: cover;
+    cursor: pointer;
+}
+
+.loading-user-avt {
+    border-radius: 50%;
+    background-color: var(--loading-element-color);
 }

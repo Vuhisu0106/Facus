@@ -57,6 +57,10 @@ function Profile() {
     }, [type]);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
         const getSelectedUser = () => {
             setType('Posts');
             const unsub = onSnapshot(doc(db, 'users', params.id), (doc) => {

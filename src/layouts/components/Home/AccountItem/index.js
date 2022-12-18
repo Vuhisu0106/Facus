@@ -6,6 +6,7 @@ import { useAuth } from '~/context/AuthContext';
 import { LoadingIcon } from '~/components/Icon';
 import { useState } from 'react';
 import { follow } from '~/utils/FollowUtils';
+import CircleAvatar from '~/components/CircleAvatar';
 
 const cx = classNames.bind(styles);
 
@@ -30,7 +31,13 @@ function AccountItem({ uid, displayName, photoURL, follower, onClick }) {
                     navigate(`/user/${uid}`);
                 }}
             >
-                <img className={cx('avatar')} src={photoURL} alt="Vũ Hiếu" />
+                <CircleAvatar
+                    className={cx('avatar')}
+                    userUid={uid}
+                    userName={displayName}
+                    avatar={photoURL}
+                    diameter={'36px'}
+                />
                 <div className={cx('info')}>
                     <h4 className={cx('name')}>
                         <span>{displayName}</span>
@@ -48,7 +55,6 @@ function AccountItem({ uid, displayName, photoURL, follower, onClick }) {
                     className={cx('follow')}
                     onClick={() => {
                         handleFollow();
-                        console.log(typeof uid);
                     }}
                 >
                     Follow
