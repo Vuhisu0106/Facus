@@ -15,7 +15,7 @@ function LoadingPost() {
             </div>
             <div className={cx('post-content')}>
                 <div className={cx('post-caption')}></div>
-                <div className={cx('post-image')}></div>
+                {/* <div className={cx('post-image')}></div> */}
             </div>
             <div className={cx('post-interaction')}>
                 <div className={cx('post-reaction')}></div>

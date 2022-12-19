@@ -202,6 +202,10 @@ html[theme='light'] {
 
     // Loading //
     --loading-element-color: #999;
+
+    // Search //
+    --acc-name-search-fw: 600;
+    --following-name-search-fw: 600;
 }
 
 html[theme='dark'] {
@@ -302,4 +306,8 @@ html[theme='dark'] {
 
     // Loading //
     --loading-element-color: #8c8e91;
+
+    // Search //
+    --acc-name-search-fw: 500;
+    --following-name-search-fw: 300;
 }

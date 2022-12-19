@@ -16,10 +16,14 @@ function AccountItem({ uid, displayName, photoURL, follower, onClick }) {
     const [loading, setLoading] = useState(false);
 
     const handleFollow = async () => {
+        setLoading(true);
         try {
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             await follow(currentUser.uid, uid);
+            setLoading(false);
         } catch (error) {
             console.log(error);
+            setLoading(false);
         }
     };
 
@@ -49,7 +53,7 @@ function AccountItem({ uid, displayName, photoURL, follower, onClick }) {
                 </div>
             </div>
             {loading ? (
-                <LoadingIcon />
+                <LoadingIcon className={cx('loading-icon')} />
             ) : (
                 <button
                     className={cx('follow')}

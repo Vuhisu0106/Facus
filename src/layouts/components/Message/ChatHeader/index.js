@@ -3,7 +3,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import CircleAvatar from '~/components/CircleAvatar';
 import { db } from '~/firebase/config';
-import styles from '~/layouts/components/Message/Message.module.scss';
+import styles from '~/layouts/components/Message/Chat.module.scss';
 
 const cx = classNames.bind(styles);
 function ChatHeader({ uid }) {

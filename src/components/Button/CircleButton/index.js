@@ -20,8 +20,10 @@ function CircleButton({ className, to, href, children, onClick, notified }) {
     }
     return (
         <Comp className={classes} {...props}>
-            <span>{children}</span>
-            {notified && <span className={cx('badge')}></span>}
+            <div className={cx('inside-wrapper')}>
+                <span>{children}</span>
+                {notified && <span className={cx('badge')}></span>}
+            </div>
         </Comp>
     );
 }

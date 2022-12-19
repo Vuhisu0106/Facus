@@ -1,26 +1,23 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect, useRef } from 'react';
-import { doc, onSnapshot, arrayUnion, serverTimestamp, Timestamp } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { v4 as uuid } from 'uuid';
+import { doc, onSnapshot } from 'firebase/firestore';
+
 import moment from 'moment';
 
-import { db, storage } from '~/firebase/config';
+import { db } from '~/firebase/config';
 import Input from '~/components/Input';
-import styles from './Message.module.scss';
+import styles from './Chat.module.scss';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { useAuth } from '~/context/AuthContext';
-
-import { updateDocument } from '~/firebase/services';
 import { useSelector } from 'react-redux';
 import ImageInputArea from '~/components/Input/ImageInputArea';
-import { resizeFiles } from '~/utils';
+import { sendMessageFunction } from '~/utils';
 import ChatHeader from './ChatHeader';
 
 const cx = classNames.bind(styles);
-function Chat() {
+function ChatLayout() {
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');
     const [img, setImg] = useState(null);
@@ -30,8 +27,6 @@ function Chat() {
     const { currentUser } = useAuth();
 
     const chat = useSelector((state) => state.chat);
-
-    const { resizeFile } = resizeFiles();
 
     useEffect(() => {
         messageRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -51,88 +46,7 @@ function Chat() {
     const handleSend = async () => {
         setText('');
         setImg(null);
-        if (img) {
-            // const storageRef = ref(storage, uuid());
-            // const uploadTask = uploadBytesResumable(storageRef, img);
-            // uploadTask.on(
-            //     (error) => {
-            //         //TODO:Handle Error
-            //     },
-            //     () => {
-            //         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            //             await updateDocument( 'chats', data.chatId), {
-            //                 messages: arrayUnion({
-            //                     id: uuid(),
-            //                     text,
-            //                     senderId: currentUser.uid,
-            //                     date: Timestamp.now(),
-            //                     img: downloadURL,
-            //                 }),
-            //             });
-            //         });
-            //     },
-            // );
-
-            const date = new Date().getTime();
-            const storageRef = ref(storage, `${'chat' + currentUser.uid + date}`);
-            const uri = await resizeFile(img);
-
-            await uploadString(storageRef, uri, 'data_url').then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    await updateDocument('chats', chat.chatId, {
-                        messages: arrayUnion({
-                            id: uuid(),
-                            text,
-                            senderId: currentUser.uid,
-                            date: Timestamp.now(),
-                            img: downloadURL,
-                        }),
-                    });
-                });
-            });
-        } else if (!text) {
-            return;
-        } else {
-            await updateDocument('chats', chat.chatId, {
-                messages: arrayUnion({
-                    id: uuid(),
-                    text,
-                    senderId: currentUser.uid,
-                    date: Timestamp.now(),
-                }),
-            });
-        }
-
-        await updateDocument('userChats', currentUser.uid, {
-            [chat.chatId + '.lastMessage']: {
-                senderId: currentUser.uid,
-                text,
-            },
-
-            [chat.chatId + '.date']: serverTimestamp(),
-            [chat.chatId + '.receiverHasRead']: true,
-        });
-
-        //if current user is same as user messaging to, receiverHasRead will be true
-        if (currentUser.uid !== chat.user.uid) {
-            await updateDocument('userChats', chat.user.uid, {
-                [chat.chatId + '.lastMessage']: {
-                    senderId: currentUser.uid,
-                    text,
-                },
-                [chat.chatId + '.date']: serverTimestamp(),
-                [chat.chatId + '.receiverHasRead']: false,
-            });
-        } else {
-            await updateDocument('userChats', chat.user.uid, {
-                [chat.chatId + '.lastMessage']: {
-                    senderId: currentUser.uid,
-                    text,
-                },
-                [chat.chatId + '.date']: serverTimestamp(),
-                [chat.chatId + '.receiverHasRead']: true,
-            });
-        }
+        await sendMessageFunction(currentUser, chat, text, img);
     };
 
     const handleSendInput = (e) => {
@@ -218,4 +132,4 @@ function Chat() {
     );
 }
 
-export default Chat;
+export default ChatLayout;

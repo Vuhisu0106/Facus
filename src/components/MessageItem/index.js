@@ -6,8 +6,18 @@ import { db } from '~/firebase/config';
 import styles from './MessageItem.module.scss';
 
 const cx = classNames.bind(styles);
-function MessageItem({ userUid, active = false, closestMess, unread, closestMessTime, onClick }) {
+function MessageItem({
+    userUid,
+    active = false,
+    closestMess,
+    closestMessTime,
+    onClick,
+    unread = false,
+    noMessages = false,
+    lastMessageIsImage = false,
+}) {
     const [accountInfo, setAccountInfo] = useState({});
+    const [avatarLoading, setAvatarLoading] = useState(false);
 
     useEffect(() => {
         const getCommenterInfo = () => {
@@ -23,14 +33,20 @@ function MessageItem({ userUid, active = false, closestMess, unread, closestMess
     }, [userUid]);
     return (
         <div className={cx('wrapper', active && 'active')} onClick={onClick}>
-            <img className={cx('user-avt')} alt={accountInfo.displayName} src={accountInfo.photoURL} />
+            <div className={cx('user-avt-wrapper')}>
+                {avatarLoading ? null : <div className={cx('loading-user-avt')} />}
+                <img
+                    className={cx('user-avt')}
+                    alt={accountInfo.displayName}
+                    src={accountInfo.photoURL}
+                    style={avatarLoading ? {} : { display: 'none' }}
+                    onLoad={() => {
+                        setAvatarLoading(true);
+                    }}
+                />
+            </div>
 
-            <div
-                className={cx('message-content')}
-                onClick={() => {
-                    console.log(accountInfo);
-                }}
-            >
+            <div className={cx('message-content')}>
                 <div className={cx('mess-detail')}>
                     <div className={cx('mess-top-content')}>
                         <h4 className={cx('user-name')}>{accountInfo.displayName}</h4>
@@ -38,7 +54,15 @@ function MessageItem({ userUid, active = false, closestMess, unread, closestMess
                     </div>
 
                     <div className={cx('mess-bottom-content')}>
-                        <span className={cx('closest-mess', unread && 'unread')}>{closestMess}</span>
+                        <span
+                            className={cx(
+                                'closest-mess',
+                                unread && 'unread',
+                                (noMessages || lastMessageIsImage) && 'italic-text',
+                            )}
+                        >
+                            {noMessages ? 'No messages yet' : lastMessageIsImage ? 'An image sent' : closestMess}
+                        </span>
                         {unread && <span className={cx('unread-count')}></span>}
                     </div>
                 </div>

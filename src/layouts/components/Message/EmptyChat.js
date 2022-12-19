@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import ChatSearch from '~/components/Search/ChatSearch';
 
-import styles from './Message.module.scss';
+import styles from './Chat.module.scss';
 
 const cx = classNames.bind(styles);
 function EmptyChat() {

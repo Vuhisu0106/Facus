@@ -11,8 +11,8 @@ import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
 import { useDispatch } from 'react-redux';
-import { changeChatUser, setAddChatState } from '~/features/Chat/ChatSlice';
-import { handleSelectChat } from '~/utils';
+import { setAddChatState } from '~/features/Chat/ChatSlice';
+import { selectChatFunction } from '~/utils';
 
 const cx = classNames.bind(styles);
 function ChatSearch({ className, placeHolder, placement, autoFocus }) {
@@ -65,13 +65,13 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
     };
 
     const handleSelect = async (result) => {
-        await handleSelectChat(currentUser, result);
-        dispatch(
-            changeChatUser({
-                currentUser: currentUser,
-                selectUser: result,
-            }),
-        );
+        await selectChatFunction(currentUser, result);
+        // dispatch(
+        //     changeChatUser({
+        //         currentUser: currentUser,
+        //         selectUser: result,
+        //     }),
+        // );
 
         setSearchResult([]);
         setSearchValue('');
@@ -85,9 +85,9 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
                 visible={showResult && searchValue}
                 render={(attrs) => (
                     <div className={cx('chat-search-result')} tabIndex="-1" {...attrs}>
-                        <PopperWrapper>
+                        <PopperWrapper className={cx('chat-search-wrapper')}>
                             {!loading && searchResult.length === 0 ? (
-                                <span>User not found</span>
+                                <span className={cx('no-user-found')}>User not found</span>
                             ) : (
                                 searchResult.map((result) => (
                                     <AccountItem

@@ -11,6 +11,7 @@ import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
 function AccountSearch({ className, placeHolder, placement, autoFocus }) {
@@ -24,6 +25,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
     const inputRef = useRef();
 
     let navigate = useNavigate();
+    const { currentUserInfo } = useApp();
 
     const handleHideResult = () => {
         setShowResult(false);
@@ -79,7 +81,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
                     <Grid type={'wide'} className={cx('account-search-result')} tabIndex="-1" {...attrs}>
                         <GridRow>
                             <GridColumn l={12} m={7} m_o={2} s={8} s_o={2}>
-                                <PopperWrapper>
+                                <PopperWrapper className={cx('account-search-wrapper')}>
                                     {loading === false && searchResult.length === 0 ? (
                                         <span>User not found</span>
                                     ) : (
@@ -90,6 +92,9 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
                                                 onClick={() => {
                                                     handleSelect(result);
                                                 }}
+                                                isFollowing={
+                                                    currentUserInfo?.following.indexOf(result.uid) !== -1 && true
+                                                }
                                             />
                                         ))
                                     )}

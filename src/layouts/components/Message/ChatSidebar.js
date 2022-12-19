@@ -9,13 +9,14 @@ import CircleButton from '~/components/Button/CircleButton';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import MessageItem from '~/components/MessageItem';
 import ChatSearch from '~/components/Search/ChatSearch';
-import styles from './Message.module.scss';
+import styles from './Chat.module.scss';
 import { useAuth } from '~/context/AuthContext';
 
 import { updateDocument } from '~/firebase/services';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeChatUser, setAddChatState } from '~/features/Chat/ChatSlice';
-import { LoadingAccountItem } from '~/components/Loading';
+import { setAddChatState } from '~/features/Chat/ChatSlice';
+import { LoadingChatItem } from '~/components/Loading';
+import { selectChatFunction } from '~/utils';
 
 const cx = classNames.bind(styles);
 function ChatSidebar() {
@@ -34,8 +35,6 @@ function ChatSidebar() {
             const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
                 setChats(Object.entries(doc.data()));
                 setLoading(false);
-
-                //dispatch(getHaveUnreadMessage(Object.entries(doc.data()).map((user) => user[1].receiverHasRead)));
             });
             return () => {
                 unsub();
@@ -46,13 +45,14 @@ function ChatSidebar() {
     }, [currentUser.uid]);
 
     const handleSelect = async (user) => {
-        //await dispatch({ type: 'CHANGE_USER', payload: user.userInfo });
-        dispatch(
-            changeChatUser({
-                currentUser,
-                selectUser: user.userInfo,
-            }),
-        );
+        await selectChatFunction(currentUser, user.userInfo);
+
+        // dispatch(
+        //     changeChatUser({
+        //         currentUser,
+        //         selectUser: user.userInfo,
+        //     }),
+        // );
 
         if (user.receiverHasRead === false) {
             await updateDocument('userChats', currentUser.uid, {
@@ -88,7 +88,7 @@ function ChatSidebar() {
                         {Array(11)
                             .fill(0)
                             .map((item, index) => (
-                                <LoadingAccountItem key={index} />
+                                <LoadingChatItem key={index} />
                             ))}
                     </div>
                 ) : (
@@ -106,6 +106,8 @@ function ChatSidebar() {
                                           chat[1].lastMessage?.text
                                 }
                                 unread={chat[1].receiverHasRead === false && true}
+                                noMessages={!chat[1].lastMessage && true}
+                                lastMessageIsImage={chat[1].lastMessage && !chat[1].lastMessage?.text && true}
                                 closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
                                 onClick={() => {
                                     handleSelect(chat[1]);

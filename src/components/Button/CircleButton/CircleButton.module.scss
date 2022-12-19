@@ -6,21 +6,26 @@
     font-size: 17px;
     cursor: pointer;
     transition: ease-in-out 100ms;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: var(--circle-btn-bc);
     color: var(--circle-btn-color);
-    position: relative;
 
-    .badge {
-        position: absolute;
-        top: -1px;
-        right: -1px;
-        width: 1rem;
-        height: 1rem;
-        border-radius: 50%;
-        background-color: var(--primary);
+    .inside-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .badge {
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: var(--primary);
+        }
     }
 
     &:hover {

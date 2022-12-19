@@ -74,6 +74,12 @@
     align-items: center;
     padding: 6px 0;
     border-radius: 8px;
+    position: relative;
+
+    .loading-icon {
+        color: var(--primary);
+        right: 13px;
+    }
 }
 
 .account-info {

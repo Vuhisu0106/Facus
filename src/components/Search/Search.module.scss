@@ -6,6 +6,19 @@
     width: 260px;
 }
 
+.chat-search-wrapper,
+.account-search-wrapper {
+    overflow: hidden;
+    max-height: 300px;
+    overflow-y: scroll;
+
+    .no-user-found {
+        color: var(--round-acc-item-name-color);
+        font-size: 15px;
+        font-weight: var(--chat-font-weight);
+    }
+}
+
 .account-search-result {
     width: 527px;
 }

@@ -1,6 +1,6 @@
 import Home from '~/pages/Home';
 import LandingPage from '~/pages/LandingPage';
-import Message from '~/pages/Message';
+import Message from '~/pages/Chat';
 import Profile from '~/pages/Profile';
 import Post from '~/pages/Post';
 import Dashboard from '~/pages/Dashboard';

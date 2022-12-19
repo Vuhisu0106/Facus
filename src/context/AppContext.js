@@ -24,7 +24,7 @@ function AppProvider({ children }) {
             };
         };
 
-        currentUser?.uid && getCurrentUser();
+        currentUser && getCurrentUser();
     }, [currentUser]);
 
     const value = { currentUserInfo };

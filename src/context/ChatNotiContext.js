@@ -26,8 +26,8 @@ function ChatNotiProvider({ children }) {
             };
         };
 
-        currentUser?.uid && getChats();
-    }, [currentUser?.uid]);
+        currentUser && getChats();
+    }, [currentUser]);
 
     const value = { isHaveChatNoti };
 
