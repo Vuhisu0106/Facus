@@ -66,13 +66,6 @@ function ChatSearch({ className, placeHolder, placement, autoFocus }) {
 
     const handleSelect = async (result) => {
         await selectChatFunction(currentUser, result);
-        // dispatch(
-        //     changeChatUser({
-        //         currentUser: currentUser,
-        //         selectUser: result,
-        //     }),
-        // );
-
         setSearchResult([]);
         setSearchValue('');
     };

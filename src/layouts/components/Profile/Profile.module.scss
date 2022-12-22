@@ -191,6 +191,15 @@
         margin-bottom: 16px;
         color: var(--right-content-h1-color);
     }
+    .no-follow {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        h3 {
+            font-size: 25px;
+            color: var(--post-interact-border-color);
+        }
+    }
 }
 
 .account {

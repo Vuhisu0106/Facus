@@ -58,7 +58,7 @@
     position: relative;
 }
 
-.add-post-header {
+.add-post__header {
     width: 100%;
     z-index: 1;
 }
@@ -257,10 +257,16 @@ input[type='file'] {
         transition: 0.1s;
         background: var(--primary);
         color: var(--white);
+        display: flex;
+        align-items: center;
         &:hover {
             background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
             color: var(--white);
         }
+    }
+
+    .add-post__icon--loading {
+        //color: #fff;
     }
 }
 

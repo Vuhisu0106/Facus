@@ -41,7 +41,7 @@ function RoundAccountItem({ className, userName, avt, status, bigText, addStatus
                 }}
             >
                 <div className={cx('story-circle')}>
-                    {imgLoading ? null : <div className={cx('loading-user-img')} />}
+                    {imgLoading ? null : <div className={cx('user-img--loading')} />}
                     <img
                         className={cx('user-img')}
                         alt={userName}
@@ -53,7 +53,7 @@ function RoundAccountItem({ className, userName, avt, status, bigText, addStatus
                     />
                 </div>
 
-                <div className={cx('status-wrapper')}>
+                <div className={cx('status__wrapper')}>
                     <div className={cx('status')}>
                         {!addStatus ? status.icon : <FontAwesomeIcon icon={faPlusCircle} />}
                     </div>

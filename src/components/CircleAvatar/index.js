@@ -13,7 +13,7 @@ function CircleAvatar({ className, userUid, userName, avatar, diameter }) {
     });
     return (
         <>
-            {loading ? null : <div className={cx('loading-user-avt')} style={{ height: diameter, width: diameter }} />}
+            {loading ? null : <div className={cx('user-avt--loading')} style={{ height: diameter, width: diameter }} />}
             <img
                 className={classes}
                 alt={userName}

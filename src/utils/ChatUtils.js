@@ -23,8 +23,6 @@ export const selectChatFunction = async (currentUser, otherUser) => {
                 [combinedId + '.userChatId']: combinedId,
                 [combinedId + '.userInfo']: {
                     uid: otherUser.uid,
-                    // displayName: otherUser.displayName,
-                    // photoURL: otherUser.photoURL,
                 },
                 [combinedId + '.date']: serverTimestamp(),
                 [combinedId + '.receiverHasRead']: true,
@@ -34,8 +32,6 @@ export const selectChatFunction = async (currentUser, otherUser) => {
                 [combinedId + '.userChatId']: combinedId,
                 [combinedId + '.userInfo']: {
                     uid: currentUser.uid,
-                    // displayName: currentUser.displayName,
-                    // photoURL: currentUser.photoURL,
                 },
                 [combinedId + '.date']: serverTimestamp(),
                 [combinedId + '.receiverHasRead']: true,

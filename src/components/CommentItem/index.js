@@ -152,14 +152,13 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
                 />
                 {commentImg && (
                     <ImageInputArea
-                        //src={commentImg === editedComment.img ? commentImg : URL.createObjectURL(commentImg)}
                         src={typeof commentImg === 'object' ? URL.createObjectURL(commentImg) : commentImg}
                         onClickCancel={() => {
                             setCommentImg('');
                         }}
                     />
                 )}
-                <div className={cx('edit-footer-btn')}>
+                <div className={cx('edit-cmt__footer--btns')}>
                     <span
                         onClick={() => {
                             setIsEditComment(false);
@@ -181,7 +180,7 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
     };
 
     return (
-        <div className={cx('comment-element')} key={data.commentId}>
+        <div className={cx('wrapper')} key={data.commentId}>
             <CircleAvatar
                 userUid={commenterInfo.uid}
                 userName={commenterInfo.displayName}
@@ -189,25 +188,25 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
                 diameter="32px"
             />
             {isEditComment ? (
-                <div className={cx('edit-comment-content')}>{editCommentJSX()}</div>
+                <div className={cx('edit-cmt__content')}>{editCommentJSX()}</div>
             ) : (
-                <div className={cx('comment-element-content')}>
-                    <div className={cx('comment-content-n-setting')}>
+                <div className={cx('comment__content--wrapper')}>
+                    <div className={cx('comment__content--text-wrapper')}>
                         <div
                             className={cx(
-                                'comment-content-wrapper',
+                                'comment__content--text',
                                 !data?.content && data?.img ? 'no-text-wrapper' : '',
                             )}
                         >
-                            <div className={cx('comment-user-name')}>{commenterInfo.displayName}</div>
-                            <div className={cx('comment-content')}>{data?.content}</div>
+                            <div className={cx('comment__user-name')}>{commenterInfo.displayName}</div>
+                            <div className={cx('comment__text--content')}>{data?.content}</div>
 
                             {/* Use data from rendering in this component (not from props of parents component) must check if they exist or not */}
-                            {!data.img && data.like && data.like.length > 0 && (
-                                <div className={cx('reaction-cmt')}>
-                                    <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
+                            {!data.img && data?.like?.length > 0 && (
+                                <div className={cx('comment__reaction')}>
+                                    <FontAwesomeIcon className={cx('comment__reaction--icon')} icon={faHeartSolid} />
                                     {data && data.like.length > 1 && (
-                                        <div className={cx('reaction-cmt-count')}>{data && data.like.length}</div>
+                                        <div className={cx('comment__reaction--count')}>{data && data.like.length}</div>
                                     )}
                                 </div>
                             )}
@@ -235,26 +234,26 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
                     </div>
 
                     {data?.img && (
-                        <div className={cx('comment-img-n-reaction')}>
+                        <div className={cx('comment__content--img')}>
                             <img
-                                className={cx('comment-image')}
+                                className={cx('comment__image')}
                                 src={typeof data?.img === 'object' ? URL.createObjectURL(data?.img) : data?.img}
                                 alt=""
                             />
                             {data.like && data.like.length > 0 && (
-                                <div className={cx('reaction-image-cmt')}>
-                                    <FontAwesomeIcon className={cx('reaction-cmt-icon')} icon={faHeartSolid} />
+                                <div className={cx('comment__img--reaction')}>
+                                    <FontAwesomeIcon className={cx('comment__reaction--icon')} icon={faHeartSolid} />
                                     {data?.like?.length > 1 && (
-                                        <div className={cx('reaction-cmt-count')}>{data?.like?.length}</div>
+                                        <div className={cx('comment__reaction--count')}>{data?.like?.length}</div>
                                     )}
                                 </div>
                             )}
                         </div>
                     )}
 
-                    <div className={cx('comment-interact')}>
+                    <div className={cx('comment__interact')}>
                         <button
-                            className={cx('like-comment-btn')}
+                            className={cx('comment__like-btn')}
                             style={{
                                 color: data.like && data.like.indexOf(currentUser.uid) !== -1 && '#fe2c55',
                             }}
@@ -263,7 +262,7 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
                             Like
                         </button>
                         <button
-                            className={cx('reply-comment-btn')}
+                            className={cx('comment__reply-btn')}
                             onClick={() => {
                                 console.log(data);
                             }}

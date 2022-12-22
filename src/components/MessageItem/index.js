@@ -34,7 +34,7 @@ function MessageItem({
     return (
         <div className={cx('wrapper', active && 'active')} onClick={onClick}>
             <div className={cx('user-avt-wrapper')}>
-                {avatarLoading ? null : <div className={cx('loading-user-avt')} />}
+                {avatarLoading ? null : <div className={cx('user-avt--loading')} />}
                 <img
                     className={cx('user-avt')}
                     alt={accountInfo.displayName}

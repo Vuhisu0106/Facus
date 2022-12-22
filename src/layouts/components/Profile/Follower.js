@@ -69,7 +69,9 @@ function Follower({ list }) {
                                 </div>
                             ))
                         ) : (
-                            <h2>This user has no follower</h2>
+                            <div className={cx('no-follow')}>
+                                <h3>This user has no follower</h3>
+                            </div>
                         )}
                     </WrapperModal>
                 </GridColumn>

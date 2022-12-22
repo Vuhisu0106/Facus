@@ -15,6 +15,7 @@ function CommentInput({
     commentImg,
     onChangeImage,
     cancelImage,
+    loading,
 }) {
     const { viewport } = useViewport();
 
@@ -35,6 +36,7 @@ function CommentInput({
                     onClickRightBtn={() => {
                         handleAddComment();
                     }}
+                    loading={loading}
                 />
             ) : (
                 <Input
@@ -53,6 +55,7 @@ function CommentInput({
                             handleAddComment();
                         }
                     }}
+                    loading={loading}
                 />
             )}
             {commentImg && <ImageInputArea src={URL.createObjectURL(commentImg)} onClickCancel={cancelImage} />}

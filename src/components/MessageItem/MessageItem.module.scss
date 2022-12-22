@@ -28,7 +28,7 @@
     object-fit: cover;
 }
 
-.loading-user-avt {
+.user-avt--loading {
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -128,7 +128,7 @@
     .user-avt {
         margin: 0;
     }
-    .loading-user-avt {
+    .user-avt--loading {
         margin: 0;
     }
 }

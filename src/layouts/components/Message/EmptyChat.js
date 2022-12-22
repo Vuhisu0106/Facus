@@ -22,7 +22,8 @@ function EmptyChat() {
             </div>
         </div>
     ) : (
-        <div className={cx('empty-chat-wrapper')}>
+        <div className={cx('empty-chat__wrapper')}>
+            <img className={cx('empty-chat__image')} src="images/emptyChatImg.png" alt="" />
             <h2>Select a chat or start a new conversation!</h2>
         </div>
     );

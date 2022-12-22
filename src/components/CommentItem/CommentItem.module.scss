@@ -1,16 +1,16 @@
-.comment-element {
+.wrapper {
     width: 100%;
     display: flex;
     margin-bottom: 8px;
 }
 
-.comment-element-content {
+.comment__content--wrapper {
     width: 100%;
     margin: 0 16px 0 6px;
     display: flex;
     flex-direction: column;
 
-    .comment-content-n-setting {
+    .comment__content--text-wrapper {
         width: 100%;
         display: flex;
         align-items: center;
@@ -22,7 +22,7 @@
             }
         }
 
-        .reaction-cmt {
+        .comment__reaction {
             height: 20px;
             width: 30px;
             bottom: -5px;
@@ -37,11 +37,11 @@
             background-color: var(--cmt-reaction-bc);
             padding: 4px 4px;
             position: absolute;
-            .reaction-cmt-icon {
+            .comment__reaction--icon {
                 color: var(--primary);
                 font-size: 11px;
             }
-            .reaction-cmt-count {
+            .comment__reaction--count {
                 font-size: 11px;
                 margin-left: 2px;
                 color: var(--cmt-reaction-color);
@@ -62,7 +62,7 @@
             cursor: pointer;
         }
 
-        .comment-content-wrapper {
+        .comment__content--text {
             position: relative;
             padding: 8px;
             background-color: var(--cmt-wrapper-bc);
@@ -74,33 +74,33 @@
             display: flex;
             flex-direction: column;
 
-            .comment-user-name {
+            .comment__user-name {
                 font-weight: 700;
                 font-size: 13px;
             }
 
-            .comment-content {
+            .comment__text--content {
                 font-weight: var(--cmt-font-weight);
             }
         }
 
-        .comment-content-wrapper.no-text-wrapper {
+        .comment__content--text.no-text-wrapper {
             background-color: transparent;
         }
     }
 
-    .comment-img-n-reaction {
+    .comment__content--img {
         position: relative;
         display: inline-block;
         width: 95%;
 
-        .comment-image {
+        .comment__image {
             width: 100%;
             border-radius: 10px;
             margin-top: 4px;
         }
 
-        .reaction-image-cmt {
+        .comment__img--reaction {
             position: absolute;
             bottom: -3px;
             right: -5px;
@@ -115,11 +115,11 @@
             border: 1px solid var(--cmt-reaction-border-color);
             background-color: var(--cmt-reaction-bc);
             padding: 4px 4px;
-            .reaction-cmt-icon {
+            .comment__reaction--icon {
                 color: var(--primary);
                 font-size: 11px;
             }
-            .reaction-cmt-count {
+            .comment__reaction--count {
                 font-size: 11px;
                 margin-left: 2px;
                 color: var(--cmt-reaction-color);
@@ -127,13 +127,13 @@
         }
     }
 
-    .comment-interact {
+    .comment__interact {
         min-width: 125px;
         margin: 0 6px;
         display: inline-block;
 
-        .like-comment-btn,
-        .reply-comment-btn {
+        .comment__like-btn,
+        .comment__reply-btn {
             font-size: 12px;
             font-weight: 700;
             color: var(--cmt-interact-color);
@@ -151,13 +151,13 @@
     }
 }
 
-.edit-comment-content {
+.edit-cmt__content {
     width: 100%;
     display: flex;
     flex-direction: column;
     margin: 0 16px 0 6px;
 
-    .edit-footer-btn {
+    .edit-cmt__footer--btns {
         span {
             padding: 4px;
             font-size: 12px;
@@ -172,17 +172,17 @@
     }
 }
 // @media (min-width: 1240px) {
-//     .comment-image {
+//     .comment__image {
 //         max-width: 95%;
 //     }
 // }
 // @media (min-width: 740px) and (max-width: 1240px) {
-//     .comment-image {
+//     .comment__image {
 //         max-width: 95%;
 //     }
 // }
 @media (max-width: 740px) {
-    .comment-content-n-setting {
+    .comment__content--text-wrapper {
         .comment-setting {
             opacity: 1 !important;
         }

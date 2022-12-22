@@ -66,7 +66,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
     };
 
     const handleSelect = (result) => {
-        navigate(`/user/${result.uid}`);
+        //navigate(`/user/${result.uid}`);
         setSearchResult([]);
         setSearchValue('');
     };
@@ -86,16 +86,18 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
                                         <span>User not found</span>
                                     ) : (
                                         searchResult.map((result) => (
-                                            <AccountItem
-                                                key={result.uid}
-                                                data={result}
-                                                onClick={() => {
-                                                    handleSelect(result);
-                                                }}
-                                                isFollowing={
-                                                    currentUserInfo?.following.indexOf(result.uid) !== -1 && true
-                                                }
-                                            />
+                                            <a key={result.uid} href={`/user/${result.uid}`}>
+                                                <AccountItem
+                                                    key={result.uid}
+                                                    data={result}
+                                                    onClick={() => {
+                                                        handleSelect(result);
+                                                    }}
+                                                    isFollowing={
+                                                        currentUserInfo?.following.indexOf(result.uid) !== -1 && true
+                                                    }
+                                                />
+                                            </a>
                                         ))
                                     )}
                                 </PopperWrapper>

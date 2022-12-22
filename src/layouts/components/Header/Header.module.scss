@@ -17,11 +17,14 @@
 }
 
 .logo {
-    display: inline-block;
+    //display: inline-block;
     color: var(--primary);
     font-size: 35px;
     font-weight: 800;
     cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
 
     button {
         color: var(--header-logo-color);
@@ -70,7 +73,7 @@
     cursor: pointer;
 }
 
-.loading-user-avt {
+.user-avt--loading {
     right: 0;
     width: 34px;
     height: 34px;

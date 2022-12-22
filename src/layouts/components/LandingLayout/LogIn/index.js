@@ -6,35 +6,42 @@ import { useState, useRef } from 'react';
 
 import { useAuth } from '~/context/AuthContext';
 import styles from './LogIn.module.scss';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Shape from '../Shape';
 import Checkbox from '~/components/Checkbox';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import config from '~/configs';
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
 function LogIn() {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const { login } = useAuth();
+    const { login, setRememberMe } = useAuth();
 
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+
+    const handleRememberMe = (e) => {
+        if (e.target.checked) {
+            setRememberMe(true);
+        } else {
+            setRememberMe(false);
+        }
+    };
 
     async function handleSubmit(e) {
         e.preventDefault();
 
         try {
-            setError('');
             setLoading(true);
             await login(emailRef.current.value, passwordRef.current.value);
-            navigate('/home');
-            //console.log(currentUser);
+            navigate('/');
         } catch (error) {
-            setError('Failed to log in');
-            //console.log(error);
+            toast.error('Failed to log in');
+            console.log(error);
         }
 
         setLoading(false);
@@ -78,7 +85,7 @@ function LogIn() {
                                 <h4>Email</h4>
                                 <div className={cx('input-field')}>
                                     {/* <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} /> */}
-                                    <input placeholder="Email" ref={emailRef} />
+                                    <input type="email" placeholder="Email" ref={emailRef} />
                                 </div>
                             </div>
                             <div className={cx('input')}>
@@ -90,8 +97,10 @@ function LogIn() {
                             </div>
 
                             <div className={cx('other-features')}>
-                                <Checkbox text={'Remember me'} />
-                                <a>Forget password</a>
+                                <Checkbox text={'Remember me'} onChange={handleRememberMe} />
+                                <Link className={cx('')} to={config.routes.forgetPassword}>
+                                    Forget Password
+                                </Link>
                             </div>
 
                             <button disabled={loading} className={cx('btn')} type="submit" value="Log in">

@@ -43,7 +43,7 @@ function Header({ className }) {
         setError('');
         try {
             await logout();
-            navigate('/');
+            navigate('/home');
         } catch {
             setError('Failed to log out');
         }
@@ -83,7 +83,7 @@ function Header({ className }) {
         {
             icon: <FontAwesomeIcon icon={faHome} />,
             title: 'Home',
-            to: config.routes.home,
+            to: config.routes.dashboard,
             onClick: () => {
                 setIsMenuVisible(false);
             },
@@ -132,7 +132,7 @@ function Header({ className }) {
             <Grid type={'wide'} className={cx('inner-wrapper')}>
                 <GridRow>
                     <GridColumn l={3.25} m={2} s={2}>
-                        <Link className={cx('logo')} to={config.routes.home}>
+                        <Link className={cx('logo')} to={config.routes.dashboard}>
                             {viewport.device === MOBILE ? (
                                 <CircleButton children={<FontAwesomeIcon icon={faFacebookF} />} />
                             ) : (
@@ -152,7 +152,7 @@ function Header({ className }) {
                     <GridColumn l={3.25} m={3} s={2} className={cx('actions')}>
                         {viewport.device === MOBILE ? (
                             <div className={cx('actions-btn')}>
-                                {avatarLoad ? null : <div className={cx('loading-user-avt')} />}
+                                {avatarLoad ? null : <div className={cx('user-avt--loading')} />}
                                 <Menu
                                     items={SMALL_VIEWPORT_HEADER_MENU}
                                     isMenuVisible={isMenuVisible}
@@ -175,7 +175,10 @@ function Header({ className }) {
                             </div>
                         ) : (
                             <div className={cx('actions-btn')}>
-                                <CircleButton to={config.routes.home} children={<FontAwesomeIcon icon={faHome} />} />
+                                <CircleButton
+                                    to={config.routes.dashboard}
+                                    children={<FontAwesomeIcon icon={faHome} />}
+                                />
                                 <CircleButton
                                     to={config.routes.message}
                                     children={<FontAwesomeIcon icon={faFacebookMessenger} />}
@@ -190,7 +193,7 @@ function Header({ className }) {
                                         changeTheme();
                                     }}
                                 />
-                                {avatarLoad ? null : <div className={cx('loading-user-avt')} />}
+                                {avatarLoad ? null : <div className={cx('user-avt--loading')} />}
                                 <Menu items={HEADER_MENU} isMenuVisible={isMenuVisible} onClickOutside={onClickOutside}>
                                     <img
                                         className={cx('user-avt')}

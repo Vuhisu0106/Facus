@@ -53,7 +53,7 @@ function AccountItem({ uid, displayName, photoURL, follower, onClick }) {
                 </div>
             </div>
             {loading ? (
-                <LoadingIcon className={cx('loading-icon')} />
+                <LoadingIcon className={cx('loading-icon')} type={'input'} />
             ) : (
                 <button
                     className={cx('follow')}

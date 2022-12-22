@@ -2,46 +2,38 @@ import classNames from 'classnames/bind';
 import { useParams } from 'react-router-dom';
 import { query, collection, where, getDocs } from 'firebase/firestore';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { db } from '~/firebase/config';
 import styles from './Post.module.scss';
 import PostLayout from '~/components/PostLayout';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPost } from '~/features/PostAndComment/PostAndCommentSlice';
+import { resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
 
 const cx = classNames.bind(styles);
 function Post() {
     let params = useParams();
     const dispatch = useDispatch();
     const post = useSelector((state) => state.postNcomment.posts[0]);
-
-    // useEffect(() => {
-    //     const getPostDetail = () => {
-    //         const unsub = onSnapshot(doc(db, 'post', params.id), (doc) => {
-    //             dispatch(setPost([doc.data()]));
-    //         });
-    //         return () => {
-    //             unsub();
-    //         };
-    //     };
-    //     getPostDetail();
-    // }, [params.id]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         const getPost = async () => {
             const q = query(collection(db, 'post'), where('postId', '==', params.id));
             try {
-                //dispatch(resetPost());
+                dispatch(resetPost());
                 const querySnapshot = await getDocs(q);
                 const posts = [];
                 querySnapshot.forEach((doc) => {
                     posts.push({ ...doc.data() });
                 });
                 dispatch(setPost([...posts]));
+                setLoading(false);
             } catch (err) {
                 console.log(err);
+                setLoading(false);
             }
         };
 

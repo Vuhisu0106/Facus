@@ -1,11 +1,12 @@
 const routes = {
-    home: '/home',
+    dashboard: '/',
     profile: '/user/:id',
     post: '/post/:id',
     message: '/message',
-    homepage: '/',
+    homepage: '/home',
     signup: '/sign-up',
     login: '/log-in',
+    forgetPassword: '/forget-password',
 };
 
 export default routes;

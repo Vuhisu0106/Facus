@@ -5,6 +5,8 @@ import { publicRoutes, privateRoutes } from './routes';
 import DefaultLayout from './layouts/DefaultLayout';
 import PrivateRoute from './components/Route/PrivateRoute';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     const [error, setError] = useState(null);
@@ -20,6 +22,18 @@ function App() {
 
     return (
         <div className="App">
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme={dark ? 'dark' : 'light'}
+            />
             <Routes>
                 {publicRoutes.map((route, index) => {
                     const Page = route.component;

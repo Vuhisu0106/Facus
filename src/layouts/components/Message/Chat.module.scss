@@ -243,15 +243,22 @@
 }
 
 //Empty chat
-.empty-chat-wrapper {
+.empty-chat__wrapper {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     background-color: var(--background-color);
     color: var(--chat-btn);
     grid-column: span 3 / span 3;
     position: relative;
+
+    .empty-chat__image {
+        width: 40%;
+        opacity: 0.28;
+    }
+
     h2 {
         color: var(--chat-btn);
 
@@ -297,8 +304,12 @@
     .chat-wrapper {
         flex: 1;
     }
-    .empty-chat-wrapper {
+    .empty-chat__wrapper {
         flex: 1;
+
+        .empty-chat__image {
+            width: 60%;
+        }
     }
 }
 
@@ -309,7 +320,11 @@
     .chat-wrapper {
         grid-column: span 5;
     }
-    .empty-chat-wrapper {
+    .empty-chat__wrapper {
         grid-column: span 5;
+
+        .empty-chat__image {
+            width: 60%;
+        }
     }
 }

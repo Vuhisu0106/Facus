@@ -8,6 +8,10 @@
     font-weight: 600;
     cursor: pointer;
 
+    label {
+        cursor: pointer;
+    }
+
     input[type='checkbox'] {
         -webkit-appearance: none;
         position: relative;

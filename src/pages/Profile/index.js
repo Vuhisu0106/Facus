@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { onSnapshot, doc } from 'firebase/firestore';
 
@@ -19,8 +19,7 @@ import { useDispatch } from 'react-redux';
 import { setProfileInfo } from '~/features/Profile/ProfileSlice';
 import { follow, unfollow } from '~/utils/FollowUtils';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
-import { changeChatUser } from '~/features/Chat/ChatSlice';
-import { Follower, Following, Posts } from '~/layouts/components/Profile';
+import { Follower, Following, LoadingProfile, Posts } from '~/layouts/components/Profile';
 import { selectChatFunction } from '~/utils';
 
 const cx = classNames.bind(styles);
@@ -45,6 +44,10 @@ function Profile() {
     const [avatarLoading, setAvatarLoading] = useState(false);
     const [coverPhotoLoading, setCoverPhotoLoading] = useState(false);
 
+    const postsMemo = memo(() => {
+        <Posts selectedUser={selectedUser} isCurrentUser={params.id === currentUser.uid ? true : false} />;
+    }, [selectedUser]);
+
     const main = () => {
         if (profileLayout === 'Following') {
             return <Following list={selectedUser.following} />;
@@ -65,6 +68,8 @@ function Profile() {
 
     useEffect(() => {
         setLoading(true);
+        setSelectedUser('');
+
         const getSelectedUser = () => {
             setType('Posts');
             const unsub = onSnapshot(doc(db, 'users', params.id), (doc) => {
@@ -88,7 +93,7 @@ function Profile() {
             };
         };
         params.id && getSelectedUser();
-    }, [params]);
+    }, [params.id]);
 
     const handleFollow = async () => {
         try {
@@ -112,19 +117,13 @@ function Profile() {
 
     const handleMessage = async () => {
         await selectChatFunction(currentUser, selectedUser);
-        // dispatch(
-        //     changeChatUser({
-        //         currentUser: currentUser,
-        //         selectUser: selectedUser,
-        //     }),
-        // );
         navigate('/message');
     };
 
     return (
         <>
             {loading ? (
-                <></>
+                <LoadingProfile />
             ) : (
                 <div className={cx('wrapper')}>
                     {statusModalVisible && (
@@ -141,7 +140,7 @@ function Profile() {
                             }}
                         />
                     )}
-                    <div className={cx('profile-main-part')}>
+                    <div className={cx('profile__main')}>
                         <Grid type={'profile'}>
                             <GridRow>
                                 <GridColumn l={12} m={12} s={12}>
@@ -158,9 +157,9 @@ function Profile() {
                                 </GridColumn>
 
                                 <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={11} s_o={0.5}>
-                                    <div className={cx('profile-main-part-center')}>
-                                        <div className={cx('profile-main-part-center-2')}>
-                                            <div className={cx('profile-main-part-right')}>
+                                    <div className={cx('profile__main-center')}>
+                                        <div className={cx('profile__main--content')}>
+                                            <div className={cx('profile__main--right')}>
                                                 <div className={cx('avatar')}>
                                                     <div
                                                         className={cx('set-status-wrapper')}
@@ -223,7 +222,6 @@ function Profile() {
                                                             alt={selectedUser?.displayName}
                                                             src={selectedUser?.photoURL}
                                                             style={avatarLoading ? {} : { display: 'none' }}
-                                                            loading="lazy"
                                                             onLoad={() => {
                                                                 setAvatarLoading(true);
                                                             }}
@@ -254,7 +252,7 @@ function Profile() {
                                             </div>
 
                                             {params.id === currentUser.uid ? (
-                                                <div className={cx('profile-main-part-left')}>
+                                                <div className={cx('profile__main-left')}>
                                                     <Button
                                                         primary
                                                         className={cx('edit-account-btn')}
@@ -272,7 +270,7 @@ function Profile() {
                                                     />
                                                 </div>
                                             ) : (
-                                                <div className={cx('profile-main-part-left')}>
+                                                <div className={cx('profile__main-left')}>
                                                     {followLoading ? (
                                                         <Button
                                                             primary

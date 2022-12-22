@@ -65,12 +65,14 @@ function Following({ list }) {
                                     />
                                     <div className={cx('account-info')}>
                                         <h1 className={cx('account-name')}>{following.displayName}</h1>
-                                        <span className={cx('account-bio')}>Hello World</span>
+                                        <span className={cx('account-bio')}>{following.bio || 'Hello World'}</span>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <h1>This user doesn't follow anyone</h1>
+                            <div className={cx('no-follow')}>
+                                <h3>This user doesn't follow anyone</h3>
+                            </div>
                         )}
                     </WrapperModal>
                 </GridColumn>

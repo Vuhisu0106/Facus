@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, useEffect } from 'react';
-import { onSnapshot, doc } from 'firebase/firestore';
+import { useState, useEffect, useMemo } from 'react';
+import { onSnapshot, doc, query, collection, where, orderBy } from 'firebase/firestore';
 import moment from 'moment';
 
 import { db } from '~/firebase/config';
@@ -33,7 +33,11 @@ function ChatSidebar() {
         setLoading(true);
         const getChats = () => {
             const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
-                setChats(Object.entries(doc.data()));
+                setChats(
+                    Object.entries(doc.data()).map((data) => {
+                        return data[1];
+                    }),
+                );
                 setLoading(false);
             });
             return () => {
@@ -46,14 +50,6 @@ function ChatSidebar() {
 
     const handleSelect = async (user) => {
         await selectChatFunction(currentUser, user.userInfo);
-
-        // dispatch(
-        //     changeChatUser({
-        //         currentUser,
-        //         selectUser: user.userInfo,
-        //     }),
-        // );
-
         if (user.receiverHasRead === false) {
             await updateDocument('userChats', currentUser.uid, {
                 [user.userChatId + '.receiverHasRead']: true,
@@ -64,9 +60,44 @@ function ChatSidebar() {
     };
 
     useEffect(() => {
+        console.log('fsegas');
         setActiveMessItem(chat.user.uid);
         dispatch(setAddChatState({ isAddChatVisible: false }));
     }, [chat.user.uid]);
+
+    const postListMemo = useMemo(() => {
+        return (
+            <>
+                {chats.length > 0 ? (
+                    chats
+                        ?.slice()
+                        .sort((a, b) => b.date - a.date)
+                        .map((chat) => (
+                            <MessageItem
+                                key={chat?.userChatId}
+                                active={activeMessItem === chat?.userInfo.uid && true}
+                                userUid={chat?.userInfo.uid}
+                                closestMess={
+                                    !chat?.lastMessage
+                                        ? ''
+                                        : (chat?.lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
+                                          chat?.lastMessage?.text
+                                }
+                                unread={chat?.receiverHasRead === false && true}
+                                noMessages={!chat?.lastMessage && true}
+                                lastMessageIsImage={chat?.lastMessage && !chat?.lastMessage?.text && true}
+                                closestMessTime={chat?.date && moment(chat?.date.toDate()).fromNow()}
+                                onClick={() => {
+                                    handleSelect(chat);
+                                }}
+                            />
+                        ))
+                ) : (
+                    <h1>No message</h1>
+                )}
+            </>
+        );
+    }, [chats]);
 
     return (
         <div className={cx('sidebar-wrapper')}>
@@ -93,24 +124,25 @@ function ChatSidebar() {
                     </div>
                 ) : (
                     chats
-                        ?.sort((a, b) => b[1].date - a[1].date)
+                        ?.slice()
+                        .sort((a, b) => b.date - a.date)
                         .map((chat) => (
                             <MessageItem
-                                key={chat[0]}
-                                active={activeMessItem === chat[1].userInfo.uid && true}
-                                userUid={chat[1].userInfo.uid}
+                                key={chat?.userChatId}
+                                active={activeMessItem === chat?.userInfo.uid && true}
+                                userUid={chat?.userInfo.uid}
                                 closestMess={
-                                    !chat[1].lastMessage
+                                    !chat?.lastMessage
                                         ? ''
-                                        : (chat[1].lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
-                                          chat[1].lastMessage?.text
+                                        : (chat?.lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
+                                          chat?.lastMessage?.text
                                 }
-                                unread={chat[1].receiverHasRead === false && true}
-                                noMessages={!chat[1].lastMessage && true}
-                                lastMessageIsImage={chat[1].lastMessage && !chat[1].lastMessage?.text && true}
-                                closestMessTime={chat[1].date && moment(chat[1].date.toDate()).fromNow()}
+                                unread={chat?.receiverHasRead === false && true}
+                                noMessages={!chat?.lastMessage && true}
+                                lastMessageIsImage={chat?.lastMessage && !chat?.lastMessage?.text && true}
+                                closestMessTime={chat?.date && moment(chat?.date.toDate()).fromNow()}
                                 onClick={() => {
-                                    handleSelect(chat[1]);
+                                    handleSelect(chat);
                                 }}
                             />
                         ))

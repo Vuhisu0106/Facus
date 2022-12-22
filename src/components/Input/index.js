@@ -73,7 +73,7 @@ function Input({
                 autoFocus={autoFocus}
                 {...props}
             ></input>
-            {loading && <LoadingIcon />}
+            {loading && <LoadingIcon type={'comment-input'} />}
             {rightIcon &&
                 (!rightBtnTypeFile ? (
                     <button

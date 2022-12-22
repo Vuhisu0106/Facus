@@ -25,7 +25,6 @@ import {
     editPostFunction,
     likePostFunction,
 } from '~/utils';
-import { deletePost, editPost, likePost } from '~/features/PostAndComment/PostAndCommentSlice';
 import CommentInput from '../Input/CommentInput';
 import { db } from '~/firebase/config';
 import { useApp } from '~/context/AppContext';
@@ -53,11 +52,10 @@ function PostLayout({
     const [comment, setComment] = useState('');
     const [commentImg, setCommentImg] = useState('');
     const [commentVisible, setCommentVisible] = useState(false);
+    const [commentLoading, setCommentLoading] = useState(false);
     const commentInputRef = useRef();
 
     const dispatch = useDispatch();
-
-    let navigate = useNavigate();
 
     const postCommentBefore = useSelector(
         (state) => state.postNcomment.posts.find((post) => post.postId === postId).comment,
@@ -87,13 +85,11 @@ function PostLayout({
 
     const handleEditPost = async (caption, img, isImgAdded, isImgChanged, isImgDeleted) => {
         await editPostFunction({ currentUser, postId, caption, img, isImgAdded, isImgChanged, isImgDeleted });
-        dispatch(editPost({ postId, caption, img }));
         setOpenModal(false);
     };
 
     const handleLikePost = async () => {
-        dispatch(likePost({ currentUserUid: currentUser.uid, like, postId }));
-        likePostFunction(currentUser.uid, like, postId);
+        await likePostFunction(currentUser.uid, like, postId);
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +110,7 @@ function PostLayout({
     };
 
     const handleAddComment = async () => {
+        setCommentLoading(true);
         let uuId = uuid();
         const data = {
             commentId: uuId,
@@ -130,8 +127,10 @@ function PostLayout({
         };
 
         await addCommentFunction(postComment, data, commentImg);
+        setCommentLoading(false);
         setComment('');
         setCommentImg('');
+        setCommentVisible(true);
     };
 
     const handleEditComment = async (data) => {
@@ -139,7 +138,6 @@ function PostLayout({
             return cmt.commentId === data.commentId ? { ...cmt, content: data.comment, img: data.commentImg } : cmt;
         });
         await editCommentFunction(data, updatedComments);
-        //dispatch(editComment({ postId, updatedComments }));
     };
 
     const handleToggleLikeComment = async (data) => {
@@ -156,7 +154,6 @@ function PostLayout({
         if (window.confirm('Do you want delete this comment?')) {
             try {
                 await deleteCommentFunction(data, filterComments);
-                //dispatch(deleteComment({ postId, filterComments }));
             } catch (error) {
                 console.log(error);
             }
@@ -181,16 +178,16 @@ function PostLayout({
             onClick: () => {
                 setPopperVisible(false);
                 deletePostFunction(postId, currentUser.uid);
-                dispatch(deletePost({ postId }));
             },
         },
     ];
 
     const commentInput = () => {
         return (
-            <div className={cx('comment-bar')}>
+            <div className={cx('comment__bar')}>
                 <CircleAvatar
-                    className={cx('user-avt-comment')}
+                    className={cx('comment__user-avt')}
+                    userUid={currentUserInfo.uid}
                     userName={currentUserInfo.displayName}
                     avatar={currentUserInfo.photoURL}
                 />
@@ -209,6 +206,7 @@ function PostLayout({
                     cancelImage={() => {
                         setCommentImg('');
                     }}
+                    loading={commentLoading}
                 />
             </div>
         );
@@ -261,17 +259,17 @@ function PostLayout({
                     }}
                 />
             )}
-            <div className={cx('post-header')}>
+            <div className={cx('post__header')}>
                 <CircleAvatar
-                    className={cx('user-avt')}
+                    className={cx('post__user-avt')}
                     userUid={posterInfo.uid}
                     userName={posterInfo.displayName}
                     avatar={posterInfo.photoURL}
                     diameter={'40px'}
                 />
-                <div className={cx('post-header-info')}>
-                    <p className={cx('user-name')}>{posterInfo.displayName}</p>
-                    <p className={cx('time-post')}>{timeStamp}</p>
+                <div className={cx('post__header-info')}>
+                    <p className={cx('post__user-name')}>{posterInfo.displayName}</p>
+                    <p className={cx('post__time-post')}>{timeStamp}</p>
                 </div>
                 {currentUser.uid === userId && !isPostPage && (
                     <Menu
@@ -292,35 +290,34 @@ function PostLayout({
                     </Menu>
                 )}
             </div>
-            <div className={cx('post-content')}>
-                <div className={cx('post-caption')}>
+            <div className={cx('post__content')}>
+                <div className={cx('post__content--caption')}>
                     <p>{postCaption}</p>
                 </div>
                 {!isPostPage
                     ? postImg && (
-                          <div className={cx('post-image')}>
+                          <div className={cx('post__content--img')}>
                               {imgLoading ? null : <div className={cx('loading-post-img')} />}
-                              <img
-                                  alt={posterInfo.displayName}
-                                  src={typeof postImg === 'object' ? URL.createObjectURL(postImg) : postImg}
-                                  style={imgLoading ? {} : { display: 'none' }}
-                                  onClick={() => {
-                                      navigate(`/post/${postId}`);
-                                  }}
-                                  onLoad={() => {
-                                      setImgLoading(true);
-                                  }}
-                              />
+                              <a href={`/post/${postId}`}>
+                                  <img
+                                      alt={posterInfo.displayName}
+                                      src={typeof postImg === 'object' ? URL.createObjectURL(postImg) : postImg}
+                                      style={imgLoading ? {} : { display: 'none' }}
+                                      onLoad={() => {
+                                          setImgLoading(true);
+                                      }}
+                                  />
+                              </a>
                           </div>
                       )
                     : ''}
             </div>
-            <div className={cx('post-interaction')}>
+            <div className={cx('post__interaction')}>
                 {(like.length > 0 || postComment.length > 0) && (
-                    <div className={cx('post-interaction-detail')}>
+                    <div className={cx('post__interaction--detail')}>
                         {like.length > 0 && (
-                            <div className={cx('post-reaction-detail')}>
-                                <FontAwesomeIcon className={cx('reaction-icon')} icon={faHeartSolid} />{' '}
+                            <div className={cx('post__reaction')}>
+                                <FontAwesomeIcon className={cx('post__reaction--icon')} icon={faHeartSolid} />{' '}
                                 {like && like.indexOf(currentUser.uid) !== -1
                                     ? like.length === 1
                                         ? 'You'
@@ -330,7 +327,7 @@ function PostLayout({
                         )}
 
                         {postComment.length > 0 && (
-                            <div className={cx('post-comment-detail')}>
+                            <div className={cx('post__comment--count')}>
                                 <span onClick={handleOnClickCommentBtn}>
                                     {!postComment
                                         ? ''
@@ -340,7 +337,7 @@ function PostLayout({
                         )}
                     </div>
                 )}
-                <div className={cx('post-interact')}>
+                <div className={cx('post__interact')}>
                     <button
                         className={cx('reaction-btn')}
                         onClick={() => {
@@ -370,7 +367,7 @@ function PostLayout({
                     </button>
                 </div>
 
-                <div className={cx('comment-area')}>
+                <div className={cx('post__comment-area')}>
                     {isPostPage ? (
                         <>
                             {commentListJSX()}

@@ -20,9 +20,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { setBio } from '~/features/Profile/ProfileSlice';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
-import { addPost, resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
+import { resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
 import { addPostFunction } from '~/utils';
 import { useApp } from '~/context/AppContext';
+import { toast } from 'react-toastify';
+import { LoadingPost } from '~/components/Loading';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
@@ -36,6 +38,8 @@ function Posts({ selectedUser, isCurrentUser = false }) {
     const [editBio, setEditBio] = useState(false);
     const [saveBioBtnDisable, setSaveBioBtnDisable] = useState(true);
 
+    const [loading, setLoading] = useState(false);
+
     //Add post modal
     const [openModal, setOpenModal] = useState(false);
 
@@ -45,8 +49,10 @@ function Posts({ selectedUser, isCurrentUser = false }) {
     });
 
     useEffect(() => {
+        setLoading(true);
         const getPost = async () => {
             const q = query(collection(db, 'post'), where('poster.uid', '==', selectedUser.uid));
+
             try {
                 dispatch(resetPost());
                 const querySnapshot = await getDocs(q);
@@ -55,10 +61,10 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                     posts.push({ ...doc.data() });
                 });
                 dispatch(setPost([...posts]));
-                //setLoading(false);
+                setLoading(false);
             } catch (err) {
                 console.log(err);
-                //setLoading(false);
+                setLoading(false);
             }
         };
 
@@ -105,14 +111,15 @@ function Posts({ selectedUser, isCurrentUser = false }) {
             comment: [],
         };
         await addPostFunction(data, img);
-        dispatch(addPost({ ...data }));
         setOpenModal(false);
     };
 
     const postListMemo = useMemo(() => {
         return (
             <>
-                {postList.length > 0 ? (
+                {loading ? (
+                    <LoadingPost />
+                ) : postList.length > 0 ? (
                     postList
                         ?.slice()
                         .sort((a, b) => b.date - a.date)
@@ -247,6 +254,9 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     className={cx('add-post-with-video-btn')}
                                     leftIcon={<FontAwesomeIcon icon={faVideo} />}
                                     children={'Video'}
+                                    onClick={() => {
+                                        toast.error('Sorry, this feature is not ready');
+                                    }}
                                 />
                                 <Button
                                     className={cx('add-post-with-photo-btn')}

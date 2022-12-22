@@ -10,16 +10,15 @@ import { useAuth } from '~/context/AuthContext';
 
 import { useState } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { setCoverPhotoURL, setPhotoAndCoverPhoto, setPhotoURL } from '~/features/Profile/ProfileSlice';
-import { setAvatarFunction, setCoverPhotoFunction } from '~/utils';
+import { useSelector } from 'react-redux';
+import { setProfilePhoto } from '~/utils';
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 function EditProfileModal({ onClose }) {
     const { currentUser } = useAuth();
 
     const profile = useSelector((state) => state.profile);
-    const dispatch = useDispatch();
 
     const [avatar, setAvatar] = useState(null);
     const [isAvatarChange, setIsAvatarChange] = useState(false);
@@ -29,24 +28,10 @@ function EditProfileModal({ onClose }) {
 
     const handleSavePhoto = async () => {
         setLoading(true);
-        if (isAvatarChange && !iscoverPhotoChange) {
-            //only avatar
-            await setAvatarFunction(currentUser, avatar);
-            dispatch(setPhotoURL({ photoURL: avatar }));
-        } else if (!isAvatarChange && iscoverPhotoChange) {
-            //only cover photo
-            await setCoverPhotoFunction(currentUser, coverPhoto);
-            dispatch(setCoverPhotoURL({ coverPhotoURL: coverPhoto }));
-        } else if (isAvatarChange && iscoverPhotoChange) {
-            //both
-            await setAvatarFunction(currentUser, avatar);
-            await setCoverPhotoFunction(currentUser, coverPhoto);
-            dispatch(setPhotoAndCoverPhoto({ photoURL: avatar, coverPhotoURL: coverPhoto }));
-        } else {
-            return;
-        }
+        await setProfilePhoto(currentUser, avatar, coverPhoto, isAvatarChange, iscoverPhotoChange);
         setLoading(false);
         onClose();
+        toast.success('Update photo successfully');
     };
     return (
         <Modal

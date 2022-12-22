@@ -1,11 +1,25 @@
 .loading {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
     animation: spinner 1s infinite linear;
+}
+
+.input {
+    position: absolute;
+    top: 50%;
+    right: 15px;
     color: var(--circle-btn-color);
-    //not
+    transform: translateY(-50%);
+}
+
+.comment-input {
+    position: absolute;
+    top: 50%;
+    right: 35px;
+    color: var(--circle-btn-color);
+    transform: translateY(-50%);
+}
+
+.button {
+    animation: spinner-btn 1s infinite linear;
 }
 
 @keyframes spinner {
@@ -14,5 +28,14 @@
     }
     to {
         transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+@keyframes spinner-btn {
+    from {
+        transform: translateY(0%) rotate(0);
+    }
+    to {
+        transform: translateY(0%) rotate(360deg);
     }
 }

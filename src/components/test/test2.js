@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 
-import { deleteObject, getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable, uploadString } from 'firebase/storage';
 
 import styles from './test.module.scss';
 import { storage } from '~/firebase/config';
@@ -26,6 +26,19 @@ function Test2() {
         });
     };
 
+    const onClick2 = async () => {
+        const storageRef = ref(storage, 'defaultCoverPhoto');
+        console.log('click');
+        await uploadBytesResumable(storageRef, img).then(() => {
+            getDownloadURL(storageRef).then(async (downloadURL) => {
+                console.log(downloadURL);
+                // await setDocument('testImg', '001', {
+                //     img: downloadURL,
+                // });
+            });
+        });
+    };
+
     const onClickDelete = async () => {
         const desertRef = ref(storage, '002');
         deleteObject(desertRef)
@@ -39,7 +52,7 @@ function Test2() {
 
     return (
         <div className={cx('test2')}>
-            <button onClick={onClick}>Click</button>
+            <button onClick={onClick2}>Click</button>
             <label htmlFor="photo-upload" className={cx('add-photo-wrapper')}>
                 <h3>Add photo</h3>
             </label>

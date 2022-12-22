@@ -16,30 +16,14 @@ function PostList({ followingList }) {
     const [last, setLast] = useState(null);
     const [hasMore, setHasMore] = useState(true);
     const [showEndOfPost, setShowEndOfPost] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    // useEffect(() => {
-    //     //const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
-    //     const q = query(
-    //         collection(db, 'post'),
-    //         where('poster.uid', 'in', followingList.length > 0 ? followingList : ['èqew']),
-    //     );
-    //     const getPost = onSnapshot(q, (querySnapshot) => {
-    //         dispatch(resetPost());
-    //         const posts = [];
-    //         querySnapshot.forEach((doc) => {
-    //             posts.push({ ...doc.data() });
-    //         });
-    //         dispatch(setPost([...posts]));
-    //     });
-
-    //     return getPost;
-    // }, [followingList]);
-
     useEffect(() => {
+        setLoading(true);
         const getPost = async () => {
             const q = query(
                 collection(db, 'post'),
@@ -59,10 +43,10 @@ function PostList({ followingList }) {
                     posts.push({ ...doc.data() });
                 });
                 dispatch(setPost([...posts]));
-                //setLoading(false);
+                setLoading(false);
             } catch (err) {
                 console.log(err);
-                //setLoading(false);
+                setLoading(false);
             }
         };
 
@@ -77,6 +61,7 @@ function PostList({ followingList }) {
             startAfter(last['date']),
             limit(1),
         );
+
         try {
             const querySnapshot = await getDocs(q);
             const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
@@ -88,7 +73,7 @@ function PostList({ followingList }) {
             if (lastVisible !== undefined) {
                 setTimeout(() => {
                     dispatch(setPost([...post, ...posts]));
-                }, 1000);
+                }, 500);
 
                 setLast(lastVisible.data());
             } else {
@@ -97,31 +82,42 @@ function PostList({ followingList }) {
                 console.log('Nothing to load');
                 return;
             }
-            //setLoading(false);
         } catch (err) {
             console.log(err);
-            //setLoading(false);
         }
     };
 
     return (
         <div>
-            <InfiniteScroll dataLength={post.length} next={loadMorePost} hasMore={hasMore} loader={<LoadingPost />}>
-                {post?.slice().map((post) => (
-                    <PostLayout
-                        key={post?.postId}
-                        postId={post?.postId}
-                        userId={post?.poster?.uid}
-                        userName={post?.poster?.displayName}
-                        userAvt={post?.poster?.photoURL}
-                        timeStamp={post?.date && moment(post?.date.toDate()).fromNow()}
-                        postImg={post?.img}
-                        postCaption={post?.caption}
-                        like={post?.like}
-                    />
+            {loading ? <LoadingPost /> : <></>}
+            {!loading &&
+                (post?.length > 0 ? (
+                    <>
+                        <InfiniteScroll
+                            dataLength={post.length}
+                            next={loadMorePost}
+                            hasMore={hasMore}
+                            loader={<LoadingPost />}
+                        >
+                            {post?.slice().map((post) => (
+                                <PostLayout
+                                    key={post?.postId}
+                                    postId={post?.postId}
+                                    userId={post?.poster?.uid}
+                                    userName={post?.poster?.displayName}
+                                    userAvt={post?.poster?.photoURL}
+                                    timeStamp={post?.date && moment(post?.date.toDate()).fromNow()}
+                                    postImg={post?.img}
+                                    postCaption={post?.caption}
+                                    like={post?.like}
+                                />
+                            ))}
+                        </InfiniteScroll>
+                        {showEndOfPost && <h3>There are no more posts to show right now.</h3>}
+                    </>
+                ) : (
+                    <h4>You don't post anything and don't follow anyone.</h4>
                 ))}
-            </InfiniteScroll>
-            {showEndOfPost && <h3>There are no more posts to show right now.</h3>}
         </div>
     );
 }

@@ -31,6 +31,12 @@ function SignUp() {
     //const [isSignedUp, setIsSignedUp] = useState(false);
     const navigate = useNavigate();
 
+    const DEFAULT_COVER_PHOTO =
+        'https://firebasestorage.googleapis.com/v0/b/facus-f9b9c.appspot.com/o/defaultCoverPhoto?alt=media&token=64708df0-b9a5-4ad6-8eb5-4ee5d6517efa';
+
+    const DEFAULT_AVATAR =
+        'https://firebasestorage.googleapis.com/v0/b/facus-f9b9c.appspot.com/o/defaultAvatar?alt=media&token=7a69a80f-e8ba-48f3-b4d3-48679bb9670a';
+
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -61,8 +67,8 @@ function SignUp() {
                             uid: res.user.uid,
                             displayName: displayNameRef.current.value,
                             email: emailRef.current.value,
-                            photoURL: downloadURL,
-                            coverPhotoURL: null,
+                            photoURL: DEFAULT_AVATAR,
+                            coverPhotoURL: DEFAULT_COVER_PHOTO,
                             keywords: generateKeywords(displayNameRef.current.value),
                             following: [],
                             follower: [],
@@ -73,7 +79,7 @@ function SignUp() {
                         //create empty user chats on firestore
                         await setDocument('userChats', res.user.uid, {});
                         //await setDocument('userPost', res.user.uid, {});
-                        navigate('/home');
+                        navigate('/');
                     } catch (err) {
                         console.log(err);
                         setError(true);

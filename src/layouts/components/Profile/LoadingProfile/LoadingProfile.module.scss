@@ -7,15 +7,7 @@
     background-color: var(--background-color);
 }
 
-.profile-cover-photo {
-    width: 100%;
-    height: 54vh;
-    object-fit: cover;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
-
-.loading-cover-photo {
+.cover-photo {
     width: 100%;
     height: 54vh;
     border-bottom-left-radius: 8px;
@@ -67,83 +59,37 @@
         height: 170px;
         border: var(--profile-avt-border);
         border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .loading-profile-avt {
-        width: 170px;
-        height: 170px;
-        border: var(--profile-avt-border);
-        border-radius: 50%;
         background-color: var(--loading-element-color);
     }
 }
 
-.set-status-wrapper {
-    height: 34px;
-    min-width: 34px;
-    display: inline-block;
-    position: absolute;
-    right: 13px;
-    bottom: 9px;
-    background-color: transparent;
-    text-align: center;
-}
-
-.hovered-set-status-btn,
-.set-status-btn {
-    height: 34px;
-    min-width: 34px;
-    border-radius: 9999px;
-    margin-left: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: ease 50ms;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--circle-btn-color);
-    background-color: var(--background-color);
-    border: var(--profile-border);
-    position: absolute;
-    margin: 0 8px 8px 0;
-    z-index: 1;
-}
-
-.hovered-set-status-btn {
-    right: -60;
-    padding: 0px 8px;
-    color: var(--primary);
-    box-shadow: var(--set-status-box-shadow);
-    font-weight: 600;
-
-    .set-status {
-        margin-left: 5px;
-        min-width: 24px;
-        white-space: nowrap;
-        font-size: 12px;
-    }
-}
-
 .profile-name-follow {
-    margin-top: 5px;
+    margin-top: 35px;
     margin-bottom: 32px;
 
     .profile-name {
-        font-size: 32px;
-        color: var(--account-item-name-color);
+        width: 200px;
+        height: 35px;
+        border-radius: 20px;
+        background-color: var(--loading-element-color);
+        margin-bottom: 10px;
     }
 
     .profile-follow-info {
-        font-size: 17px;
-        font-weight: var(--acc-item-font-weight);
         color: var(--post-time-color);
         column-gap: 0.8rem;
         display: flex;
         justify-content: flex-start;
         align-items: center;
         //position: absolute;
+
+        .profile-following,
+        .profile-follower {
+            width: 80px;
+            height: 20px;
+            border-radius: 10px;
+            background-color: var(--loading-element-color);
+        }
 
         .separate-follow {
             font-size: 8px;
@@ -158,21 +104,18 @@
     align-items: flex-end;
     padding-bottom: 20px;
     margin-top: 8px;
-    button {
+
+    .edit-account-btn,
+    .edit-profile-btn {
+        width: 120px;
         height: 40px;
-        border-radius: 8px;
+        border-radius: 20px;
         padding: 0 12px;
+        background-color: var(--loading-element-color);
     }
 
-    .edit-profile-btn,
-    .chat-btn {
-        background-color: var(--sub-profile-btn-bc);
-        color: var(--sub-profile-btn-color);
+    .edit-profile-btn {
         margin-left: 10px;
-
-        &:hover {
-            background-color: var(--circle-btn-hover-bc);
-        }
     }
 }
 
@@ -190,29 +133,21 @@
         height: 100%;
         display: flex;
         justify-content: space-between;
+        align-items: center;
         background-color: transparent;
         list-style-type: none;
 
         li {
-            font-size: 15px;
             width: 100%;
         }
     }
 }
 
-.profile-nav-btn {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--profile-nav-color);
-    &:hover {
-        background-color: var(--circle-btn-hover-bc);
-    }
-}
-
-.profile-content {
-    background-color: var(--background-color-2);
-
-    padding: 16px 0;
+.profile__nav--item {
+    width: 100px;
+    height: 25px;
+    border-radius: 20px;
+    background-color: var(--loading-element-color);
 }
 
 @media (max-width: 740px) {
@@ -254,6 +189,7 @@
             flex-direction: column;
             align-items: center;
             margin-bottom: 0;
+            margin-top: 15px;
         }
     }
 

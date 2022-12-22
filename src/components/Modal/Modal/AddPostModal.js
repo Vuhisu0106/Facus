@@ -10,6 +10,7 @@ import CircleButton from '~/components/Button/CircleButton';
 import Button from '~/components/Button';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { useApp } from '~/context/AppContext';
+import { LoadingIcon } from '~/components/Icon';
 
 const cx = classNames.bind(styles);
 function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, editPostFunc }) {
@@ -40,24 +41,40 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
     };
 
     const handleAddPost = () => {
-        addPostFunc(caption, img);
+        setLoading(true);
+        setTimeout(() => {
+            try {
+                addPostFunc(caption, img);
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+                setLoading(false);
+            }
+        }, 500);
     };
 
     const handleEditPost = async () => {
-        if (editedPost.img) {
-            if (img === editedPost.img) {
-                await editPostFunc(caption, img);
-            } else if (!img) {
-                await editPostFunc(caption, img, false, false, true);
+        setLoading(true);
+        try {
+            if (editedPost.img) {
+                if (img === editedPost.img) {
+                    await editPostFunc(caption, img);
+                } else if (!img) {
+                    await editPostFunc(caption, img, false, false, true);
+                } else {
+                    await editPostFunc(caption, img, false, true);
+                }
             } else {
-                await editPostFunc(caption, img, false, true);
+                if (img) {
+                    await editPostFunc(caption, img, true, true);
+                } else {
+                    await editPostFunc(caption, img);
+                }
             }
-        } else {
-            if (img) {
-                await editPostFunc(caption, img, true, true);
-            } else {
-                await editPostFunc(caption, img);
-            }
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
         }
     };
 
@@ -73,7 +90,7 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
             onClose={onCloseAddPostModal}
             children={
                 <div className={cx('add-post-wrapper')}>
-                    <div className={cx('add-post-header')}>
+                    <div className={cx('add-post__header')}>
                         <div className={cx('add-post-user-info')}>
                             <img alt={currentUserInfo.displayName} src={currentUserInfo.photoURL} />
                             <div className={cx('user-info')}>
@@ -162,8 +179,14 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
                             </div>
                         </div>
                         <Button
-                            disabled={!caption && !img}
-                            children={!loading ? 'Post' : '...Loading'}
+                            disabled={(!caption && !img) || loading}
+                            children={
+                                !loading ? (
+                                    'Post'
+                                ) : (
+                                    <LoadingIcon className={cx('add-post__icon--loading')} type={'button'} />
+                                )
+                            }
                             className={cx('post-btn')}
                             onClick={edit ? handleEditPost : handleAddPost}
                         />

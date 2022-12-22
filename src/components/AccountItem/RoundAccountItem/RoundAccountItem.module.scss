@@ -21,7 +21,7 @@
     margin-bottom: 6px;
     margin-top: 4px;
 
-    .status-wrapper {
+    .status__wrapper {
         height: 34px;
         min-width: 34px;
         display: inline-block;
@@ -68,7 +68,7 @@
     justify-content: center;
 }
 
-.loading-user-img {
+.user-img--loading {
     width: 62px;
     height: 62px;
     border-radius: 50%;
