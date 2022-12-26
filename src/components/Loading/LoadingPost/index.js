@@ -13,13 +13,14 @@ function LoadingPost() {
                     <div className={cx('time-post')} />
                 </div>
             </div>
-            <div className={cx('post-content')}>
-                <div className={cx('post-caption')}></div>
-                {/* <div className={cx('post-image')}></div> */}
-            </div>
+
             <div className={cx('post__interaction')}>
-                <div className={cx('post-reaction')}></div>
-                <div className={cx('post-comment')}></div>
+                <div className={cx('post-reaction__wrapper')}>
+                    <div className={cx('post-reaction')}></div>
+                </div>
+                <div className={cx('post-comment__wrapper')}>
+                    <div className={cx('post-comment')}></div>
+                </div>
             </div>
         </div>
     );

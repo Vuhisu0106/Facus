@@ -34,16 +34,15 @@ function LogIn() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-
         try {
             setLoading(true);
             await login(emailRef.current.value, passwordRef.current.value);
+            toast.success('Log in successfully');
             navigate('/');
         } catch (error) {
             toast.error('Failed to log in');
             console.log(error);
         }
-
         setLoading(false);
     }
 

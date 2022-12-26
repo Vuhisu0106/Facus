@@ -46,9 +46,14 @@
     }
 
     .close-modal-btn {
+        opacity: 0.5;
         top: 13px;
         right: 16px;
         position: absolute;
+
+        &:hover {
+            opacity: 0.8;
+        }
     }
 }
 
@@ -263,10 +268,6 @@ input[type='file'] {
             background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
             color: var(--white);
         }
-    }
-
-    .add-post__icon--loading {
-        //color: #fff;
     }
 }
 
@@ -489,7 +490,7 @@ input[type='file'] {
 }
 
 /////////////////////////////////////////////////////////Set Status Modal//////////////////////////////////////////////////////
-.set-status-wrapper {
+.set-status__wrapper {
     width: 100%;
     position: relative;
 
@@ -576,13 +577,13 @@ input[type='file'] {
     justify-content: space-between;
     align-items: center;
 
-    .set-status-btn,
+    .set-status__btn,
     .clear-status-btn {
         width: 48%;
         height: 32px;
         border-radius: 6px;
     }
-    .set-status-btn {
+    .set-status__btn {
         background-color: var(--primary);
         color: var(--white);
     }

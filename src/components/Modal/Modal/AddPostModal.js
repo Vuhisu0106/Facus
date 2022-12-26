@@ -11,6 +11,7 @@ import Button from '~/components/Button';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { useApp } from '~/context/AppContext';
 import { LoadingIcon } from '~/components/Icon';
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, editPostFunc }) {
@@ -51,6 +52,8 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
                 setLoading(false);
             }
         }, 500);
+
+        onCloseAddPostModal();
     };
 
     const handleEditPost = async () => {
@@ -110,7 +113,22 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
                             onChange={handleCaption}
                         ></textarea>
                         {addPhotoVisible && (
-                            <div className={cx('add-photo-container')}>
+                            <div
+                                className={cx('add-photo-container')}
+                                draggable="true"
+                                onDragOver={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }}
+                                onDragEnter={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }}
+                                onDrop={(e) => {
+                                    e.nativeEvent.preventDefault();
+                                    setImg(e.dataTransfer.files[0]);
+                                }}
+                            >
                                 {!img ? (
                                     <label htmlFor="photo-upload" className={cx('add-photo-wrapper')}>
                                         <CircleButton
@@ -175,6 +193,9 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
                                 <CircleButton
                                     className={cx('circle-btn-footer')}
                                     children={<FontAwesomeIcon icon={faVideo} />}
+                                    onClick={() => {
+                                        toast.error('Sorry, this feature is not ready');
+                                    }}
                                 />
                             </div>
                         </div>

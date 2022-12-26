@@ -1,3 +1,4 @@
+import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { where, collection, query, getDocs, orderBy, limit, startAfter } from 'firebase/firestore';
@@ -8,7 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlice';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { LoadingPost } from '~/components/Loading';
+import styles from './Home.module.scss';
 
+const cx = classNames.bind(styles);
 function PostList({ followingList }) {
     const dispatch = useDispatch();
     const post = useSelector((state) => state.postNcomment.posts);
@@ -113,10 +116,15 @@ function PostList({ followingList }) {
                                 />
                             ))}
                         </InfiniteScroll>
-                        {showEndOfPost && <h3>There are no more posts to show right now.</h3>}
+                        {showEndOfPost && (
+                            <h3 className={cx('post-list__h3')}>There are no more posts to show right now.</h3>
+                        )}
                     </>
                 ) : (
-                    <h4>You don't post anything and don't follow anyone.</h4>
+                    <div className={cx('post-list__no-post')}>
+                        <img src="images/status-feature.png" alt="" />
+                        <h3 className={cx('post-list__h3')}>You don't post anything and don't follow anyone.</h3>
+                    </div>
                 ))}
         </div>
     );

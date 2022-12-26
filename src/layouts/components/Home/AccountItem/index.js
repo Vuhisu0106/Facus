@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import { useNavigate } from 'react-router-dom';
 
 import styles from '~/layouts/components/Home/Home.module.scss';
 import { useAuth } from '~/context/AuthContext';
@@ -7,12 +6,13 @@ import { LoadingIcon } from '~/components/Icon';
 import { useState } from 'react';
 import { follow } from '~/utils/FollowUtils';
 import CircleAvatar from '~/components/CircleAvatar';
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
-function AccountItem({ uid, displayName, photoURL, follower, onClick }) {
+function AccountItem({ uid, displayName, photoURL, follower }) {
     const { currentUser } = useAuth();
-    let navigate = useNavigate();
+
     const [loading, setLoading] = useState(false);
 
     const handleFollow = async () => {
@@ -20,6 +20,7 @@ function AccountItem({ uid, displayName, photoURL, follower, onClick }) {
         try {
             await new Promise((resolve) => setTimeout(resolve, 3000));
             await follow(currentUser.uid, uid);
+            toast.success('Follow successfully');
             setLoading(false);
         } catch (error) {
             console.log(error);
@@ -29,12 +30,7 @@ function AccountItem({ uid, displayName, photoURL, follower, onClick }) {
 
     return (
         <div className={cx('account-item')}>
-            <div
-                className={cx('account-info')}
-                onClick={() => {
-                    navigate(`/user/${uid}`);
-                }}
-            >
+            <div className={cx('account-info')}>
                 <CircleAvatar
                     className={cx('avatar')}
                     userUid={uid}

@@ -25,6 +25,8 @@ import { addPostFunction } from '~/utils';
 import { useApp } from '~/context/AppContext';
 import { toast } from 'react-toastify';
 import { LoadingPost } from '~/components/Loading';
+import { LoadingIcon } from '~/components/Icon';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
@@ -39,6 +41,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
     const [saveBioBtnDisable, setSaveBioBtnDisable] = useState(true);
 
     const [loading, setLoading] = useState(false);
+    const [bioLoading, setBioLoading] = useState(false);
 
     //Add post modal
     const [openModal, setOpenModal] = useState(false);
@@ -83,14 +86,21 @@ function Posts({ selectedUser, isCurrentUser = false }) {
     };
 
     const handleSaveBio = async () => {
-        await updateDocument('users', currentUser.uid, {
-            bio: bioInput,
-        });
-        dispatch(
-            setBio({
+        setBioLoading(true);
+        try {
+            await updateDocument('users', currentUser.uid, {
                 bio: bioInput,
-            }),
-        );
+            });
+            dispatch(
+                setBio({
+                    bio: bioInput,
+                }),
+            );
+            setBioLoading(false);
+        } catch (error) {
+            toast.error('Fail to set bio');
+            setBioLoading(false);
+        }
         setEditBio(false);
     };
 
@@ -110,16 +120,14 @@ function Posts({ selectedUser, isCurrentUser = false }) {
             like: [],
             comment: [],
         };
+
         await addPostFunction(data, img);
-        setOpenModal(false);
     };
 
     const postListMemo = useMemo(() => {
         return (
             <>
-                {loading ? (
-                    <LoadingPost />
-                ) : postList.length > 0 ? (
+                {postList.length > 0 ? (
                     postList
                         ?.slice()
                         .sort((a, b) => b.date - a.date)
@@ -127,14 +135,14 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                             <PostLayout
                                 key={post.postId}
                                 postId={post.postId}
-                                userId={post?.poster?.uid}
-                                userName={post?.poster?.displayName}
-                                userAvt={post?.poster?.photoURL}
-                                timeStamp={post?.date && moment(post?.date.toDate()).fromNow()}
-                                postImg={post?.img}
-                                postCaption={post?.caption}
-                                like={post?.like}
-                                comment={post?.comment?.length}
+                                userId={post.poster.uid}
+                                userName={post.poster.displayName}
+                                userAvt={post.poster?.photoURL}
+                                timeStamp={post.date && moment(post.date.toDate()).fromNow()}
+                                postImg={post.img}
+                                postCaption={post.caption}
+                                like={post.like}
+                                comment={post.comment.length}
                             />
                         ))
                 ) : (
@@ -155,7 +163,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                 />
             )}
             <GridRow>
-                <GridColumn l={4} l_o={1.5} m={5} m_o={0.5} s={11} s_o={0.5} className={cx('left-content')}>
+                <GridColumn l={4} l_o={1.5} m={5} m_o={0.5} s={11} s_o={0.5}>
                     <WrapperModal className={cx('intro')}>
                         <h2>Intro</h2>
 
@@ -192,12 +200,10 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                         }}
                                     />
                                     <Button
-                                        disabled={saveBioBtnDisable}
+                                        disabled={saveBioBtnDisable || bioLoading}
                                         className={cx('save-bio-btn')}
-                                        children={'Save'}
-                                        onClick={() => {
-                                            handleSaveBio();
-                                        }}
+                                        children={bioLoading ? <LoadingIcon type={'button'} /> : 'Save'}
+                                        onClick={handleSaveBio}
                                     />
                                 </div>
                             </div>
@@ -214,7 +220,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     .sort((a, b) => b.date - a.date)
                                     .map((post) => (
                                         <div key={post.postId} className={cx('image-wrapper')}>
-                                            <a href={`/post/${post.postId}`}>
+                                            <Link to={'/post/' + post.postId}>
                                                 <img
                                                     src={
                                                         typeof post?.img === 'object'
@@ -223,7 +229,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                                     }
                                                     alt={post.postId}
                                                 />
-                                            </a>
+                                            </Link>
                                         </div>
                                     ))}
                             </div>
@@ -236,6 +242,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                             <div className={cx('add-post-top')}>
                                 <CircleAvatar
                                     className={cx('add-post-user-avt')}
+                                    userUid={currentUserInfo.uid}
                                     userName={currentUserInfo.displayName}
                                     avatar={currentUserInfo.photoURL}
                                     diameter="40px"

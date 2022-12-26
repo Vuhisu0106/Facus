@@ -86,7 +86,6 @@
     height: 100%;
     display: flex;
     align-items: center;
-    cursor: pointer;
 }
 
 .avatar {
@@ -138,4 +137,24 @@
     color: var(--primary);
     font-weight: var(--acc-item-font-weight);
     cursor: pointer;
+}
+
+/////////////////////////Post list//////////////////////////////
+.post-list__h3 {
+    text-align: center;
+    color: var(--post-interact-border-color);
+}
+
+.post-list__no-post {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    img {
+        width: 60%;
+        opacity: 0.3;
+    }
 }

@@ -29,18 +29,11 @@ function AuthProvider({ children }) {
     function login(email, password) {
         setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence)
             .then(() => {
-                // Existing and future Auth states are now persisted in the current
-                // session only. Closing the window would clear any existing state even
-                // if a user forgets to sign out.
-                // ...
-                // New sign-in will be persisted with session persistence.
                 return signInWithEmailAndPassword(auth, email, password);
             })
             .catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(error);
+                console.log(errorMessage);
             });
         return signInWithEmailAndPassword(auth, email, password);
     }
@@ -58,7 +51,6 @@ function AuthProvider({ children }) {
         const unsubcriber = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
             setLoading(false);
-            console.log('useEffect authcontext');
         });
 
         return unsubcriber;

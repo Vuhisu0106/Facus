@@ -181,17 +181,19 @@
 }
 
 //Following
-.following,
-.follower {
+.following__wrapper,
+.follower__wrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    min-height: 205px;
     h2 {
         width: 100%;
         margin-bottom: 16px;
         color: var(--right-content-h1-color);
     }
-    .no-follow {
+    .follower__no-follow,
+    .following__no-follow {
         width: 100%;
         display: flex;
         justify-content: center;
@@ -202,7 +204,8 @@
     }
 }
 
-.account {
+.following__accounts,
+.follower__accounts {
     flex-basis: 49.5%;
     display: flex;
     flex-direction: row;
@@ -215,7 +218,8 @@
     border: var(--profile-border);
 }
 
-.account-avt {
+.following__account--avt,
+.follower__account--avt {
     width: 80px;
     height: 80px;
     border-radius: 8px;
@@ -223,7 +227,8 @@
     object-fit: cover;
     cursor: pointer;
 }
-.account-info {
+.following__account--info,
+.follower__account--info {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -231,20 +236,23 @@
     flex: 1;
 }
 
-.account-name {
+.following__account--name,
+.follower__account--name {
     color: var(--acc-item-color);
     font-size: 17px;
     font-weight: 600;
 }
 
-.account-bio {
+.following__account--bio,
+.follower__account--bio {
     color: var(--sub-acc-item-color);
     font-size: 12px;
     font-weight: 400;
 }
 
 @media (max-width: 740px) {
-    .account {
+    .following__accounts,
+    .follower__accounts {
         flex-basis: 100%;
     }
 }

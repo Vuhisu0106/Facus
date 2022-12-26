@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { db } from '~/firebase/config';
 import AccountItem from '~/components/AccountItem';
@@ -78,32 +78,26 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
                 placement={placement}
                 visible={showResult && searchValue}
                 render={(attrs) => (
-                    <Grid type={'wide'} className={cx('account-search-result')} tabIndex="-1" {...attrs}>
-                        <GridRow>
-                            <GridColumn l={12} m={7} m_o={2} s={8} s_o={2}>
-                                <PopperWrapper className={cx('account-search-wrapper')}>
-                                    {loading === false && searchResult.length === 0 ? (
-                                        <span>User not found</span>
-                                    ) : (
-                                        searchResult.map((result) => (
-                                            <a key={result.uid} href={`/user/${result.uid}`}>
-                                                <AccountItem
-                                                    key={result.uid}
-                                                    data={result}
-                                                    onClick={() => {
-                                                        handleSelect(result);
-                                                    }}
-                                                    isFollowing={
-                                                        currentUserInfo?.following.indexOf(result.uid) !== -1 && true
-                                                    }
-                                                />
-                                            </a>
-                                        ))
-                                    )}
-                                </PopperWrapper>
-                            </GridColumn>
-                        </GridRow>
-                    </Grid>
+                    <div className={cx('account-search-result')} tabIndex="-1" {...attrs}>
+                        <PopperWrapper className={cx('account-search-wrapper')}>
+                            {loading === false && searchResult.length === 0 ? (
+                                <span>User not found</span>
+                            ) : (
+                                searchResult.map((result) => (
+                                    <Link key={result.uid} to={`/user/${result.uid}`}>
+                                        <AccountItem
+                                            key={result.uid}
+                                            data={result}
+                                            onClick={() => {
+                                                handleSelect(result);
+                                            }}
+                                            isFollowing={currentUserInfo?.following.indexOf(result.uid) !== -1 && true}
+                                        />
+                                    </Link>
+                                ))
+                            )}
+                        </PopperWrapper>
+                    </div>
                 )}
                 onClickOutside={handleHideResult}
             >

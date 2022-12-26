@@ -19,6 +19,13 @@
     }
 }
 
+.account-search-wrapper::-webkit-scrollbar-thumb,
+.chat-search-wrapper::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: var(--chat-sending-time-color);
+}
+
 .account-search-result {
     width: 527px;
 }

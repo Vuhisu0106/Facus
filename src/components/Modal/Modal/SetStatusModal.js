@@ -14,6 +14,8 @@ import { useAuth } from '~/context/AuthContext';
 import { deleteField } from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { setStatus } from '~/features/Profile/ProfileSlice';
+import { toast } from 'react-toastify';
+import { LoadingIcon } from '~/components/Icon';
 
 const cx = classNames.bind(styles);
 function SetStatusModal({ onClose }) {
@@ -28,6 +30,7 @@ function SetStatusModal({ onClose }) {
     const [text, setText] = useState(status.text || '');
     const [showPicker, setShowPicker] = useState(false);
     const [statusBtnDisable, setStatusBtnDisable] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const onEmojiClick = (e) => {
         setShowPicker(false);
@@ -35,10 +38,14 @@ function SetStatusModal({ onClose }) {
     };
 
     const clearStatus = async () => {
-        await updateDocument('users', currentUser.uid, {
-            status: deleteField(),
-        });
-        dispatch(setStatus({ status: { icon: null, text: '' } }));
+        try {
+            await updateDocument('users', currentUser.uid, {
+                status: deleteField(),
+            });
+            dispatch(setStatus({ status: { icon: null, text: '' } }));
+        } catch (error) {
+            toast.error('Fail to clear status');
+        }
         setSelectEmoji('');
         setText('');
         setShowPicker(false);
@@ -65,13 +72,20 @@ function SetStatusModal({ onClose }) {
     }, [selectEmoji, text]);
 
     const handleSetStatus = async () => {
-        await updateDocument('users', currentUser.uid, {
-            status: {
-                icon: selectEmoji,
-                text,
-            },
-        });
-        dispatch(setStatus({ status: { icon: selectEmoji, text: text } }));
+        setLoading(true);
+        try {
+            await updateDocument('users', currentUser.uid, {
+                status: {
+                    icon: selectEmoji,
+                    text,
+                },
+            });
+            dispatch(setStatus({ status: { icon: selectEmoji, text: text } }));
+            setLoading(false);
+        } catch (error) {
+            toast.error('Fail to clear status');
+            setLoading(false);
+        }
         onClose();
     };
 
@@ -86,7 +100,7 @@ function SetStatusModal({ onClose }) {
             s_o={1}
             onClose={onClose}
             children={
-                <div className={cx('set-status-wrapper')}>
+                <div className={cx('set-status__wrapper')}>
                     <div className={cx('status-content')}>
                         <Input
                             value={text}
@@ -131,9 +145,9 @@ function SetStatusModal({ onClose }) {
                     </div>
                     <div className={cx('status-footer')}>
                         <Button
-                            disabled={statusBtnDisable}
-                            className={cx('set-status-btn')}
-                            children={'Set status'}
+                            disabled={statusBtnDisable || loading}
+                            className={cx('set-status__btn')}
+                            children={loading ? <LoadingIcon type={'button'} /> : 'Set status'}
                             onClick={handleSetStatus}
                         />
                         <Button

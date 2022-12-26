@@ -18,7 +18,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '~/firebase/config';
 
 const cx = classNames.bind(styles);
-function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
+function CommentItem({ className, data, editComment, toggleLikeComment, deleteComment, isReplyPress }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditComment, setIsEditComment] = useState(false);
 
@@ -28,6 +28,8 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
     const [cancelEdit, setCancelEdit] = useState(false);
 
     const [commenterInfo, setCommenterInfo] = useState({});
+
+    const [isReplyCmtVisible, setIsReplyCmtVisible] = useState(false);
 
     const { currentUser } = useAuth();
     const dispatch = useDispatch();
@@ -179,98 +181,142 @@ function CommentItem({ data, editComment, toggleLikeComment, deleteComment }) {
         );
     };
 
+    const classes = cx('wrapper', { [className]: className });
+
     return (
-        <div className={cx('wrapper')} key={data.commentId}>
-            <CircleAvatar
-                userUid={commenterInfo.uid}
-                userName={commenterInfo.displayName}
-                avatar={commenterInfo.photoURL}
-                diameter="32px"
-            />
+        <div className={classes} key={data.commentId}>
+            <div className={cx('comment__avt')}>
+                <CircleAvatar
+                    userUid={commenterInfo.uid}
+                    userName={commenterInfo.displayName}
+                    avatar={commenterInfo.photoURL}
+                    diameter="32px"
+                />
+            </div>
             {isEditComment ? (
                 <div className={cx('edit-cmt__content')}>{editCommentJSX()}</div>
             ) : (
-                <div className={cx('comment__content--wrapper')}>
-                    <div className={cx('comment__content--text-wrapper')}>
-                        <div
-                            className={cx(
-                                'comment__content--text',
-                                !data?.content && data?.img ? 'no-text-wrapper' : '',
-                            )}
-                        >
-                            <div className={cx('comment__user-name')}>{commenterInfo.displayName}</div>
-                            <div className={cx('comment__text--content')}>{data?.content}</div>
+                <div className={cx('comment__wrapper')}>
+                    <div className={cx('comment__content--wrapper')}>
+                        <div className={cx('comment__content--text-wrapper')}>
+                            <div
+                                className={cx(
+                                    'comment__content--text',
+                                    !data?.content && data?.img ? 'no-text-wrapper' : '',
+                                )}
+                            >
+                                <div className={cx('comment__user-name')}>{commenterInfo.displayName}</div>
+                                <div className={cx('comment__text--content')}>{data?.content}</div>
 
-                            {/* Use data from rendering in this component (not from props of parents component) must check if they exist or not */}
-                            {!data.img && data?.like?.length > 0 && (
-                                <div className={cx('comment__reaction')}>
-                                    <FontAwesomeIcon className={cx('comment__reaction--icon')} icon={faHeartSolid} />
-                                    {data && data.like.length > 1 && (
-                                        <div className={cx('comment__reaction--count')}>{data && data.like.length}</div>
-                                    )}
-                                </div>
+                                {/* Use data from rendering in this component (not from props of parents component) must check if they exist or not */}
+                                {!data.img && data?.like?.length > 0 && (
+                                    <div className={cx('comment__reaction')}>
+                                        <FontAwesomeIcon
+                                            className={cx('comment__reaction--icon')}
+                                            icon={faHeartSolid}
+                                        />
+                                        {data && data.like.length > 1 && (
+                                            <div className={cx('comment__reaction--count')}>
+                                                {data && data.like.length}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {data.commenter.uid === currentUser.uid && (
+                                <Menu
+                                    items={MENU_COMMENT}
+                                    placement={'bottom-start'}
+                                    isMenuVisible={isModalVisible}
+                                    onClickOutside={() => {
+                                        setIsModalVisible(false);
+                                    }}
+                                >
+                                    <div
+                                        className={cx('comment-setting')}
+                                        onClick={() => {
+                                            setIsModalVisible(!isModalVisible);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon icon={faEllipsis} />
+                                    </div>
+                                </Menu>
                             )}
                         </div>
 
-                        {data.commenter.uid === currentUser.uid && (
-                            <Menu
-                                items={MENU_COMMENT}
-                                placement={'bottom-start'}
-                                isMenuVisible={isModalVisible}
-                                onClickOutside={() => {
-                                    setIsModalVisible(false);
-                                }}
-                            >
-                                <div
-                                    className={cx('comment-setting')}
+                        {data?.img && (
+                            <div className={cx('comment__content--img')}>
+                                <img
+                                    className={cx('comment__image')}
+                                    src={typeof data?.img === 'object' ? URL.createObjectURL(data?.img) : data?.img}
+                                    alt=""
+                                />
+                                {data.like && data.like.length > 0 && (
+                                    <div className={cx('comment__img--reaction')}>
+                                        <FontAwesomeIcon
+                                            className={cx('comment__reaction--icon')}
+                                            icon={faHeartSolid}
+                                        />
+                                        {data?.like?.length > 1 && (
+                                            <div className={cx('comment__reaction--count')}>{data?.like?.length}</div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {
+                            <div className={cx('comment__interact')}>
+                                <button
+                                    className={cx('comment__like-btn')}
+                                    style={{
+                                        color: data.like && data.like.indexOf(currentUser.uid) !== -1 && '#fe2c55',
+                                    }}
+                                    onClick={() => handleLikeComment(data.commentId)}
+                                >
+                                    Like
+                                </button>
+                                <button
+                                    className={cx('comment__reply-btn')}
+                                    style={{
+                                        color: isReplyCmtVisible && '#fe2c55',
+                                    }}
                                     onClick={() => {
-                                        setIsModalVisible(!isModalVisible);
+                                        setIsReplyCmtVisible(!isReplyCmtVisible);
                                     }}
                                 >
-                                    <FontAwesomeIcon icon={faEllipsis} />
-                                </div>
-                            </Menu>
-                        )}
+                                    Reply
+                                </button>
+                                <span>{data.createdAt && moment(data.createdAt).fromNow()}</span>
+                            </div>
+                        }
+                        {isReplyCmtVisible && <div className={cx('reply-comment__border')}></div>}
                     </div>
+                    {/* Reply commment */}
 
-                    {data?.img && (
-                        <div className={cx('comment__content--img')}>
-                            <img
-                                className={cx('comment__image')}
-                                src={typeof data?.img === 'object' ? URL.createObjectURL(data?.img) : data?.img}
-                                alt=""
-                            />
-                            {data.like && data.like.length > 0 && (
-                                <div className={cx('comment__img--reaction')}>
-                                    <FontAwesomeIcon className={cx('comment__reaction--icon')} icon={faHeartSolid} />
-                                    {data?.like?.length > 1 && (
-                                        <div className={cx('comment__reaction--count')}>{data?.like?.length}</div>
-                                    )}
+                    {isReplyCmtVisible && (
+                        <div className={cx('reply-comment')}>
+                            <div className={cx('reply-comment__avt')}>
+                                <CircleAvatar
+                                    userUid={commenterInfo.uid}
+                                    userName={commenterInfo.displayName}
+                                    avatar={commenterInfo.photoURL}
+                                    diameter="32px"
+                                />
+                            </div>
+                            <div className={cx('reply-comment__content--text-wrapper')}>
+                                <div className={cx('comment__content--text')}>
+                                    <div className={cx('comment__user-name')}>Vũ Hiếu</div>
+                                    <div className={cx('comment__text--content')}>
+                                        Sorry, this feature is not ready :v
+                                    </div>
                                 </div>
-                            )}
+                            </div>
                         </div>
                     )}
 
-                    <div className={cx('comment__interact')}>
-                        <button
-                            className={cx('comment__like-btn')}
-                            style={{
-                                color: data.like && data.like.indexOf(currentUser.uid) !== -1 && '#fe2c55',
-                            }}
-                            onClick={() => handleLikeComment(data.commentId)}
-                        >
-                            Like
-                        </button>
-                        <button
-                            className={cx('comment__reply-btn')}
-                            onClick={() => {
-                                console.log(data);
-                            }}
-                        >
-                            Reply
-                        </button>
-                        <span>{data.createdAt && moment(data.createdAt).fromNow()}</span>
-                    </div>
+                    {/* Reply comment */}
                 </div>
             )}
         </div>

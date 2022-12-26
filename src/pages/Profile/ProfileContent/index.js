@@ -24,110 +24,8 @@ import { selectChatFunction } from '~/utils';
 import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
-const NAV_LIST = ['Posts', 'Following', 'Follower'];
-function Profile() {
-    const [selectedUser, setSelectedUser] = useState('');
-    const [type, setType] = useState('Posts');
-    const [profileLayout, setProfileLayout] = useState('Posts');
-    const [statusModalVisible, setStatusModalVisible] = useState(false);
-    const [profileModalVisible, setProfileModalVisible] = useState(false);
-    const [followLoading, setFollowingLoading] = useState(false);
-    const [loading, setLoading] = useState(false);
 
-    const { currentUser } = useAuth();
-    const { currentUserInfo } = useApp();
-
-    const navigate = useNavigate();
-    let params = useParams();
-    const dispatch = useDispatch();
-
-    const [hovered, setHovered] = useState(false);
-    const [avatarLoading, setAvatarLoading] = useState(false);
-    const [coverPhotoLoading, setCoverPhotoLoading] = useState(false);
-
-    const postsMemo = memo(() => {
-        <Posts selectedUser={selectedUser} isCurrentUser={params.id === currentUser.uid ? true : false} />;
-    }, [selectedUser]);
-
-    const main = () => {
-        if (profileLayout === 'Following') {
-            return <Following list={selectedUser.following} />;
-        }
-        if (profileLayout === 'Follower') {
-            return <Follower list={selectedUser.follower} />;
-        }
-        return <Posts selectedUser={selectedUser} isCurrentUser={params.id === currentUser.uid ? true : false} />;
-    };
-
-    useEffect(() => {
-        setProfileLayout(type);
-    }, [type]);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    useEffect(() => {
-        setLoading(true);
-
-        const getSelectedUser = () => {
-            setType('Posts');
-            const unsub = onSnapshot(doc(db, 'users', params.id), (doc) => {
-                setSelectedUser(doc.data());
-
-                dispatch(
-                    setProfileInfo({
-                        status: {
-                            icon: doc.data()?.status?.icon,
-                            text: doc.data()?.status?.text,
-                        },
-                        bio: doc.data()?.bio,
-                        photoURL: doc.data()?.photoURL,
-                        coverPhotoURL: doc.data()?.coverPhotoURL,
-                    }),
-                );
-                setLoading(false);
-            });
-            return () => {
-                unsub();
-            };
-        };
-        params.id && getSelectedUser();
-    }, [params.id]);
-
-    console.log(selectedUser);
-
-    const handleFollow = async () => {
-        try {
-            //setSelectedUser((prev) => ({ ...prev, follower: prev.follower.push(currentUserInfo.uid) }));
-
-            setFollowingLoading(true);
-            await follow(currentUser.uid, selectedUser.uid);
-            toast.success('Follow successfully');
-        } catch (error) {
-            console.log(error);
-        }
-        setFollowingLoading(false);
-    };
-
-    const handleUnfollow = async () => {
-        try {
-            setFollowingLoading(true);
-            await unfollow(currentUser.uid, selectedUser.uid);
-            toast.success('Unfollow successfully');
-        } catch (error) {
-            console.log(error);
-        }
-        setFollowingLoading(false);
-    };
-
-    const handleMessage = async () => {
-        await selectChatFunction(currentUser, selectedUser);
-        navigate('/message');
-    };
-
-    const ProfileContent = useMemo(() => {});
-
+function ProfileContent() {
     return (
         <>
             {followLoading || loading ? (
@@ -357,4 +255,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export default ProfileContent;

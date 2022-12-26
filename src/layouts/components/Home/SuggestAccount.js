@@ -18,7 +18,6 @@ function SuggestAccount({ label, followingList }) {
     useEffect(() => {
         setLoading(true);
         const getSuggestFollowList = async () => {
-            //const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
             const q = query(collection(db, 'users'), where('uid', 'not-in', followingList), limit(6));
             try {
                 const querySnapshot = await getDocs(q);

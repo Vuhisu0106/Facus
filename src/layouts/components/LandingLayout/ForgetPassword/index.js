@@ -10,7 +10,6 @@ function ForgetPassword() {
 
     const sendPassword = async () => {
         if (email) {
-            console.log('send');
             await forgotPassword(email);
         }
         setEmail('');

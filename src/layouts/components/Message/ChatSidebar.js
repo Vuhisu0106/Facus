@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect, useMemo } from 'react';
-import { onSnapshot, doc, query, collection, where, orderBy } from 'firebase/firestore';
+import { onSnapshot, doc } from 'firebase/firestore';
 import moment from 'moment';
 
 import { db } from '~/firebase/config';
@@ -60,44 +60,9 @@ function ChatSidebar() {
     };
 
     useEffect(() => {
-        console.log('fsegas');
         setActiveMessItem(chat.user.uid);
         dispatch(setAddChatState({ isAddChatVisible: false }));
     }, [chat.user.uid]);
-
-    const postListMemo = useMemo(() => {
-        return (
-            <>
-                {chats.length > 0 ? (
-                    chats
-                        ?.slice()
-                        .sort((a, b) => b.date - a.date)
-                        .map((chat) => (
-                            <MessageItem
-                                key={chat?.userChatId}
-                                active={activeMessItem === chat?.userInfo.uid && true}
-                                userUid={chat?.userInfo.uid}
-                                closestMess={
-                                    !chat?.lastMessage
-                                        ? ''
-                                        : (chat?.lastMessage?.senderId === currentUser.uid ? 'You: ' : '') +
-                                          chat?.lastMessage?.text
-                                }
-                                unread={chat?.receiverHasRead === false && true}
-                                noMessages={!chat?.lastMessage && true}
-                                lastMessageIsImage={chat?.lastMessage && !chat?.lastMessage?.text && true}
-                                closestMessTime={chat?.date && moment(chat?.date.toDate()).fromNow()}
-                                onClick={() => {
-                                    handleSelect(chat);
-                                }}
-                            />
-                        ))
-                ) : (
-                    <h1>No message</h1>
-                )}
-            </>
-        );
-    }, [chats]);
 
     return (
         <div className={cx('sidebar-wrapper')}>

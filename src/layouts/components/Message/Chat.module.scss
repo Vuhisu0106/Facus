@@ -7,6 +7,12 @@
     overflow-y: auto;
 }
 
+.sidebar-wrapper::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: var(--chat-sending-time-color);
+}
+
 .sidebar-header {
     position: sticky;
     background-color: var(--background-color);
@@ -45,7 +51,7 @@
     }
 }
 
-//Chat
+//Chat layout
 .chat-wrapper {
     background-color: var(--background-color);
     grid-column: span 3 / span 3;
@@ -94,6 +100,12 @@
     padding: 20px 18px 0 18px;
     overflow-y: auto;
     max-height: 100%;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: var(--chat-sending-time-color);
 }
 
 .message {

@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { setProfilePhoto } from '~/utils';
 import { toast } from 'react-toastify';
+import { LoadingIcon } from '~/components/Icon';
 
 const cx = classNames.bind(styles);
 function EditProfileModal({ onClose }) {
@@ -169,8 +170,9 @@ function EditProfileModal({ onClose }) {
                     </div>
                     <div className={cx('edit-profile-footer')}>
                         <Button
-                            children={loading ? 'Loading...' : 'Save'}
+                            children={loading ? <LoadingIcon type={'button'} /> : 'Save'}
                             className={cx('save-btn')}
+                            disabled={loading}
                             onClick={() => {
                                 handleSavePhoto();
                             }}

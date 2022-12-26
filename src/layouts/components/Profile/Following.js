@@ -42,7 +42,7 @@ function Following({ list }) {
         <Grid type={'profile'}>
             <GridRow>
                 <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={12}>
-                    <WrapperModal className={cx('following')}>
+                    <WrapperModal className={cx('following__wrapper')}>
                         <h2>Following</h2>
                         {loading ? (
                             <>
@@ -54,23 +54,25 @@ function Following({ list }) {
                             </>
                         ) : list?.length > 0 ? (
                             followingList?.map((following) => (
-                                <div key={following.uid} className={cx('account')}>
+                                <div key={following.uid} className={cx('following__accounts')}>
                                     <img
-                                        className={cx('account-avt')}
+                                        className={cx('following__account--avt')}
                                         alt={following.displayName}
                                         src={following.photoURL}
                                         onClick={() => {
                                             navigate(`/user/${following.uid}`);
                                         }}
                                     />
-                                    <div className={cx('account-info')}>
-                                        <h1 className={cx('account-name')}>{following.displayName}</h1>
-                                        <span className={cx('account-bio')}>{following.bio || 'Hello World'}</span>
+                                    <div className={cx('following__account--info')}>
+                                        <h1 className={cx('following__account--name')}>{following.displayName}</h1>
+                                        <span className={cx('following__account--bio')}>
+                                            {following.bio || 'Hello World'}
+                                        </span>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <div className={cx('no-follow')}>
+                            <div className={cx('following__no-follow')}>
                                 <h3>This user doesn't follow anyone</h3>
                             </div>
                         )}

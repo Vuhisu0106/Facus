@@ -41,7 +41,7 @@ function Follower({ list }) {
         <Grid type={'profile'}>
             <GridRow>
                 <GridColumn l={11} l_o={0.5} m={11} m_o={0.5} s={12}>
-                    <WrapperModal className={cx('follower')}>
+                    <WrapperModal className={cx('follower__wrapper')}>
                         <h2>Follower</h2>
                         {loading ? (
                             <>
@@ -53,23 +53,23 @@ function Follower({ list }) {
                             </>
                         ) : list?.length > 0 ? (
                             followerList?.map((follower) => (
-                                <div key={follower.uid} className={cx('account')}>
+                                <div key={follower.uid} className={cx('follower__accounts')}>
                                     <img
-                                        className={cx('account-avt')}
+                                        className={cx('follower__account--avt')}
                                         alt={follower.displayName}
                                         src={follower.photoURL}
                                         onClick={() => {
                                             navigate(`/user/${follower.uid}`);
                                         }}
                                     />
-                                    <div className={cx('account-info')}>
-                                        <h1 className={cx('account-name')}>{follower.displayName}</h1>
-                                        <span className={cx('account-bio')}>Hello World</span>
+                                    <div className={cx('follower__account--info')}>
+                                        <h1 className={cx('follower__account--name')}>{follower.displayName}</h1>
+                                        <span className={cx('follower__account--bio')}>Hello World</span>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <div className={cx('no-follow')}>
+                            <div className={cx('follower__no-follow')}>
                                 <h3>This user has no follower</h3>
                             </div>
                         )}

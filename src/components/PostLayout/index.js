@@ -28,7 +28,8 @@ import {
 import CommentInput from '../Input/CommentInput';
 import { db } from '~/firebase/config';
 import { useApp } from '~/context/AppContext';
-import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 function PostLayout({
@@ -85,6 +86,7 @@ function PostLayout({
 
     const handleEditPost = async (caption, img, isImgAdded, isImgChanged, isImgDeleted) => {
         await editPostFunction({ currentUser, postId, caption, img, isImgAdded, isImgChanged, isImgDeleted });
+        toast.success('Edit post successfully');
         setOpenModal(false);
     };
 
@@ -175,9 +177,15 @@ function PostLayout({
         {
             icon: <FontAwesomeIcon icon={faTrashCan} />,
             title: 'Delete post',
-            onClick: () => {
+            onClick: async () => {
                 setPopperVisible(false);
-                deletePostFunction(postId, currentUser.uid);
+                try {
+                    await deletePostFunction(postId, currentUser.uid);
+                    toast.success('Delete post successfully');
+                } catch (error) {
+                    console.log(error);
+                    toast.success('Fail to delete post');
+                }
             },
         },
     ];
@@ -298,7 +306,7 @@ function PostLayout({
                     ? postImg && (
                           <div className={cx('post__content--img')}>
                               {imgLoading ? null : <div className={cx('loading-post-img')} />}
-                              <a href={`/post/${postId}`}>
+                              <Link to={`/post/${postId}`}>
                                   <img
                                       alt={posterInfo.displayName}
                                       src={typeof postImg === 'object' ? URL.createObjectURL(postImg) : postImg}
@@ -307,7 +315,7 @@ function PostLayout({
                                           setImgLoading(true);
                                       }}
                                   />
-                              </a>
+                              </Link>
                           </div>
                       )
                     : ''}

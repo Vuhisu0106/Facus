@@ -20,21 +20,21 @@ function LoadingProfile() {
                                 <div className={cx('profile__main--content')}>
                                     <div className={cx('profile__main--right')}>
                                         <div className={cx('avatar')}>
-                                            <div className={cx('profile-avt-wrapper')}>
+                                            <div className={cx('profile-avt__wrapper')}>
                                                 <div className={cx('profile-avt')} />
                                             </div>
                                         </div>
-                                        <div className={cx('profile-name-follow')}>
-                                            <div className={cx('profile-name')}></div>
-                                            <div className={cx('profile-follow-info')}>
-                                                <div className={cx('profile-following')}></div>
+                                        <div className={cx('profile__name-n-follow')}>
+                                            <div className={cx('profile__name')}></div>
+                                            <div className={cx('profile__follow-info')}>
+                                                <div className={cx('profile__following')}></div>
                                                 <FontAwesomeIcon className={cx('separate-follow')} icon={faCircle} />
-                                                <div className={cx('profile-follower')}></div>
+                                                <div className={cx('profile__follower')}></div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className={cx('profile__main-left')}>
+                                    <div className={cx('profile__main--left')}>
                                         <div className={cx('edit-account-btn')}></div>
                                         <div className={cx('edit-profile-btn')}></div>
                                     </div>

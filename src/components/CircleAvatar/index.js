@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './CircleAvatar.module.scss';
 
@@ -14,18 +14,20 @@ function CircleAvatar({ className, userUid, userName, avatar, diameter }) {
     return (
         <>
             {loading ? null : <div className={cx('user-avt--loading')} style={{ height: diameter, width: diameter }} />}
-            <img
-                className={classes}
-                alt={userName}
-                src={avatar}
-                style={{ display: loading ? 'block' : 'none', height: diameter, width: diameter }}
-                onClick={() => {
-                    navigate(`/user/${userUid}`);
-                }}
-                onLoad={() => {
-                    setLoading(true);
-                }}
-            />
+            <Link to={'/user/' + userUid}>
+                <img
+                    className={classes}
+                    alt={userName}
+                    src={avatar}
+                    style={{ display: loading ? 'block' : 'none', height: diameter, width: diameter }}
+                    // onClick={() => {
+                    //     navigate(`/user/${userUid}`);
+                    // }}
+                    onLoad={() => {
+                        setLoading(true);
+                    }}
+                />
+            </Link>
         </>
     );
 }
