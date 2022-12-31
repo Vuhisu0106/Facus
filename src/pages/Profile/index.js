@@ -45,9 +45,9 @@ function Profile() {
     const [avatarLoading, setAvatarLoading] = useState(false);
     const [coverPhotoLoading, setCoverPhotoLoading] = useState(false);
 
-    const postsMemo = memo(() => {
-        <Posts selectedUser={selectedUser} isCurrentUser={params.id === currentUser.uid ? true : false} />;
-    }, [selectedUser]);
+    // const postsMemo = memo(() => {
+    //     <Posts selectedUser={selectedUser} isCurrentUser={params.id === currentUser.uid ? true : false} />;
+    // }, [selectedUser]);
 
     const main = () => {
         if (profileLayout === 'Following') {
@@ -94,8 +94,6 @@ function Profile() {
         };
         params.id && getSelectedUser();
     }, [params.id]);
-
-    console.log(selectedUser);
 
     const handleFollow = async () => {
         try {

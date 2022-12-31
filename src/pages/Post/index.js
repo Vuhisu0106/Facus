@@ -15,11 +15,11 @@ const cx = classNames.bind(styles);
 function Post() {
     let params = useParams();
     const dispatch = useDispatch();
-    const post = useSelector((state) => state.postNcomment.posts[0]);
-    const [loading, setLoading] = useState(false);
+    const post = useSelector((state) => {
+        return state.postNcomment.posts.find((post) => post.postId === params.id);
+    });
 
     useEffect(() => {
-        setLoading(true);
         const getPost = async () => {
             const q = query(collection(db, 'post'), where('postId', '==', params.id));
             try {
@@ -30,10 +30,8 @@ function Post() {
                     posts.push({ ...doc.data() });
                 });
                 dispatch(setPost([...posts]));
-                setLoading(false);
             } catch (err) {
                 console.log(err);
-                setLoading(false);
             }
         };
 

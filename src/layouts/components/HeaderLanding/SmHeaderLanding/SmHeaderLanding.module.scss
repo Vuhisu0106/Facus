@@ -2,16 +2,13 @@
     height: 70px;
     width: 100%;
     padding: 13px 30px;
-    background-color: transparent;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    //box-shadow: rgb(0 0 0 / 8%) 0px 2px 12px;
-    z-index: 1;
     border-bottom: #bd34fe;
-    background-color: rgb(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    //background-color: rgb(255, 255, 255, 0.1);
+    //backdrop-filter: blur(10px);
     z-index: 10;
 }
 
@@ -52,54 +49,17 @@
         height: 100%;
         font-size: 20px;
         background-color: transparent;
-        border: none;
-        outline: none;
-        color: #000;
+        color: #fff;
         cursor: pointer;
     }
 }
 
-.theme-btn {
-    height: 30px;
-    width: 60px;
-    padding: 2px;
-    border-radius: 50px;
-    background-color: #fff;
-    border: 2px solid var(--light-text-color);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-
-    .theme-btn-inner {
-        position: relative;
-        height: 24px;
-        width: 24px;
-        background-color: var(--primary);
-        border-radius: 50%;
-        transition: all 0.6s;
-    }
-
-    .theme-btn-inner::before {
-        width: 100%;
-        height: 100%;
-        content: ' ';
-        position: absolute;
-        top: 0;
-        left: -50%;
-        background-color: #fff;
-        border-radius: 50%;
-        transform: scale(0);
-        transition: all 0.6s;
-    }
-
-    .theme-btn-inner.dark {
-        transform: translateX(calc(60px - 32px));
-        background-color: #f3ce9e;
-    }
-
-    .theme-btn-inner.dark::before {
-        left: -12px;
-        transform: scale(1);
-    }
+.menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #333;
+    opacity: 0.5;
 }

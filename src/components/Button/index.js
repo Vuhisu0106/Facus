@@ -17,6 +17,8 @@ function Button({
     onClick,
     className,
     activeNav = false,
+    landingNav = false,
+    activeLandingNav = false,
     disabled = false,
     ...passProps
 }) {
@@ -49,6 +51,8 @@ function Button({
         popper,
         nav,
         activeNav,
+        landingNav,
+        activeLandingNav,
         disabled,
         long,
     });

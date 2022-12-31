@@ -329,7 +329,7 @@ function PostLayout({
                                 {like && like.indexOf(currentUser.uid) !== -1
                                     ? like.length === 1
                                         ? 'You'
-                                        : 'You and ' + (like.length - 1)
+                                        : `You and ${like.length - 1} others`
                                     : like.length}
                             </div>
                         )}

@@ -78,7 +78,7 @@ form {
     height: 55px;
     border-radius: 10px;
     height: 50px;
-    padding: 0 3rem;
+    padding: 0 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,16 +119,19 @@ form {
     align-items: center;
 
     a {
-        color: #3a3b3c;
+        color: #656565;
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
     }
 }
 
-.btn {
+.log-in__btn {
     width: 100%;
     background: linear-gradient(120deg, #e54c91 49.6%, #f48b7b 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     outline: none;
     height: 45px;
@@ -151,7 +154,7 @@ form {
     padding: 0.7rem 0;
     font-size: 1.6rem;
     font-weight: 600;
-    color: #3a3b3c;
+    color: #656565;
 }
 
 .social-media {
@@ -170,10 +173,6 @@ form {
         border: 1px solid #333;
         text-decoration: none;
         font-size: 1.8rem;
-
-        .icon {
-            //transition: 0.1s !important;
-        }
 
         &:hover {
             color: #e54c91;
@@ -198,6 +197,12 @@ form {
 
     .hand-image {
         width: 95%;
+        transform: translateY(250%);
+        transition: 0.8s;
+    }
+
+    .hand-image.log-in__open {
+        transform: translateY(0);
     }
 }
 .cloud {
@@ -208,24 +213,36 @@ form {
     .cloud-image {
         height: 100%;
         max-width: 100%;
-        opacity: 0.7;
+        opacity: 0.6;
     }
-    .heart-image-1 {
+    .heart-img {
         position: absolute;
+        transform: scale(0);
+        transition: 1s;
+    }
+
+    .heart-img.log-in__open {
+        transform: scale(1);
+    }
+
+    .heart-image-1 {
         top: 50px;
         left: 100px;
     }
 
     .heart-image-2 {
-        position: absolute;
         top: 420px;
         left: 140px;
     }
 
     .heart-image-3 {
-        position: absolute;
         top: 300px;
         left: 200px;
+    }
+
+    .heart-image-4 {
+        top: 150px;
+        left: 550px;
     }
 
     .image-4 {

@@ -18,9 +18,9 @@ function AccountItem({ uid, displayName, photoURL, follower }) {
     const handleFollow = async () => {
         setLoading(true);
         try {
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             await follow(currentUser.uid, uid);
-            toast.success('Follow successfully');
+            toast.success(`Follow ${displayName} successfully`);
             setLoading(false);
         } catch (error) {
             console.log(error);

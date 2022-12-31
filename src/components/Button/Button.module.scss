@@ -79,6 +79,31 @@
     }
 }
 
+.landingNav {
+    font-weight: 700;
+    color: #979797;
+    &::after {
+        display: block;
+        color: var(--primary);
+        bottom: -5px;
+        content: '';
+        height: 0.3rem;
+        position: absolute;
+        width: 60%;
+        background: linear-gradient(90.06deg, #fe2c55 -14.45%, #6f5cf1 154.12%);
+        left: 20%;
+        transform: scale(0);
+        transition: all 0.2s ease-in-out;
+    }
+    &:hover {
+        color: #fe2c55;
+        background-color: transparent !important;
+        &::after {
+            transform: scale(1);
+        }
+    }
+}
+
 .activeNav {
     background-color: transparent;
     color: var(--primary);
@@ -99,6 +124,10 @@
         background-color: var(--primary);
         left: 20%;
     }
+}
+
+.activeLandingNav {
+    color: var(--primary);
 }
 
 //Button size

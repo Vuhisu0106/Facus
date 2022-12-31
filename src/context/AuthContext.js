@@ -20,21 +20,13 @@ export function useAuth() {
 function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
     const [loading, setLoading] = useState(true);
-    const [rememberMe, setRememberMe] = useState(false);
 
     function signup(email, password) {
         return createUserWithEmailAndPassword(auth, email, password);
     }
 
-    function login(email, password) {
-        setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence)
-            .then(() => {
-                return signInWithEmailAndPassword(auth, email, password);
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                console.log(errorMessage);
-            });
+    async function login(email, password, rememberMe) {
+        await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
         return signInWithEmailAndPassword(auth, email, password);
     }
 
@@ -43,9 +35,17 @@ function AuthProvider({ children }) {
         return signOut(auth);
     }
 
-    function forgotPassword(email) {
+    async function resetPassword(email) {
         return sendPasswordResetEmail(auth, email);
     }
+
+    // function signupWithGoogle() {
+    //     return signInWithGooglePopUp(auth, provider).then((result) => {
+    //       console.log(result)
+    //     }).catch((error) => {
+    //       console.log(error)
+    //     })
+    //   }
 
     useEffect(() => {
         const unsubcriber = onAuthStateChanged(auth, (user) => {
@@ -56,29 +56,12 @@ function AuthProvider({ children }) {
         return unsubcriber;
     }, []);
 
-    // useEffect(() => {
-    //     const unsubcriber = onAuthStateChanged(auth, (user) => {
-    //         if (user) {
-    //             navigate('/');
-    //             setCurrentUser(user);
-    //             setLoading(false);
-    //         }
-    //         setCurrentUser();
-    //         setLoading(false);
-    //         navigate('/landing');
-    //     });
-
-    //     return unsubcriber;
-    // }, []);
-
     const value = {
         currentUser,
         signup,
         login,
         logout,
-        forgotPassword,
-        rememberMe,
-        setRememberMe,
+        resetPassword,
     };
     return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 }

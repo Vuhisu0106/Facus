@@ -1,11 +1,9 @@
 import { faFacebook, faGoogle, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faCamera, faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useState, useRef } from 'react';
-import { storage } from '~/firebase/config';
+import { useState, useRef, useLayoutEffect } from 'react';
 import { updateProfile } from 'firebase/auth';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 import { useAuth } from '~/context/AuthContext';
 import styles from './SignUp.module.scss';
@@ -14,6 +12,8 @@ import { generateKeywords } from '~/utils';
 import { setDocument } from '~/firebase/services';
 import Shape from '../Shape';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
+import { toast } from 'react-toastify';
+import { FadingBalls } from 'react-cssfx-loading';
 
 const cx = classNames.bind(styles);
 
@@ -22,14 +22,20 @@ function SignUp() {
     const displayNameRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
-    //const fileRef = useRef();
-    const [file, setFile] = useState(null);
 
     const { signup, currentUser } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    //const [isSignedUp, setIsSignedUp] = useState(false);
+
     const navigate = useNavigate();
+
+    const [open, setOpen] = useState(false);
+
+    useLayoutEffect(() => {
+        setTimeout(() => {
+            setOpen(true);
+        }, 50);
+    }, []);
 
     const DEFAULT_COVER_PHOTO =
         'https://firebasestorage.googleapis.com/v0/b/facus-f9b9c.appspot.com/o/defaultCoverPhoto?alt=media&token=64708df0-b9a5-4ad6-8eb5-4ee5d6517efa';
@@ -41,7 +47,7 @@ function SignUp() {
         e.preventDefault();
 
         if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-            return setError('Passwords do not match');
+            toast.error('Passwords do not match');
         }
 
         try {
@@ -49,47 +55,36 @@ function SignUp() {
             setLoading(true);
             const res = await signup(emailRef.current.value, passwordRef.current.value);
 
-            //Create a unique image name
-            const date = new Date().getTime();
-            const storageRef = ref(storage, `${'photoURL' + displayNameRef.current.value + date}`);
-
-            await uploadBytesResumable(storageRef, file).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    try {
-                        //Update profile
-                        await updateProfile(res.user, {
-                            displayName: displayNameRef.current.value,
-                            photoURL: downloadURL,
-                        });
-
-                        //create user on firestore
-                        await setDocument('users', res.user.uid, {
-                            uid: res.user.uid,
-                            displayName: displayNameRef.current.value,
-                            email: emailRef.current.value,
-                            photoURL: DEFAULT_AVATAR,
-                            coverPhotoURL: DEFAULT_COVER_PHOTO,
-                            keywords: generateKeywords(displayNameRef.current.value),
-                            following: [],
-                            follower: [],
-                            bio: '',
-                            isAdmin: false,
-                        });
-
-                        //create empty user chats on firestore
-                        await setDocument('userChats', res.user.uid, {});
-                        //await setDocument('userPost', res.user.uid, {});
-                        navigate('/');
-                    } catch (err) {
-                        console.log(err);
-                        setError(true);
-                        setLoading(false);
-                    }
+            try {
+                await updateProfile(res.user, {
+                    displayName: displayNameRef.current.value,
+                    photoURL: DEFAULT_AVATAR,
                 });
-            });
-        } catch (e) {
-            setError(error);
-            console.log(e);
+
+                await setDocument('users', res.user.uid, {
+                    uid: res.user.uid,
+                    displayName: displayNameRef.current.value,
+                    email: emailRef.current.value,
+                    photoURL: DEFAULT_AVATAR,
+                    coverPhotoURL: DEFAULT_COVER_PHOTO,
+                    keywords: generateKeywords(displayNameRef.current.value),
+                    following: [],
+                    follower: [],
+                    bio: '',
+                    isAdmin: false,
+                });
+
+                //create empty user chats on firestore
+                await setDocument('userChats', res.user.uid, {});
+                navigate('/');
+            } catch (error) {
+                console.log(error);
+            }
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+                toast.error('User already exists');
+            }
+            console.log(error);
         }
         //setIsSignedUp(true);
         setLoading(false);
@@ -98,7 +93,7 @@ function SignUp() {
     return (
         <Grid type={'landing'} className={cx('sign-up-wrapper')}>
             <GridRow>
-                <GridColumn l={5} l_o={1} m={7} s={12}>
+                <GridColumn l={5} l_o={1} m={7} s={12} className={cx('form-col')}>
                     <div className={cx('sign-up-col')}>
                         <form onSubmit={handleSubmit} className={cx('sign-up-form')}>
                             <div className={cx('title')}>
@@ -147,26 +142,29 @@ function SignUp() {
                                 </div>
                             </div>
 
-                            {/* <div className={cx('input-field')}>
-                                <input
-                                    required
-                                    style={{ display: 'none' }}
-                                    type="file"
-                                    id="file"
-                                    onChange={(e) => {
-                                        setFile(e.target.files[0]);
-                                    }}
-                                />
-                                <label htmlFor="file">
-                                    <FontAwesomeIcon className={cx('icon')} icon={faCamera} />
-                                    <span>Add an avatar</span>
-                                </label>
-                            </div> */}
-
                             <button disabled={loading} type="submit" className={cx('btn')} value="Sign up">
-                                Sign up
+                                {loading ? (
+                                    <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
+                                ) : (
+                                    'Sign up'
+                                )}
                             </button>
+                            <p>
+                                If you have an account, let's{' '}
+                                <span
+                                    onClick={() => {
+                                        navigate('/log-in');
+                                    }}
+                                >
+                                    log in
+                                </span>
+                            </p>
                         </form>
+                        <img className={cx('cloud-image-1')} src="images/Cloud-1.png" alt="" />
+                        <img className={cx('cloud-image-2')} src="images/Cloud-1.png" alt="" />
+                        <img className={cx('cloud-image-3')} src="images/Cloud-2.png" alt="" />
+                        <img className={cx('cloud-image-4')} src="images/Cloud-2.png" alt="" />
+                        <img className={cx('cloud-image-5')} src="images/Cloud-2.png" alt="" />
                     </div>
                 </GridColumn>
                 <GridColumn l={6} m={5} className={cx('animate-col')}>
@@ -174,10 +172,10 @@ function SignUp() {
                         <Shape width={'500'} height={'500'} top={'-30'} left={'20'} color={'#f3ce9e'} blur={75} />
                         <Shape width={'500'} height={'500'} top={'-30'} left={'325'} color={'#ff6fb0'} blur={75} />
                         <Shape width={'500'} height={'500'} top={'300'} left={'150'} color={'#b879ff'} blur={75} />
-                        <div className={cx('blur-backgound')}></div>
+                        <div className={cx('blur-background')}></div>
                     </div>
                     <div className={cx('rocket')}>
-                        <img className={cx('rocket-image')} src="images/Saly-1.png" alt="" />
+                        <img className={cx('rocket-image', open && 'sign-up__open')} src="images/Saly-1.png" alt="" />
                     </div>
                 </GridColumn>
             </GridRow>
