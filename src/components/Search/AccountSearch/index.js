@@ -65,7 +65,6 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
     };
 
     const handleSelect = (result) => {
-        //navigate(`/user/${result.uid}`);
         setSearchResult([]);
         setSearchValue('');
     };
@@ -90,7 +89,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
                                             onClick={() => {
                                                 handleSelect(result);
                                             }}
-                                            isFollowing={currentUserInfo?.following.indexOf(result.uid) !== -1 && true}
+                                            isFollowing={currentUserInfo?.following?.indexOf(result.uid) !== -1 && true}
                                         />
                                     </Link>
                                 ))

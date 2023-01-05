@@ -18,6 +18,8 @@ function ProfileCard() {
     const { adminInfo, currentUserInfo } = useApp();
     const navigate = useNavigate();
 
+    const SKILLS = ['HTML', 'CSS', 'Javascript', 'Bootstrap', 'React', 'Redux', 'MySQL', '...'];
+
     const handleFollow = async () => {
         try {
             setFollowingLoading(true);
@@ -61,6 +63,7 @@ function ProfileCard() {
             );
         }
     };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('blur-wrapper')}></div>
@@ -84,6 +87,7 @@ function ProfileCard() {
 
                     <div className={cx('buttons')}>
                         <Button
+                            primary
                             className={cx('view-profile-btn')}
                             children={'View profile'}
                             onClick={() => {
@@ -96,12 +100,9 @@ function ProfileCard() {
                 <div className={cx('skills')}>
                     <h6>Skills</h6>
                     <ul>
-                        <li>HTML</li>
-                        <li>CSS</li>
-                        <li>JavaScript</li>
-                        <li>React</li>
-                        <li>Redux</li>
-                        <li>...</li>
+                        {SKILLS.map((item, index) => (
+                            <li key={index}>{item}</li>
+                        ))}
                     </ul>
                 </div>
             </div>

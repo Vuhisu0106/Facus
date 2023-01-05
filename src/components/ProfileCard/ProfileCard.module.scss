@@ -78,9 +78,10 @@
         padding: 10px 10px;
     }
 
-    .view-profile-btn {
-        background-color: var(--primary);
-        border: 1px solid var(--primary);
+    .follow-btn {
+        &:hover {
+            background-color: rgba(254, 44, 85, 0.06);
+        }
     }
 
     .follow-btn {

@@ -110,72 +110,65 @@ function SignUp() {
                 <GridColumn l={5} l_o={1} m={7} s={12} className={cx('form-col')}>
                     <div className={cx('sign-up-col')}>
                         <form onSubmit={handleSubmit} className={cx('sign-up-form')}>
-                            <div className={cx('form__body')}>
-                                <div className={cx('title')}>
-                                    <h2>Sign up</h2>
-                                </div>
-                                {currentUser && currentUser.email}
+                            <div className={cx('title')}>
+                                <h2>Sign up</h2>
+                            </div>
+                            {currentUser && currentUser.email}
 
-                                <div className={cx('user-info-input')}>
-                                    <div className={cx('input')}>
-                                        <h4>Email</h4>
-                                        <div className={cx('input-field')}>
-                                            <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
-                                            <input placeholder="Email" ref={emailRef} />
-                                        </div>
-                                    </div>
-
-                                    <div className={cx('input')}>
-                                        <h4>User name</h4>
-                                        <div className={cx('input-field')}>
-                                            <FontAwesomeIcon className={cx('icon')} icon={faUser} />
-                                            <input placeholder="User name" ref={displayNameRef} />
-                                        </div>
+                            <div className={cx('user-info-input')}>
+                                <div className={cx('input')}>
+                                    <h4>Email</h4>
+                                    <div className={cx('input-field')}>
+                                        <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
+                                        <input placeholder="Email" ref={emailRef} />
                                     </div>
                                 </div>
 
                                 <div className={cx('input')}>
-                                    <h4>Password</h4>
+                                    <h4>User name</h4>
                                     <div className={cx('input-field')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-
-                                        <input type="password" placeholder="Password" ref={passwordRef} />
+                                        <FontAwesomeIcon className={cx('icon')} icon={faUser} />
+                                        <input placeholder="User name" ref={displayNameRef} />
                                     </div>
                                 </div>
+                            </div>
 
-                                <div className={cx('input')}>
-                                    <h4> Confirm password</h4>
-                                    <div className={cx('input-field')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faLock} />
+                            <div className={cx('input')}>
+                                <h4>Password</h4>
+                                <div className={cx('input-field')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faLock} />
 
-                                        <input
-                                            type="password"
-                                            placeholder="Confirm password"
-                                            ref={passwordConfirmRef}
-                                        />
-                                    </div>
+                                    <input type="password" placeholder="Password" ref={passwordRef} />
                                 </div>
+                            </div>
 
-                                <button disabled={loading} type="submit" className={cx('btn')} value="Sign up">
-                                    {loading ? (
-                                        <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
-                                    ) : (
-                                        'Sign up'
-                                    )}
-                                </button>
+                            <div className={cx('input')}>
+                                <h4> Confirm password</h4>
+                                <div className={cx('input-field')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faLock} />
+
+                                    <input type="password" placeholder="Confirm password" ref={passwordConfirmRef} />
+                                </div>
                             </div>
-                            <div className={cx('form__footer')}>
-                                <p>
-                                    If you have an account, let's{' '}
-                                    <span
-                                        onClick={() => {
-                                            navigate('/log-in');
-                                        }}
-                                    >
-                                        log in
-                                    </span>
-                                </p>
-                            </div>
+
+                            <button disabled={loading} type="submit" className={cx('btn')} value="Sign up">
+                                {loading ? (
+                                    <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
+                                ) : (
+                                    'Sign up'
+                                )}
+                            </button>
+
+                            <p className={cx('sign-up__footer')}>
+                                If you have an account, let's{' '}
+                                <span
+                                    onClick={() => {
+                                        navigate('/log-in');
+                                    }}
+                                >
+                                    log in
+                                </span>
+                            </p>
                         </form>
                         <img className={cx('cloud-image-1')} src="images/Cloud-1.png" alt="" />
                         <img className={cx('cloud-image-2')} src="images/Cloud-1.png" alt="" />

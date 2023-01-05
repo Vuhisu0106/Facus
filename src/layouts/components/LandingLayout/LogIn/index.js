@@ -91,54 +91,50 @@ function LogIn() {
                 <GridColumn l={4.5} l_o={1} m={6} s={12}>
                     <div className={cx('log-in-col')}>
                         <form onSubmit={handleSubmit} className={cx('log-in-form')}>
-                            <div className={cx('form__body')}>
-                                <div className={cx('title')}>
-                                    <h2>Log in</h2>
-                                </div>
-
-                                <div className={cx('input')}>
-                                    <h4>Email</h4>
-                                    <div className={cx('input-field')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
-                                        <input type="email" placeholder="Email" ref={emailRef} />
-                                    </div>
-                                </div>
-                                <div className={cx('input')}>
-                                    <h4>Password</h4>
-                                    <div className={cx('input-field')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-                                        <input type="password" placeholder="Password" ref={passwordRef} />
-                                    </div>
-                                </div>
-
-                                <div className={cx('other-features')}>
-                                    <Checkbox text={'Remember me'} onChange={handleRememberMe} />
-                                    <Link className={cx('')} to={config.routes.forgetPassword}>
-                                        Forget Password
-                                    </Link>
-                                </div>
-
-                                <button disabled={loading} className={cx('log-in__btn')} type="submit" value="Log in">
-                                    {loading ? (
-                                        <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
-                                    ) : (
-                                        'Log in'
-                                    )}
-                                </button>
+                            <div className={cx('title')}>
+                                <h2>Log in</h2>
                             </div>
 
-                            <div className={cx('form__footer')}>
-                                <h4>
-                                    Don't have an account yet?{' '}
-                                    <span
-                                        onClick={() => {
-                                            navigate('/sign-up');
-                                        }}
-                                    >
-                                        Sign up
-                                    </span>{' '}
-                                </h4>
+                            <div className={cx('input')}>
+                                <h4>Email</h4>
+                                <div className={cx('input-field')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
+                                    <input type="email" placeholder="Email" ref={emailRef} />
+                                </div>
                             </div>
+                            <div className={cx('input')}>
+                                <h4>Password</h4>
+                                <div className={cx('input-field')}>
+                                    <FontAwesomeIcon className={cx('icon')} icon={faLock} />
+                                    <input type="password" placeholder="Password" ref={passwordRef} />
+                                </div>
+                            </div>
+
+                            <div className={cx('other-features')}>
+                                <Checkbox text={'Remember me'} onChange={handleRememberMe} />
+                                <Link className={cx('')} to={config.routes.forgetPassword}>
+                                    Forget Password
+                                </Link>
+                            </div>
+
+                            <button disabled={loading} className={cx('log-in__btn')} type="submit" value="Log in">
+                                {loading ? (
+                                    <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
+                                ) : (
+                                    'Log in'
+                                )}
+                            </button>
+
+                            <h4>
+                                Don't have an account yet?{' '}
+                                <span
+                                    onClick={() => {
+                                        navigate('/sign-up');
+                                    }}
+                                >
+                                    Sign up
+                                </span>{' '}
+                            </h4>
                         </form>
                     </div>
                 </GridColumn>
