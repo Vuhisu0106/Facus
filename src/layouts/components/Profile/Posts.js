@@ -2,9 +2,12 @@ import classNames from 'classnames/bind';
 import { useState, useEffect, useMemo } from 'react';
 import { query, collection, where, getDocs, Timestamp } from 'firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faGraduationCap, faHouse, faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 import { db } from '~/firebase/config';
 import Button from '~/components/Button';
@@ -12,11 +15,10 @@ import WrapperModal from '~/components/Wrapper';
 import PostLayout from '~/components/PostLayout';
 import styles from './Profile.module.scss';
 import { useAuth } from '~/context/AuthContext';
-import CircleAvatar from '~/components/CircleAvatar';
+import { UserAvatar } from '~/components/AccountItem';
 import Input from '~/components/Input';
 import AddPostModal from '~/components/Modal/Modal/AddPostModal';
 import { updateDocument } from '~/firebase/services';
-import { useDispatch, useSelector } from 'react-redux';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { setBio } from '~/features/Profile/ProfileSlice';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
@@ -26,12 +28,11 @@ import { useApp } from '~/context/AppContext';
 import { toast } from 'react-toastify';
 import { LoadingPost } from '~/components/Loading';
 import { LoadingIcon } from '~/components/Icon';
-import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 function Posts({ selectedUser, isCurrentUser = false }) {
     const { currentUser } = useAuth();
-    const { currentUserInfo } = useApp();
+    const { currentUserInfo, adminInfo } = useApp();
     const dispatch = useDispatch();
     const bio = useSelector((state) => state.profile.bio);
     const postList = useSelector((state) => state.postNcomment.posts);
@@ -152,11 +153,40 @@ function Posts({ selectedUser, isCurrentUser = false }) {
         );
     }, [postList]);
 
+    const adminInfoJSX = () => {
+        return (
+            <div className={cx('admin__intro')}>
+                <div>
+                    <span>
+                        <FontAwesomeIcon icon={faHouse} />
+                    </span>
+                    <h5>
+                        Live in <span>Hanoi, Vietnam</span>
+                    </h5>
+                </div>
+                <div>
+                    <span>
+                        <FontAwesomeIcon icon={faGraduationCap} />
+                    </span>
+                    <h5>
+                        Studies Software Engineering at <span>HUCE</span>
+                    </h5>
+                </div>
+                <div>
+                    <span>
+                        <FontAwesomeIcon icon={faGithub} />
+                    </span>
+                    <a href="https://github.com/Vuhisu0106">https://github.com/Vuhisu0106</a>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <Grid type={'profile'} className={cx('wrapper')}>
             {openModal && (
                 <AddPostModal
-                    addPostFunc={handleAddPost}
+                    onAddPost={handleAddPost}
                     onCloseAddPostModal={() => {
                         setOpenModal(false);
                     }}
@@ -208,6 +238,8 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                 </div>
                             </div>
                         )}
+
+                        {adminInfo.uid === selectedUser.uid && adminInfoJSX()}
                     </WrapperModal>
                     <WrapperModal className={cx('photo')}>
                         <h2>Photo</h2>
@@ -240,7 +272,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                     {isCurrentUser && (
                         <WrapperModal className={cx('add-post')}>
                             <div className={cx('add-post-top')}>
-                                <CircleAvatar
+                                <UserAvatar
                                     className={cx('add-post-user-avt')}
                                     userUid={currentUserInfo.uid}
                                     userName={currentUserInfo.displayName}
@@ -278,7 +310,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                         </WrapperModal>
                     )}
 
-                    {postListMemo}
+                    {loading ? <LoadingPost /> : postListMemo}
                 </GridColumn>
             </GridRow>
         </Grid>

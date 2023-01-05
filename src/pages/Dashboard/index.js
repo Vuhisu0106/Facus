@@ -15,17 +15,7 @@ function Dashboard() {
     const [followingList, setFollowingList] = useState([]);
     const { currentUserInfo } = useApp();
 
-    // let currentScrollPosition = 0;
-    // let scrollAmount = 320;
-
-    // console.log(storyRef.current.offsetWidth);
-
-    // //let maxScroll = -storyRef.current.offsetWidth + horizontalRef.current.offsetWidth;
-
-    // function scrollHorizontally() {}
-
     useEffect(() => {
-        //setFollowing([...currentUserInfo?.following, currentUserInfo?.uid]);
         Object.keys(currentUserInfo).length > 0 &&
             setFollowingList([...(currentUserInfo?.following || []), currentUserInfo?.uid || []]);
     }, [currentUserInfo, currentUserInfo?.following]);

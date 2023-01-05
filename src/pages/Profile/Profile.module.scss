@@ -130,11 +130,6 @@
     margin-top: 5px;
     margin-bottom: 32px;
 
-    .profile__name {
-        font-size: 32px;
-        color: var(--account-item-name-color);
-    }
-
     .profile__follow-info {
         font-size: 17px;
         font-weight: var(--acc-item-font-weight);
@@ -143,7 +138,6 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        //position: absolute;
 
         .profile__following,
         .profile__follower {

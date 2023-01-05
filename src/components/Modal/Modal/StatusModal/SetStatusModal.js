@@ -6,9 +6,8 @@ import { useEffect, useState } from 'react';
 
 import Button from '~/components/Button';
 import Input from '~/components/Input';
-import styles from '~/components/Modal/Modal.module.scss';
+import styles from './StatusModal.module.scss';
 
-import Modal from '..';
 import { updateDocument } from '~/firebase/services';
 import { useAuth } from '~/context/AuthContext';
 import { deleteField } from 'firebase/firestore';
@@ -16,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setStatus } from '~/features/Profile/ProfileSlice';
 import { toast } from 'react-toastify';
 import { LoadingIcon } from '~/components/Icon';
+import Modal from '../..';
 
 const cx = classNames.bind(styles);
 function SetStatusModal({ onClose }) {

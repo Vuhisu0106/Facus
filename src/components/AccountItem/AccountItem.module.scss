@@ -1,41 +1,62 @@
-.wrapper {
-    height: 48px;
+// Avatar //
+.user-avt {
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.user-avt--loading {
+    border-radius: 50%;
+    background-color: var(--loading-element-color);
+}
+
+// User name //
+.user-name {
+    color: var(--account-item-name-color);
+    width: fit-content;
     display: flex;
     align-items: center;
-    padding: 8px 8px;
-    cursor: pointer;
-    border-radius: 8px;
-    &:hover {
-        background: var(--account-item-hover);
+}
+
+.user-role {
+    color: var(--primary);
+
+    .user-role__hover {
+        background-color: rgb(0, 0, 0, 0.75);
+        color: #fff;
+        padding: 5px;
+        border-radius: 5px;
     }
 }
 
-.avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
+.large {
+    font-size: 32px;
+    font-weight: 700;
+    .user-role {
+        font-size: 20px;
+        font-weight: 600;
+        margin-left: 10px;
+    }
 }
 
-.info {
-    flex: 1;
-    margin-left: 8px;
+.medium {
+    font-size: 15px;
+    font-weight: 600;
+
+    .user-role {
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 4px;
+    }
 }
 
-.name {
-    color: var(--account-item-name-color);
-    font-size: 1.5rem;
-    font-weight: var(--acc-name-search-fw);
-    //margin-top: 5px;
-}
+.small {
+    font-size: 13px;
+    font-weight: 700;
 
-.check {
-    margin-left: 6px;
-    color: rgb(32, 213, 236);
-}
-
-.following {
-    font-size: var(--account-item-following-font-size);
-    color: var(--account-item-following-color);
-    font-weight: var(--following-name-search-fw);
+    .user-role {
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 3px;
+    }
 }

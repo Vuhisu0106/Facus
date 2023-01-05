@@ -272,7 +272,7 @@ input[type='file'] {
 }
 
 ////////////////////////////////////////////////////////Edit profile modal/////////////////////////////////////////////////////////
-.edit-profile-wrapper {
+.edit-profile__wrapper {
     width: 100%;
     position: relative;
     h3 {
@@ -289,9 +289,17 @@ input[type='file'] {
     border-bottom: 1px solid rgb(204, 206, 209, 0.5);
 }
 
-.edit-profile-body {
+.edit-profile__body {
     width: 100%;
     padding-bottom: 28px;
+
+    .note {
+        font-weight: 500;
+        color: var(--primary);
+        margin-top: 2px;
+        text-align: center;
+        display: none;
+    }
 }
 
 .edit-avatar {
@@ -312,23 +320,23 @@ input[type='file'] {
     align-items: center;
     padding: 0 16px;
 
-    .edit-avatar-wrapper,
-    .avatar-upload-label,
-    .avatar-upload-hover,
+    .edit-avatar__wrapper,
+    .avatar-upload__label,
+    .avatar-upload__hover,
     .blur-selected-avatar {
         height: 168px;
         width: 168px;
         border-radius: 50%;
     }
 
-    .edit-avatar-wrapper {
+    .edit-avatar__wrapper {
         background: transparent;
         display: flex;
         justify-content: center;
         align-items: center;
         position: relative;
 
-        .avatar-upload-label {
+        .avatar-upload__label {
             background-size: contain;
             background-size: 100% 100%;
             cursor: pointer;
@@ -340,7 +348,7 @@ input[type='file'] {
             background-position-y: center;
         }
 
-        .avatar-upload-hover,
+        .avatar-upload__hover,
         .blur-selected-avatar {
             background-color: rgb(255, 255, 255, 0.2);
             opacity: 0;
@@ -351,10 +359,10 @@ input[type='file'] {
             transition: 0.1s;
         }
 
-        .avatar-upload-hover {
+        .avatar-upload__hover {
             cursor: pointer;
 
-            .avatar-upload-icon {
+            .avatar-upload__icon {
                 font-size: 28px;
                 color: rgb(0, 0, 0, 0.7);
             }
@@ -394,7 +402,7 @@ input[type='file'] {
     padding-bottom: 20px;
 }
 
-.edit-cover-photo-wrapper {
+.edit-cover-photo__wrapper {
     width: 100%;
     height: 185px;
     border-radius: 10px;
@@ -433,19 +441,17 @@ input[type='file'] {
         object-fit: cover;
     }
 }
-.cover-photo-upload-label {
+.cover-photo-upload__label {
     width: 100%;
     height: 185px;
     border-radius: 10px;
-    //background-size: contain;
     background-size: cover;
-    //background-size: 100%;
     background-position-x: center;
     background-position-y: center;
     cursor: pointer;
     position: absolute;
 
-    .cover-photo-upload-hover {
+    .cover-photo-upload__hover {
         width: 100%;
         height: 185px;
         border-radius: 10px;
@@ -458,7 +464,7 @@ input[type='file'] {
         cursor: pointer;
         transition: 0.1s;
 
-        .cover-photo-upload-icon {
+        .cover-photo-upload__icon {
             font-size: 28px;
             color: rgb(0, 0, 0, 0.7);
         }
@@ -489,130 +495,10 @@ input[type='file'] {
     }
 }
 
-/////////////////////////////////////////////////////////Set Status Modal//////////////////////////////////////////////////////
-.set-status__wrapper {
-    width: 100%;
-    position: relative;
-
-    .status-content {
-        padding: 12px 16px;
-
-        .status-bar {
-            border-bottom-right-radius: 0px;
-            border-top-right-radius: 0px;
-            border-bottom-left-radius: 8px;
-            border-top-left-radius: 8px;
-            background-color: var(--background-color-2);
-            border: 1px solid var(--chat-border);
-            margin-bottom: 8px;
-            transition: none;
-
-            button {
-                border-top-left-radius: 8px;
-                border-bottom-left-radius: 8px;
-            }
-
-            .status-input {
-                color: var(--bio-color);
-                margin-left: 6px;
-                font-weight: 500;
-            }
-
-            .status-icon {
-                color: var(--circle-btn-color);
-                border-bottom-left-radius: 8px;
-                border-top-left-radius: 8px;
-                background-color: var(--background-color);
-                border-right: 1.5px solid var(--border-menu-separate);
-
-                &:hover {
-                    background-color: var(--long-btn-hover-color);
-                    color: var(--primary);
-                }
-
-                &:active {
-                    background-color: var(--primary);
-                    color: var(--white);
-                }
-
-                &:focus-within {
-                    border-color: none;
-                }
-            }
+@media (max-width: 740px) {
+    .edit-profile__body {
+        .note {
+            display: block;
         }
-    }
-}
-
-.suggestions {
-    height: 80px;
-    transition: height 100ms ease-out, opacity 200ms ease-in;
-    overflow: hidden;
-
-    h4 {
-        width: 100%;
-        margin: 8px 0 16px 0;
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--sub-acc-item-color);
-    }
-
-    .suggest-examples {
-        div {
-            width: 50%;
-        }
-        color: var(--sub-acc-item-color);
-        margin: 8px 16px 0 16px;
-        display: flex;
-        justify-content: space-between;
-        font-size: 13px;
-    }
-}
-
-.status-footer {
-    width: 100%;
-    height: 65px;
-    border-top: var(--profile-border);
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .set-status__btn,
-    .clear-status-btn {
-        width: 48%;
-        height: 32px;
-        border-radius: 6px;
-    }
-    .set-status__btn {
-        background-color: var(--primary);
-        color: var(--white);
-    }
-    .clear-status-btn {
-        border: 1px solid var(--chat-border);
-        background-color: var(--circle-btn-bc);
-        color: var(--sub-profile-btn-color);
-        &:hover {
-            background-color: var(--circle-btn-hover-bc);
-        }
-    }
-}
-
-//////////////////////////////////////////////Status Modal////////////////////////////////////////
-.status-wrapper {
-    min-height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    .status {
-        margin: 0;
-        padding: 0;
-    }
-    p {
-        color: var(--bio-color);
-        font-size: 13px;
-        font-weight: 400;
-        margin-top: 5px;
     }
 }

@@ -5,12 +5,13 @@ import { useState, useEffect } from 'react';
 import { where, collection, query, getDocs } from 'firebase/firestore';
 
 import { db } from '~/firebase/config';
-import RoundAccountItem from '~/components/AccountItem/RoundAccountItem';
+
 import styles from './Home.module.scss';
 
 import { useAuth } from '~/context/AuthContext';
 import { useApp } from '~/context/AppContext';
 import { LoadingRoundAccItem } from '~/components/Loading';
+import StatusItem from '~/components/Modal/Modal/StatusModal/StatusItem';
 
 const cx = classNames.bind(styles);
 function StatusesBar({ followingList }) {
@@ -71,13 +72,13 @@ function StatusesBar({ followingList }) {
                 <div className={cx('status-container')}>
                     {/* Check if current user having status, add status button will not be shown */}
                     {!statusFollowingList?.find((list) => list.uid === currentUser.uid)?.status && (
-                        <RoundAccountItem addStatus avt={currentUserInfo.photoURL} />
+                        <StatusItem addStatus avt={currentUserInfo.photoURL} />
                     )}
 
                     {statusFollowingList?.map(
                         (list) =>
                             list.status && (
-                                <RoundAccountItem
+                                <StatusItem
                                     key={list.uid}
                                     avt={list.photoURL}
                                     userName={list.displayName}

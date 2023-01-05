@@ -12,11 +12,12 @@ function HomePage() {
         <div className={cx('wrapper')}>
             <Grid type={'landing'} className={cx('home')}>
                 <div className={cx('home__background')}></div>
-                <GridRow className={cx('home-test')}>
-                    <GridColumn l={5.5} m={6} s={12} className={cx('home-content')}>
+                <GridRow className={cx('home__content--wrapper')}>
+                    <GridColumn l={5.5} m={6} s={12} className={cx('home__content')}>
                         <div className={cx('content-inner')}>
-                            <h1 className={cx('home-title')}>A new world is rising. Let’s discover it.</h1>
-                            <div className={cx('home-description')}>
+                            <span className={cx('title')}>Facus</span>
+                            <h1 className={cx('home__title')}>A new world is rising. Let’s discover it.</h1>
+                            <div className={cx('home__description')}>
                                 <p>
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius sit, laudantium
                                     cupiditate esse animi ab ex, iure eveniet provident facilis, similique dignissimos
@@ -29,7 +30,7 @@ function HomePage() {
                             </div>
                         </div>
                     </GridColumn>
-                    <GridColumn l={6} l_o={0.5} m={6} s={12} className={cx('home-animation')}>
+                    <GridColumn l={6} l_o={0.5} m={6} s={12} className={cx('home__animation')}>
                         <div className={cx('animation-inner')}>
                             <img className={cx('vector')} src="images/Vector-1.png" alt="" />
                             <img className={cx('man')} src="images/Saly-13.0.png" alt="" />

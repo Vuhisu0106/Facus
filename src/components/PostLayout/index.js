@@ -10,7 +10,7 @@ import { faHeart as faHeartRegular, faPenToSquare, faTrashCan } from '@fortaweso
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { useAuth } from '~/context/AuthContext';
-import CircleAvatar from '../CircleAvatar';
+import { UserAvatar, UserName } from '../AccountItem';
 import CommentItem from '../CommentItem';
 import Menu from '../Popper/Menu';
 import AddPostModal from '../Modal/Modal/AddPostModal';
@@ -193,7 +193,7 @@ function PostLayout({
     const commentInput = () => {
         return (
             <div className={cx('comment__bar')}>
-                <CircleAvatar
+                <UserAvatar
                     className={cx('comment__user-avt')}
                     userUid={currentUserInfo.uid}
                     userName={currentUserInfo.displayName}
@@ -230,9 +230,10 @@ function PostLayout({
                         <CommentItem
                             key={comments.commentId}
                             data={comments}
-                            editComment={handleEditComment}
-                            toggleLikeComment={handleToggleLikeComment}
-                            deleteComment={handleDeleteComment}
+                            posterUid={posterInfo.uid}
+                            onEditComment={handleEditComment}
+                            onToggleLikeComment={handleToggleLikeComment}
+                            onDeleteComment={handleDeleteComment}
                         />
                     ))}
             </>
@@ -261,14 +262,14 @@ function PostLayout({
                 <AddPostModal
                     editPostId={postId}
                     edit
-                    editPostFunc={handleEditPost}
+                    onEditPost={handleEditPost}
                     onCloseAddPostModal={() => {
                         setOpenModal(false);
                     }}
                 />
             )}
             <div className={cx('post__header')}>
-                <CircleAvatar
+                <UserAvatar
                     className={cx('post__user-avt')}
                     userUid={posterInfo.uid}
                     userName={posterInfo.displayName}
@@ -276,7 +277,12 @@ function PostLayout({
                     diameter={'40px'}
                 />
                 <div className={cx('post__header-info')}>
-                    <p className={cx('post__user-name')}>{posterInfo.displayName}</p>
+                    <UserName
+                        userUid={posterInfo.uid}
+                        userName={posterInfo.displayName}
+                        size={'medium'}
+                        isAdmin={posterInfo.isAdmin}
+                    />
                     <p className={cx('post__time-post')}>{timeStamp}</p>
                 </div>
                 {currentUser.uid === userId && !isPostPage && (

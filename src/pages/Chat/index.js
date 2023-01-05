@@ -10,10 +10,10 @@ function Chat() {
     const chat = useSelector((state) => state.chat);
 
     return (
-        <Grid type={'chat'} className={cx('container')}>
+        <Grid type={'chat'} className={cx('wrapper')}>
             <GridRow>
                 <GridColumn l={12} m={12} s={12} className={cx('chat-col')}>
-                    <div className={cx('wrapper')}>
+                    <div className={cx('container')}>
                         <ChatSidebar />
                         {chat.chatId === 'null' || (chat.chatId && chat.isAddChatVisible) ? (
                             <EmptyChat />

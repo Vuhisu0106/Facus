@@ -28,7 +28,7 @@
     position: relative;
 
     &:hover {
-        .comment-setting {
+        .comment__setting {
             opacity: 1;
         }
     }
@@ -64,7 +64,7 @@
     }
 }
 
-.comment-setting {
+.comment__setting {
     width: 32px;
     height: 32px;
     display: flex;
@@ -89,11 +89,6 @@
     max-width: 420px;
     display: flex;
     flex-direction: column;
-
-    .comment__user-name {
-        font-weight: 700;
-        font-size: 13px;
-    }
 
     .comment__text--content {
         font-weight: var(--cmt-font-weight);
@@ -223,7 +218,7 @@
 // }
 @media (max-width: 740px) {
     .comment__content--text-wrapper {
-        .comment-setting {
+        .comment__setting {
             opacity: 1 !important;
         }
     }

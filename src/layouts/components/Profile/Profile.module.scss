@@ -7,9 +7,9 @@
 .intro,
 .photo {
     margin-bottom: 1.4rem;
+
     p {
         color: var(--bio-color);
-
         margin-top: 16px;
         text-align: center;
         margin-bottom: 12px;
@@ -18,6 +18,34 @@
         color: var(--profile-nav-color);
         font-size: 2.5rem;
         font-weight: 700;
+    }
+}
+
+.admin__intro {
+    div {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        color: var(--bio-color);
+        margin-top: 14px;
+
+        span {
+            margin-right: 8px;
+            color: #8c939d;
+        }
+
+        h5,
+        a {
+            font-weight: 400;
+            font-size: 15px;
+            color: var(--bio-color);
+
+            span {
+                color: red;
+                font-weight: 700;
+                color: var(--acc-item-color);
+            }
+        }
     }
 }
 
@@ -234,13 +262,6 @@
     flex-direction: column;
     justify-content: center;
     flex: 1;
-}
-
-.following__account--name,
-.follower__account--name {
-    color: var(--acc-item-color);
-    font-size: 17px;
-    font-weight: 600;
 }
 
 .following__account--bio,

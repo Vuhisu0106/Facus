@@ -48,6 +48,7 @@ function SuggestAccount({ label, followingList }) {
                               displayName={account?.displayName}
                               photoURL={account?.photoURL}
                               follower={account?.follower?.length}
+                              isAdmin={account?.isAdmin}
                           />
                       ))}
             </div>

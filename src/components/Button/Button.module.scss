@@ -74,9 +74,9 @@
     width: 100%;
     background-color: transparent;
 
-    &:hover {
-        background-color: rgba(22, 24, 35, 0.12);
-    }
+    // &:hover {
+    //     background-color: rgba(22, 24, 35, 0.12);
+    // }
 }
 
 .landingNav {
@@ -96,7 +96,10 @@
         transition: all 0.2s ease-in-out;
     }
     &:hover {
-        color: #fe2c55;
+        background: -webkit-linear-gradient(90.06deg, #f86086 -4.45%, #fe8d77 104.12%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
         background-color: transparent !important;
         &::after {
             transform: scale(1);

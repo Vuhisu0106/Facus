@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from '~/firebase/config';
+import { UserName } from '../AccountItem';
 
 import styles from './MessageItem.module.scss';
 
@@ -49,7 +50,8 @@ function MessageItem({
             <div className={cx('message-content')}>
                 <div className={cx('mess-detail')}>
                     <div className={cx('mess-top-content')}>
-                        <h4 className={cx('user-name')}>{accountInfo.displayName}</h4>
+                        <UserName userName={accountInfo.displayName} size={'medium'} isAdmin={accountInfo.isAdmin} />
+
                         <span className={cx('closest-mess-time')}>{closestMessTime}</span>
                     </div>
 

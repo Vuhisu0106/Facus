@@ -2,16 +2,16 @@ import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { db } from '~/firebase/config';
-import AccountItem from '~/components/AccountItem';
+
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
 import { useDebounce } from '~/components/Hook';
-import { Grid, GridColumn, GridRow } from '~/components/Grid';
 import { useApp } from '~/context/AppContext';
+import AccountItem from '../AccountItem';
 
 const cx = classNames.bind(styles);
 function AccountSearch({ className, placeHolder, placement, autoFocus }) {
@@ -24,7 +24,6 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef();
 
-    let navigate = useNavigate();
     const { currentUserInfo } = useApp();
 
     const handleHideResult = () => {

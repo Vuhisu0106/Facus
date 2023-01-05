@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 
 import { publicRoutes, privateRoutes } from './routes';
 import DefaultLayout from './layouts/DefaultLayout';
-import PrivateRoute from './components/Route/PrivateRoute';
 import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Error from './pages/Error';
+import { PrivateRoute, PublicRoute } from './components/Route';
 
 function App() {
-    const [error, setError] = useState(null);
     const dark = useSelector((state) => state.theme.darkMode);
 
     if (dark) {
@@ -35,35 +35,28 @@ function App() {
                 theme={dark ? 'dark' : 'light'}
             />
             <Routes>
+                {/* Public route */}
                 {publicRoutes.map((route, index) => {
                     const Page = route.component;
-
-                    let Layout = DefaultLayout;
-                    if (route.layout) {
-                        Layout = route.layout;
-                    } else if (route.layout === null) {
-                        Layout = Fragment;
-                    }
-
+                    let Layout = route.layout;
                     return (
                         <Route
                             key={index}
                             path={route.path}
                             element={
-                                <Layout>
-                                    <Page />
-                                </Layout>
+                                <PublicRoute>
+                                    <Layout>
+                                        <Page />
+                                    </Layout>
+                                </PublicRoute>
                             }
                         />
                     );
                 })}
 
-                {/* <Route element={<LandingPage />}>
-                    <Route path="/" exact element={<HomePage />} />
-                    <Route path="/log-in" element={<LogIn />} />
-                    <Route path="/sign-up" element={<SignUp />} />
-                </Route> */}
+                <Route path="*" element={<Error />} />
 
+                {/* Private route */}
                 {privateRoutes.map((route, index) => {
                     const Page = route.component;
 
@@ -89,36 +82,6 @@ function App() {
                         ></Route>
                     );
                 })}
-
-                {/* <Route
-                        path="/"
-                        element={
-                            <PrivateRoute>
-                                <DefaultLayout></DefaultLayout>
-                            </PrivateRoute>
-                        }
-                    /> */}
-
-                {/* <Route
-                        path="/"
-                        element={
-                            <PrivateRoute>
-                                <DefaultLayout />
-                            </PrivateRoute>
-                        }
-                    >
-                        <Route
-                            // @ts-ignore
-                            index
-                            path="/"
-                            element={<Home />}
-                        />
-                        <Route path="/messenger" element={<Message />} />
-                        <Route path="/upload" element={<Upload />} />
-                        <Route path="/post" element={<Post />} />
-                        <Route path="/@:nickname" element={<Profile />} />
-                    </Route>
-                    <Route path="/landing" element={<LandingPage />} /> */}
             </Routes>
         </div>
     );

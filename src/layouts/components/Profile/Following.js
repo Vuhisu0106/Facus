@@ -10,6 +10,7 @@ import WrapperModal from '~/components/Wrapper';
 import { useNavigate } from 'react-router-dom';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
 import { LoadingFollowAccItem } from '~/components/Loading';
+import { UserName } from '~/components/AccountItem';
 
 const cx = classNames.bind(styles);
 function Following({ list }) {
@@ -64,7 +65,12 @@ function Following({ list }) {
                                         }}
                                     />
                                     <div className={cx('following__account--info')}>
-                                        <h1 className={cx('following__account--name')}>{following.displayName}</h1>
+                                        <UserName
+                                            userUid={following.uid}
+                                            userName={following.displayName}
+                                            size={'medium'}
+                                            isAdmin={following.isAdmin}
+                                        />
                                         <span className={cx('following__account--bio')}>
                                             {following.bio || 'Hello World'}
                                         </span>

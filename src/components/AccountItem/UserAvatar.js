@@ -2,10 +2,10 @@ import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import styles from './CircleAvatar.module.scss';
+import styles from './AccountItem.module.scss';
 
 const cx = classNames.bind(styles);
-function CircleAvatar({ className, userUid, userName, avatar, diameter }) {
+function UserAvatar({ className, userUid, userName, avatar, diameter }) {
     const [loading, setLoading] = useState(false);
     const classes = cx('user-avt', {
         [className]: className,
@@ -28,4 +28,4 @@ function CircleAvatar({ className, userUid, userName, avatar, diameter }) {
     );
 }
 
-export default CircleAvatar;
+export default UserAvatar;

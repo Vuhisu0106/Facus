@@ -1,0 +1,40 @@
+.wrapper {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 8px 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    &:hover {
+        background: var(--account-item-hover);
+    }
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.info {
+    flex: 1;
+    margin-left: 8px;
+}
+
+.name {
+    color: var(--account-item-name-color);
+    font-size: 1.5rem;
+    font-weight: var(--acc-name-search-fw);
+}
+
+.check {
+    margin-left: 6px;
+    color: rgb(32, 213, 236);
+}
+
+.following {
+    font-size: var(--account-item-following-font-size);
+    color: var(--account-item-following-color);
+    font-weight: var(--following-name-search-fw);
+}

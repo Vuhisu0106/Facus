@@ -1,14 +1,14 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 
-import StatusModal from '~/components/Modal/Modal/StatusModal';
-import styles from './RoundAccountItem.module.scss';
+import styles from './StatusItem.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
+import SetStatusModal from '../SetStatusModal';
+import ViewStatusModal from '../ViewStatusModal';
 
 const cx = classNames.bind(styles);
-function RoundAccountItem({ className, userName, avt, status, bigText, addStatus }) {
+function StatusItem({ className, userName, avt, status, bigText, addStatus }) {
     const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
     const [isSetStatusVisible, setIsSetStatusVisible] = useState(false);
     const [imgLoading, setImgLoading] = useState(false);
@@ -18,7 +18,7 @@ function RoundAccountItem({ className, userName, avt, status, bigText, addStatus
     return (
         <div className={classes}>
             {isStatusModalVisible && (
-                <StatusModal
+                <ViewStatusModal
                     userName={userName}
                     avt={avt}
                     status={status}
@@ -64,4 +64,4 @@ function RoundAccountItem({ className, userName, avt, status, bigText, addStatus
     );
 }
 
-export default RoundAccountItem;
+export default StatusItem;

@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    //isHaveUnreadMessage: false,
     isAddChatVisible: false,
     chatId: 'null',
     user: {},
@@ -21,9 +20,6 @@ const chat = createSlice({
         setAddChatState: (state, action) => {
             state.isAddChatVisible = action.payload.isAddChatVisible;
         },
-        // getHaveUnreadMessage: (state, action) => {
-        //     state.isHaveUnreadMessage = !action.payload.every((element) => element === true);
-        // },
     },
 });
 

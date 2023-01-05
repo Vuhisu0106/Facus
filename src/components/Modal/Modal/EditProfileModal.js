@@ -49,8 +49,8 @@ function EditProfileModal({ onClose }) {
                 setIsCoverPhotoChange(false);
             }}
             children={
-                <div className={cx('edit-profile-wrapper')}>
-                    <div className={cx('edit-profile-body')}>
+                <div className={cx('edit-profile__wrapper')}>
+                    <div className={cx('edit-profile__body')}>
                         {/* Edit profile picture */}
                         <div className={cx('edit-avatar')}>
                             <div className={cx('edit-title')}>
@@ -58,20 +58,20 @@ function EditProfileModal({ onClose }) {
                             </div>
 
                             <div className={cx('edit-body')}>
-                                <div className={cx('edit-avatar-wrapper')}>
+                                <div className={cx('edit-avatar__wrapper')}>
                                     {/* Display blur wrapper and selected avatar  */}
                                     {!avatar ? (
                                         <>
                                             <label
                                                 htmlFor="avatar-upload"
-                                                className={cx('avatar-upload-label')}
+                                                className={cx('avatar-upload__label')}
                                                 style={{
                                                     backgroundImage: `url(${profile.photoURL})`,
                                                 }}
                                             >
-                                                <div className={cx('avatar-upload-hover')}>
+                                                <div className={cx('avatar-upload__hover')}>
                                                     <FontAwesomeIcon
-                                                        className={cx('avatar-upload-icon')}
+                                                        className={cx('avatar-upload__icon')}
                                                         icon={faCamera}
                                                     />
                                                 </div>
@@ -115,21 +115,21 @@ function EditProfileModal({ onClose }) {
                                 <h3>Cover photo</h3>
                             </div>
                             <div className={cx('edit-body')}>
-                                <div className={cx('edit-cover-photo-wrapper')}>
+                                <div className={cx('edit-cover-photo__wrapper')}>
                                     {!coverPhoto ? (
                                         <>
                                             <label
                                                 htmlFor="cover-photo-upload"
-                                                className={cx('cover-photo-upload-label')}
+                                                className={cx('cover-photo-upload__label')}
                                                 style={{
                                                     backgroundImage: `url(${
                                                         profile.coverPhotoURL || profile.photoURL
                                                     })`,
                                                 }}
                                             >
-                                                <div className={cx('cover-photo-upload-hover')}>
+                                                <div className={cx('cover-photo-upload__hover')}>
                                                     <FontAwesomeIcon
-                                                        className={cx('cover-photo-upload-icon')}
+                                                        className={cx('cover-photo-upload__icon')}
                                                         icon={faCamera}
                                                     />
                                                 </div>
@@ -167,6 +167,7 @@ function EditProfileModal({ onClose }) {
                                 </div>
                             </div>
                         </div>
+                        <h5 className={cx('note')}>Click on image to add/delete it</h5>
                     </div>
                     <div className={cx('edit-profile-footer')}>
                         <Button

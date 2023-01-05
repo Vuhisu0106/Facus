@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import { faCamera, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-import CircleAvatar from '../CircleAvatar';
+import { UserAvatar, UserName } from '../AccountItem';
 import styles from './CommentItem.module.scss';
 import { useAuth } from '~/context/AuthContext';
 import Menu from '../Popper/Menu';
@@ -16,28 +16,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { likeComment, unlikeComment } from '~/features/PostAndComment/PostAndCommentSlice';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '~/firebase/config';
+import { useApp } from '~/context/AppContext';
 
 const cx = classNames.bind(styles);
-function CommentItem({ className, data, editComment, toggleLikeComment, deleteComment, isReplyPress }) {
+function CommentItem({ className, data, posterUid, onEditComment, onToggleLikeComment, onDeleteComment }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditComment, setIsEditComment] = useState(false);
-
     const [comment, setComment] = useState('');
     const [commentImg, setCommentImg] = useState('');
-
     const [cancelEdit, setCancelEdit] = useState(false);
-
     const [commenterInfo, setCommenterInfo] = useState({});
-
     const [isReplyCmtVisible, setIsReplyCmtVisible] = useState(false);
 
     const { currentUser } = useAuth();
+    const { adminInfo } = useApp();
     const dispatch = useDispatch();
 
     const editedComment = useSelector((state) => {
         const postComment = state.postNcomment.posts.find((post) => post.postId === data.postId).comment;
         return postComment.find((comment) => comment.commentId === data.commentId);
     });
+
+    console.log('render cmt');
 
     const MENU_COMMENT = [
         {
@@ -52,7 +52,7 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
             icon: <FontAwesomeIcon icon={faTrashCan} />,
             title: 'Delete comment',
             onClick: () => {
-                deleteComment(data);
+                onDeleteComment(data);
             },
         },
     ];
@@ -80,7 +80,7 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
     const handleLikeComment = async (commentId) => {
         if (data.like.indexOf(currentUser.uid) === -1) {
             data.like = [...data.like, currentUser.uid];
-            toggleLikeComment({
+            onToggleLikeComment({
                 dataComment: data,
                 postId: data.postId,
                 commentId,
@@ -94,7 +94,7 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
                 data.like = newLike;
             }
             dispatch(unlikeComment({ currentUserUid: currentUser.uid, postId: data.postId, commentId }));
-            toggleLikeComment({
+            onToggleLikeComment({
                 dataComment: data,
                 postId: data.postId,
                 commentId,
@@ -119,17 +119,17 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
         //if prev comment already has image
         if (editedComment.img) {
             if (commentImg === editedComment.img) {
-                await editComment({ ...dataEdit, commentImg: editedComment.img });
+                await onEditComment({ ...dataEdit, commentImg: editedComment.img });
             } else if (!commentImg) {
-                await editComment({ ...dataEdit, isImgChanged: false, isImgDeleted: true });
+                await onEditComment({ ...dataEdit, isImgChanged: false, isImgDeleted: true });
             } else {
-                await editComment({ ...dataEdit, isImgChanged: true });
+                await onEditComment({ ...dataEdit, isImgChanged: true });
             }
         } else {
             if (commentImg) {
-                await editComment({ ...dataEdit, isImgChanged: true, isImgAdded: true });
+                await onEditComment({ ...dataEdit, isImgChanged: true, isImgAdded: true });
             } else {
-                await editComment(dataEdit);
+                await onEditComment(dataEdit);
             }
         }
     };
@@ -186,7 +186,7 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
     return (
         <div className={classes} key={data.commentId}>
             <div className={cx('comment__avt')}>
-                <CircleAvatar
+                <UserAvatar
                     userUid={commenterInfo.uid}
                     userName={commenterInfo.displayName}
                     avatar={commenterInfo.photoURL}
@@ -205,7 +205,13 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
                                     !data?.content && data?.img ? 'no-text-wrapper' : '',
                                 )}
                             >
-                                <div className={cx('comment__user-name')}>{commenterInfo.displayName}</div>
+                                <UserName
+                                    userUid={commenterInfo.uid}
+                                    userName={commenterInfo.displayName}
+                                    size={'small'}
+                                    isCreator={data.commenter.uid === posterUid}
+                                    isAdmin={commenterInfo.isAdmin}
+                                />
                                 <div className={cx('comment__text--content')}>{data?.content}</div>
 
                                 {/* Use data from rendering in this component (not from props of parents component) must check if they exist or not */}
@@ -234,7 +240,7 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
                                     }}
                                 >
                                     <div
-                                        className={cx('comment-setting')}
+                                        className={cx('comment__setting')}
                                         onClick={() => {
                                             setIsModalVisible(!isModalVisible);
                                         }}
@@ -298,16 +304,21 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
                     {isReplyCmtVisible && (
                         <div className={cx('reply-comment')}>
                             <div className={cx('reply-comment__avt')}>
-                                <CircleAvatar
-                                    userUid={commenterInfo.uid}
-                                    userName={commenterInfo.displayName}
-                                    avatar={commenterInfo.photoURL}
+                                <UserAvatar
+                                    userUid={adminInfo.uid}
+                                    userName={adminInfo.displayName}
+                                    avatar={adminInfo.photoURL}
                                     diameter="32px"
                                 />
                             </div>
                             <div className={cx('reply-comment__content--text-wrapper')}>
                                 <div className={cx('comment__content--text')}>
-                                    <div className={cx('comment__user-name')}>Vũ Hiếu</div>
+                                    <UserName
+                                        userName={adminInfo.displayName}
+                                        userUid={adminInfo.uid}
+                                        size={'small'}
+                                        isAdmin={true}
+                                    />
                                     <div className={cx('comment__text--content')}>
                                         Sorry, this feature is not ready :v
                                     </div>
@@ -315,12 +326,10 @@ function CommentItem({ className, data, editComment, toggleLikeComment, deleteCo
                             </div>
                         </div>
                     )}
-
-                    {/* Reply comment */}
                 </div>
             )}
         </div>
     );
 }
 
-export default CommentItem;
+export default memo(CommentItem);

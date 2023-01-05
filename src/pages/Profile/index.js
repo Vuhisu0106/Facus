@@ -1,27 +1,26 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { onSnapshot, doc } from 'firebase/firestore';
+import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
+import { faCircle, faMessage, faPen, faUserMinus, faUserPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { db } from '~/firebase/config';
 import styles from './Profile.module.scss';
-import { faCircle, faMessage, faPen, faUserMinus, faUserPlus, faWrench } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
-
-import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
-import SetStatusModal from '~/components/Modal/Modal/SetStatusModal';
 import EditProfileModal from '~/components/Modal/Modal/EditProfileModal';
 import { useApp } from '~/context/AppContext';
-
-import { useDispatch } from 'react-redux';
 import { setProfileInfo } from '~/features/Profile/ProfileSlice';
 import { follow, unfollow } from '~/utils/FollowUtils';
 import { Grid, GridColumn, GridRow } from '~/components/Grid';
 import { Follower, Following, LoadingProfile, Posts } from '~/layouts/components/Profile';
 import { selectChatFunction } from '~/utils';
-import { toast } from 'react-toastify';
+import SetStatusModal from '~/components/Modal/Modal/StatusModal/SetStatusModal';
+import { UserName } from '~/components/AccountItem';
 
 const cx = classNames.bind(styles);
 const NAV_LIST = ['Posts', 'Following', 'Follower'];
@@ -44,10 +43,6 @@ function Profile() {
     const [hovered, setHovered] = useState(false);
     const [avatarLoading, setAvatarLoading] = useState(false);
     const [coverPhotoLoading, setCoverPhotoLoading] = useState(false);
-
-    // const postsMemo = memo(() => {
-    //     <Posts selectedUser={selectedUser} isCurrentUser={params.id === currentUser.uid ? true : false} />;
-    // }, [selectedUser]);
 
     const main = () => {
         if (profileLayout === 'Following') {
@@ -97,8 +92,6 @@ function Profile() {
 
     const handleFollow = async () => {
         try {
-            //setSelectedUser((prev) => ({ ...prev, follower: prev.follower.push(currentUserInfo.uid) }));
-
             setFollowingLoading(true);
             await follow(currentUser.uid, selectedUser.uid);
             toast.success('Follow successfully');
@@ -123,8 +116,6 @@ function Profile() {
         await selectChatFunction(currentUser, selectedUser);
         navigate('/message');
     };
-
-    const ProfileContent = useMemo(() => {});
 
     return (
         <>
@@ -234,12 +225,17 @@ function Profile() {
                                                     </div>
                                                 </div>
                                                 <div className={cx('profile__name-n-follow')}>
-                                                    <h1 className={cx('profile__name')}>{selectedUser.displayName}</h1>
+                                                    <UserName
+                                                        userName={selectedUser.displayName}
+                                                        size={'large'}
+                                                        isAdmin={selectedUser.isAdmin}
+                                                    />
                                                     <div className={cx('profile__follow-info')}>
                                                         <span
                                                             className={cx('profile__following')}
                                                             onClick={() => {
                                                                 setProfileLayout('Following');
+                                                                setType('Following');
                                                             }}
                                                         >
                                                             {selectedUser?.following?.length > 0
@@ -255,6 +251,7 @@ function Profile() {
                                                             className={cx('profile__follower')}
                                                             onClick={() => {
                                                                 setProfileLayout('Follower');
+                                                                setType('Follower');
                                                             }}
                                                         >
                                                             {selectedUser?.follower?.length > 0

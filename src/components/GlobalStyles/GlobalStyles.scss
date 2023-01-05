@@ -9,17 +9,6 @@
     --primary: rgb(254, 44, 85);
     --black: #000;
     --white: #fff;
-    //Default Layout
-    --default-layout-header-height: 60px;
-
-    //Home Layout
-    --home-layout-width: 1178px;
-    --home-interface-padding: 20px 24px;
-    --home-center-area-width: 612px;
-
-    //Profile Layout
-    --profile-layout-width: 1095px;
-    --profile-layout-padding: 246px;
 
     ////////////////////////Light mode//////////////////////
     --text-color: #161823;
@@ -32,7 +21,6 @@
 
     ////////////////////////////////////////////////////////
     --input-border-radius: 92px;
-    --transition-theme: all 0.02s ease;
     --component-border-radius: 15px;
 
     ////////////////////////Dark mode//////////////////////
@@ -47,8 +35,6 @@
     --dark-text-color: #3a3b3c;
     --dark-text-color-2: #e4e6eb;
     --dark-text-color-3: #b0b3b8;
-
-    --dark-border-color: 1px solid rgb(62, 64, 66);
 
     //circle button//
     --dark-background-color-3: #f0f0f0;
@@ -109,7 +95,7 @@ html *::-webkit-scrollbar-track {
 html[theme='light'] {
     --background-color: #fff;
     --background-color-2: #f2f5f7;
-    --wrapper-box-shadow: 0 2px 8px 0 rgb(99 99 99 / 20%);
+    --wrapper-box-shadow: 0 2px 8px 0 rgb(99 99 99 / 10%);
 
     // Input //
     --background-input: #f2f5f7;
@@ -283,7 +269,7 @@ html[theme='dark'] {
     --chat-font-weight: 400;
     --chat-sending-time-font-weight: 700;
     --chat-sending-time-color: #3a3b3c;
-    --fr-chat-bc: rgba(68, 43, 48, 0.302);
+    --fr-chat-bc: #ff003321;
     --fr-chat-color: #b0b3b8;
     --chat-btn: #8c8e91;
     --chat-item-active-bc: #292a2c;

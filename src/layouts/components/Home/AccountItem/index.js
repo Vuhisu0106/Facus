@@ -5,12 +5,12 @@ import { useAuth } from '~/context/AuthContext';
 import { LoadingIcon } from '~/components/Icon';
 import { useState } from 'react';
 import { follow } from '~/utils/FollowUtils';
-import CircleAvatar from '~/components/CircleAvatar';
+import { UserAvatar, UserName } from '~/components/AccountItem';
 import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
-function AccountItem({ uid, displayName, photoURL, follower }) {
+function AccountItem({ uid, displayName, photoURL, follower, isAdmin }) {
     const { currentUser } = useAuth();
 
     const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ function AccountItem({ uid, displayName, photoURL, follower }) {
     return (
         <div className={cx('account-item')}>
             <div className={cx('account-info')}>
-                <CircleAvatar
+                <UserAvatar
                     className={cx('avatar')}
                     userUid={uid}
                     userName={displayName}
@@ -39,10 +39,7 @@ function AccountItem({ uid, displayName, photoURL, follower }) {
                     diameter={'36px'}
                 />
                 <div className={cx('info')}>
-                    <h4 className={cx('name')}>
-                        <span>{displayName}</span>
-                        {/* <FontAwesomeIcon className={cx('check')} icon={faCheckCircle} /> */}
-                    </h4>
+                    <UserName userUid={uid} userName={displayName} size={'medium'} isAdmin={isAdmin} />
                     <span className={cx('follower')}>
                         {follower ? (follower < 2 ? follower + ' follower' : follower + ' followers') : '0 follower'}
                     </span>

@@ -8,6 +8,10 @@
     font-weight: 600;
     cursor: pointer;
 
+    &:hover {
+        color: #e54c91;
+    }
+
     label {
         cursor: pointer;
     }

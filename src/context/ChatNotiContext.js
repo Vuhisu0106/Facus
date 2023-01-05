@@ -17,7 +17,7 @@ function ChatNotiProvider({ children }) {
     useEffect(() => {
         const getChats = () => {
             const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
-                const arr = Object.entries(doc.data()).map((user) => user[1].receiverHasRead);
+                const arr = Object.entries(doc.data() || {}).map((user) => user[1].receiverHasRead);
                 setIsHaveChatNoti(!arr.every((element) => element === true));
             });
 

@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import CircleAvatar from '~/components/CircleAvatar';
+import { UserAvatar, UserName } from '~/components/AccountItem';
 import { db } from '~/firebase/config';
 import styles from '~/layouts/components/Message/Chat.module.scss';
 
@@ -23,14 +23,19 @@ function ChatHeader({ uid }) {
     }, [uid]);
     return (
         <div className={cx('chat-header')}>
-            <CircleAvatar
+            <UserAvatar
                 className={cx('user-avt')}
                 userUid={accountInfo.uid}
                 userName={accountInfo.displayName}
                 avatar={accountInfo.photoURL}
                 diameter="38px"
             />
-            <h3 className={cx('user-name')}>{accountInfo.displayName}</h3>
+            <UserName
+                userUid={accountInfo.uid}
+                userName={accountInfo.displayName}
+                size={'medium'}
+                isAdmin={accountInfo.isAdmin}
+            />
         </div>
     );
 }

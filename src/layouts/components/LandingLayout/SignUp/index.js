@@ -1,4 +1,3 @@
-import { faFacebook, faGoogle, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
@@ -24,7 +23,6 @@ function SignUp() {
     const passwordConfirmRef = useRef();
 
     const { signup, currentUser } = useAuth();
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -45,48 +43,64 @@ function SignUp() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        const submitData = [
+            emailRef.current.value,
+            displayNameRef.current.value,
+            passwordRef.current.value,
+            passwordConfirmRef.current.value,
+        ];
 
-        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-            toast.error('Passwords do not match');
+        if (!submitData.every((data) => data !== '')) {
+            toast.error('Please complete all required fields');
+        } else {
+            if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+                toast.error('Passwords do not match');
+            } else {
+                try {
+                    setLoading(true);
+                    const res = await signup(emailRef.current.value, passwordRef.current.value);
+
+                    try {
+                        await updateProfile(res.user, {
+                            displayName: submitData[1],
+                            photoURL: DEFAULT_AVATAR,
+                        });
+
+                        await setDocument('users', res.user.uid, {
+                            uid: res.user.uid,
+                            displayName: submitData[1],
+                            email: submitData[0],
+                            photoURL: DEFAULT_AVATAR,
+                            coverPhotoURL: DEFAULT_COVER_PHOTO,
+                            keywords: generateKeywords(submitData[1]),
+                            following: [],
+                            follower: [],
+                            bio: '',
+                            isAdmin: false,
+                        });
+
+                        //create empty user chats on firestore
+                        await setDocument('userChats', res.user.uid, {});
+                        navigate('/');
+                    } catch (error) {
+                        console.log(error);
+                    }
+                } catch (error) {
+                    var errorCode = error.code;
+                    if (errorCode === 'auth/email-already-in-use') {
+                        toast.error('User already exists');
+                    } else if (errorCode === 'auth/invalid-email') {
+                        toast.error('Email invalid');
+                    } else if (errorCode === 'auth/weak-password') {
+                        toast.error('Password should be at least 6 characters');
+                    } else {
+                        toast.error('Fail to sign up');
+                    }
+                    console.log(error);
+                }
+            }
         }
 
-        try {
-            setError('');
-            setLoading(true);
-            const res = await signup(emailRef.current.value, passwordRef.current.value);
-
-            try {
-                await updateProfile(res.user, {
-                    displayName: displayNameRef.current.value,
-                    photoURL: DEFAULT_AVATAR,
-                });
-
-                await setDocument('users', res.user.uid, {
-                    uid: res.user.uid,
-                    displayName: displayNameRef.current.value,
-                    email: emailRef.current.value,
-                    photoURL: DEFAULT_AVATAR,
-                    coverPhotoURL: DEFAULT_COVER_PHOTO,
-                    keywords: generateKeywords(displayNameRef.current.value),
-                    following: [],
-                    follower: [],
-                    bio: '',
-                    isAdmin: false,
-                });
-
-                //create empty user chats on firestore
-                await setDocument('userChats', res.user.uid, {});
-                navigate('/');
-            } catch (error) {
-                console.log(error);
-            }
-        } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                toast.error('User already exists');
-            }
-            console.log(error);
-        }
-        //setIsSignedUp(true);
         setLoading(false);
     }
 
@@ -96,69 +110,72 @@ function SignUp() {
                 <GridColumn l={5} l_o={1} m={7} s={12} className={cx('form-col')}>
                     <div className={cx('sign-up-col')}>
                         <form onSubmit={handleSubmit} className={cx('sign-up-form')}>
-                            <div className={cx('title')}>
-                                <h2>Sign up</h2>
-                            </div>
-                            {currentUser && currentUser.email}
+                            <div className={cx('form__body')}>
+                                <div className={cx('title')}>
+                                    <h2>Sign up</h2>
+                                </div>
+                                {currentUser && currentUser.email}
 
-                            {/* <div className={cx('input-field')}>
-                        <FontAwesomeIcon className={cx('icon')} icon={faUser} />
-            
-                        <input type="text" placeholder="Username" />
-                    </div> */}
-                            <div className={cx('user-info-input')}>
-                                <div className={cx('input')}>
-                                    <h4>Email</h4>
-                                    <div className={cx('input-field')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
-                                        <input placeholder="Email" ref={emailRef} />
+                                <div className={cx('user-info-input')}>
+                                    <div className={cx('input')}>
+                                        <h4>Email</h4>
+                                        <div className={cx('input-field')}>
+                                            <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
+                                            <input placeholder="Email" ref={emailRef} />
+                                        </div>
+                                    </div>
+
+                                    <div className={cx('input')}>
+                                        <h4>User name</h4>
+                                        <div className={cx('input-field')}>
+                                            <FontAwesomeIcon className={cx('icon')} icon={faUser} />
+                                            <input placeholder="User name" ref={displayNameRef} />
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div className={cx('input')}>
-                                    <h4>User name</h4>
+                                    <h4>Password</h4>
                                     <div className={cx('input-field')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faUser} />
-                                        <input placeholder="User name" ref={displayNameRef} />
+                                        <FontAwesomeIcon className={cx('icon')} icon={faLock} />
+
+                                        <input type="password" placeholder="Password" ref={passwordRef} />
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className={cx('input')}>
-                                <h4>Password</h4>
-                                <div className={cx('input-field')}>
-                                    <FontAwesomeIcon className={cx('icon')} icon={faLock} />
+                                <div className={cx('input')}>
+                                    <h4> Confirm password</h4>
+                                    <div className={cx('input-field')}>
+                                        <FontAwesomeIcon className={cx('icon')} icon={faLock} />
 
-                                    <input type="password" placeholder="Password" ref={passwordRef} />
+                                        <input
+                                            type="password"
+                                            placeholder="Confirm password"
+                                            ref={passwordConfirmRef}
+                                        />
+                                    </div>
                                 </div>
+
+                                <button disabled={loading} type="submit" className={cx('btn')} value="Sign up">
+                                    {loading ? (
+                                        <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
+                                    ) : (
+                                        'Sign up'
+                                    )}
+                                </button>
                             </div>
-
-                            <div className={cx('input')}>
-                                <h4> Confirm password</h4>
-                                <div className={cx('input-field')}>
-                                    <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-
-                                    <input type="password" placeholder="Confirm password" ref={passwordConfirmRef} />
-                                </div>
+                            <div className={cx('form__footer')}>
+                                <p>
+                                    If you have an account, let's{' '}
+                                    <span
+                                        onClick={() => {
+                                            navigate('/log-in');
+                                        }}
+                                    >
+                                        log in
+                                    </span>
+                                </p>
                             </div>
-
-                            <button disabled={loading} type="submit" className={cx('btn')} value="Sign up">
-                                {loading ? (
-                                    <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
-                                ) : (
-                                    'Sign up'
-                                )}
-                            </button>
-                            <p>
-                                If you have an account, let's{' '}
-                                <span
-                                    onClick={() => {
-                                        navigate('/log-in');
-                                    }}
-                                >
-                                    log in
-                                </span>
-                            </p>
                         </form>
                         <img className={cx('cloud-image-1')} src="images/Cloud-1.png" alt="" />
                         <img className={cx('cloud-image-2')} src="images/Cloud-1.png" alt="" />

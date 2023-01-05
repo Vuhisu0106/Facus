@@ -5,7 +5,6 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 
 import { useAuth } from '~/context/AuthContext';
 import { db } from '~/firebase/config';
-import AccountItem from '~/components/AccountItem';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import Input from '~/components/Input';
 import styles from '~/components/Search/Search.module.scss';
@@ -13,6 +12,7 @@ import { useDebounce } from '~/components/Hook';
 import { useDispatch } from 'react-redux';
 import { setAddChatState } from '~/features/Chat/ChatSlice';
 import { selectChatFunction } from '~/utils';
+import AccountItem from '../AccountItem';
 
 const cx = classNames.bind(styles);
 function ChatSearch({ className, placeHolder, placement, autoFocus }) {

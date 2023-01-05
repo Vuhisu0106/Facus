@@ -1,19 +1,14 @@
-import Home from '~/pages/Dashboard';
-import LandingPage from '~/pages/LandingPage';
 import Message from '~/pages/Chat';
 import Profile from '~/pages/Profile';
 import Post from '~/pages/Post';
-
+import Dashboard from '~/pages/Dashboard';
 import config from '~/configs';
 import HeaderOnly from '~/layouts/HeaderOnly';
-
 import SignUp from '~/layouts/components/LandingLayout/SignUp';
-
 import LandingLayout from '~/layouts/LandingLayout';
 import HomePage from '~/layouts/components/LandingLayout/HomePage';
 import LogIn from '~/layouts/components/LandingLayout/LogIn';
 import { ForgetPassword } from '~/layouts/components/LandingLayout';
-import Dashboard from '~/pages/Dashboard';
 
 const publicRoutes = [
     {

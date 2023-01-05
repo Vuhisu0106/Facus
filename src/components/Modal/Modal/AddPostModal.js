@@ -14,7 +14,7 @@ import { LoadingIcon } from '~/components/Icon';
 import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
-function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, editPostFunc }) {
+function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEditPost }) {
     const { currentUserInfo } = useApp();
     const dispatch = useDispatch();
 
@@ -45,7 +45,7 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
         setLoading(true);
         setTimeout(() => {
             try {
-                addPostFunc(caption, img);
+                onAddPost(caption, img);
                 setLoading(false);
             } catch (error) {
                 console.log(error);
@@ -61,17 +61,17 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, addPostFunc, edit
         try {
             if (editedPost.img) {
                 if (img === editedPost.img) {
-                    await editPostFunc(caption, img);
+                    await onEditPost(caption, img);
                 } else if (!img) {
-                    await editPostFunc(caption, img, false, false, true);
+                    await onEditPost(caption, img, false, false, true);
                 } else {
-                    await editPostFunc(caption, img, false, true);
+                    await onEditPost(caption, img, false, true);
                 }
             } else {
                 if (img) {
-                    await editPostFunc(caption, img, true, true);
+                    await onEditPost(caption, img, true, true);
                 } else {
-                    await editPostFunc(caption, img);
+                    await onEditPost(caption, img);
                 }
             }
             setLoading(false);

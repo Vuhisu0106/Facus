@@ -1,4 +1,3 @@
-import { faFacebook, faGoogle, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
@@ -42,15 +41,28 @@ function LogIn() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        try {
-            setLoading(true);
-            await login(emailRef.current.value, passwordRef.current.value, rememberMe);
-            toast.success('Log in successfully');
-            navigate('/');
-        } catch (error) {
-            toast.error('Failed to log in');
-            console.log(error);
+        const submitData = [emailRef.current.value, passwordRef.current.value];
+        if (!submitData.every((data) => data !== '')) {
+            toast.error('Please complete all required fields');
+        } else {
+            try {
+                setLoading(true);
+                await login(emailRef.current.value, passwordRef.current.value, rememberMe);
+                toast.success('Log in successfully');
+                navigate('/');
+            } catch (error) {
+                var errorCode = error.code;
+                if (errorCode === 'auth/wrong-password') {
+                    toast.error('Incorrect password');
+                } else if (errorCode === 'auth/user-not-found') {
+                    toast.error('No users found');
+                } else if (errorCode === 'auth/invalid-email') {
+                    toast.error('Email invalid');
+                } else toast.error('Failed to log in');
+                console.log(error);
+            }
         }
+
         setLoading(false);
     }
 
@@ -79,54 +91,53 @@ function LogIn() {
                 <GridColumn l={4.5} l_o={1} m={6} s={12}>
                     <div className={cx('log-in-col')}>
                         <form onSubmit={handleSubmit} className={cx('log-in-form')}>
-                            <div className={cx('title')}>
-                                <h2>Log in</h2>
+                            <div className={cx('form__body')}>
+                                <div className={cx('title')}>
+                                    <h2>Log in</h2>
+                                </div>
+
+                                <div className={cx('input')}>
+                                    <h4>Email</h4>
+                                    <div className={cx('input-field')}>
+                                        <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
+                                        <input type="email" placeholder="Email" ref={emailRef} />
+                                    </div>
+                                </div>
+                                <div className={cx('input')}>
+                                    <h4>Password</h4>
+                                    <div className={cx('input-field')}>
+                                        <FontAwesomeIcon className={cx('icon')} icon={faLock} />
+                                        <input type="password" placeholder="Password" ref={passwordRef} />
+                                    </div>
+                                </div>
+
+                                <div className={cx('other-features')}>
+                                    <Checkbox text={'Remember me'} onChange={handleRememberMe} />
+                                    <Link className={cx('')} to={config.routes.forgetPassword}>
+                                        Forget Password
+                                    </Link>
+                                </div>
+
+                                <button disabled={loading} className={cx('log-in__btn')} type="submit" value="Log in">
+                                    {loading ? (
+                                        <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
+                                    ) : (
+                                        'Log in'
+                                    )}
+                                </button>
                             </div>
 
-                            <div className={cx('input')}>
-                                <h4>Email</h4>
-                                <div className={cx('input-field')}>
-                                    <FontAwesomeIcon className={cx('icon')} icon={faEnvelope} />
-                                    <input type="email" placeholder="Email" ref={emailRef} />
-                                </div>
-                            </div>
-                            <div className={cx('input')}>
-                                <h4>Password</h4>
-                                <div className={cx('input-field')}>
-                                    <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-                                    <input type="password" placeholder="Password" ref={passwordRef} />
-                                </div>
-                            </div>
-
-                            <div className={cx('other-features')}>
-                                <Checkbox text={'Remember me'} onChange={handleRememberMe} />
-                                <Link className={cx('')} to={config.routes.forgetPassword}>
-                                    Forget Password
-                                </Link>
-                            </div>
-
-                            <button disabled={loading} className={cx('log-in__btn')} type="submit" value="Log in">
-                                {loading ? (
-                                    <FadingBalls color="#fff" width="32px" height="8px" duration="0.4s" />
-                                ) : (
-                                    'Log in'
-                                )}
-                            </button>
-
-                            <p className={cx('social-text')}>Or Log in with social platforms</p>
-                            <div className={cx('social-media')}>
-                                <div href="" className={cx('social-icons')}>
-                                    <FontAwesomeIcon className={cx('icon')} icon={faFacebook} />
-                                </div>
-                                <div href="" className={cx('social-icons')}>
-                                    <FontAwesomeIcon className={cx('icon')} icon={faTwitter} />
-                                </div>
-                                <div href="" className={cx('social-icons')}>
-                                    <FontAwesomeIcon className={cx('icon')} icon={faGoogle} />
-                                </div>
-                                <div href="" className={cx('social-icons')}>
-                                    <FontAwesomeIcon className={cx('icon')} icon={faLinkedin} />
-                                </div>
+                            <div className={cx('form__footer')}>
+                                <h4>
+                                    Don't have an account yet?{' '}
+                                    <span
+                                        onClick={() => {
+                                            navigate('/sign-up');
+                                        }}
+                                    >
+                                        Sign up
+                                    </span>{' '}
+                                </h4>
                             </div>
                         </form>
                     </div>

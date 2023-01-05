@@ -32,7 +32,7 @@ function PostList({ followingList }) {
                 collection(db, 'post'),
                 where('poster.uid', 'in', followingList),
                 orderBy('date', 'desc'),
-                limit(3),
+                limit(4),
             );
             try {
                 dispatch(resetPost());

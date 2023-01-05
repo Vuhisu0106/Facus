@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
-import RoundAccountItem from '~/components/AccountItem/RoundAccountItem';
 
-import styles from '~/components/Modal/Modal.module.scss';
+import styles from './StatusModal.module.scss';
 
-import Modal from '..';
+import Modal from '../..';
+import StatusItem from './StatusItem';
 
 const cx = classNames.bind(styles);
-function StatusModal({ userName, avt, status, onCloseStatusModal }) {
+function ViewStatusModal({ userName, avt, status, onCloseStatusModal }) {
     return (
         <Modal
             title={'Status'}
@@ -19,7 +19,7 @@ function StatusModal({ userName, avt, status, onCloseStatusModal }) {
             onClose={onCloseStatusModal}
             children={
                 <div className={cx('status-wrapper')}>
-                    <RoundAccountItem className={cx('status')} userName={userName} avt={avt} status={status} bigText />
+                    <StatusItem className={cx('status')} userName={userName} avt={avt} status={status} bigText />
                     <p>{status.text}</p>
                 </div>
             }
@@ -27,4 +27,4 @@ function StatusModal({ userName, avt, status, onCloseStatusModal }) {
     );
 }
 
-export default StatusModal;
+export default ViewStatusModal;

@@ -10,6 +10,7 @@
     flex-direction: row;
     overflow: hidden;
     position: relative;
+    box-shadow: var(--wrapper-box-shadow);
 
     .btn-scroll-left,
     .btn-scroll-right {
@@ -54,6 +55,7 @@
     padding: 16px 20px;
     background-color: var(--background-color);
     border-radius: 6px;
+    box-shadow: var(--wrapper-box-shadow);
 }
 
 .label {
