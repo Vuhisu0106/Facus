@@ -40,7 +40,7 @@ function AccountSearch({ className, placeHolder, placement, autoFocus }) {
         setLoading(true);
 
         const handleSearch = async () => {
-            const q = query(collection(db, 'users'), where('keywords', 'array-contains', searchValue));
+            const q = query(collection(db, 'users'), where('keywords', 'array-contains', searchValue.toLowerCase()));
 
             try {
                 const querySnapshot = await getDocs(q);

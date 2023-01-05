@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileCirclePlus, faGlobeAsia, faImage, faVideo, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import Modal from '..';
 import styles from '~/components/Modal/Modal.module.scss';
@@ -11,7 +12,6 @@ import Button from '~/components/Button';
 import { setImageInputState } from '~/features/Modal/ModalSlice';
 import { useApp } from '~/context/AppContext';
 import { LoadingIcon } from '~/components/Icon';
-import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEditPost }) {
@@ -92,9 +92,9 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEdit
             s_o={1}
             onClose={onCloseAddPostModal}
             children={
-                <div className={cx('add-post-wrapper')}>
+                <div className={cx('add-post__wrapper')}>
                     <div className={cx('add-post__header')}>
-                        <div className={cx('add-post-user-info')}>
+                        <div className={cx('add-post__user--info')}>
                             <img alt={currentUserInfo.displayName} src={currentUserInfo.photoURL} />
                             <div className={cx('user-info')}>
                                 <h4>{currentUserInfo.displayName}</h4>
@@ -106,7 +106,7 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEdit
                             </div>
                         </div>
                     </div>
-                    <div className={cx('add-post-body')}>
+                    <div className={cx('add-post__body')}>
                         <textarea
                             value={caption}
                             placeholder={`What's on your mind, ${currentUserInfo.displayName}?`}
@@ -114,7 +114,7 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEdit
                         ></textarea>
                         {addPhotoVisible && (
                             <div
-                                className={cx('add-photo-container')}
+                                className={cx('add-photo__container')}
                                 draggable="true"
                                 onDragOver={(e) => {
                                     e.preventDefault();
@@ -130,9 +130,9 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEdit
                                 }}
                             >
                                 {!img ? (
-                                    <label htmlFor="photo-upload" className={cx('add-photo-wrapper')}>
+                                    <label htmlFor="photo-upload" className={cx('add-photo__wrapper')}>
                                         <CircleButton
-                                            className={cx('close-upload-btn')}
+                                            className={cx('close-upload__btn')}
                                             children={<FontAwesomeIcon icon={faXmark} />}
                                             onClick={() => {
                                                 dispatch(
@@ -152,7 +152,7 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEdit
                                         <span>or drag and drop</span>
                                     </label>
                                 ) : (
-                                    <div className={cx('selected-photo-wrapper')}>
+                                    <div className={cx('selected-photo__wrapper')}>
                                         <img src={typeof img === 'object' ? URL.createObjectURL(img) : img} alt="img" />
                                         <CircleButton
                                             className={cx('cancel-photo-btn')}
@@ -174,12 +174,12 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEdit
                             }}
                         ></input>
                     </div>
-                    <div className={cx('add-post-footer')}>
-                        <div className={cx('btn-nav-footer')}>
+                    <div className={cx('add-post__footer')}>
+                        <div className={cx('btn-nav__footer')}>
                             <h4>Add photo or video into your post</h4>
-                            <div className={cx('btn-footer-list')}>
+                            <div className={cx('btn__footer--list')}>
                                 <CircleButton
-                                    className={cx('circle-btn-footer', buttonActive && 'active')}
+                                    className={cx('circle-btn__footer', buttonActive && 'active')}
                                     children={<FontAwesomeIcon icon={faImage} />}
                                     onClick={() => {
                                         dispatch(
@@ -191,7 +191,7 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEdit
                                     }}
                                 />
                                 <CircleButton
-                                    className={cx('circle-btn-footer')}
+                                    className={cx('circle-btn__footer')}
                                     children={<FontAwesomeIcon icon={faVideo} />}
                                     onClick={() => {
                                         toast.error('Sorry, this feature is not ready');

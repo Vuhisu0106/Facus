@@ -43,13 +43,6 @@ function GridColumn({ s, s_o, m, m_o, l, l_o, className, children }) {
                     // left: fixedLeft && `calc((100vw - 984px) / 2)`,
                     // right: fixedRight && `calc((100vw - 984px) / 2)`,
                 },
-
-                // '@media (min-width: 1239px)': {
-                //     left: fixedLeft && `calc((100vw - 1178px) / 2)`,
-                //     right: fixedRight && `calc((100vw - 1178px) / 2)`,
-                // },
-
-                //Tablet - PC low resolution
             }}
         >
             {children}

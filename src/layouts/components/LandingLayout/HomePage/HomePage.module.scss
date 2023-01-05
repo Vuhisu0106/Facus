@@ -100,28 +100,32 @@
 }
 
 .title {
-    background: -webkit-linear-gradient(90.06deg, #f86086 -4.45%, #fe8d77 104.12%);
+    background: -webkit-linear-gradient(120deg, #923bf3 0%, #e54c91 49.6%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-left: 20px;
     font-size: 42px;
     font-weight: 900;
     font-family: 'Lato', sans-serif;
     display: none;
 }
 
-.home__title {
-    font-size: 60px;
+.title__home {
+    font-size: 58px;
     margin-bottom: 10px;
     color: #fff;
     font-weight: 900;
     font-family: 'Lato', sans-serif;
+
+    .title__separate {
+        display: none;
+    }
 }
 
 .home__description {
     color: #fff;
     opacity: 0.5;
+    margin: 10px 0 5px 0;
 }
 
 .home__btns {
@@ -167,7 +171,7 @@
 
 @media (max-width: 500px) {
     .content-inner {
-        .home__title {
+        .title__home {
             font-size: 35px;
         }
 
@@ -202,18 +206,40 @@
         order: 2;
 
         .content-inner {
-            .home__title {
-                color: red;
+            height: 90%;
+            .title__home {
+                background: -webkit-linear-gradient(90.06deg, #f86086 -4.45%, #fe8d77 104.12%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+
+                .title__separate {
+                    display: inline-block;
+                }
+            }
+
+            .title {
+                display: inline-block;
+                color: var(--primary);
             }
 
             .home__description {
                 p {
-                    color: red;
+                    color: var(--primary);
+                    font-weight: 600;
                 }
             }
 
             .home__btns {
-                a {
+                margin-top: 2rem;
+                .sign-up-btn {
+                    font-weight: 700;
+                    color: var(--primary);
+                    border: 1.5px solid var(--primary);
+
+                    &:hover {
+                        background-color: rgba(254, 44, 85, 0.06);
+                    }
                 }
             }
         }
@@ -248,7 +274,7 @@
         margin-top: 0px;
     }
 
-    .home__title {
+    .title__home {
         font-size: 40px;
     }
 
@@ -270,7 +296,7 @@
     .home__content--wrapper {
         padding: 0 50px;
     }
-    .home__title {
+    .title__home {
         font-size: 40px;
     }
 

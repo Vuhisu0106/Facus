@@ -37,8 +37,6 @@ function CommentItem({ className, data, posterUid, onEditComment, onToggleLikeCo
         return postComment.find((comment) => comment.commentId === data.commentId);
     });
 
-    console.log('render cmt');
-
     const MENU_COMMENT = [
         {
             icon: <FontAwesomeIcon icon={faPenToSquare} />,

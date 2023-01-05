@@ -143,9 +143,14 @@
 .right-content {
     flex: 1;
     h1 {
-        color: var(--right-content-h1-color);
+        color: var(--post-interact-border-color);
         text-align: center;
         margin-top: 50px;
+    }
+
+    h3 {
+        text-align: center;
+        color: var(--post-interact-border-color);
     }
 }
 

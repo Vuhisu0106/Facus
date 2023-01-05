@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
 import config from '~/configs';
 
@@ -7,6 +8,8 @@ import styles from './HeaderLanding.module.scss';
 const cx = classNames.bind(styles);
 
 function HeaderLanding({ className }) {
+    const navigate = useNavigate();
+
     const classes = cx('wrapper', {
         [className]: className,
     });
@@ -30,7 +33,14 @@ function HeaderLanding({ className }) {
     ];
     return (
         <div className={classes}>
-            <span className={cx('title')}>Facus</span>
+            <span
+                className={cx('title')}
+                onClick={() => {
+                    navigate('/home');
+                }}
+            >
+                Facus
+            </span>
             <div className={cx('btn')}>
                 {NAV_LIST.map((nav) => (
                     <Button

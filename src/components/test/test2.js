@@ -53,7 +53,7 @@ function Test2() {
     return (
         <div className={cx('test2')}>
             <button onClick={onClick2}>Click</button>
-            <label htmlFor="photo-upload" className={cx('add-photo-wrapper')}>
+            <label htmlFor="photo-upload" className={cx('add-photo__wrapper')}>
                 <h3>Add photo</h3>
             </label>
             <input id="photo-upload" type="file" accept="image/*" onChange={(e) => setImg(e.target.files[0])} />

@@ -15,8 +15,14 @@ function HomePage() {
                 <GridRow className={cx('home__content--wrapper')}>
                     <GridColumn l={5.5} m={6} s={12} className={cx('home__content')}>
                         <div className={cx('content-inner')}>
-                            <span className={cx('title')}>Facus</span>
-                            <h1 className={cx('home__title')}>A new world is rising. Let’s discover it.</h1>
+                            <div>
+                                <span className={cx('title')}>Facus</span>
+                                <span className={cx('title__home')}>
+                                    {' '}
+                                    <span className={cx('title__separate')}> - </span> A new world is rising. Let’s
+                                    discover it !
+                                </span>
+                            </div>
                             <div className={cx('home__description')}>
                                 <p>
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius sit, laudantium

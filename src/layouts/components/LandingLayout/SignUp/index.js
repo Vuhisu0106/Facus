@@ -72,7 +72,7 @@ function SignUp() {
                             email: submitData[0],
                             photoURL: DEFAULT_AVATAR,
                             coverPhotoURL: DEFAULT_COVER_PHOTO,
-                            keywords: generateKeywords(submitData[1]),
+                            keywords: generateKeywords(submitData[1].toLowerCase()),
                             following: [],
                             follower: [],
                             bio: '',

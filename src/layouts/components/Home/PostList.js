@@ -116,9 +116,10 @@ function PostList({ followingList }) {
                                 />
                             ))}
                         </InfiniteScroll>
-                        {showEndOfPost && (
+                        {/* {showEndOfPost && (
                             <h3 className={cx('post-list__h3')}>There are no more posts to show right now.</h3>
-                        )}
+                        )} */}
+                        <h3 className={cx('post-list__h3')}>There are no more posts to show right now.</h3>
                     </>
                 ) : (
                     <div className={cx('post-list__no-post')}>

@@ -129,23 +129,26 @@ function Posts({ selectedUser, isCurrentUser = false }) {
         return (
             <>
                 {postList.length > 0 ? (
-                    postList
-                        ?.slice()
-                        .sort((a, b) => b.date - a.date)
-                        .map((post) => (
-                            <PostLayout
-                                key={post.postId}
-                                postId={post.postId}
-                                userId={post.poster.uid}
-                                userName={post.poster.displayName}
-                                userAvt={post.poster?.photoURL}
-                                timeStamp={post.date && moment(post.date.toDate()).fromNow()}
-                                postImg={post.img}
-                                postCaption={post.caption}
-                                like={post.like}
-                                comment={post.comment.length}
-                            />
-                        ))
+                    <>
+                        {postList
+                            ?.slice()
+                            .sort((a, b) => b.date - a.date)
+                            .map((post) => (
+                                <PostLayout
+                                    key={post.postId}
+                                    postId={post.postId}
+                                    userId={post.poster.uid}
+                                    userName={post.poster.displayName}
+                                    userAvt={post.poster?.photoURL}
+                                    timeStamp={post.date && moment(post.date.toDate()).fromNow()}
+                                    postImg={post.img}
+                                    postCaption={post.caption}
+                                    like={post.like}
+                                    comment={post.comment.length}
+                                />
+                            ))}
+                        <h3>There are no more posts to show right now.</h3>
+                    </>
                 ) : (
                     <h1>No post found</h1>
                 )}
