@@ -37,7 +37,7 @@ function StatusItem({ className, userName, avt, status, bigText, addStatus }) {
             <div
                 className={cx('user-avt')}
                 onClick={() => {
-                    addStatus ? setIsSetStatusVisible(true) : setIsStatusModalVisible(true);
+                    !bigText && (addStatus ? setIsSetStatusVisible(true) : setIsStatusModalVisible(true));
                 }}
             >
                 <div className={cx('story-circle')}>
