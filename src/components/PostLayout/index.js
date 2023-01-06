@@ -61,7 +61,7 @@ function PostLayout({
     const postCommentBefore = useSelector(
         (state) => state.postNcomment.posts.find((post) => post.postId === postId).comment,
     );
-    const postComment = postCommentBefore.map((postCmt) => {
+    const postComment = postCommentBefore?.map((postCmt) => {
         return { ...postCmt, createdAt: postCmt.createdAt.toDate() };
     });
 
@@ -327,25 +327,27 @@ function PostLayout({
                     : ''}
             </div>
             <div className={cx('post__interaction')}>
-                {(like.length > 0 || postComment.length > 0) && (
+                {(like.length > 0 || postComment?.length > 0) && (
                     <div className={cx('post__interaction--detail')}>
                         {like.length > 0 && (
                             <div className={cx('post__reaction')}>
                                 <FontAwesomeIcon className={cx('post__reaction--icon')} icon={faHeartSolid} />{' '}
-                                {like && like.indexOf(currentUser.uid) !== -1
-                                    ? like.length === 1
+                                {like?.indexOf(currentUser.uid) !== -1
+                                    ? like?.length === 1
                                         ? 'You'
-                                        : `You and ${like.length - 1} others`
-                                    : like.length}
+                                        : `You and ${like?.length - 1} others`
+                                    : like?.length}
                             </div>
                         )}
 
-                        {postComment.length > 0 && (
+                        {postComment?.length > 0 && (
                             <div className={cx('post__comment--count')}>
                                 <span onClick={handleOnClickCommentBtn}>
                                     {!postComment
                                         ? ''
-                                        : postComment.length + ' ' + (postComment.length > 1 ? 'comments' : 'comment')}
+                                        : postComment?.length +
+                                          ' ' +
+                                          (postComment?.length > 1 ? 'comments' : 'comment')}
                                 </span>
                             </div>
                         )}

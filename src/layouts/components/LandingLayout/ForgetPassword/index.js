@@ -60,7 +60,7 @@ function ForgetPassword() {
                         <h2>{resetSuccessfully ? 'Email has been sent!' : 'Forgot your password?'}</h2>
                         <h6>
                             {resetSuccessfully
-                                ? 'Please check your inbox or spam folder and click received link to reset a password '
+                                ? 'Please check your inbox or spam folder and click received link to reset password '
                                 : 'Enter your register email bellow to receive password reset instruction'}
                         </h6>
                         <input

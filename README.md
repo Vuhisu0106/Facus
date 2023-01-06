@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+# **Introduction**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+-   This is a social-network project using ReactJS + Firebase
 
-## Available Scripts
+# **Page**
 
-In the project directory, you can run:
+###### _(Not logged)_
 
-### `npm start`
+-   Home.
+    ![Dark mode](https://www.dropbox.com/s/nvar4oouvulk5ck/Screenshot%202023-01-06%20161515.png?raw=1)
+-   Login.
+    ![Dark mode](https://www.dropbox.com/s/1u8akuvnkiiduh6/Screenshot%202023-01-06%20163328.png?raw=1)
+-   Sign up.
+    ![Dark mode](https://www.dropbox.com/s/d2f76alyazbp0oa/Screenshot%202023-01-06%20163347.png?raw=1)
+-   Reset password.
+    ![Dark mode](https://www.dropbox.com/s/b8h52u8mbt2gnmo/Screenshot%202023-01-06%20163403.png?raw=1)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+###### _(Logged)_
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+-   Dashboard (light mode).
+    ![Dark mode](https://www.dropbox.com/s/9zgdgthzad4q3r8/Screenshot%202023-01-06%20165108.png?raw=1)
+-   Dashboard (dark mode).
+    ![Dark mode](https://www.dropbox.com/s/o467dq57fzynpb0/Screenshot%202023-01-06%20164803.png?raw=1)
+-   Chat.
+    ![Dark mode](https://www.dropbox.com/s/kjg85gaom87oyw0/Screenshot%202023-01-06%20164847.png?raw=1)
+-   Post layout.
+    ![Dark mode](https://www.dropbox.com/s/1hm9rzuvtns2oz6/Screenshot%202023-01-06%20165046.png?raw=1)
+-   Profile.
+    ![Dark mode](https://www.dropbox.com/s/yxpbwxwi5f07w3p/Screenshot%202023-01-06%20165600.png?raw=1)
+-   Update profile.
+    ![Dark mode](https://www.dropbox.com/s/1jvc2kdb1yc8q0x/Screenshot%202023-01-06%20165629.png?raw=1)
+-   Set status.
+    ![Dark mode](https://www.dropbox.com/s/18njuisyor1yhf6/Screenshot%202023-01-06%20165959.png?raw=1)
 
-### `npm test`
+# **Features**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-   Responsive.
+-   Dark mode
+-   Authentication:
+    -   Email/Password sign-in.
+    -   Reset password.
+    -   Persist session.
+    -   Log out.
+-   Search account using keywords.
+-   Follow user, unfollow user.
+-   Post (in Dashboard page and profile page) :
+    -   CRUD post (with text and image).
+    -   Like and unlike post.
+    -   CRUD comments (with text and image).
+    -   Delete and update comment.
+    -   Like and unlike comment.
+-   Chat:
+    -   Send text and image
+    -   Notification when receiving new messages
+-   Profile:
+    -   Change bio, avatar and cover photo.
+    -   Set status (with emoji and text).
+-   ...

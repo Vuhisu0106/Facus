@@ -144,7 +144,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     postImg={post.img}
                                     postCaption={post.caption}
                                     like={post.like}
-                                    comment={post.comment.length}
+                                    comment={post?.comment?.length}
                                 />
                             ))}
                         <h3>There are no more posts to show right now.</h3>
