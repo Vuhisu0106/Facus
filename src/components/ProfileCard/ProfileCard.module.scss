@@ -92,13 +92,17 @@
 }
 
 .skills {
-    background-color: #ff4f71;
+    background-color: #fd3e64;
     text-align: left;
     padding: 10px;
     margin-top: 20px;
     color: var(--white);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+
+    h6 {
+        margin-bottom: 5px;
+    }
 
     ul {
         list-style-type: none;

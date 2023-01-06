@@ -103,6 +103,7 @@ function Header({ className }) {
             onClick: () => {
                 setIsMenuVisible(false);
             },
+            notified: `${isHaveChatNoti}`,
         },
         {
             icon: <FontAwesomeIcon icon={faSun} />,
@@ -172,6 +173,7 @@ function Header({ className }) {
                                         }}
                                     />
                                 </Menu>
+                                {isHaveChatNoti && <span className={cx('badge')}></span>}
                             </div>
                         ) : (
                             <div className={cx('actions-btn')}>

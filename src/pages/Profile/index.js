@@ -270,6 +270,9 @@ function Profile() {
                                                         className={cx('edit-account-btn')}
                                                         leftIcon={<FontAwesomeIcon icon={faWrench} />}
                                                         children={'Edit account'}
+                                                        onClick={() => {
+                                                            setProfileModalVisible(true);
+                                                        }}
                                                     />
 
                                                     <Button

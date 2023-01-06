@@ -123,6 +123,7 @@ html[theme='light'] {
     --header-border: transparent;
     --header-logo-color: #fff;
     --header-logo-bc: rgb(254, 44, 85);
+    --header-logo-hover-bc: #ef2950;
 
     // Round Account Item Status //
     --round-acc-item-img-border: #fff;
@@ -228,6 +229,7 @@ html[theme='dark'] {
     --header-border: rgb(62, 64, 66);
     --header-logo-color: rgb(254, 44, 85);
     --header-logo-bc: #3a3b3c;
+    --header-logo-hover-bc: #4e4f50;
 
     // Round Account Item Status //
     --round-acc-item-img-border: #242526;

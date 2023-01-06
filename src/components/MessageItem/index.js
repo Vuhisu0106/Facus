@@ -45,6 +45,7 @@ function MessageItem({
                         setAvatarLoading(true);
                     }}
                 />
+                {unread && <span className={cx('badge')}></span>}
             </div>
 
             <div className={cx('message-content')}>

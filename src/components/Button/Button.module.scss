@@ -47,6 +47,17 @@
     align-items: center;
 }
 
+.btn__noti {
+    height: 7px;
+    width: 7px;
+    text-align: center;
+    font-size: 10px;
+    background-color: var(--primary);
+    color: var(--white);
+    border-radius: 50%;
+    margin-left: 60px;
+}
+
 //Button types
 .primary {
     background-color: var(--primary);

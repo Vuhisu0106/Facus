@@ -20,6 +20,7 @@ function Button({
     landingNav = false,
     activeLandingNav = false,
     disabled = false,
+    notified = 'false',
     ...passProps
 }) {
     let Comp = 'button';
@@ -61,6 +62,7 @@ function Button({
             {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
             <span className={cx('title')}>{children}</span>
             {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
+            {notified === 'true' && <span className={cx('btn__noti')}></span>}
         </Comp>
     );
 }

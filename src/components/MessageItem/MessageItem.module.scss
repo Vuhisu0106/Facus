@@ -20,6 +20,19 @@
     width: 38px;
     height: 38px;
     margin-right: 10px;
+    position: relative;
+
+    .badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 1.4rem;
+        height: 1.4rem;
+        border-radius: 50%;
+        background-color: var(--primary);
+        border: 2.5px solid var(--background-color);
+        display: none;
+    }
 }
 .user-avt {
     width: 38px;
@@ -125,10 +138,15 @@
     .message-content {
         display: none;
     }
-    .user-avt {
-        margin: 0;
-    }
-    .user-avt--loading {
-        margin: 0;
+    .user-avt-wrapper {
+        .user-avt {
+            margin: 0;
+        }
+        .user-avt--loading {
+            margin: 0;
+        }
+        .badge {
+            display: block;
+        }
     }
 }

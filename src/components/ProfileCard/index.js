@@ -18,7 +18,19 @@ function ProfileCard() {
     const { adminInfo, currentUserInfo } = useApp();
     const navigate = useNavigate();
 
-    const SKILLS = ['HTML', 'CSS', 'SCSS', 'Bootstrap', 'Javascript', 'React', 'Redux', 'MySQL'];
+    const SKILLS = [
+        'HTML',
+        'CSS',
+        'SCSS',
+        'Bootstrap',
+        'Tailwind',
+        'Javascript',
+        'ReactJS',
+        'Redux',
+        'MySQL',
+        'SQL Server',
+        '...',
+    ];
 
     const handleFollow = async () => {
         try {

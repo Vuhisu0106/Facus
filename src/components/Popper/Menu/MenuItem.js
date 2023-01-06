@@ -9,7 +9,7 @@ function MenuItem({ data, onClick }) {
         separate: data.separate,
     });
     return (
-        <Button popper className={classes} leftIcon={data.icon} to={data.to} onClick={onClick}>
+        <Button popper className={classes} leftIcon={data.icon} to={data.to} notified={data.notified} onClick={onClick}>
             {data.title}
         </Button>
     );
