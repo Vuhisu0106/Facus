@@ -246,7 +246,17 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                     </WrapperModal>
                     <WrapperModal className={cx('photo')}>
                         <h2>Photo</h2>
-                        {postImgList.length === 0 ? (
+                        {loading ? (
+                            <div className={cx('photo-box')}>
+                                {Array(3)
+                                    .fill(0)
+                                    .map((item, index) => (
+                                        <div key={index} className={cx('image__wrapper--loading')}>
+                                            <div className={cx('image__loading')}></div>
+                                        </div>
+                                    ))}
+                            </div>
+                        ) : postImgList.length === 0 ? (
                             <p>No image found!</p>
                         ) : (
                             <div className={cx('photo-box')}>
@@ -254,7 +264,7 @@ function Posts({ selectedUser, isCurrentUser = false }) {
                                     ?.slice()
                                     .sort((a, b) => b.date - a.date)
                                     .map((post) => (
-                                        <div key={post.postId} className={cx('image-wrapper')}>
+                                        <div key={post.postId} className={cx('image__wrapper')}>
                                             <Link to={'/post/' + post.postId}>
                                                 <img
                                                     src={

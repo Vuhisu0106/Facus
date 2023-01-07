@@ -174,12 +174,22 @@
         font-weight: 500;
     }
 
+    input::-ms-reveal,
+    input::-ms-clear {
+        display: none;
+    }
+
     .icon {
         text-align: center;
         margin-right: 8px;
         color: #acacac;
         transition: 0.5s;
         font-size: 1.6rem;
+    }
+
+    .icon.show-password {
+        cursor: pointer;
+        margin: 0 0 0 5px;
     }
 }
 

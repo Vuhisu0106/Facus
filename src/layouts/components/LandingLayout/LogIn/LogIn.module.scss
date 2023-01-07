@@ -117,12 +117,22 @@
         font-weight: 500;
     }
 
+    input::-ms-reveal,
+    input::-ms-clear {
+        display: none;
+    }
+
     .icon {
         text-align: center;
         margin-right: 8px;
         color: #acacac;
         transition: 0.5s;
         font-size: 1.6rem;
+    }
+
+    .icon.show-password {
+        cursor: pointer;
+        margin: 0 0 0 5px;
     }
 }
 
@@ -165,37 +175,6 @@
     &:hover {
         background: linear-gradient(120deg, #e54c91 49.6%, #f48b7b 100%);
         opacity: 0.8;
-    }
-}
-
-.social-text {
-    padding: 0.7rem 0;
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #656565;
-}
-
-.social-media {
-    display: flex;
-    justify-content: center;
-
-    .social-icons {
-        height: 46px;
-        width: 46px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 0.45rem;
-        color: #333;
-        border-radius: 15px;
-        border: 1px solid #333;
-        text-decoration: none;
-        font-size: 1.8rem;
-
-        &:hover {
-            color: #e54c91;
-            border-color: var(--primary);
-        }
     }
 }
 

@@ -1,4 +1,4 @@
-import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faEye, faEyeSlash, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState, useRef, useLayoutEffect } from 'react';
@@ -24,14 +24,17 @@ function SignUp() {
 
     const { signup, currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
+    const [isMount, setIsMount] = useState(false);
+    const [showPassword, setShowPassword] = useState({
+        password: false,
+        passwordConfirm: false,
+    });
 
     const navigate = useNavigate();
 
-    const [open, setOpen] = useState(false);
-
     useLayoutEffect(() => {
         setTimeout(() => {
-            setOpen(true);
+            setIsMount(true);
         }, 50);
     }, []);
 
@@ -81,6 +84,7 @@ function SignUp() {
 
                         //create empty user chats on firestore
                         await setDocument('userChats', res.user.uid, {});
+                        toast.success('Sign up successfully');
                         navigate('/');
                     } catch (error) {
                         console.log(error);
@@ -137,8 +141,18 @@ function SignUp() {
                                 <h4>Password</h4>
                                 <div className={cx('input-field')}>
                                     <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-
-                                    <input type="password" placeholder="Password" ref={passwordRef} />
+                                    <input
+                                        type={showPassword.password ? 'text' : 'password'}
+                                        placeholder="Password"
+                                        ref={passwordRef}
+                                    />
+                                    <FontAwesomeIcon
+                                        className={cx('icon', 'show-password')}
+                                        icon={showPassword.password ? faEye : faEyeSlash}
+                                        onClick={() => {
+                                            setShowPassword({ ...showPassword, password: !showPassword.password });
+                                        }}
+                                    />
                                 </div>
                             </div>
 
@@ -146,8 +160,21 @@ function SignUp() {
                                 <h4> Confirm password</h4>
                                 <div className={cx('input-field')}>
                                     <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-
-                                    <input type="password" placeholder="Confirm password" ref={passwordConfirmRef} />
+                                    <input
+                                        type={showPassword.passwordConfirm ? 'text' : 'password'}
+                                        placeholder="Confirm password"
+                                        ref={passwordConfirmRef}
+                                    />
+                                    <FontAwesomeIcon
+                                        className={cx('icon', 'show-password')}
+                                        icon={showPassword.passwordConfirm ? faEye : faEyeSlash}
+                                        onClick={() => {
+                                            setShowPassword({
+                                                ...showPassword,
+                                                passwordConfirm: !showPassword.passwordConfirm,
+                                            });
+                                        }}
+                                    />
                                 </div>
                             </div>
 
@@ -185,7 +212,11 @@ function SignUp() {
                         <div className={cx('blur-background')}></div>
                     </div>
                     <div className={cx('rocket')}>
-                        <img className={cx('rocket-image', open && 'sign-up__open')} src="images/Saly-1.png" alt="" />
+                        <img
+                            className={cx('rocket-image', isMount && 'sign-up__open')}
+                            src="images/Saly-1.png"
+                            alt=""
+                        />
                     </div>
                 </GridColumn>
             </GridRow>

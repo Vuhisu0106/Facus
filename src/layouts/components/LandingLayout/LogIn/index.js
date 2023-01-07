@@ -1,4 +1,4 @@
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faEye, faEyeSlash, faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState, useRef, useLayoutEffect } from 'react';
@@ -17,7 +17,8 @@ const cx = classNames.bind(styles);
 function LogIn() {
     const [loading, setLoading] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [isMount, setIsMount] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -25,7 +26,7 @@ function LogIn() {
 
     useLayoutEffect(() => {
         setTimeout(() => {
-            setOpen(true);
+            setIsMount(true);
         }, 50);
     }, []);
 
@@ -76,7 +77,7 @@ function LogIn() {
                     {heartImgClass.map((classes) => (
                         <img
                             key={classes}
-                            className={cx(classes, 'heart-img', open && 'log-in__open')}
+                            className={cx(classes, 'heart-img', isMount && 'log-in__open')}
                             src="images/heart.png"
                             alt=""
                         />
@@ -85,7 +86,7 @@ function LogIn() {
                 </div>
                 <GridColumn l={6} m={6} s={0} className={cx('animate-col')}>
                     <div className={cx('hand')}>
-                        <img className={cx('hand-image', open && 'log-in__open')} src="images/Saly-24.png" alt="" />
+                        <img className={cx('hand-image', isMount && 'log-in__open')} src="images/Saly-24.png" alt="" />
                     </div>
                 </GridColumn>
                 <GridColumn l={4.5} l_o={1} m={6} s={12}>
@@ -106,7 +107,18 @@ function LogIn() {
                                 <h4>Password</h4>
                                 <div className={cx('input-field')}>
                                     <FontAwesomeIcon className={cx('icon')} icon={faLock} />
-                                    <input type="password" placeholder="Password" ref={passwordRef} />
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder="Password"
+                                        ref={passwordRef}
+                                    />
+                                    <FontAwesomeIcon
+                                        className={cx('icon', 'show-password')}
+                                        icon={showPassword ? faEye : faEyeSlash}
+                                        onClick={() => {
+                                            setShowPassword(!showPassword);
+                                        }}
+                                    />
                                 </div>
                             </div>
 
