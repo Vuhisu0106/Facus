@@ -26,7 +26,6 @@ export const addPostFunction = async (data, img) => {
             img: '',
         });
     }
-
     store.dispatch(addPost({ ...data }));
 };
 

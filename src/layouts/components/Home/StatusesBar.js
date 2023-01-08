@@ -55,7 +55,7 @@ function StatusesBar({ followingList }) {
         };
 
         followingList.length > 0 && getStatus();
-    }, [followingList]);
+    }, [currentUser, followingList]);
 
     return (
         <div className={cx('horizontal-scroll')}>

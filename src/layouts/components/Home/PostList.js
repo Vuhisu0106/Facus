@@ -10,15 +10,16 @@ import { resetPost, setPost } from '~/features/PostAndComment/PostAndCommentSlic
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { LoadingPost } from '~/components/Loading';
 import styles from './Home.module.scss';
+import { useAuth } from '~/context/AuthContext';
 
 const cx = classNames.bind(styles);
 function PostList({ followingList }) {
     const dispatch = useDispatch();
     const post = useSelector((state) => state.postNcomment.posts);
+    const { currentUser } = useAuth();
 
     const [last, setLast] = useState(null);
     const [hasMore, setHasMore] = useState(true);
-    const [showEndOfPost, setShowEndOfPost] = useState(false);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -54,7 +55,7 @@ function PostList({ followingList }) {
         };
 
         followingList.length > 0 && getPost();
-    }, [followingList]);
+    }, [currentUser, followingList]);
 
     const loadMorePost = async () => {
         const q = query(
@@ -81,7 +82,6 @@ function PostList({ followingList }) {
                 setLast(lastVisible.data());
             } else {
                 setHasMore(false);
-                setShowEndOfPost(true);
                 console.log('Nothing to load');
                 return;
             }

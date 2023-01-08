@@ -121,8 +121,9 @@ function Posts({ selectedUser, isCurrentUser = false }) {
             like: [],
             comment: [],
         };
-
         await addPostFunction(data, img);
+        toast.success('Add post successfully');
+        setOpenModal(false);
     };
 
     const postListMemo = useMemo(() => {

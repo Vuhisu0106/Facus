@@ -43,17 +43,13 @@ function AddPostModal({ editPostId, edit, onCloseAddPostModal, onAddPost, onEdit
 
     const handleAddPost = () => {
         setLoading(true);
-        setTimeout(() => {
-            try {
-                onAddPost(caption, img);
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-                setLoading(false);
-            }
-        }, 500);
-
-        onCloseAddPostModal();
+        try {
+            onAddPost(caption, img);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
     };
 
     const handleEditPost = async () => {

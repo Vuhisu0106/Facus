@@ -84,10 +84,6 @@
     height: 100%;
     width: 100%;
     background-color: transparent;
-
-    // &:hover {
-    //     background-color: rgba(22, 24, 35, 0.12);
-    // }
 }
 
 .landingNav {
@@ -98,16 +94,16 @@
         color: var(--primary);
         bottom: -5px;
         content: '';
-        height: 0.3rem;
+        height: 0.2rem;
         position: absolute;
         width: 60%;
-        background: linear-gradient(90.06deg, #fe2c55 -14.45%, #6f5cf1 154.12%);
+        background: linear-gradient(120deg, #923bf3 0%, #e54c91 49.6%, #f48b7b 100%);
         left: 20%;
         transform: scale(0);
         transition: all 0.2s ease-in-out;
     }
     &:hover {
-        background: -webkit-linear-gradient(90.06deg, #f86086 -4.45%, #fe8d77 104.12%);
+        background: -webkit-linear-gradient(120deg, #923bf3 0%, #e54c91 49.6%, #f48b7b 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -141,7 +137,11 @@
 }
 
 .activeLandingNav {
-    color: var(--primary);
+    background: -webkit-linear-gradient(120deg, #923bf3 0%, #e54c91 49.6%, #f48b7b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-color: transparent !important;
 }
 
 //Button size
