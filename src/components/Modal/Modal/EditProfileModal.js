@@ -167,7 +167,7 @@ function EditProfileModal({ onClose }) {
                                 </div>
                             </div>
                         </div>
-                        <h5 className={cx('note')}>Click on image to add/delete it</h5>
+                        <h5 className={cx('note')}>Click on image to add or delete it</h5>
                     </div>
                     <div className={cx('edit-profile-footer')}>
                         <Button

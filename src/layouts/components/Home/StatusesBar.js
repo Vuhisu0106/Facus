@@ -23,22 +23,8 @@ function StatusesBar({ followingList }) {
 
     useEffect(() => {
         setLoading(true);
-        // const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
-        // console.log(a);
-        // const q = query(collection(db, 'users'), where('uid', 'in', a));
-        // const getStatus = onSnapshot(q, (querySnapshot) => {
-        //     const statuses = [];
-        //     querySnapshot.forEach((doc) => {
-        //         statuses.push(doc.data());
-        //     });
-        //     setStatusFollowingList(statuses);
-        //     setLoading(false);
-        // });
-
-        // return getStatus;
 
         const getStatus = async () => {
-            //const a = [...(currentUserInfo?.following || []), currentUserInfo?.uid || []];
             const q = query(collection(db, 'users'), where('uid', 'in', followingList));
             try {
                 const querySnapshot = await getDocs(q);

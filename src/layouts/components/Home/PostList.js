@@ -124,7 +124,7 @@ function PostList({ followingList }) {
                 ) : (
                     <div className={cx('post-list__no-post')}>
                         <img src="images/status-feature.png" alt="" />
-                        <h3 className={cx('post-list__h3')}>You don't post anything and don't follow anyone.</h3>
+                        <h3 className={cx('post-list__h3')}>You don't post anything or don't follow anyone.</h3>
                     </div>
                 ))}
         </div>

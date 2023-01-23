@@ -18,7 +18,7 @@ import { LoadingIcon } from '~/components/Icon';
 import Modal from '../..';
 
 const cx = classNames.bind(styles);
-function SetStatusModal({ onClose }) {
+function SetStatusModal({ setFromEmpty, onClose }) {
     const { currentUser } = useAuth();
 
     const status = useSelector((state) => state.profile.status);
@@ -26,8 +26,8 @@ function SetStatusModal({ onClose }) {
 
     const dispatch = useDispatch();
 
-    const [selectEmoji, setSelectEmoji] = useState(status.icon || '');
-    const [text, setText] = useState(status.text || '');
+    const [selectedEmoji, setSelectEmoji] = useState(setFromEmpty ? '' : status.icon || '');
+    const [text, setText] = useState(setFromEmpty ? '' : status.text || '');
     const [showPicker, setShowPicker] = useState(false);
     const [statusBtnDisable, setStatusBtnDisable] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -64,23 +64,23 @@ function SetStatusModal({ onClose }) {
 
     //Condition to set 'Set status btn' unactive
     useEffect(() => {
-        if (selectEmoji && text) {
+        if (selectedEmoji && text) {
             setStatusBtnDisable(false);
         } else {
             setStatusBtnDisable(true);
         }
-    }, [selectEmoji, text]);
+    }, [selectedEmoji, text]);
 
     const handleSetStatus = async () => {
         setLoading(true);
         try {
             await updateDocument('users', currentUser.uid, {
                 status: {
-                    icon: selectEmoji,
+                    icon: selectedEmoji,
                     text,
                 },
             });
-            dispatch(setStatus({ status: { icon: selectEmoji, text: text } }));
+            dispatch(setStatus({ status: { icon: selectedEmoji, text: text } }));
             setLoading(false);
         } catch (error) {
             toast.error('Fail to clear status');
@@ -109,7 +109,7 @@ function SetStatusModal({ onClose }) {
                             placeHolder="What's happening?"
                             classNameLeftBtn={cx('status-icon')}
                             onChange={handleSendInput}
-                            leftIcon={selectEmoji || <FontAwesomeIcon icon={faFaceSmile} />}
+                            leftIcon={selectedEmoji || <FontAwesomeIcon icon={faFaceSmile} />}
                             onChangeLeftBtn={''}
                             onClickLeftBtn={() => {
                                 setShowPicker(!showPicker);

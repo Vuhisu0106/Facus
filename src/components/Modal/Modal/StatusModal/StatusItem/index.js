@@ -29,6 +29,7 @@ function StatusItem({ className, userName, avt, status, bigText, addStatus }) {
             )}
             {isSetStatusVisible && (
                 <SetStatusModal
+                    setFromEmpty
                     onClose={() => {
                         setIsSetStatusVisible(false);
                     }}
