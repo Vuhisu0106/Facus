@@ -142,6 +142,10 @@
         .profile__following,
         .profile__follower {
             cursor: pointer;
+
+            &:hover {
+                color: var(--account-item-name-color);
+            }
         }
         .separate-follow {
             font-size: 8px;

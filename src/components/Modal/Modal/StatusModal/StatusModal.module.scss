@@ -68,6 +68,14 @@
     .suggest-examples {
         div {
             width: 50%;
+
+            p {
+                width: fit-content;
+                cursor: pointer;
+                &:hover {
+                    color: #f82951;
+                }
+            }
         }
         color: var(--sub-acc-item-color);
         margin: 8px 16px 0 16px;

@@ -32,6 +32,17 @@ function SetStatusModal({ setFromEmpty, onClose }) {
     const [statusBtnDisable, setStatusBtnDisable] = useState(true);
     const [loading, setLoading] = useState(false);
 
+    const sttExamples = [
+        [
+            { icon: '🥱', text: 'Deadline' },
+            { icon: '🤒', text: 'Out sick af' },
+        ],
+        [
+            { icon: '🐧', text: 'Feeling lazy' },
+            { icon: '🥰', text: 'Awesome web' },
+        ],
+    ];
+
     const onEmojiClick = (e) => {
         setShowPicker(false);
         setSelectEmoji(e.emoji);
@@ -132,14 +143,21 @@ function SetStatusModal({ setFromEmpty, onClose }) {
                         <div className={cx('suggestions')}>
                             <h4>Suggestions</h4>
                             <div className={cx('suggest-examples')}>
-                                <div>
-                                    <p>🥱 Deadline</p>
-                                    <p>🤒 Out sick af</p>
-                                </div>
-                                <div>
-                                    <p>🐧 I'm lazy</p>
-                                    <p>🥰 Awesome web</p>
-                                </div>
+                                {sttExamples.map((exs, index) => (
+                                    <div key={index}>
+                                        {exs.map((ex, index) => (
+                                            <p
+                                                key={index}
+                                                onClick={() => {
+                                                    setSelectEmoji(ex.icon);
+                                                    setText(ex.text);
+                                                }}
+                                            >
+                                                {ex.icon} {ex.text}
+                                            </p>
+                                        ))}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
